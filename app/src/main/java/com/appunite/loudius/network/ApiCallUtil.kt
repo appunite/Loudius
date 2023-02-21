@@ -4,7 +4,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 
-suspend fun <T : StatusTracker> safeApiCall(
+suspend fun <T> safeApiCall(
     errorParser: RequestErrorParser = DefaultErrorParser,
     apiCall: suspend () -> Response<T>
 ): Result<T> {
@@ -17,19 +17,14 @@ suspend fun <T : StatusTracker> safeApiCall(
     }
 }
 
-private suspend fun <T : StatusTracker> handleSuccessfulCall(
+private suspend fun <T> handleSuccessfulCall(
     apiCall: suspend () -> Response<T>,
     errorParser: RequestErrorParser
 ): Result<T> {
     val response = apiCall()
     val body = response.body()
     return if (response.isSuccessful && body != null) {
-        val status = body.status
-        if (status == 200) {
-            Result.success(body)
-        } else {
-            Result.failure(errorParser(status, body.message))
-        }
+        Result.success(body)
     } else {
         Result.failure(errorParser(response.code(), response.message()))
     }
