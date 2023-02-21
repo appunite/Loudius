@@ -5,9 +5,7 @@ import java.io.IOException
 sealed class WebException : Exception() {
 
     /**
-     * Represents exception which comes from backend. In this project successful
-     * response (status code = 200) often comes with error response (status
-     * in response body is not equal to 200).
+     * Represents exception which comes from backend.
      */
     data class UnknownError(val code: Int, override val message: String?) : WebException()
 
