@@ -29,7 +29,7 @@ fun LoudiusTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { onClickBackArrow() }) {
+            IconButton(onClick = onClickBackArrow) {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = stringResource(R.string.back_button)
