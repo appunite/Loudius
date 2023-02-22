@@ -6,7 +6,7 @@ name: MegaLinter
 on:
   push:
   pull_request:
-    branches: [ main,develop ]
+    branches: [main, develop]
 
 env:
   APPLY_FIXES: all # When active, APPLY_FIXES must also be defined as environment variable (in github/workflows/mega-linter.yml or other CI tool)
