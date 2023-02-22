@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Loudius</string>
+    <string name="back_button">Back button</string>
 </resources>
