@@ -1,4 +1,4 @@
-package com.appunite.loudius.network
+package com.appunite.loudius.network.utils
 
 interface RequestErrorParser {
 

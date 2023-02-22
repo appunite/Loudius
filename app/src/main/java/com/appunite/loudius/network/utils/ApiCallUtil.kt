@@ -1,4 +1,4 @@
-package com.appunite.loudius.network
+package com.appunite.loudius.network.utils
 
 import retrofit2.HttpException
 import java.io.IOException
