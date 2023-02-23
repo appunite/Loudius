@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
+import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,12 +45,18 @@ private fun DetailsScreenContent(reviewers: List<Reviewer>, modifier: Modifier) 
         modifier = modifier.fillMaxWidth()
     ) {
         itemsIndexed(reviewers) { index, reviewer ->
-            val backgroundColor =
-                if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
-            ReviewerView(reviewer = reviewer, backgroundColor = backgroundColor) {}
+            ReviewerView(
+                reviewer = reviewer,
+                backgroundColor = resolveReviewerBackgroundColor(index),
+                onNotifyClick = {}
+            )
         }
     }
 }
+
+@Composable
+private fun resolveReviewerBackgroundColor(index: Int) =
+    if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
 
 
 @Composable
@@ -61,7 +68,7 @@ private fun ReviewerView(reviewer: Reviewer, backgroundColor: Color, onNotifyCli
             .bottomBorder(1.dp, MaterialTheme.colorScheme.outlineVariant)
             .padding(16.dp)
     ) {
-        ReviewerAvatar(Modifier.align(CenterVertically))
+        ReviewerAvatarView(Modifier.align(CenterVertically))
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -76,7 +83,7 @@ private fun ReviewerView(reviewer: Reviewer, backgroundColor: Color, onNotifyCli
 }
 
 @Composable
-private fun ReviewerAvatar(modifier: Modifier = Modifier) {
+private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.person_outline_24px),
         contentDescription = stringResource(
@@ -124,10 +131,12 @@ private fun NotifyButton(onNotifyClick: () -> Unit, modifier: Modifier = Modifie
 @Preview
 @Composable
 private fun ReviewerViewPreview() {
-    ReviewerView(
-        reviewer = Reviewer("Kezc", true, 12, 12),
-        backgroundColor = MaterialTheme.colorScheme.onSurface
-    ) {}
+    LoudiusTheme {
+        ReviewerView(
+            reviewer = Reviewer("Kezc", true, 12, 12),
+            backgroundColor = MaterialTheme.colorScheme.surface
+        ) {}
+    }
 }
 
 @Preview
@@ -138,5 +147,7 @@ fun DetailsScreenPreview() {
     val reviewer3 = Reviewer("Weronika", false, 24, 0)
     val reviewer4 = Reviewer("Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
-    DetailsScreenStateless(topBarTitle = "Pull request #1", reviewers = reviewers)
+    LoudiusTheme {
+        DetailsScreenStateless(topBarTitle = "Pull request #1", reviewers = reviewers)
+    }
 }
