@@ -10,7 +10,4 @@ class GithubRepositoryImpl @Inject constructor(
 
     override suspend fun getAccessToken(clientId: String, clientSecret: String, code: String): Result<AccessToken> =
         githubDataSource.getAccessToken(clientId, clientSecret, code)
-
-    override suspend fun authorize(): Result<String> =
-        githubDataSource.authorize()
 }

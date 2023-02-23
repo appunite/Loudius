@@ -8,8 +8,6 @@ import javax.inject.Singleton
 interface GithubDataSource {
 
     suspend fun getAccessToken(clientId: String, clientSecret: String, code: String): Result<AccessToken>
-
-    suspend fun authorize(): Result<String>
 }
 
 @Singleton
@@ -19,7 +17,4 @@ class GithubNetworkDataSource @Inject constructor(
 
     override suspend fun getAccessToken(clientId: String, clientSecret: String, code: String): Result<AccessToken> =
         safeApiCall { api.getAccessToken(clientId, clientSecret, code) }
-
-    override suspend fun authorize(): Result<String> =
-        safeApiCall { api.authorize() }
 }
