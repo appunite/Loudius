@@ -28,9 +28,9 @@ import com.appunite.loudius.ui.utils.bottomBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailsScreenStateless(reviewers: List<Reviewer>) {
+private fun DetailsScreenStateless(topBarTitle: String, reviewers: List<Reviewer>) {
     Scaffold(
-        topBar = { LoudiusTopAppBar(onClickBackArrow = {}, title = "TODO") },
+        topBar = { LoudiusTopAppBar(onClickBackArrow = {}, title = topBarTitle) },
         content = { padding ->
             DetailsScreenContent(reviewers, modifier = Modifier.padding(padding))
         },
@@ -89,16 +89,17 @@ private fun ReviewerAvatar(modifier: Modifier = Modifier) {
 @Composable
 private fun IsReviewedHeadlineText(reviewer: Reviewer) {
     Text(
-        text = if (reviewer.isReviewDone) stringResource(
-            id = R.string.details_reviewed,
-            reviewer.hoursFromReviewDone ?: 0
-        ) else stringResource(
-            id = R.string.details_not_reviewed,
-            reviewer.hoursFromPRStart
-        ),
+        text = resolveIsReviewedText(reviewer),
         style = MaterialTheme.typography.labelMedium,
         color = if (reviewer.isReviewDone) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error
     )
+}
+
+@Composable
+private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
+    stringResource(id = R.string.details_reviewed, reviewer.hoursFromReviewDone ?: 0)
+} else {
+    stringResource(id = R.string.details_not_reviewed, reviewer.hoursFromPRStart)
 }
 
 @Composable
@@ -137,5 +138,5 @@ fun DetailsScreenPreview() {
     val reviewer3 = Reviewer("Weronika", false, 24, 0)
     val reviewer4 = Reviewer("Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
-    DetailsScreenStateless(reviewers = reviewers)
+    DetailsScreenStateless(topBarTitle = "Pull request #1", reviewers = reviewers)
 }
