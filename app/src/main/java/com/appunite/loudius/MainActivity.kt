@@ -35,9 +35,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.Login.route,
                     ) {
                         composable(route = Screen.Login.route) {
-                            LoginScreen(
-                                context = this@MainActivity,
-                            )
+                            LoginScreen()
                         }
                         composable(
                             route = Screen.Repos.route,

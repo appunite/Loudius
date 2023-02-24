@@ -1,7 +1,7 @@
 package com.appunite.loudius.di
 
-import com.appunite.loudius.domain.GithubRepository
-import com.appunite.loudius.domain.GithubRepositoryImpl
+import com.appunite.loudius.domain.UserRepository
+import com.appunite.loudius.domain.UserRepositoryImpl
 import com.appunite.loudius.network.GithubApi
 import com.appunite.loudius.network.GithubDataSource
 import com.appunite.loudius.network.GithubNetworkDataSource
@@ -22,9 +22,9 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubRepository(
+    fun provideUserRepository(
         githubDataSource: GithubDataSource,
-    ): GithubRepository = GithubRepositoryImpl(githubDataSource)
+    ): UserRepository = UserRepositoryImpl(githubDataSource)
 
     @Singleton
     @Provides
