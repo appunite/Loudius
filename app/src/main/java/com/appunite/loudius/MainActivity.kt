@@ -12,9 +12,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.appunite.loudius.common.Constants.REDIRECT_URL
-import com.appunite.loudius.presentation.ScreenRoute
-import com.appunite.loudius.presentation.login.ExampleScreen
+import com.appunite.loudius.common.ScreenRoute
 import com.appunite.loudius.presentation.login.LoginScreen
+import com.appunite.loudius.presentation.repos.ReposScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                                 uriPattern = REDIRECT_URL
                             })
                         ) {
-                            ExampleScreen(intent = intent)
+                            ReposScreen(intent = intent)
                         }
                     }
                 }

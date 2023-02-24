@@ -11,8 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.appunite.loudius.common.Constants.AUTH_URL
+import androidx.compose.ui.res.stringResource
+import com.appunite.loudius.R
+import com.appunite.loudius.common.Constants.AUTH_PATH
+import com.appunite.loudius.common.Constants.BASE_URL
 import com.appunite.loudius.common.Constants.CLIENT_ID
+import com.appunite.loudius.common.Constants.NAME_PARAM_CLIENT_ID
 
 @Composable
 fun LoginScreen(
@@ -24,18 +28,15 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = {
-                val url = "$AUTH_URL/login/oauth/authorize?client_id=$CLIENT_ID"
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                context.startActivity(intent)
-            }
+            onClick = { startAuthorizing(context) }
         ) {
-            Text(text = "Login")
+            Text(text = stringResource(id = R.string.login))
         }
     }
 }
 
-@Composable
-fun ExampleScreen(intent: Intent) {
-    Text(text = intent.data?.getQueryParameter("code") ?: "empty code")
+private fun startAuthorizing(context: Context) {
+    val url = BASE_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    context.startActivity(intent)
 }

@@ -1,4 +1,4 @@
-package com.appunite.loudius.presentation
+package com.appunite.loudius.common
 
 sealed class ScreenRoute(val route: String) {
 
