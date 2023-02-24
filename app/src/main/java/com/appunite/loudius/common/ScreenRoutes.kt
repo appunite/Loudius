@@ -1,8 +1,8 @@
 package com.appunite.loudius.common
 
-sealed class ScreenRoute(val route: String) {
+sealed class Screen(val route: String) {
 
-    object Login: ScreenRoute("login_screen")
+    object Login: Screen("login_screen")
 
-    object ReposScreen: ScreenRoute("repos_screen")
+    object Repos: Screen("repos_screen")
 }
