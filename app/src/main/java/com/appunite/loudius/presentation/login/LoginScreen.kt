@@ -20,15 +20,15 @@ import com.appunite.loudius.common.Constants.NAME_PARAM_CLIENT_ID
 
 @Composable
 fun LoginScreen(
-    context: Context
+    context: Context,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(
-            onClick = { startAuthorizing(context) }
+            onClick = { startAuthorizing(context) },
         ) {
             Text(text = stringResource(id = R.string.login))
         }

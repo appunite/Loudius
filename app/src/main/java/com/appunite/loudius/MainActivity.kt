@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
                             deepLinks = listOf(
                                 navDeepLink {
                                     uriPattern = REDIRECT_URL
-                                }
-                            )
+                                },
+                            ),
                         ) {
                             ReposScreen(intent = intent)
                         }
