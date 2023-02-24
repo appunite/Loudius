@@ -8,7 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun ReposScreen(
     intent: Intent,
-    viewModel: ReposViewModel = hiltViewModel()
+    viewModel: ReposViewModel = hiltViewModel(),
 ) {
     val code = intent.data?.getQueryParameter("code")
     Text(text = code ?: "empty code")

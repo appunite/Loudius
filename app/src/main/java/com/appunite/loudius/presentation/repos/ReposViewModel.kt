@@ -11,16 +11,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReposViewModel @Inject constructor(
-    private val githubRepository: GithubRepository
+    private val githubRepository: GithubRepository,
 ) : ViewModel() {
 
     fun getAccessToken(code: String) {
         viewModelScope.launch {
-            //TODO add client secret [SIL-66]
+            // TODO add client secret [SIL-66]
             githubRepository.getAccessToken(
                 clientId = CLIENT_ID,
                 clientSecret = "",
-                code = code
+                code = code,
             ).onSuccess { token ->
                 Log.i("access_token", token.accessToken)
             }.onFailure {

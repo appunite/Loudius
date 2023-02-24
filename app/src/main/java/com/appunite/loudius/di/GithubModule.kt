@@ -23,12 +23,12 @@ object GithubModule {
     @Singleton
     @Provides
     fun provideGithubRepository(
-        githubDataSource: GithubDataSource
+        githubDataSource: GithubDataSource,
     ): GithubRepository = GithubRepositoryImpl(githubDataSource)
 
     @Singleton
     @Provides
     fun provideGithubDataSource(
-        api: GithubApi
+        api: GithubApi,
     ): GithubDataSource = GithubNetworkDataSource(api)
 }
