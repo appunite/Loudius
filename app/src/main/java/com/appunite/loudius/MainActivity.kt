@@ -15,6 +15,7 @@ import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.presentation.login.LoginScreen
 import com.appunite.loudius.presentation.repos.ReposScreen
+import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Login.route,
+                        startDestination = Screen.PullRequests.route,
                     ) {
                         composable(route = Screen.Login.route) {
                             LoginScreen()
@@ -46,6 +47,9 @@ class MainActivity : ComponentActivity() {
                             ),
                         ) {
                             ReposScreen(intent = intent)
+                        }
+                        composable(route = Screen.PullRequests.route) {
+                            PullRequestsScreen()
                         }
                     }
                 }
