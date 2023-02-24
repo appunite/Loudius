@@ -5,7 +5,7 @@ import com.appunite.loudius.network.model.AccessToken
 import javax.inject.Inject
 
 class GithubRepositoryImpl @Inject constructor(
-    private val githubDataSource: GithubDataSource
+    private val githubDataSource: GithubDataSource,
 ) : GithubRepository {
 
     override suspend fun getAccessToken(clientId: String, clientSecret: String, code: String): Result<AccessToken> =

@@ -27,16 +27,16 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Login.route
+                        startDestination = Screen.Login.route,
                     ) {
                         composable(route = Screen.Login.route) {
                             LoginScreen(
-                                context = this@MainActivity
+                                context = this@MainActivity,
                             )
                         }
                         composable(
