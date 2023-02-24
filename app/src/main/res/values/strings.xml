@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Loudius</string>
     <string name="back_button">Back button</string>
+    <string name="login">Log in</string>
     <string name="details_screen_user_image_description">User image</string>
     <string name="details_notify">Notify</string>
     <string name="details_reviewed">Reviewed %d h ago.</string>
