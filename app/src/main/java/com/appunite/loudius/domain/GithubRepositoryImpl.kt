@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GithubRepositoryImpl @Inject constructor(
     private val githubDataSource: GithubDataSource
-): GithubRepository {
+) : GithubRepository {
 
     override suspend fun getAccessToken(clientId: String, clientSecret: String, code: String): Result<AccessToken> =
         githubDataSource.getAccessToken(clientId, clientSecret, code)

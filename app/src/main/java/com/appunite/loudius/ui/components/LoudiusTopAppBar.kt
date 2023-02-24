@@ -38,7 +38,7 @@ fun LoudiusTopAppBar(
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface
-        ),
+        )
     )
 }
 

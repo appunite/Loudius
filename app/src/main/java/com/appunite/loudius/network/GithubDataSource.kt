@@ -13,7 +13,7 @@ interface GithubDataSource {
 @Singleton
 class GithubNetworkDataSource @Inject constructor(
     private val api: GithubApi
-): GithubDataSource {
+) : GithubDataSource {
 
     override suspend fun getAccessToken(clientId: String, clientSecret: String, code: String): Result<AccessToken> =
         safeApiCall { api.getAccessToken(clientId, clientSecret, code) }

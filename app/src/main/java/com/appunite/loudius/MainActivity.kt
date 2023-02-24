@@ -41,9 +41,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(
                             route = Screen.Repos.route,
-                            deepLinks = listOf(navDeepLink {
-                                uriPattern = REDIRECT_URL
-                            })
+                            deepLinks = listOf(
+                                navDeepLink {
+                                    uriPattern = REDIRECT_URL
+                                }
+                            )
                         ) {
                             ReposScreen(intent = intent)
                         }
