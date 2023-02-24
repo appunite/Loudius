@@ -28,6 +28,8 @@ private val LightColorScheme = lightColorScheme(
     surface = White99,
     onSurface = Black90,
     onSurfaceVariant = PurpleBlack30,
+    outlineVariant = NeutralVariant30,
+    error = Error40,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
