@@ -8,16 +8,16 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.network.GitHubPullRequestsRepository
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class PullRequestState(
-    val pullRequests: List<PullRequest> = emptyList()
+    val pullRequests: List<PullRequest> = emptyList(),
 )
 
 @HiltViewModel
 class PullRequestsViewModel @Inject constructor(
-    private val gitHubReposRepository: GitHubPullRequestsRepository
+    private val gitHubReposRepository: GitHubPullRequestsRepository,
 ) : ViewModel() {
     var state by mutableStateOf(PullRequestState())
         private set

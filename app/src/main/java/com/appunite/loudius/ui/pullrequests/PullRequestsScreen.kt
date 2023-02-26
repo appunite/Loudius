@@ -42,12 +42,12 @@ private fun PullRequestsScreenStateless(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             pullRequests.forEach {
                 PullRequestItem(
                     repositoryName = it.fullRepositoryName,
-                    pullRequestTitle = it.title
+                    pullRequestTitle = it.title,
                 )
             }
         }
@@ -78,7 +78,7 @@ fun PullRequestsScreenPreview() {
                 0,
                 "${Constants.BASE_API_URL}/appunite/Stefan",
                 "PR 1",
-                "2021-11-29T16:31:41Z"
+                "2021-11-29T16:31:41Z",
             ),
             PullRequest(
                 1,
@@ -86,7 +86,7 @@ fun PullRequestsScreenPreview() {
                 1,
                 "${Constants.BASE_API_URL}/appunite/Silentus",
                 "PR 2",
-                "2022-11-29T16:31:41Z"
+                "2022-11-29T16:31:41Z",
             ),
             PullRequest(
                 2,
@@ -94,7 +94,7 @@ fun PullRequestsScreenPreview() {
                 2,
                 "${Constants.BASE_API_URL}/appunite/Loudius",
                 "PR 3",
-                "2023-01-29T16:31:41Z"
+                "2023-01-29T16:31:41Z",
             ),
             PullRequest(
                 3,
@@ -102,8 +102,8 @@ fun PullRequestsScreenPreview() {
                 3,
                 "${Constants.BASE_API_URL}/appunite/Blocktrade",
                 "PR 4",
-                "2022-01-29T16:31:41Z"
+                "2022-01-29T16:31:41Z",
             ),
-        )
+        ),
     )
 }
