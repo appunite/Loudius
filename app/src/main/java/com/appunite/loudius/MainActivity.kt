@@ -13,8 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
-import com.appunite.loudius.presentation.login.LoginScreen
-import com.appunite.loudius.presentation.repos.ReposScreen
+import com.appunite.loudius.ui.login.LoginScreen
+import com.appunite.loudius.ui.repos.ReposScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,12 +27,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Login.route,
+                        startDestination = Screen.Login.route
                     ) {
                         composable(route = Screen.Login.route) {
                             LoginScreen()
@@ -42,8 +42,8 @@ class MainActivity : ComponentActivity() {
                             deepLinks = listOf(
                                 navDeepLink {
                                     uriPattern = REDIRECT_URL
-                                },
-                            ),
+                                }
+                            )
                         ) {
                             ReposScreen(intent = intent)
                         }

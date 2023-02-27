@@ -1,4 +1,4 @@
-package com.appunite.loudius.presentation.repos
+package com.appunite.loudius.ui.repos
 
 import android.content.Intent
 import androidx.compose.material3.Text
@@ -8,7 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun ReposScreen(
     intent: Intent,
-    viewModel: ReposViewModel = hiltViewModel(),
+    viewModel: ReposViewModel = hiltViewModel()
 ) {
     val code = intent.data?.getQueryParameter("code")
     Text(text = code ?: "empty code")

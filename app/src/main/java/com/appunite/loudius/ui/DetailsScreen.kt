@@ -35,20 +35,20 @@ private fun DetailsScreenStateless(topBarTitle: String, reviewers: List<Reviewer
         content = { padding ->
             DetailsScreenContent(reviewers, modifier = Modifier.padding(padding))
         },
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
     )
 }
 
 @Composable
 private fun DetailsScreenContent(reviewers: List<Reviewer>, modifier: Modifier) {
     LazyColumn(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
     ) {
         itemsIndexed(reviewers) { index, reviewer ->
             ReviewerView(
                 reviewer = reviewer,
                 backgroundColor = resolveReviewerBackgroundColor(index),
-                onNotifyClick = {},
+                onNotifyClick = {}
             )
         }
     }
@@ -65,14 +65,14 @@ private fun ReviewerView(reviewer: Reviewer, backgroundColor: Color, onNotifyCli
             .fillMaxWidth()
             .background(backgroundColor)
             .bottomBorder(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            .padding(16.dp),
+            .padding(16.dp)
     ) {
         ReviewerAvatarView(Modifier.align(CenterVertically))
         Column(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 16.dp)
-                .align(CenterVertically),
+                .align(CenterVertically)
         ) {
             IsReviewedHeadlineText(reviewer)
             ReviewerName(reviewer)
@@ -86,9 +86,9 @@ private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.person_outline_24px),
         contentDescription = stringResource(
-            R.string.details_screen_user_image_description,
+            R.string.details_screen_user_image_description
         ),
-        modifier = modifier,
+        modifier = modifier
     )
 }
 
@@ -97,7 +97,7 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
     Text(
         text = resolveIsReviewedText(reviewer),
         style = MaterialTheme.typography.labelMedium,
-        color = if (reviewer.isReviewDone) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
+        color = if (reviewer.isReviewDone) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error
     )
 }
 
@@ -113,7 +113,7 @@ private fun ReviewerName(reviewer: Reviewer) {
     Text(
         text = reviewer.name,
         style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -122,7 +122,7 @@ private fun NotifyButton(onNotifyClick: () -> Unit, modifier: Modifier = Modifie
     OutlinedButton(onClick = onNotifyClick, modifier = modifier) {
         Text(
             text = stringResource(R.string.details_notify),
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -133,7 +133,7 @@ private fun ReviewerViewPreview() {
     LoudiusTheme {
         ReviewerView(
             reviewer = Reviewer("Kezc", true, 12, 12),
-            backgroundColor = MaterialTheme.colorScheme.surface,
+            backgroundColor = MaterialTheme.colorScheme.surface
         ) {}
     }
 }
