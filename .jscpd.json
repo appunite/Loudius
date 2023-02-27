@@ -3,13 +3,15 @@
   "reporters": [
     "html",
     "console",
-    "xml"
+    "xml",
+    "consoleFull"
   ],
   "ignore": [
     "**/__snapshots__/**"
   ],
   "ignorePattern": [
-    "^import .*"
+    "^import .*",
+    "import .*"
   ],
   "absolute": true
 }
