@@ -1,0 +1,15 @@
+{
+  "threshold": 0,
+  "reporters": [
+    "html",
+    "console",
+    "xml"
+  ],
+  "ignore": [
+    "**/__snapshots__/**"
+  ],
+  "ignorePattern": [
+    "import .*"
+  ],
+  "absolute": true
+}
