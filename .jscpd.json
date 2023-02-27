@@ -1,0 +1,16 @@
+{
+  "threshold": 0,
+  "reporters": [
+    "html",
+    "console",
+    "badge"
+  ],
+  "ignore": [
+    "**/__snapshots__/**",
+    "^import .*"
+  ],
+  "ignorePattern": [
+    "import .* from '.*';"
+  ],
+  "absolute": true
+}
