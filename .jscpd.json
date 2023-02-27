@@ -3,14 +3,13 @@
   "reporters": [
     "html",
     "console",
-    "badge"
+    "xml"
   ],
   "ignore": [
-    "**/__snapshots__/**",
-    "^import .*"
+    "**/__snapshots__/**"
   ],
   "ignorePattern": [
-    "import .* from '.*';"
+    "^import .*"
   ],
   "absolute": true
 }
