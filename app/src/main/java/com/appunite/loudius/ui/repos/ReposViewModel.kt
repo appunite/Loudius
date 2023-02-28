@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReposViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     fun getAccessToken(code: String) {
@@ -20,7 +20,7 @@ class ReposViewModel @Inject constructor(
             userRepository.getAccessToken(
                 clientId = CLIENT_ID,
                 clientSecret = "",
-                code = code
+                code = code,
             ).onSuccess { token ->
                 Log.i("access_token", token.accessToken)
             }.onFailure {

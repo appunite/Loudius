@@ -34,7 +34,7 @@ fun LoginScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(painter = painterResource(id = R.drawable.loudius_logo), contentDescription = stringResource(
                     R.string.login_screen)
@@ -43,17 +43,17 @@ fun LoginScreen() {
             onClick = { startAuthorizing(context) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 46.dp)
+                .padding(horizontal = 46.dp),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_github),
                 contentDescription = stringResource(R.string.github_icon),
-                tint = Color.Black
+                tint = Color.Black,
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 text = stringResource(id = R.string.login),
-                color = Pink40
+                color = Pink40,
             )
         }
     }
