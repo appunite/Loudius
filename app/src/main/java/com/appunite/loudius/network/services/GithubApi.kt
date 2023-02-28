@@ -9,7 +9,7 @@ import retrofit2.http.POST
 interface GithubApi {
 
     @Headers("Accept: application/json")
-    @POST("login/oauth/access_token")
+    @POST("login/oauth/access_token?scope=repo")
     @FormUrlEncoded
     suspend fun getAccessToken(
         @Field("client_id") clientId: String,
