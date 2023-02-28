@@ -2,8 +2,6 @@ package com.appunite.loudius.domain
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,16 +15,8 @@ class AccessTokenLocalDataSource @Inject constructor(@ApplicationContext context
 
     }
 
-    private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-    private val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
-
-    private val sharedPreferences: SharedPreferences = EncryptedSharedPreferences.create(
-        FILE_NAME,
-        mainKeyAlias,
-        context,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
     fun saveAccessToken(accessToken: String) {
         sharedPreferences.edit().putString(KEY_ACCESS_TOKEN, accessToken).apply()
