@@ -60,7 +60,7 @@ fun LoginButton(modifier: Modifier) {
     val context = LocalContext.current
     OutlinedButton(
         onClick = { startAuthorizing(context) },
-        modifier = modifier
+        modifier = modifier,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_github),
