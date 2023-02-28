@@ -10,7 +10,7 @@ class GitHubPullRequestsDataSource @Inject constructor(private val service: Gith
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = safeApiCall {
         service.getPullRequestsForUser(
             auth_token,
-            "author%3A$author+type%3Apr+state%3Aopen",
+            "author:$author type:pr state:open",
         )
     }
 }
