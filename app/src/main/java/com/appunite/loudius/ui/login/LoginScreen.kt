@@ -36,7 +36,9 @@ fun LoginScreen() {
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painter = painterResource(id = R.drawable.loudius_logo), contentDescription = "Loudius logo")
+        Image(painter = painterResource(id = R.drawable.loudius_logo), contentDescription = stringResource(
+                    R.string.login_screen)
+                )
         OutlinedButton(
             onClick = { startAuthorizing(context) },
             modifier = Modifier
@@ -45,7 +47,7 @@ fun LoginScreen() {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_github),
-                contentDescription = "Github icon",
+                contentDescription = stringResource(R.string.github_icon),
                 tint = Color.Black
             )
             Text(
