@@ -4,11 +4,9 @@ import com.appunite.loudius.network.model.AccessToken
 
 interface UserRepository {
 
-    suspend fun getAccessToken(
+    suspend fun getAndSaveAccessToken(
         clientId: String,
         clientSecret: String,
         code: String
     ): Result<AccessToken>
-
-    suspend fun saveAccessToken(accessToken: AccessToken)
 }

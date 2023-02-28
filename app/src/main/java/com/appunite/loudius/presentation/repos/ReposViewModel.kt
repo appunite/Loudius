@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.domain.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ReposViewModel @Inject constructor(
@@ -17,7 +17,7 @@ class ReposViewModel @Inject constructor(
     fun getAccessToken(code: String) {
         viewModelScope.launch {
             // TODO add client secret [SIL-66]
-            userRepository.getAccessToken(
+            userRepository.getAndSaveAccessToken(
                 clientId = CLIENT_ID,
                 clientSecret = "",
                 code = code,

@@ -7,12 +7,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccessTokenLocalDataSource @Inject constructor(@ApplicationContext context: Context) {
+class UserLocalDataSource @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
         private const val FILE_NAME = "com.appunite.loudius.sharedPreferences"
         private const val KEY_ACCESS_TOKEN = "access_token"
-
     }
 
     private val sharedPreferences: SharedPreferences =
@@ -22,7 +21,5 @@ class AccessTokenLocalDataSource @Inject constructor(@ApplicationContext context
         sharedPreferences.edit().putString(KEY_ACCESS_TOKEN, accessToken).apply()
     }
 
-    fun getAccessToken(): String? =
-        sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
-
+    fun getAccessToken(): String? = sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
 }

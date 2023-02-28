@@ -1,12 +1,12 @@
 package com.appunite.loudius.di
 
 import android.content.Context
-import com.appunite.loudius.domain.AccessTokenLocalDataSource
+import com.appunite.loudius.domain.UserLocalDataSource
 import com.appunite.loudius.domain.UserRepository
 import com.appunite.loudius.domain.UserRepositoryImpl
 import com.appunite.loudius.network.GithubApi
-import com.appunite.loudius.network.GithubDataSource
-import com.appunite.loudius.network.GithubNetworkDataSource
+import com.appunite.loudius.network.UserDataSource
+import com.appunite.loudius.network.UserNetworkDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,18 +26,18 @@ object GithubModule {
     @Singleton
     @Provides
     fun provideUserRepository(
-        githubDataSource: GithubDataSource,
-        accessTokenLocalDataSource: AccessTokenLocalDataSource,
-    ): UserRepository = UserRepositoryImpl(githubDataSource, accessTokenLocalDataSource)
+        userDataSource: UserDataSource,
+        userLocalDataSource: UserLocalDataSource,
+    ): UserRepository = UserRepositoryImpl(userDataSource, userLocalDataSource)
 
     @Singleton
     @Provides
     fun provideGithubDataSource(
         api: GithubApi,
-    ): GithubDataSource = GithubNetworkDataSource(api)
+    ): UserDataSource = UserNetworkDataSource(api)
 
     @Singleton
     @Provides
-    fun provideAccessTokenLocalDataSource(@ApplicationContext context: Context): AccessTokenLocalDataSource =
-        AccessTokenLocalDataSource(context)
+    fun provideAccessTokenLocalDataSource(@ApplicationContext context: Context): UserLocalDataSource =
+        UserLocalDataSource(context)
 }
