@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,35 +31,47 @@ import com.appunite.loudius.ui.theme.Pink40
 
 @Composable
 fun LoginScreen() {
-    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.loudius_logo),
-            contentDescription = stringResource(
-                R.string.login_screen,
-            ),
-        )
-        OutlinedButton(
-            onClick = { startAuthorizing(context) },
+        LoginImage()
+        LoginButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 46.dp),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_github),
-                contentDescription = stringResource(R.string.github_icon),
-                tint = Color.Black,
-            )
-            Text(
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
-                text = stringResource(id = R.string.login),
-                color = Pink40,
-            )
-        }
+        )
+    }
+}
+
+@Composable
+fun LoginImage() {
+    Image(
+        painter = painterResource(id = R.drawable.loudius_logo),
+        contentDescription = stringResource(
+            R.string.login_screen,
+        ),
+    )
+}
+
+@Composable
+fun LoginButton(modifier: Modifier) {
+    val context = LocalContext.current
+    OutlinedButton(
+        onClick = { startAuthorizing(context) },
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_github),
+            contentDescription = stringResource(R.string.github_icon),
+            tint = Color.Black,
+        )
+        Text(
+            modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
+            text = stringResource(id = R.string.login),
+            color = Pink40,
+        )
     }
 }
 
@@ -73,5 +86,7 @@ private fun buildAuthorizationUrl() = BASE_URL + AUTH_PATH + NAME_PARAM_CLIENT_I
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    MaterialTheme {
+        LoginScreen()
+    }
 }
