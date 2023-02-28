@@ -1,4 +1,4 @@
-package com.appunite.loudius.presentation.repos
+package com.appunite.loudius.ui.repos
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

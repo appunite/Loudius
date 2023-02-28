@@ -1,4 +1,4 @@
-package com.appunite.loudius.presentation.repos
+package com.appunite.loudius.ui.repos
 
 import android.content.Intent
 import androidx.compose.material3.Text
