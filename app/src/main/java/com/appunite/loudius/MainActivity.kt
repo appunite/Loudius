@@ -13,9 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
-import com.appunite.loudius.presentation.login.LoginScreen
-import com.appunite.loudius.presentation.repos.ReposScreen
+import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
+import com.appunite.loudius.ui.repos.ReposScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
