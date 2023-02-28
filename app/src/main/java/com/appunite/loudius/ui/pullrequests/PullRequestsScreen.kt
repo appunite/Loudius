@@ -40,7 +40,7 @@ private fun PullRequestsScreenStateless(
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             items(pullRequests) {
                 PullRequestItem(
