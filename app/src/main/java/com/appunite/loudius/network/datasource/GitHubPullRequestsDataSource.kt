@@ -1,6 +1,7 @@
-package com.appunite.loudius.network
+package com.appunite.loudius.network.datasource
 
 import com.appunite.loudius.network.model.PullRequestsResponse
+import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 

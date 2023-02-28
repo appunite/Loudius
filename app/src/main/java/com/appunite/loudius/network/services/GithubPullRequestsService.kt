@@ -1,4 +1,4 @@
-package com.appunite.loudius.network
+package com.appunite.loudius.network.services
 
 import com.appunite.loudius.network.model.PullRequestsResponse
 import retrofit2.http.GET
