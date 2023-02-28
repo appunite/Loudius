@@ -5,7 +5,7 @@ import java.io.IOException
 
 suspend fun <T> safeApiCall(
     errorParser: RequestErrorParser = DefaultErrorParser,
-    apiCall: suspend () -> T
+    apiCall: suspend () -> T,
 ): Result<T> {
     return try {
         val response = apiCall()
