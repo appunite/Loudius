@@ -21,7 +21,6 @@ class UserRepositoryImpl @Inject constructor(
             Result.success(AccessToken(tokenFromLocal))
         } else {
             githubDataSource.getAccessToken(clientId, clientSecret, code)
-
         }
     }
 
