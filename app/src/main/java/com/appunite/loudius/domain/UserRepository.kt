@@ -7,6 +7,6 @@ interface UserRepository {
     suspend fun getAndSaveAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken>
 }

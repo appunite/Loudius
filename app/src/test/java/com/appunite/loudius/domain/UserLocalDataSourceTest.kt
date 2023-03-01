@@ -8,7 +8,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-
 class UserLocalDataSourceTest {
     private val sharedPreferences = mockk<SharedPreferences>(relaxed = true) {
         every { getString("access_token", null) } returns "exampleAccessToken"

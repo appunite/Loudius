@@ -11,7 +11,7 @@ interface UserDataSource {
     suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken>
 }
 
@@ -23,7 +23,7 @@ class UserNetworkDataSource @Inject constructor(
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken> =
         safeApiCall { api.getAccessToken(clientId, clientSecret, code) }
 }

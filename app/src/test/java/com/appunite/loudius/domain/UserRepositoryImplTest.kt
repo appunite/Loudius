@@ -31,7 +31,8 @@ class UserRepositoryImplTest {
 
             coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
             assertEquals(
-                Result.success(AccessToken("validAccessToken")), result
+                Result.success(AccessToken("validAccessToken")),
+                result,
             ) { "Expected success result with valid access token" }
         }
 
@@ -51,7 +52,8 @@ class UserRepositoryImplTest {
 
         coVerify(exactly = 0) { networkDataSource.getAccessToken(any(), any(), any()) }
         assertEquals(
-            Result.success(AccessToken("validAccessToken")), result
+            Result.success(AccessToken("validAccessToken")),
+            result,
         ) { "Expected success result with valid access token" }
     }
 }

@@ -12,7 +12,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getAndSaveAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken> {
         val tokenFromLocal = userLocalDataSource.getAccessToken()
 
