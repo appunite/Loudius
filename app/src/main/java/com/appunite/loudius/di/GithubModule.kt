@@ -2,9 +2,10 @@ package com.appunite.loudius.di
 
 import com.appunite.loudius.domain.UserRepository
 import com.appunite.loudius.domain.UserRepositoryImpl
-import com.appunite.loudius.network.GithubApi
 import com.appunite.loudius.network.GithubDataSource
 import com.appunite.loudius.network.GithubNetworkDataSource
+import com.appunite.loudius.network.services.GithubApi
+import com.appunite.loudius.network.services.GithubPullRequestsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +19,9 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubApi(retrofit: Retrofit): GithubApi = retrofit.create(GithubApi::class.java)
+    fun provideGithubApi(@NetworkModule.GitHubNonApi retrofit: Retrofit): GithubApi = retrofit.create(
+        GithubApi::class.java,
+    )
 
     @Singleton
     @Provides
@@ -31,4 +34,8 @@ object GithubModule {
     fun provideGithubDataSource(
         api: GithubApi,
     ): GithubDataSource = GithubNetworkDataSource(api)
+
+    @Provides
+    fun provideGithubReposService(retrofit: Retrofit): GithubPullRequestsService =
+        retrofit.create(GithubPullRequestsService::class.java)
 }
