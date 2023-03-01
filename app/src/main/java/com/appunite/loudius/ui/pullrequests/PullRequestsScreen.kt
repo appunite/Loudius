@@ -41,9 +41,7 @@ private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
 ) {
     Scaffold(topBar = {
-        LoudiusTopAppBar(title = stringResource(R.string.app_name)) {
-            // TODO: navigation
-        }
+        LoudiusTopAppBar(title = stringResource(R.string.app_name))
     }, content = { padding ->
         LazyColumn(
             modifier = Modifier

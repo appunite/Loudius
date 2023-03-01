@@ -18,7 +18,7 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 @Composable
 fun LoudiusTopAppBar(
     title: String,
-    onClickBackArrow: () -> Unit,
+    onClickBackArrow: (() -> Unit)? = null,
 ) {
     TopAppBar(
         title = {
@@ -29,11 +29,13 @@ fun LoudiusTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onClickBackArrow) {
-                Icon(
-                    painter = painterResource(id = R.drawable.arrow_back),
-                    contentDescription = stringResource(R.string.back_button),
-                )
+            if (onClickBackArrow != null) {
+                IconButton(onClick = onClickBackArrow) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = stringResource(R.string.back_button),
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
