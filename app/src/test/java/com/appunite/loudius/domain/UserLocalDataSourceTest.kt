@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -29,5 +30,14 @@ class UserLocalDataSourceTest {
 
         val result = userLocalDataSource.getAccessToken()
         assertEquals(null, result)
+    }
+
+    @Test
+    fun `GIVEN access token WHEN saving access token THEN shared preferences are edited`() {
+        userLocalDataSource.saveAccessToken("exampleAccessToken")
+
+        verify(exactly = 1) {
+            sharedPreferences.edit().putString("access_token", "exampleAccessToken")
+        }
     }
 }

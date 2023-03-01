@@ -54,6 +54,4 @@ class UserRepositoryImplTest {
             Result.success(AccessToken("validAccessToken")), result
         ) { "Expected success result with valid access token" }
     }
-
-
 }
