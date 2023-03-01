@@ -4,7 +4,8 @@ import android.content.Context
 import com.appunite.loudius.domain.UserLocalDataSource
 import com.appunite.loudius.domain.UserRepository
 import com.appunite.loudius.domain.UserRepositoryImpl
-import com.appunite.loudius.network.GithubApi
+import com.appunite.loudius.network.services.GithubApi
+import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.UserDataSource
 import com.appunite.loudius.network.UserNetworkDataSource
 import dagger.Module
@@ -21,7 +22,9 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubApi(retrofit: Retrofit): GithubApi = retrofit.create(GithubApi::class.java)
+    fun provideGithubApi(@NetworkModule.GitHubNonApi retrofit: Retrofit): GithubApi = retrofit.create(
+        GithubApi::class.java,
+    )
 
     @Singleton
     @Provides
@@ -35,6 +38,10 @@ object GithubModule {
     fun provideGithubDataSource(
         api: GithubApi,
     ): UserDataSource = UserNetworkDataSource(api)
+
+    @Provides
+    fun provideGithubReposService(retrofit: Retrofit): GithubPullRequestsService =
+        retrofit.create(GithubPullRequestsService::class.java)
 
     @Singleton
     @Provides

@@ -1,4 +1,4 @@
-package com.appunite.loudius.network
+package com.appunite.loudius.network.services
 
 import com.appunite.loudius.network.model.AccessToken
 import retrofit2.http.Field

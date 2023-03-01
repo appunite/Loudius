@@ -6,4 +6,6 @@
     <string name="details_notify">Notify</string>
     <string name="details_reviewed">Reviewed %d h ago.</string>
     <string name="details_not_reviewed">Not reviewed for %d h.</string>
+    <string name="github_icon">Github icon</string>
+    <string name="login_screen">Loudius logo</string>
 </resources>
