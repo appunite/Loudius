@@ -21,6 +21,10 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        if (System.env.CLIENT_SECRET == null || System.env.CLIENT_SECRET.isEmpty()) {
+            logger.warn("You need to set CLIENT_SECRET in your environment variables")
+        }
+        buildConfigField "String", "CLIENT_SECRET", "\"${System.env.CLIENT_SECRET}\""
     }
 
     buildTypes {
