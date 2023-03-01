@@ -4,10 +4,10 @@ import android.content.Context
 import com.appunite.loudius.domain.UserLocalDataSource
 import com.appunite.loudius.domain.UserRepository
 import com.appunite.loudius.domain.UserRepositoryImpl
-import com.appunite.loudius.network.services.GithubApi
-import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.UserDataSource
 import com.appunite.loudius.network.UserNetworkDataSource
+import com.appunite.loudius.network.services.GithubApi
+import com.appunite.loudius.network.services.GithubPullRequestsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,9 +22,14 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubApi(@NetworkModule.GitHubNonApi retrofit: Retrofit): GithubApi = retrofit.create(
-        GithubApi::class.java,
-    )
+    fun provideGithubApi(@NetworkModule.GitHubNonApi retrofit: Retrofit): GithubApi =
+        retrofit.create(
+            GithubApi::class.java,
+        )
+
+    @Provides
+    fun provideGithubReposService(retrofit: Retrofit): GithubPullRequestsService =
+        retrofit.create(GithubPullRequestsService::class.java)
 
     @Singleton
     @Provides
@@ -35,16 +40,12 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubDataSource(
+    fun provideUserDataSource(
         api: GithubApi,
     ): UserDataSource = UserNetworkDataSource(api)
 
-    @Provides
-    fun provideGithubReposService(retrofit: Retrofit): GithubPullRequestsService =
-        retrofit.create(GithubPullRequestsService::class.java)
-
     @Singleton
     @Provides
-    fun provideAccessTokenLocalDataSource(@ApplicationContext context: Context): UserLocalDataSource =
+    fun provideUserLocalDataSource(@ApplicationContext context: Context): UserLocalDataSource =
         UserLocalDataSource(context)
 }

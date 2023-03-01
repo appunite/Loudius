@@ -1,6 +1,7 @@
 package com.appunite.loudius.network
 
 import com.appunite.loudius.network.model.AccessToken
+import com.appunite.loudius.network.services.GithubApi
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
