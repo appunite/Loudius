@@ -17,7 +17,6 @@ class ReposViewModel @Inject constructor(
 
     fun getAccessToken(code: String) {
         viewModelScope.launch {
-            // TODO add client secret [SIL-66]
             userRepository.getAccessToken(
                 clientId = CLIENT_ID,
                 clientSecret = BuildConfig.CLIENT_SECRET,
