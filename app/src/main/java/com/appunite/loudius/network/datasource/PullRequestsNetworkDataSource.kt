@@ -26,13 +26,10 @@ interface PullRequestDataSource {
 
 const val auth_token = "BEARER xxxxxxx" // temporary solution
 
-class GitHubPullRequestsDataSource @Inject constructor(private val service: GithubPullRequestsService) :
+class PullRequestsNetworkDataSource @Inject constructor(private val service: GithubPullRequestsService) :
     PullRequestDataSource {
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = safeApiCall {
-        service.getPullRequestsForUser(
-            auth_token,
-            "author:$author type:pr state:open",
-        )
+        service.getPullRequestsForUser(auth_token, "author:$author type:pr state:open")
     }
 
     override suspend fun getReviewers(
