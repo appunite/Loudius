@@ -18,7 +18,7 @@ object NetworkModule {
 
     @Provides
     @AuthAPI
-    fun provideBaseAuthUrl() = Constants.BASE_AUTH_URL
+    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
 
     @Provides
     @BaseAPI
