@@ -22,7 +22,7 @@ android {
             useSupportLibrary true
         }
         if (System.env.CLIENT_SECRET == null || System.env.CLIENT_SECRET.isEmpty()) {
-            throw RuntimeException("You need to set CLIENT_SECRET in your environment variables")
+            logger.warn("You need to set CLIENT_SECRET in your environment variables")
         }
         buildConfigField "String", "CLIENT_SECRET", "\"${System.env.CLIENT_SECRET}\""
     }
