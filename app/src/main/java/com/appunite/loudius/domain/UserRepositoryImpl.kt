@@ -15,7 +15,7 @@ class UserRepositoryImpl @Inject constructor(
         code: String,
     ): Result<AccessToken> {
         val result = userDataSource.getAccessToken(clientId, clientSecret, code)
-        result.onSuccess { userLocalDataSource.saveAccessToken(it.accessToken) }
+        result.onSuccess { userLocalDataSource.saveAccessToken(it) }
         return result
     }
 

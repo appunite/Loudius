@@ -22,7 +22,7 @@ class ReposViewModel @Inject constructor(
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code,
             ).onSuccess { token ->
-                Log.i("access_token", token.accessToken)
+                Log.i("access_token", token)
             }.onFailure {
                 Log.i("access_token", it.message.toString())
             }

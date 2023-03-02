@@ -1,7 +1,6 @@
 package com.appunite.loudius.domain
 
 import com.appunite.loudius.network.UserDataSource
-import com.appunite.loudius.network.model.AccessToken
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -16,7 +15,7 @@ class UserRepositoryImplTest {
     private val networkDataSource: UserDataSource = mockk {
         coEvery {
             getAccessToken(any(), any(), any())
-        } returns Result.success(AccessToken("validAccessToken"))
+        } returns Result.success("validAccessToken")
     }
     private val localDataSource: UserLocalDataSource = mockk {
         every { getAccessToken() } returns "validAccessToken"
@@ -31,7 +30,7 @@ class UserRepositoryImplTest {
 
             coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
             assertEquals(
-                Result.success(AccessToken("validAccessToken")),
+                Result.success("validAccessToken"),
                 result,
             ) { "Expected success result with valid access token" }
         }

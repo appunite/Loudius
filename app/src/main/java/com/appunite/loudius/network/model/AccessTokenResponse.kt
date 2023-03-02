@@ -1,6 +1,8 @@
 package com.appunite.loudius.network.model
 
-data class AccessToken(
+typealias AccessToken = String
+
+data class AccessTokenResponse(
 
     val accessToken: String,
 )

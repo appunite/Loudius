@@ -25,5 +25,5 @@ class UserNetworkDataSource @Inject constructor(
         clientSecret: String,
         code: String,
     ): Result<AccessToken> =
-        safeApiCall { api.getAccessToken(clientId, clientSecret, code) }
+        safeApiCall { api.getAccessToken(clientId, clientSecret, code).accessToken }
 }
