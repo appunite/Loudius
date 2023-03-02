@@ -6,6 +6,7 @@ import com.appunite.loudius.network.model.Reviewer
 import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
+import javax.inject.Singleton
 
 interface PullRequestDataSource {
     suspend fun getReviewers(
@@ -26,6 +27,7 @@ interface PullRequestDataSource {
 
 const val auth_token = "BEARER xxxxxxx" // temporary solution
 
+@Singleton
 class PullRequestsNetworkDataSource @Inject constructor(private val service: GithubPullRequestsService) :
     PullRequestDataSource {
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = safeApiCall {
