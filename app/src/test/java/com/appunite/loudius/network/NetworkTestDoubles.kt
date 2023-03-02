@@ -1,21 +1,26 @@
 package com.appunite.loudius.network
 
+import com.appunite.loudius.domain.UserRepository
+import com.appunite.loudius.fakes.FakeUserRepository
+import com.appunite.loudius.network.utils.AuthInterceptor
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
-private fun testOkHttpClient() = OkHttpClient.Builder()
-    .connectTimeout(1, TimeUnit.SECONDS)
-    .readTimeout(1, TimeUnit.SECONDS)
-    .writeTimeout(1, TimeUnit.SECONDS)
-    .build()
+fun testOkHttpClient(userRepository: UserRepository = FakeUserRepository()) =
+    OkHttpClient.Builder()
+        .connectTimeout(1, TimeUnit.SECONDS)
+        .readTimeout(1, TimeUnit.SECONDS)
+        .writeTimeout(1, TimeUnit.SECONDS)
+        .addInterceptor(AuthInterceptor(userRepository))
+        .build()
 
 private fun testGson() =
     GsonBuilder()

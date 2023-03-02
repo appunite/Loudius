@@ -3,15 +3,15 @@ package com.appunite.loudius.network.services
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
+import com.appunite.loudius.network.model.User
 import retrofit2.http.GET
-import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GithubPullRequestsService {
     @GET("/search/issues")
     suspend fun getPullRequestsForUser(
-        @Header("Authorization") authorization: String,
         @Query("q", encoded = true) query: String,
         @Query("page") page: Int = 0,
         @Query("per_page") perPage: Int = 100,
@@ -22,7 +22,6 @@ interface GithubPullRequestsService {
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Path("pull_number") pullRequestNumber: String,
-        @Header("Authorization") token: String,
     ): RequestedReviewersResponse
 
     @GET("/repos/{owner}/{repo}/pulls/{pull_number}/reviews")
@@ -30,6 +29,9 @@ interface GithubPullRequestsService {
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Path("pull_number") pullRequestNumber: String,
-        @Header("Authorization") token: String,
     ): List<Review>
+
+    @Headers("Accept: application/json")
+    @GET("user")
+    suspend fun getUser(): User
 }

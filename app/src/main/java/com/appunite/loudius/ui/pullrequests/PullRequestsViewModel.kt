@@ -24,7 +24,7 @@ class PullRequestsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            gitHubReposRepository.getPullRequestsForUser("kezc") // TODO get logged user
+            gitHubReposRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(pullRequests = it.items)
                 }

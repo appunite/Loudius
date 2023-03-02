@@ -2,6 +2,7 @@ package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
+import com.appunite.loudius.network.utils.AuthInterceptor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -21,12 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideOkHttp(): OkHttpClient {
-        val logging = HttpLoggingInterceptor()
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
-        return OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .build()
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BASIC
     }
 
     @Provides
@@ -43,13 +40,18 @@ object NetworkModule {
     fun provideAuthRetrofit(
         gson: Gson,
         @AuthAPI baseUrl: String,
-        okHttpClient: OkHttpClient
-    ): Retrofit =
-        Retrofit.Builder()
+        loggingInterceptor: HttpLoggingInterceptor
+    ): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
 
     @Provides
     @Singleton
@@ -57,13 +59,20 @@ object NetworkModule {
     fun provideBaseRetrofit(
         gson: Gson,
         @BaseAPI baseAPIUrl: String,
-        okHttpClient: OkHttpClient
-    ): Retrofit =
-        Retrofit.Builder()
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor
+    ): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
             .baseUrl(baseAPIUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
 
     @Provides
     @Singleton
