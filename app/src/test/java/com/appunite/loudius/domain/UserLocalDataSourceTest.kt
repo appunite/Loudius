@@ -24,11 +24,11 @@ class UserLocalDataSourceTest {
     }
 
     @Test
-    fun `GIVEN not filled data source WHEN getting access token THEN return null`() {
+    fun `GIVEN not filled data source WHEN getting access token THEN return empty string`() {
         every { sharedPreferences.getString("access_token", null) } returns null
 
         val result = userLocalDataSource.getAccessToken()
-        assertEquals(null, result)
+        assertEquals("", result)
     }
 
     @Test
