@@ -54,7 +54,7 @@ private fun PullRequestsScreenStateless(
                     repositoryName = item.fullRepositoryName,
                     pullRequestTitle = item.title,
                     darkBackground = isIndexEven,
-                    onClick = {}
+                    onClick = {},
                 )
             }
         }
@@ -63,7 +63,10 @@ private fun PullRequestsScreenStateless(
 
 @Composable
 private fun PullRequestItem(
-    repositoryName: String, pullRequestTitle: String, darkBackground: Boolean, onClick: () -> Unit
+    repositoryName: String,
+    pullRequestTitle: String,
+    darkBackground: Boolean,
+    onClick: () -> Unit,
 ) {
     val backgroundColor = if (darkBackground) {
         MaterialTheme.colorScheme.onSurface.copy(0.08f)
@@ -74,21 +77,21 @@ private fun PullRequestItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .clickable(onClick = onClick)
+            .clickable(onClick = onClick),
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_share),
             contentDescription = null,
             modifier = Modifier
                 .padding(start = 19.dp, top = 10.dp)
-                .size(width = 18.dp, height = 20.dp)
+                .size(width = 18.dp, height = 20.dp),
         )
         Column(Modifier.padding(start = 19.dp, top = 8.dp, bottom = 8.dp)) {
             Text(text = pullRequestTitle, style = MaterialTheme.typography.bodyLarge)
             Text(
                 text = repositoryName,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
