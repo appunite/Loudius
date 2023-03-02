@@ -41,7 +41,7 @@ class UserRepositoryImplTest {
         runTest {
             repository.fetchAccessToken("clientId", "clientSecret", "code")
 
-            coVerify(exactly = 1) { localDataSource.saveAccessToken(any()) }
+            coVerify(exactly = 1) { localDataSource.saveAccessToken("validAccessToken") }
         }
 
     @Test
