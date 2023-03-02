@@ -102,46 +102,50 @@ private fun PullRequestItem(
 @Preview("Pull requests - empty list")
 @Composable
 fun PullRequestsScreenEmptyListPreview() {
-    PullRequestsScreenStateless(emptyList())
+    LoudiusTheme {
+        PullRequestsScreenStateless(emptyList())
+    }
 }
 
 @Preview("Pull requests - filled list")
 @Composable
 fun PullRequestsScreenPreview() {
-    PullRequestsScreenStateless(
-        listOf(
-            PullRequest(
-                id = 0,
-                draft = false,
-                number = 0,
-                repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
-                title = "[SIL-67] Details screen - network layer",
-                updatedAt = "2021-11-29T16:31:41Z",
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            listOf(
+                PullRequest(
+                    id = 0,
+                    draft = false,
+                    number = 0,
+                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
+                    title = "[SIL-67] Details screen - network layer",
+                    updatedAt = "2021-11-29T16:31:41Z",
+                ),
+                PullRequest(
+                    id = 1,
+                    draft = true,
+                    number = 1,
+                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
+                    title = "[SIL-66] Add client secret to build config",
+                    updatedAt = "2022-11-29T16:31:41Z",
+                ),
+                PullRequest(
+                    id = 2,
+                    draft = false,
+                    number = 2,
+                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
+                    title = "[SIL-73] Storing access token",
+                    updatedAt = "2023-01-29T16:31:41Z",
+                ),
+                PullRequest(
+                    id = 3,
+                    draft = false,
+                    number = 3,
+                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
+                    title = "[SIL-62/SIL-75] Provide new annotation for API instances",
+                    updatedAt = "2022-01-29T16:31:41Z",
+                ),
             ),
-            PullRequest(
-                id = 1,
-                draft = true,
-                number = 1,
-                repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
-                title = "[SIL-66] Add client secret to build config",
-                updatedAt = "2022-11-29T16:31:41Z",
-            ),
-            PullRequest(
-                id = 2,
-                draft = false,
-                number = 2,
-                repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
-                title = "[SIL-73] Storing access token",
-                updatedAt = "2023-01-29T16:31:41Z",
-            ),
-            PullRequest(
-                id = 3,
-                draft = false,
-                number = 3,
-                repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
-                title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-                updatedAt = "2022-01-29T16:31:41Z",
-            ),
-        ),
-    )
+        )
+    }
 }
