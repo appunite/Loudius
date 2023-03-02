@@ -19,7 +19,7 @@ class UserRepositoryImplTest {
         } returns Result.success(AccessToken("validAccessToken"))
     }
     private val localDataSource: UserLocalDataSource = mockk {
-        every { getAccessToken() } returns null
+        every { getAccessToken() } returns ""
         every { saveAccessToken(any()) } returns Unit
     }
     private val repository = UserRepositoryImpl(networkDataSource, localDataSource)
@@ -27,7 +27,7 @@ class UserRepositoryImplTest {
     @Test
     fun `GIVEN not saved token locally WHEN getting token THEN return new token from network`() =
         runTest {
-            val result = repository.getAndSaveAccessToken("clientId", "clientSecret", "code")
+            val result = repository.fetchAccessToken("clientId", "clientSecret", "code")
 
             coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
             assertEquals(
@@ -39,7 +39,7 @@ class UserRepositoryImplTest {
     @Test
     fun `GIVEN not saved token locally WHEN getting token THEN new token should be saved`() =
         runTest {
-            repository.getAndSaveAccessToken("clientId", "clientSecret", "code")
+            repository.fetchAccessToken("clientId", "clientSecret", "code")
 
             coVerify(exactly = 1) { localDataSource.saveAccessToken(any()) }
         }
@@ -48,7 +48,7 @@ class UserRepositoryImplTest {
     fun `GIVEN saved token locally WHEN getting token THEN return saved token`() = runTest {
         every { localDataSource.getAccessToken() } returns "validAccessToken"
 
-        val result = repository.getAndSaveAccessToken("clientId", "clientSecret", "code")
+        val result = repository.fetchAccessToken("clientId", "clientSecret", "code")
 
         coVerify(exactly = 0) { networkDataSource.getAccessToken(any(), any(), any()) }
         assertEquals(

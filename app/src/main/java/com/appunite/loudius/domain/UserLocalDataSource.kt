@@ -21,5 +21,5 @@ class UserLocalDataSource @Inject constructor(@ApplicationContext context: Conte
         sharedPreferences.edit().putString(KEY_ACCESS_TOKEN, accessToken).apply()
     }
 
-    fun getAccessToken(): String? = sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
+    fun getAccessToken(): String = sharedPreferences.getString(KEY_ACCESS_TOKEN, null) ?: ""
 }

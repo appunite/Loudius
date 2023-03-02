@@ -9,19 +9,15 @@ class UserRepositoryImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource,
 ) : UserRepository {
 
-    override suspend fun getAndSaveAccessToken(
+    override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
         code: String,
     ): Result<AccessToken> {
-        val tokenFromLocal = userLocalDataSource.getAccessToken()
-
-        return if (tokenFromLocal != null) {
-            // TODO: Propose removal of AccessToken data class
-            Result.success(AccessToken(tokenFromLocal))
-        } else {
-            val result = userDataSource.getAccessToken(clientId, clientSecret, code)
-            result.onSuccess { userLocalDataSource.saveAccessToken(it.accessToken) }
-        }
+        val result = userDataSource.getAccessToken(clientId, clientSecret, code)
+        result.onSuccess { userLocalDataSource.saveAccessToken(it.accessToken) }
+        return result
     }
+
+    override fun getAccessToken(): String = userLocalDataSource.getAccessToken()
 }
