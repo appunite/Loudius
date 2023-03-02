@@ -80,23 +80,33 @@ private fun PullRequestItem(
             .background(backgroundColor)
             .clickable(onClick = onClick),
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_share),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(start = 18.dp, top = 10.dp)
-                .size(width = 18.dp, height = 20.dp),
-        )
-        Column(Modifier.padding(start = 18.dp, top = 8.dp, bottom = 8.dp)) {
-            Text(text = pullRequestTitle, style = MaterialTheme.typography.bodyLarge)
-            Text(
-                text = repositoryName,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        PullRequestIcon()
+        RepoDetails(pullRequestTitle = pullRequestTitle, repositoryName = repositoryName)
     }
     Divider(color = MaterialTheme.colorScheme.outlineVariant)
+}
+
+@Composable
+private fun PullRequestIcon() {
+    Image(
+        painter = painterResource(id = R.drawable.ic_share),
+        contentDescription = null,
+        modifier = Modifier
+            .padding(start = 18.dp, top = 10.dp)
+            .size(width = 18.dp, height = 20.dp),
+    )
+}
+
+@Composable
+private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
+    Column(Modifier.padding(start = 18.dp, top = 8.dp, bottom = 8.dp)) {
+        Text(text = pullRequestTitle, style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = repositoryName,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
 }
 
 @Preview("Pull requests - empty list")
