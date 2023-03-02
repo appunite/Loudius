@@ -11,5 +11,9 @@ data class PullRequest(
     val updatedAt: String,
 ) {
     val fullRepositoryName: String
-        get() = repositoryUrl.removePrefix(Constants.BASE_API_URL + "/")
+        get() = repositoryUrl.removePrefix(REPOSITORY_PATH)
+
+    companion object {
+        private const val REPOSITORY_PATH = Constants.BASE_API_URL + "/repos/"
+    }
 }
