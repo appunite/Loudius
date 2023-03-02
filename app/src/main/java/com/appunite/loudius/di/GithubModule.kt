@@ -22,13 +22,11 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubApi(@NetworkModule.GitHubNonApi retrofit: Retrofit): GithubApi =
-        retrofit.create(
-            GithubApi::class.java,
-        )
+    fun provideGithubApi(@AuthAPI retrofit: Retrofit): GithubApi =
+        retrofit.create(GithubApi::class.java)
 
     @Provides
-    fun provideGithubReposService(retrofit: Retrofit): GithubPullRequestsService =
+    fun provideGithubReposService(@BaseAPI retrofit: Retrofit): GithubPullRequestsService =
         retrofit.create(GithubPullRequestsService::class.java)
 
     @Singleton
