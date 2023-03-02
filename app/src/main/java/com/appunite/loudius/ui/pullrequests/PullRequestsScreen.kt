@@ -29,6 +29,7 @@ import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
+import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun PullRequestsScreen(viewModel: PullRequestsViewModel = hiltViewModel()) {
@@ -83,10 +84,10 @@ private fun PullRequestItem(
             painter = painterResource(id = R.drawable.ic_share),
             contentDescription = null,
             modifier = Modifier
-                .padding(start = 19.dp, top = 10.dp)
+                .padding(start = 18.dp, top = 10.dp)
                 .size(width = 18.dp, height = 20.dp),
         )
-        Column(Modifier.padding(start = 19.dp, top = 8.dp, bottom = 8.dp)) {
+        Column(Modifier.padding(start = 18.dp, top = 8.dp, bottom = 8.dp)) {
             Text(text = pullRequestTitle, style = MaterialTheme.typography.bodyLarge)
             Text(
                 text = repositoryName,
