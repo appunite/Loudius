@@ -17,12 +17,12 @@ class ReposViewModel @Inject constructor(
 
     fun getAccessToken(code: String) {
         viewModelScope.launch {
-            userRepository.getAccessToken(
+            userRepository.fetchAccessToken(
                 clientId = CLIENT_ID,
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code,
             ).onSuccess { token ->
-                Log.i("access_token", token.accessToken)
+                Log.i("access_token", token)
             }.onFailure {
                 Log.i("access_token", it.message.toString())
             }

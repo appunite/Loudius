@@ -6,24 +6,24 @@ import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface GithubDataSource {
+interface UserDataSource {
 
     suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken>
 }
 
 @Singleton
-class GithubNetworkDataSource @Inject constructor(
+class UserNetworkDataSource @Inject constructor(
     private val api: GithubApi,
-) : GithubDataSource {
+) : UserDataSource {
 
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken> =
-        safeApiCall { api.getAccessToken(clientId, clientSecret, code) }
+        safeApiCall { api.getAccessToken(clientId, clientSecret, code).accessToken }
 }

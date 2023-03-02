@@ -1,6 +1,6 @@
 package com.appunite.loudius.network.services
 
-import com.appunite.loudius.network.model.AccessToken
+import com.appunite.loudius.network.model.AccessTokenResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Headers
@@ -15,5 +15,5 @@ interface GithubApi {
         @Field("client_id") clientId: String,
         @Field("client_secret") clientSecret: String,
         @Field("code") code: String,
-    ): AccessToken
+    ): AccessTokenResponse
 }
