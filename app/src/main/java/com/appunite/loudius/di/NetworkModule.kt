@@ -10,7 +10,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -18,9 +17,17 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
+    @AuthAPI
+    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
+
+    @Provides
+    @BaseAPI
+    fun provideBaseAPIUrl() = Constants.BASE_API_URL
+
+    @Provides
     @Singleton
-    @GitHubNonApi
-    fun provideRetrofit(gson: Gson, baseUrl: String): Retrofit =
+    @AuthAPI
+    fun provideAuthRetrofit(gson: Gson, @AuthAPI baseUrl: String): Retrofit =
         Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
@@ -28,21 +35,15 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson =
-        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
-
-    @Provides
-    @Singleton
-    fun provideApiRetrofit(gson: Gson): Retrofit =
+    @BaseAPI
+    fun provideBaseRetrofit(gson: Gson, @BaseAPI baseAPIUrl: String): Retrofit =
         Retrofit.Builder()
-            .baseUrl(Constants.BASE_API_URL)
+            .baseUrl(baseAPIUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
     @Provides
-    fun provideBaseUrl() = Constants.BASE_URL
-
-    @Qualifier
-    @Retention(AnnotationRetention.RUNTIME)
-    annotation class GitHubNonApi
+    @Singleton
+    fun provideGson(): Gson =
+        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 }

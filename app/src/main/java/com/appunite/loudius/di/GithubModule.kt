@@ -19,9 +19,8 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubApi(@NetworkModule.GitHubNonApi retrofit: Retrofit): GithubApi = retrofit.create(
-        GithubApi::class.java,
-    )
+    fun provideGithubApi(@AuthAPI retrofit: Retrofit): GithubApi =
+        retrofit.create(GithubApi::class.java)
 
     @Singleton
     @Provides
@@ -36,6 +35,6 @@ object GithubModule {
     ): GithubDataSource = GithubNetworkDataSource(api)
 
     @Provides
-    fun provideGithubReposService(retrofit: Retrofit): GithubPullRequestsService =
+    fun provideGithubReposService(@BaseAPI retrofit: Retrofit): GithubPullRequestsService =
         retrofit.create(GithubPullRequestsService::class.java)
 }
