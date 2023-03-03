@@ -2,8 +2,8 @@ package com.appunite.loudius.domain
 
 import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
 import com.appunite.loudius.network.model.PullRequestsResponse
+import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
-import com.appunite.loudius.network.model.Reviewer
 import javax.inject.Inject
 
 interface PullRequestRepository {
@@ -17,7 +17,7 @@ interface PullRequestRepository {
         owner: String,
         repo: String,
         pullRequestNumber: String
-    ): Result<List<Reviewer>>
+    ): Result<RequestedReviewersResponse>
 
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse>
 }
@@ -38,6 +38,6 @@ class GitHubPullRequestsRepository @Inject constructor(private val remoteDataSou
         owner: String,
         repo: String,
         pullRequestNumber: String
-    ): Result<List<Reviewer>> =
+    ): Result<RequestedReviewersResponse> =
         remoteDataSource.getReviewers(owner, repo, pullRequestNumber, "TODO ACCESS TOKEN")
 }

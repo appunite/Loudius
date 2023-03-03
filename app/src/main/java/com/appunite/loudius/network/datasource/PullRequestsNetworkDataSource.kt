@@ -1,8 +1,8 @@
 package com.appunite.loudius.network.datasource
 
 import com.appunite.loudius.network.model.PullRequestsResponse
+import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
-import com.appunite.loudius.network.model.Reviewer
 import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
@@ -14,7 +14,7 @@ interface PullRequestDataSource {
         repository: String,
         pullRequestNumber: String,
         accessToken: String
-    ): Result<List<Reviewer>>
+    ): Result<RequestedReviewersResponse>
 
     suspend fun getReviews(
         owner: String,
@@ -39,7 +39,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Git
         repository: String,
         pullRequestNumber: String,
         accessToken: String
-    ): Result<List<Reviewer>> = safeApiCall {
+    ): Result<RequestedReviewersResponse> = safeApiCall {
         service.getReviewers(owner, repository, pullRequestNumber, accessToken)
     }
 

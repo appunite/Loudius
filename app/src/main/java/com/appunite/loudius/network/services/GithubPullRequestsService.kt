@@ -1,8 +1,8 @@
 package com.appunite.loudius.network.services
 
 import com.appunite.loudius.network.model.PullRequestsResponse
+import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
-import com.appunite.loudius.network.model.Reviewer
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -17,15 +17,15 @@ interface GithubPullRequestsService {
         @Query("per_page") perPage: Int = 100,
     ): PullRequestsResponse
 
-    @GET("https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers")
+    @GET("/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers")
     suspend fun getReviewers(
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Path("pull_number") pullRequestNumber: String,
         @Header("Authorization") token: String,
-    ): List<Reviewer>
+    ): RequestedReviewersResponse
 
-    @GET("https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}/reviews")
+    @GET("/repos/{owner}/{repo}/pulls/{pull_number}/reviews")
     suspend fun getReviews(
         @Path("owner") owner: String,
         @Path("repo") repo: String,
