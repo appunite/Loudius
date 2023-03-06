@@ -16,8 +16,9 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 @Composable
 fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
+    dialogTitle: String = stringResource(id = R.string.error_dialog_title),
+    dialogText: String = stringResource(id = R.string.error_dialog_text),
+    confirmText: String = stringResource(R.string.ok)
 ) {
     val openDialog = remember { mutableStateOf(true) }
     if (openDialog.value) {
@@ -26,9 +27,10 @@ fun LoudiusErrorDialog(
             title = { Text(text = dialogTitle) },
             text = { Text(text = dialogText) },
             confirmButton = {
-                ConfirmButton {
-                    onConfirmButtonClick()
-                }
+                ConfirmButton(
+                    confirmText = confirmText,
+                    confirm = onConfirmButtonClick
+                )
             },
             containerColor = MaterialTheme.colorScheme.surface,
         )
@@ -37,6 +39,7 @@ fun LoudiusErrorDialog(
 
 @Composable
 private fun ConfirmButton(
+    confirmText: String,
     confirm: () -> Unit,
 ) {
     Button(
@@ -46,7 +49,7 @@ private fun ConfirmButton(
             contentColor = MaterialTheme.colorScheme.tertiary,
         ),
     ) {
-        Text(text = stringResource(R.string.ok))
+        Text(text = confirmText)
     }
 }
 
@@ -54,10 +57,6 @@ private fun ConfirmButton(
 @Composable
 fun LoudiusErrorDialogPreview() {
     LoudiusTheme {
-        LoudiusErrorDialog(
-            onConfirmButtonClick = { },
-            dialogTitle = "Example title",
-            dialogText = "Example text",
-        )
+        LoudiusErrorDialog(onConfirmButtonClick = {})
     }
 }
