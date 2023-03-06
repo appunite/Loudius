@@ -18,7 +18,7 @@ fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
     dialogTitle: String = stringResource(id = R.string.error_dialog_title),
     dialogText: String = stringResource(id = R.string.error_dialog_text),
-    confirmText: String = stringResource(R.string.ok)
+    confirmText: String = stringResource(R.string.ok),
 ) {
     val openDialog = remember { mutableStateOf(true) }
     if (openDialog.value) {
@@ -29,7 +29,7 @@ fun LoudiusErrorDialog(
             confirmButton = {
                 ConfirmButton(
                     confirmText = confirmText,
-                    confirm = onConfirmButtonClick
+                    confirm = onConfirmButtonClick,
                 )
             },
             containerColor = MaterialTheme.colorScheme.surface,
