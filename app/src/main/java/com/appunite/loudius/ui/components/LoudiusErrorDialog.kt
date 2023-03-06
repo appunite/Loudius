@@ -17,7 +17,7 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
     dialogTitle: String,
-    dialogText: String
+    dialogText: String,
 ) {
     val openDialog = remember { mutableStateOf(true) }
     if (openDialog.value) {
@@ -57,7 +57,7 @@ fun LoudiusErrorDialogPreview() {
         LoudiusErrorDialog(
             onConfirmButtonClick = { },
             dialogTitle = "Example title",
-            dialogText = "Example text"
+            dialogText = "Example text",
         )
     }
 }
