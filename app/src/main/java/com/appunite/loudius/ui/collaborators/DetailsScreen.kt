@@ -1,4 +1,4 @@
-package com.appunite.loudius.ui
+package com.appunite.loudius.ui.collaborators
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
