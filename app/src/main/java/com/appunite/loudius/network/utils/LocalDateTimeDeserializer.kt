@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException
 import java.lang.reflect.Type
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
 class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime> {
 
@@ -18,8 +18,7 @@ class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime> {
     ): LocalDateTime {
         try {
             val dateString = json?.asJsonPrimitive?.asString
-            val offsetDateTime =
-                OffsetDateTime.parse(dateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            val offsetDateTime = OffsetDateTime.parse(dateString, ISO_OFFSET_DATE_TIME)
             return offsetDateTime.toLocalDateTime()
         } catch (e: Exception) {
             throw JsonParseException(e)

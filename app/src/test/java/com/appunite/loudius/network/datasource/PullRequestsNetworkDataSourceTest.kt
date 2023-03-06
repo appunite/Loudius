@@ -23,10 +23,10 @@ import org.junit.jupiter.api.Test
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
 
-    private val mockWebServer: MockWebServer = MockWebServer().apply { start(8080) }
-    private val userApi =
-        retrofitTestDouble(mockWebServer = mockWebServer).create(GithubPullRequestsService::class.java)
-    private val pullRequestDataSource = PullRequestsNetworkDataSource(userApi)
+    private val mockWebServer: MockWebServer = MockWebServer()
+    private val pullRequestsService = retrofitTestDouble(mockWebServer = mockWebServer)
+        .create(GithubPullRequestsService::class.java)
+    private val pullRequestDataSource = PullRequestsNetworkDataSource(pullRequestsService)
 
 
     @AfterEach
@@ -54,7 +54,7 @@ class PullRequestsNetworkDataSourceTest {
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
                     actualResponse.exceptionOrNull()
-                )
+                ) { "Exception thrown should be NetworkError type" }
             }
 
         @Test
@@ -102,19 +102,10 @@ class PullRequestsNetworkDataSourceTest {
                     "validAccessToken"
                 )
 
-                val expected = Result.success(
-                    RequestedReviewersResponse(
-                        listOf(
-                            Reviewer(
-                                "1",
-                                "exampleLogin",
-                                "https://example/avatar"
-                            )
-                        )
-                    )
-                )
+                val reviewer = Reviewer("1", "exampleLogin", "https://example/avatar")
+                val expected = Result.success(RequestedReviewersResponse(listOf(reviewer)))
 
-                assertEquals(expected, actualResponse) { "Data should be correct" }
+                assertEquals(expected, actualResponse) { "Data should be valid" }
             }
 
 
@@ -150,7 +141,7 @@ class PullRequestsNetworkDataSourceTest {
                 )
 
 
-                assertEquals(expected, actualResponse)
+                assertEquals(expected, actualResponse) { "Data should be valid" }
             }
     }
 
@@ -174,7 +165,7 @@ class PullRequestsNetworkDataSourceTest {
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
                     actualResponse.exceptionOrNull()
-                )
+                ) { "Exception thrown should be NetworkError type" }
             }
 
         @Test
@@ -182,47 +173,46 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 //language=JSON
                 val jsonResponse = """
-                    [
-    {
-        "id": 1,
-        "node_id": "exampleId",
-        "user": {
-            "login": "exampleUser",
-            "id": 33498031,
-            "node_id": "exampleNodeId",
-            "avatar_url": "https://avatars.githubusercontent.com/u/33498031?v=4",
-            "gravatar_id": "",
-            "url": "https://api.github.com/users/exampleUser",
-            "html_url": "https://github.com/exampleUser",
-            "followers_url": "https://api.github.com/users/exampleUser/followers",
-            "following_url": "https://api.github.com/users/exampleUser/following{/other_user}",
-            "gists_url": "https://api.github.com/users/exampleUser/gists{/gist_id}",
-            "starred_url": "https://api.github.com/users/exampleUser/starred{/owner}{/repo}",
-            "subscriptions_url": "https://api.github.com/users/exampleUser/subscriptions",
-            "organizations_url": "https://api.github.com/users/exampleUser/orgs",
-            "repos_url": "https://api.github.com/users/exampleUser/repos",
-            "events_url": "https://api.github.com/users/exampleUser/events{/privacy}",
-            "received_events_url": "https://api.github.com/users/exampleUser/received_events",
-            "type": "User",
-            "site_admin": false
-        },
-        "body": "",
-        "state": "COMMENTED",
-        "html_url": "https://github.com/exampleOwner/exampleRepo/pull/20#pullrequestreview-1321494756",
-        "pull_request_url": "https://api.github.com/repos/exampleOwner/exampleRepo/pulls/20",
-        "author_association": "COLLABORATOR",
-        "_links": {
-            "html": {
-                "href": "https://github.com/exampleOwner/exampleRepo/pull/20#pullrequestreview-1321494756"
-            },
-            "pull_request": {
-                "href": "https://api.github.com/repos/exampleOwner/exampleRepo/pulls/20"
-            }
-        },
-        "submitted_at": "2023-03-02T10:21:36Z",
-        "commit_id": "exampleCommitId"
-    }]
-                """.trimIndent()
+                [
+                    {
+                        "id": 1,
+                        "node_id": "exampleId",
+                        "user": {
+                            "login": "exampleUser",
+                            "id": 33498031,
+                            "node_id": "exampleNodeId",
+                            "avatar_url": "https://avatars.githubusercontent.com/u/33498031?v=4",
+                            "gravatar_id": "",
+                            "url": "https://api.github.com/users/exampleUser",
+                            "html_url": "https://github.com/exampleUser",
+                            "followers_url": "https://api.github.com/users/exampleUser/followers",
+                            "following_url": "https://api.github.com/users/exampleUser/following{/other_user}",
+                            "gists_url": "https://api.github.com/users/exampleUser/gists{/gist_id}",
+                            "starred_url": "https://api.github.com/users/exampleUser/starred{/owner}{/repo}",
+                            "subscriptions_url": "https://api.github.com/users/exampleUser/subscriptions",
+                            "organizations_url": "https://api.github.com/users/exampleUser/orgs",
+                            "repos_url": "https://api.github.com/users/exampleUser/repos",
+                            "events_url": "https://api.github.com/users/exampleUser/events{/privacy}",
+                            "received_events_url": "https://api.github.com/users/exampleUser/received_events",
+                            "type": "User",
+                            "site_admin": false
+                        },
+                        "body": "",
+                        "state": "COMMENTED",
+                        "html_url": "https://github.com/exampleOwner/exampleRepo/pull/20#pullrequestreview-1321494756",
+                        "pull_request_url": "https://api.github.com/repos/exampleOwner/exampleRepo/pulls/20",
+                        "author_association": "COLLABORATOR",
+                        "_links": {
+                            "html": {
+                                "href": "https://github.com/exampleOwner/exampleRepo/pull/20#pullrequestreview-1321494756"
+                            },
+                            "pull_request": {
+                                "href": "https://api.github.com/repos/exampleOwner/exampleRepo/pulls/20"
+                            }
+                        },
+                        "submitted_at": "2023-03-02T10:21:36Z",
+                        "commit_id": "exampleCommitId"
+                }]""".trimIndent()
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
@@ -247,8 +237,7 @@ class PullRequestsNetworkDataSourceTest {
                     )
                 )
 
-
-                assertEquals(expected, actualResponse) { "Data should be correct" }
+                assertEquals(expected, actualResponse) { "Data should be valid" }
             }
 
 
@@ -282,7 +271,6 @@ class PullRequestsNetworkDataSourceTest {
                         "Bad credentials"
                     )
                 )
-
 
                 assertEquals(expected, actualResponse)
             }
