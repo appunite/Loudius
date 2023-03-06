@@ -16,13 +16,15 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 @Composable
 fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
+    dialogTitle: String,
+    dialogText: String
 ) {
     val openDialog = remember { mutableStateOf(true) }
     if (openDialog.value) {
         AlertDialog(
             onDismissRequest = { openDialog.value = false },
-            title = { Text(text = stringResource(R.string.error_dialog_title)) },
-            text = { Text(text = stringResource(R.string.error_dialog_text)) },
+            title = { Text(text = dialogTitle) },
+            text = { Text(text = dialogText) },
             confirmButton = {
                 ConfirmButton {
                     onConfirmButtonClick()
@@ -52,6 +54,10 @@ private fun ConfirmButton(
 @Composable
 fun LoudiusErrorDialogPreview() {
     LoudiusTheme {
-        LoudiusErrorDialog { }
+        LoudiusErrorDialog(
+            onConfirmButtonClick = { },
+            dialogTitle = "Example title",
+            dialogText = "Example text"
+        )
     }
 }
