@@ -13,16 +13,15 @@ interface PullRequestDataSource {
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        accessToken: String
+        accessToken: String,
     ): Result<RequestedReviewersResponse>
 
     suspend fun getReviews(
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        accessToken: String
+        accessToken: String,
     ): Result<List<Review>>
-
 }
 
 const val auth_token = "BEARER xxxxxxx" // temporary solution
@@ -38,7 +37,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Git
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        accessToken: String
+        accessToken: String,
     ): Result<RequestedReviewersResponse> = safeApiCall {
         service.getReviewers(owner, repository, pullRequestNumber, accessToken)
     }
@@ -47,7 +46,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Git
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        accessToken: String
+        accessToken: String,
     ): Result<List<Review>> = safeApiCall {
         service.getReviews(owner, repository, pullRequestNumber, accessToken)
     }

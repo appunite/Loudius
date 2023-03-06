@@ -9,10 +9,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import java.time.LocalDateTime
-import javax.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -51,4 +51,3 @@ object NetworkModule {
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
             .create()
 }
-

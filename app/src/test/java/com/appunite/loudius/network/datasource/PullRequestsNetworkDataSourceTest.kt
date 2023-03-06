@@ -8,7 +8,6 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.utils.WebException
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -27,7 +27,6 @@ class PullRequestsNetworkDataSourceTest {
     private val pullRequestsService = retrofitTestDouble(mockWebServer = mockWebServer)
         .create(GithubPullRequestsService::class.java)
     private val pullRequestDataSource = PullRequestsNetworkDataSource(pullRequestsService)
-
 
     @AfterEach
     fun tearDown() {
@@ -42,18 +41,18 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
-                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
                 val actualResponse = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken"
+                    "validAccessToken",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
-                    actualResponse.exceptionOrNull()
+                    actualResponse.exceptionOrNull(),
                 ) { "Exception thrown should be NetworkError type" }
             }
 
@@ -87,19 +86,19 @@ class PullRequestsNetworkDataSourceTest {
                     ],
                     "teams": []
                 }
-            """.trimIndent()
+                """.trimIndent()
 
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val actualResponse = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken"
+                    "validAccessToken",
                 )
 
                 val reviewer = Reviewer("1", "exampleLogin", "https://example/avatar")
@@ -107,7 +106,6 @@ class PullRequestsNetworkDataSourceTest {
 
                 assertEquals(expected, actualResponse) { "Data should be valid" }
             }
-
 
         @Test
         fun `Given incorrect access token WHEN processing request THEN return failure with Network error`() =
@@ -123,23 +121,22 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val actualResponse = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken"
+                    "validAccessToken",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(
                     WebException.UnknownError(
                         401,
-                        "Bad credentials"
-                    )
+                        "Bad credentials",
+                    ),
                 )
-
 
                 assertEquals(expected, actualResponse) { "Data should be valid" }
             }
@@ -153,18 +150,18 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
-                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
                 val actualResponse = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken"
+                    "validAccessToken",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
-                    actualResponse.exceptionOrNull()
+                    actualResponse.exceptionOrNull(),
                 ) { "Exception thrown should be NetworkError type" }
             }
 
@@ -212,18 +209,19 @@ class PullRequestsNetworkDataSourceTest {
                         },
                         "submitted_at": "2023-03-02T10:21:36Z",
                         "commit_id": "exampleCommitId"
-                }]""".trimIndent()
+                }]
+                """.trimIndent()
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val actualResponse = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken"
+                    "validAccessToken",
                 )
 
                 val expected = Result.success(
@@ -232,14 +230,13 @@ class PullRequestsNetworkDataSourceTest {
                             "1",
                             User(33498031),
                             ReviewState.COMMENTED,
-                            LocalDateTime.parse("2023-03-02T10:21:36")
-                        )
-                    )
+                            LocalDateTime.parse("2023-03-02T10:21:36"),
+                        ),
+                    ),
                 )
 
                 assertEquals(expected, actualResponse) { "Data should be valid" }
             }
-
 
         @Test
         fun `Given incorrect access token WHEN processing request THEN return failure with Network error`() =
@@ -255,26 +252,24 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val actualResponse = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken"
+                    "validAccessToken",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(
                     WebException.UnknownError(
                         401,
-                        "Bad credentials"
-                    )
+                        "Bad credentials",
+                    ),
                 )
 
                 assertEquals(expected, actualResponse)
             }
     }
-
-
 }

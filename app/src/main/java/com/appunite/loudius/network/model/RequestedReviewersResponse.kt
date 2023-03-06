@@ -1,5 +1,5 @@
 package com.appunite.loudius.network.model
 
 data class RequestedReviewersResponse(
-    val users: List<Reviewer>
+    val users: List<Reviewer>,
 )

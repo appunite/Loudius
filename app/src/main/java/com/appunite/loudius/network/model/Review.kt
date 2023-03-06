@@ -6,9 +6,9 @@ data class Review(
     val id: String,
     val user: User,
     val state: ReviewState,
-    val submittedAt: LocalDateTime
+    val submittedAt: LocalDateTime,
 )
 
 data class User(
-    val id: Int
+    val id: Int,
 )

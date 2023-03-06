@@ -10,13 +10,13 @@ interface PullRequestRepository {
     suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<List<Review>>
 
     suspend fun getReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<RequestedReviewersResponse>
 
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse>
@@ -30,14 +30,14 @@ class GitHubPullRequestsRepository @Inject constructor(private val remoteDataSou
     override suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<List<Review>> =
         remoteDataSource.getReviews(owner, repo, pullRequestNumber, "TODO ACCESS TOKEN")
 
     override suspend fun getReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> =
         remoteDataSource.getReviewers(owner, repo, pullRequestNumber, "TODO ACCESS TOKEN")
 }

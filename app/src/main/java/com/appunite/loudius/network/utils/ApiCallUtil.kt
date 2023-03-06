@@ -1,9 +1,9 @@
 package com.appunite.loudius.network.utils
 
 import com.google.gson.Gson
-import java.io.IOException
 import org.json.JSONException
 import retrofit2.HttpException
+import java.io.IOException
 
 suspend fun <T> safeApiCall(
     errorParser: RequestErrorParser = DefaultErrorParser,
@@ -23,7 +23,7 @@ suspend fun <T> safeApiCall(
 private fun getApiErrorMessageIfExist(throwable: HttpException) = try {
     val errorResponse = Gson().fromJson(
         throwable.response()?.errorBody()?.string(),
-        DefaultErrorResponse::class.java
+        DefaultErrorResponse::class.java,
     )
     errorResponse.message
 } catch (throwable: JSONException) {
