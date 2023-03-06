@@ -12,7 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val White99 = Color(0xFFFFFBFE)
 val Black90 = Color(0xFF1C1B1F)
-val PurpleBlack30 = Color(0xFF49454F)
 
 val NeutralVariant30 = Color(0xFF49454F)
+val NeutralVariant80 = Color(0xFFCAC4D0)
 val Error40 = Color(0xFFB3261E)
