@@ -4,8 +4,8 @@ on:
   pull_request:
   push:
     branches:
-      - 'develop'
-      - 'main'
+      - "develop"
+      - "main"
 
 permissions: read-all
 
@@ -25,8 +25,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: "11"
+          distribution: "adopt"
           cache: gradle
 
       - name: Validate Gradle wrapper
