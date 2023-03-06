@@ -1,13 +1,16 @@
 package com.appunite.loudius.network
 
+import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 private fun testOkHttpClient() = OkHttpClient.Builder()
     .connectTimeout(1, TimeUnit.SECONDS)
@@ -16,7 +19,9 @@ private fun testOkHttpClient() = OkHttpClient.Builder()
     .build()
 
 private fun testGson() =
-    GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+    GsonBuilder()
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
 fun retrofitTestDouble(
     client: OkHttpClient = testOkHttpClient(),
