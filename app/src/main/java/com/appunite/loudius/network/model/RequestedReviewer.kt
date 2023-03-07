@@ -1,7 +1,9 @@
 package com.appunite.loudius.network.model
 
-data class Reviewer(
-    val id: String,
+data class RequestedReviewer(
+    val id: Int,
     val login: String,
     val avatarUrl: String,
 )
+
+//reviewer id z Review -> user -> id

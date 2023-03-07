@@ -1,13 +1,14 @@
 package com.appunite.loudius.network.datasource
 
+import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
-import com.appunite.loudius.network.model.Reviewer
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.GithubPullRequestsService
 import com.appunite.loudius.network.utils.WebException
+import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -101,8 +101,9 @@ class PullRequestsNetworkDataSourceTest {
                     "validAccessToken",
                 )
 
-                val reviewer = Reviewer("1", "exampleLogin", "https://example/avatar")
-                val expected = Result.success(RequestedReviewersResponse(listOf(reviewer)))
+                val requestedReviewer =
+                    RequestedReviewer(1, "exampleLogin", "https://example/avatar")
+                val expected = Result.success(RequestedReviewersResponse(listOf(requestedReviewer)))
 
                 assertEquals(expected, actualResponse) { "Data should be valid" }
             }
@@ -176,9 +177,9 @@ class PullRequestsNetworkDataSourceTest {
                         "node_id": "exampleId",
                         "user": {
                             "login": "exampleUser",
-                            "id": 33498031,
+                            "id": 10000000,
                             "node_id": "exampleNodeId",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/33498031?v=4",
+                            "avatar_url": "https://avatars.com/u/10000000",
                             "gravatar_id": "",
                             "url": "https://api.github.com/users/exampleUser",
                             "html_url": "https://github.com/exampleUser",
@@ -228,7 +229,7 @@ class PullRequestsNetworkDataSourceTest {
                     listOf(
                         Review(
                             "1",
-                            User(33498031),
+                            User(10000000, "exampleUser", "https://avatars.com/u/10000000"),
                             ReviewState.COMMENTED,
                             LocalDateTime.parse("2023-03-02T10:21:36"),
                         ),
