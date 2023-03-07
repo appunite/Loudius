@@ -7,7 +7,7 @@ class FakeUserRepository : UserRepository {
     override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken> {
         return Result.success("validToken")
     }

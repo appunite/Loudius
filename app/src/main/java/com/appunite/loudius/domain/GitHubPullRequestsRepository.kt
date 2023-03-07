@@ -1,7 +1,7 @@
 package com.appunite.loudius.domain
 
-import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
 import com.appunite.loudius.common.flatMap
+import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
