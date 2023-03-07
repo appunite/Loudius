@@ -6,8 +6,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.appunite.loudius.R
@@ -20,10 +22,10 @@ fun LoudiusErrorDialog(
     dialogText: String = stringResource(id = R.string.error_dialog_text),
     confirmText: String = stringResource(R.string.ok),
 ) {
-    val openDialog = remember { mutableStateOf(true) }
-    if (openDialog.value) {
+    var openDialog by remember { mutableStateOf(true) }
+    if (openDialog) {
         AlertDialog(
-            onDismissRequest = { openDialog.value = false },
+            onDismissRequest = { openDialog = false },
             title = { Text(text = dialogTitle) },
             text = { Text(text = dialogText) },
             confirmButton = {
@@ -43,7 +45,7 @@ private fun ConfirmButton(
     confirm: () -> Unit,
 ) {
     Button(
-        onClick = { confirm() },
+        onClick = confirm,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.tertiary,
