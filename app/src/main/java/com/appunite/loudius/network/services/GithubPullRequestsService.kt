@@ -31,7 +31,6 @@ interface GithubPullRequestsService {
         @Path("pull_number") pullRequestNumber: String,
     ): List<Review>
 
-    @Headers("Accept: application/json")
     @GET("user")
     suspend fun getUser(): User
 }
