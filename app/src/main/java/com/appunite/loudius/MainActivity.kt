@@ -16,6 +16,7 @@ import com.appunite.loudius.common.Screen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.repos.ReposScreen
+import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,6 +51,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(route = Screen.PullRequests.route) {
                             PullRequestsScreen()
+                        }
+                        composable(route = Screen.Reviewers.route) {
+                            ReviewersScreen({ navController.popBackStack() })
                         }
                     }
                 }

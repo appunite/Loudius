@@ -7,4 +7,6 @@ sealed class Screen(val route: String) {
     object Repos : Screen("repos_screen")
 
     object PullRequests : Screen("pull_requests_screen")
+
+    object Reviewers : Screen("reviewers_screen")
 }
