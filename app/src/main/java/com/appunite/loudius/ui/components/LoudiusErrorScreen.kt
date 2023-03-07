@@ -21,18 +21,18 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 fun LoudiusErrorScreen(
     errorText: String,
     buttonText: String,
-    onButtonClick: () -> Unit
+    onButtonClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(top = 142.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(57.dp)
+        verticalArrangement = Arrangement.spacedBy(57.dp),
     ) {
         ErrorImage()
         ErrorText(text = errorText)
         LoudiusOutlinedButton(
             onClick = onButtonClick,
-            text = buttonText
+            text = buttonText,
         )
     }
 }
@@ -50,7 +50,7 @@ private fun ErrorText(text: String) {
     Text(
         text = text,
         color = MaterialTheme.colorScheme.error,
-        style = MaterialTheme.typography.titleLarge
+        style = MaterialTheme.typography.titleLarge,
     )
 }
 
@@ -61,7 +61,7 @@ fun LoudiusErrorScreenPreview() {
         LoudiusErrorScreen(
             errorText = stringResource(id = R.string.error_dialog_text),
             buttonText = stringResource(R.string.try_again_text),
-            onButtonClick = {}
+            onButtonClick = {},
         )
     }
 }

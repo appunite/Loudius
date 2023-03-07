@@ -17,7 +17,7 @@ fun LoudiusOutlinedButton(
     onClick: () -> Unit,
     text: String,
     iconPainter: Painter? = null,
-    iconDescription: String? = null
+    iconDescription: String? = null,
 ) {
     OutlinedButton(
         onClick = onClick,

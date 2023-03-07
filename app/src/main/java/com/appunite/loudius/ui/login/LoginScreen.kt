@@ -36,7 +36,7 @@ fun LoginScreen() {
             onClick = { startAuthorizing(context) },
             text = stringResource(id = R.string.login),
             iconPainter = painterResource(id = R.drawable.ic_github),
-            iconDescription = stringResource(R.string.github_icon)
+            iconDescription = stringResource(R.string.github_icon),
         )
     }
 }
