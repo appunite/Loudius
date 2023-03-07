@@ -2,12 +2,13 @@ package com.appunite.loudius.di
 
 import android.content.Context
 import com.appunite.loudius.domain.UserLocalDataSource
-import com.appunite.loudius.domain.UserRepository
-import com.appunite.loudius.domain.UserRepositoryImpl
-import com.appunite.loudius.network.UserDataSource
-import com.appunite.loudius.network.UserNetworkDataSource
-import com.appunite.loudius.network.services.GithubApi
+import com.appunite.loudius.domain.AuthRepository
+import com.appunite.loudius.domain.AuthRepositoryImpl
+import com.appunite.loudius.network.datasource.AuthDataSource
+import com.appunite.loudius.network.datasource.AuthNetworkDataSource
+import com.appunite.loudius.network.services.GithubAuthService
 import com.appunite.loudius.network.services.GithubPullRequestsService
+import com.appunite.loudius.network.services.GithubUserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,25 +23,31 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubApi(@AuthAPI retrofit: Retrofit): GithubApi =
-        retrofit.create(GithubApi::class.java)
+    fun provideGithubAuthService(@AuthAPI retrofit: Retrofit): GithubAuthService =
+        retrofit.create(GithubAuthService::class.java)
 
+    @Singleton
+    @Provides
+    fun provideGithubUserService(@BaseAPI retrofit: Retrofit): GithubUserService =
+        retrofit.create(GithubUserService::class.java)
+
+    @Singleton
     @Provides
     fun provideGithubReposService(@BaseAPI retrofit: Retrofit): GithubPullRequestsService =
         retrofit.create(GithubPullRequestsService::class.java)
 
     @Singleton
     @Provides
-    fun provideUserRepository(
-        userDataSource: UserDataSource,
+    fun provideAuthRepository(
+        authDataSource: AuthDataSource,
         userLocalDataSource: UserLocalDataSource,
-    ): UserRepository = UserRepositoryImpl(userDataSource, userLocalDataSource)
+    ): AuthRepository = AuthRepositoryImpl(authDataSource, userLocalDataSource)
 
     @Singleton
     @Provides
-    fun provideUserDataSource(
-        api: GithubApi,
-    ): UserDataSource = UserNetworkDataSource(api)
+    fun provideAuthServiceDataSource(
+        service: GithubAuthService,
+    ): AuthDataSource = AuthNetworkDataSource(service)
 
     @Singleton
     @Provides

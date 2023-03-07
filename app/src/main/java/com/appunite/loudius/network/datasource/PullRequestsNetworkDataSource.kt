@@ -45,8 +45,4 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Git
     ): Result<List<Review>> = safeApiCall {
         service.getReviews(owner, repository, pullRequestNumber)
     }
-
-    suspend fun getUser(): Result<User> = safeApiCall {
-        service.getUser()
-    }
 }

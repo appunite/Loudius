@@ -5,19 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.common.Constants.CLIENT_ID
-import com.appunite.loudius.domain.UserRepository
+import com.appunite.loudius.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ReposViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     fun getAccessToken(code: String) {
         viewModelScope.launch {
-            userRepository.fetchAccessToken(
+            authRepository.fetchAccessToken(
                 clientId = CLIENT_ID,
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code,

@@ -1,9 +1,9 @@
 package com.appunite.loudius.fakes
 
-import com.appunite.loudius.domain.UserRepository
+import com.appunite.loudius.domain.AuthRepository
 import com.appunite.loudius.network.model.AccessToken
 
-class FakeUserRepository : UserRepository {
+class FakeAuthRepository : AuthRepository {
     override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,

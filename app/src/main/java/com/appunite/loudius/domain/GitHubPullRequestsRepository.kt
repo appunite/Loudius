@@ -2,6 +2,7 @@ package com.appunite.loudius.domain
 
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
@@ -23,11 +24,14 @@ interface PullRequestRepository {
     suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse>
 }
 
-class GitHubPullRequestsRepository @Inject constructor(private val remoteDataSource: PullRequestsNetworkDataSource) :
+class GitHubPullRequestsRepository @Inject constructor(
+    private val pullRequestsNetworkDataSource: PullRequestsNetworkDataSource,
+    private val userDataSource: UserDataSource,
+) :
     PullRequestRepository {
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
-        val currentUser = remoteDataSource.getUser()
-        return currentUser.flatMap { remoteDataSource.getPullRequestsForUser(it.login) }
+        val currentUser = userDataSource.getUser()
+        return currentUser.flatMap { pullRequestsNetworkDataSource.getPullRequestsForUser(it.login) }
     }
 
     override suspend fun getReviews(
@@ -35,12 +39,12 @@ class GitHubPullRequestsRepository @Inject constructor(private val remoteDataSou
         repo: String,
         pullRequestNumber: String,
     ): Result<List<Review>> =
-        remoteDataSource.getReviews(owner, repo, pullRequestNumber)
+        pullRequestsNetworkDataSource.getReviews(owner, repo, pullRequestNumber)
 
     override suspend fun getReviewers(
         owner: String,
         repo: String,
         pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> =
-        remoteDataSource.getReviewers(owner, repo, pullRequestNumber)
+        pullRequestsNetworkDataSource.getReviewers(owner, repo, pullRequestNumber)
 }

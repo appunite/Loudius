@@ -3,7 +3,6 @@ package com.appunite.loudius.network.services
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
-import com.appunite.loudius.network.model.User
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -29,7 +28,4 @@ interface GithubPullRequestsService {
         @Path("repo") repo: String,
         @Path("pull_number") pullRequestNumber: String,
     ): List<Review>
-
-    @GET("user")
-    suspend fun getUser(): User
 }

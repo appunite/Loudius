@@ -2,7 +2,7 @@ package com.appunite.loudius.domain
 
 import com.appunite.loudius.network.model.AccessToken
 
-interface UserRepository {
+interface AuthRepository {
 
     suspend fun fetchAccessToken(
         clientId: String,
