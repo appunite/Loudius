@@ -15,4 +15,4 @@ val Black90 = Color(0xFF1C1B1F)
 
 val NeutralVariant30 = Color(0xFF49454F)
 val NeutralVariant80 = Color(0xFFCAC4D0)
-val Error40 = Color(0xFFB3261E)
+val Error20 = Color(0xFF601410)
