@@ -26,7 +26,7 @@ fun LoudiusErrorScreen(
     Column(
         modifier = Modifier.padding(top = 142.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(57.dp),
+        verticalArrangement = Arrangement.spacedBy(56.dp),
     ) {
         ErrorImage()
         ErrorText(text = errorText)

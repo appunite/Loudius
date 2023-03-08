@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoudiusOutlinedButton(
-    onClick: () -> Unit,
     text: String,
     iconPainter: Painter? = null,
     iconDescription: String? = null,
+    onClick: () -> Unit,
 ) {
     OutlinedButton(
         onClick = onClick,
