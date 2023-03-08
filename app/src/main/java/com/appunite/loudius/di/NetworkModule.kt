@@ -1,6 +1,7 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
+import com.appunite.loudius.network.utils.AuthInterceptor
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -9,6 +10,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
@@ -17,6 +20,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BASIC
+    }
 
     @Provides
     @AuthAPI
@@ -29,20 +37,42 @@ object NetworkModule {
     @Provides
     @Singleton
     @AuthAPI
-    fun provideAuthRetrofit(gson: Gson, @AuthAPI baseUrl: String): Retrofit =
-        Retrofit.Builder()
+    fun provideAuthRetrofit(
+        gson: Gson,
+        @AuthAPI baseUrl: String,
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
             .baseUrl(baseUrl)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
 
     @Provides
     @Singleton
     @BaseAPI
-    fun provideBaseRetrofit(gson: Gson, @BaseAPI baseAPIUrl: String): Retrofit =
-        Retrofit.Builder()
+    fun provideBaseRetrofit(
+        gson: Gson,
+        @BaseAPI baseAPIUrl: String,
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
+    ): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
             .baseUrl(baseAPIUrl)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+    }
 
     @Provides
     @Singleton

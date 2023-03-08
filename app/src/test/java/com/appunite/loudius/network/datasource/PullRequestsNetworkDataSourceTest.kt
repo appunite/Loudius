@@ -48,7 +48,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
@@ -98,7 +97,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val reviewer = Reviewer("1", "exampleLogin", "https://example/avatar")
@@ -128,7 +126,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(
@@ -157,7 +154,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
@@ -221,14 +217,13 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val expected = Result.success(
                     listOf(
                         Review(
                             "1",
-                            User(33498031),
+                            User(33498031, "exampleUser"),
                             ReviewState.COMMENTED,
                             LocalDateTime.parse("2023-03-02T10:21:36"),
                         ),
@@ -259,7 +254,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(

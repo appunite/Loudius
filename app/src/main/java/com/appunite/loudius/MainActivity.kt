@@ -46,7 +46,9 @@ class MainActivity : ComponentActivity() {
                                 },
                             ),
                         ) {
-                            ReposScreen(intent = intent)
+                            ReposScreen(intent = intent) {
+                                navController.navigate(Screen.PullRequests.route)
+                            }
                         }
                         composable(route = Screen.PullRequests.route) {
                             PullRequestsScreen()
