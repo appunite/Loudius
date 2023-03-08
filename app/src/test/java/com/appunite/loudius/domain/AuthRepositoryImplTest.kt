@@ -1,6 +1,6 @@
 package com.appunite.loudius.domain
 
-import com.appunite.loudius.network.UserDataSource
+import com.appunite.loudius.network.datasource.AuthDataSource
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class UserRepositoryImplTest {
-    private val networkDataSource: UserDataSource = mockk {
+class AuthRepositoryImplTest {
+    private val networkDataSource: AuthDataSource = mockk {
         coEvery {
             getAccessToken(any(), any(), any())
         } returns Result.success("validAccessToken")
@@ -21,7 +21,7 @@ class UserRepositoryImplTest {
         every { getAccessToken() } returns "validAccessToken"
         every { saveAccessToken(any()) } returns Unit
     }
-    private val repository = UserRepositoryImpl(networkDataSource, localDataSource)
+    private val repository = AuthRepositoryImpl(networkDataSource, localDataSource)
 
     @Test
     fun `GIVEN fetch access token function WHEN processing THEN return success with new valid token`() =
