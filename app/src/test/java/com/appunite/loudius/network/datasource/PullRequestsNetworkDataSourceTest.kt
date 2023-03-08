@@ -48,7 +48,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
@@ -98,7 +97,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val requestedReviewer =
@@ -129,7 +127,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(
@@ -158,7 +155,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
@@ -222,7 +218,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val expected = Result.success(
@@ -260,7 +255,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "validAccessToken",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(

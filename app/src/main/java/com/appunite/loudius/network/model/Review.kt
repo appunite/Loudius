@@ -8,9 +8,3 @@ data class Review(
     val state: ReviewState,
     val submittedAt: LocalDateTime,
 )
-
-data class User(
-    val id: Int,
-    val login: String,
-    val avatarUrl: String,
-)
