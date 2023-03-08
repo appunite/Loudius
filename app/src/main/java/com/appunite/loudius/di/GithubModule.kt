@@ -1,9 +1,9 @@
 package com.appunite.loudius.di
 
 import android.content.Context
-import com.appunite.loudius.domain.UserLocalDataSource
 import com.appunite.loudius.domain.AuthRepository
 import com.appunite.loudius.domain.AuthRepositoryImpl
+import com.appunite.loudius.domain.UserLocalDataSource
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.AuthNetworkDataSource
 import com.appunite.loudius.network.services.AuthService
