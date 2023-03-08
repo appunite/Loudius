@@ -24,7 +24,7 @@ interface PullRequestRepository {
     suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse>
 }
 
-class GitHubPullRequestsRepository @Inject constructor(
+class PullRequestsRepository @Inject constructor(
     private val pullRequestsNetworkDataSource: PullRequestsNetworkDataSource,
     private val userDataSource: UserDataSource,
 ) :

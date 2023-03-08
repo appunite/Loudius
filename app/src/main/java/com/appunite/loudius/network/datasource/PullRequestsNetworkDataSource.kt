@@ -3,8 +3,7 @@ package com.appunite.loudius.network.datasource
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
-import com.appunite.loudius.network.model.User
-import com.appunite.loudius.network.services.GithubPullRequestsService
+import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,7 +23,7 @@ interface PullRequestDataSource {
 }
 
 @Singleton
-class PullRequestsNetworkDataSource @Inject constructor(private val service: GithubPullRequestsService) :
+class PullRequestsNetworkDataSource @Inject constructor(private val service: PullRequestsService) :
     PullRequestDataSource {
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = safeApiCall {
         service.getPullRequestsForUser("author:$author type:pr state:open")

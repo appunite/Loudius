@@ -6,9 +6,9 @@ import com.appunite.loudius.domain.AuthRepository
 import com.appunite.loudius.domain.AuthRepositoryImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.AuthNetworkDataSource
-import com.appunite.loudius.network.services.GithubAuthService
-import com.appunite.loudius.network.services.GithubPullRequestsService
-import com.appunite.loudius.network.services.GithubUserService
+import com.appunite.loudius.network.services.AuthService
+import com.appunite.loudius.network.services.PullRequestsService
+import com.appunite.loudius.network.services.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,18 +23,18 @@ object GithubModule {
 
     @Singleton
     @Provides
-    fun provideGithubAuthService(@AuthAPI retrofit: Retrofit): GithubAuthService =
-        retrofit.create(GithubAuthService::class.java)
+    fun provideAuthService(@AuthAPI retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 
     @Singleton
     @Provides
-    fun provideGithubUserService(@BaseAPI retrofit: Retrofit): GithubUserService =
-        retrofit.create(GithubUserService::class.java)
+    fun provideUserService(@BaseAPI retrofit: Retrofit): UserService =
+        retrofit.create(UserService::class.java)
 
     @Singleton
     @Provides
-    fun provideGithubReposService(@BaseAPI retrofit: Retrofit): GithubPullRequestsService =
-        retrofit.create(GithubPullRequestsService::class.java)
+    fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =
+        retrofit.create(PullRequestsService::class.java)
 
     @Singleton
     @Provides
@@ -46,7 +46,7 @@ object GithubModule {
     @Singleton
     @Provides
     fun provideAuthServiceDataSource(
-        service: GithubAuthService,
+        service: AuthService,
     ): AuthDataSource = AuthNetworkDataSource(service)
 
     @Singleton

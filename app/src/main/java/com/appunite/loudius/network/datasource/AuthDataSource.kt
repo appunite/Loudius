@@ -1,7 +1,7 @@
 package com.appunite.loudius.network.datasource
 
 import com.appunite.loudius.network.model.AccessToken
-import com.appunite.loudius.network.services.GithubAuthService
+import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,7 +17,7 @@ interface AuthDataSource {
 
 @Singleton
 class AuthNetworkDataSource @Inject constructor(
-    private val authService: GithubAuthService,
+    private val authService: AuthService,
 ) : AuthDataSource {
 
     override suspend fun getAccessToken(

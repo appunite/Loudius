@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface GithubPullRequestsService {
+interface PullRequestsService {
     @GET("/search/issues")
     suspend fun getPullRequestsForUser(
         @Query("q", encoded = true) query: String,
