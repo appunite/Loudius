@@ -1,10 +1,11 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.appunite.loudius.ui.pullrequests
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
+import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
@@ -49,33 +53,63 @@ fun PullRequestsScreen(
     }
     PullRequestsScreenStateless(
         pullRequests = state.pullRequests,
-        onItemClick = viewModel::onAction,
+        onAction = viewModel::onAction,
+        isLoading = state.isLoading,
+        isError = state.isError,
     )
 }
 
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
-    onItemClick: (PulLRequestsAction) -> Unit,
+    onAction: (PulLRequestsAction) -> Unit,
+    isLoading: Boolean,
+    isError: Boolean,
 ) {
     Scaffold(topBar = {
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
     }, content = { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-        ) {
-            itemsIndexed(pullRequests) { index, item ->
-                val isIndexEven = index % 2 == 0
-                PullRequestItem(
-                    data = item,
-                    darkBackground = isIndexEven,
-                    onClick = onItemClick,
-                )
-            }
+        when {
+            isError -> LoudiusErrorScreen(
+                errorText = stringResource(id = R.string.error_dialog_text),
+                buttonText = stringResource(R.string.try_again_text),
+                onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
+            )
+            isLoading -> LoadingIndicator(modifier = Modifier.padding(padding))
+            else -> PullRequestsList(
+                pullRequests = pullRequests,
+                modifier = Modifier.padding(padding),
+                onItemClick = onAction,
+            )
         }
     })
+}
+
+@Composable
+private fun LoadingIndicator(modifier: Modifier) {
+    Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun PullRequestsList(
+    pullRequests: List<PullRequest>,
+    modifier: Modifier,
+    onItemClick: (PulLRequestsAction) -> Unit,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        itemsIndexed(pullRequests) { index, item ->
+            val isIndexEven = index % 2 == 0
+            PullRequestItem(
+                data = item,
+                darkBackground = isIndexEven,
+                onClick = onItemClick,
+            )
+        }
+    }
 }
 
 @Composable
@@ -124,20 +158,14 @@ private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
     }
 }
 
-@Preview("Pull requests - empty list")
-@Composable
-fun PullRequestsScreenEmptyListPreview() {
-    LoudiusTheme {
-        PullRequestsScreenStateless(emptyList()) { }
-    }
-}
-
 @Preview("Pull requests - filled list")
 @Composable
 fun PullRequestsScreenPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
-            listOf(
+            isLoading = false,
+            isError = false,
+            pullRequests = listOf(
                 PullRequest(
                     id = 0,
                     draft = false,
@@ -171,6 +199,46 @@ fun PullRequestsScreenPreview() {
                     createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
                 ),
             ),
-        ) { }
+            onAction = {}
+        )
+    }
+}
+
+@Preview("Pull requests - empty list")
+@Composable
+fun PullRequestsScreenEmptyListPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            emptyList(),
+            isLoading = false,
+            isError = false,
+            onAction = {},
+        )
+    }
+}
+
+@Preview("Pull requests - Loading")
+@Composable
+fun PullRequestsScreenLoadingPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            emptyList(),
+            isLoading = true,
+            isError = false,
+            onAction = {},
+        )
+    }
+}
+
+@Preview("Pull requests - Error")
+@Composable
+fun PullRequestsScreenErrorPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            emptyList(),
+            isLoading = false,
+            isError = true,
+            onAction = {},
+        )
     }
 }

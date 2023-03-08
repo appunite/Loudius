@@ -1,6 +1,7 @@
 package com.appunite.loudius.fakes
 
 import com.appunite.loudius.domain.PullRequestRepository
+import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
@@ -53,7 +54,35 @@ class FakePullRequestRepository : PullRequestRepository {
         else -> Result.success(RequestedReviewersResponse(emptyList()))
     }
 
+    private val initialPullRequestAnswer = Result.success(
+        PullRequestsResponse(
+            incompleteResults = false,
+            totalCount = 1,
+            items = listOf(
+                PullRequest(
+                    id = 1,
+                    draft = false,
+                    number = 1,
+                    repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
+                    title = "example title",
+                    LocalDateTime.parse("2023-03-07T09:21:45"),
+                ),
+            ),
+        ),
+    )
+
+    private var lazyCurrentUserPullRequests: suspend () -> Result<PullRequestsResponse> =
+        { initialPullRequestAnswer }
+
+    fun setCurrentUserPullRequests(result: suspend () -> Result<PullRequestsResponse>) {
+        lazyCurrentUserPullRequests = result
+    }
+
+    fun resetCurrentUserPullRequestAnswer() {
+        lazyCurrentUserPullRequests = { initialPullRequestAnswer }
+    }
+
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
-        TODO("Not yet implemented")
+        return lazyCurrentUserPullRequests()
     }
 }
