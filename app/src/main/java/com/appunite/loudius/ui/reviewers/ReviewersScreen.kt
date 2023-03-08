@@ -29,10 +29,17 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
 
 @Composable
-fun ReviewersScreen(navigateBack: () -> Unit, viewModel: ReviewersViewModel = hiltViewModel()) {
+fun ReviewersScreen(
+    pullRequestNumber: String?,
+    owner: String?,
+    repo: String?,
+    submissionDate: String?,
+    navigateBack: () -> Unit,
+    viewModel: ReviewersViewModel = hiltViewModel()
+) {
     val state = viewModel.state
     ReviewersScreenStateless(
-        topBarTitle = "Pull request #19",
+        topBarTitle = "Pull request $pullRequestNumber",
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack
     )
