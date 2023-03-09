@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
                     Log.i("failure", it.toString() + "bad_verification_code")
                 }
             }
-            .onFailure { Log.i("failure", "incorrect_client_credientals") }
+            .onFailure { Log.i("failure", "incorrect_client_credentials") }
         return result
     }
 
