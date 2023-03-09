@@ -24,11 +24,10 @@ interface PullRequestRepository {
     suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse>
 }
 
-class PullRequestsRepository @Inject constructor(
+class PullRequestRepositoryImpl @Inject constructor(
     private val pullRequestsNetworkDataSource: PullRequestsNetworkDataSource,
     private val userDataSource: UserDataSource,
-) :
-    PullRequestRepository {
+) : PullRequestRepository {
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
         val currentUser = userDataSource.getUser()
         return currentUser.flatMap { pullRequestsNetworkDataSource.getPullRequestsForUser(it.login) }

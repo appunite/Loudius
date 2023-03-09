@@ -7,15 +7,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Screen
-import com.appunite.loudius.domain.PullRequestsRepository
+import com.appunite.loudius.domain.PullRequestRepositoryImpl
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
@@ -24,7 +24,7 @@ data class ReviewersState(
 
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
-    private val repository: PullRequestsRepository,
+    private val repository: PullRequestRepositoryImpl,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
