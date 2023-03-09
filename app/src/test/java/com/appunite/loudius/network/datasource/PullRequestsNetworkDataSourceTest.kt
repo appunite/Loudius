@@ -224,7 +224,7 @@ class PullRequestsNetworkDataSourceTest {
                     listOf(
                         Review(
                             "1",
-                            User(10000000, "exampleUser", "https://avatars.com/u/10000000"),
+                            User(10000000, "exampleUser"),
                             ReviewState.COMMENTED,
                             LocalDateTime.parse("2023-03-02T10:21:36"),
                         ),
