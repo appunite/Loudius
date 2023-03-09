@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appunite.loudius.domain.GitHubPullRequestsRepository
+import com.appunite.loudius.domain.PullRequestsRepository
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,14 +17,14 @@ data class PullRequestState(
 
 @HiltViewModel
 class PullRequestsViewModel @Inject constructor(
-    private val gitHubReposRepository: GitHubPullRequestsRepository,
+    private val pullRequestsRepository: PullRequestsRepository,
 ) : ViewModel() {
     var state by mutableStateOf(PullRequestState())
         private set
 
     init {
         viewModelScope.launch {
-            gitHubReposRepository.getCurrentUserPullRequests()
+            pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(pullRequests = it.items)
                 }

@@ -2,7 +2,7 @@
 
 package com.appunite.loudius.network
 
-import com.appunite.loudius.fakes.FakeUserRepository
+import com.appunite.loudius.fakes.FakeAuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import retrofit2.http.GET
 
 class AuthInterceptorTest {
-    private val fakeUserRepository = FakeUserRepository()
+    private val fakeUserRepository = FakeAuthRepository()
     private val testOkHttpClient = testOkHttpClient(fakeUserRepository)
     private val mockWebServer: MockWebServer = MockWebServer()
     private val service = retrofitTestDouble(

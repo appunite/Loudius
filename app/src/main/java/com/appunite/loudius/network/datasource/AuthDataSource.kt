@@ -1,12 +1,12 @@
-package com.appunite.loudius.network
+package com.appunite.loudius.network.datasource
 
 import com.appunite.loudius.network.model.AccessToken
-import com.appunite.loudius.network.services.GithubApi
+import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface UserDataSource {
+interface AuthDataSource {
 
     suspend fun getAccessToken(
         clientId: String,
@@ -16,14 +16,14 @@ interface UserDataSource {
 }
 
 @Singleton
-class UserNetworkDataSource @Inject constructor(
-    private val api: GithubApi,
-) : UserDataSource {
+class AuthNetworkDataSource @Inject constructor(
+    private val authService: AuthService,
+) : AuthDataSource {
 
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
         code: String,
     ): Result<AccessToken> =
-        safeApiCall { api.getAccessToken(clientId, clientSecret, code).accessToken }
+        safeApiCall { authService.getAccessToken(clientId, clientSecret, code).accessToken }
 }
