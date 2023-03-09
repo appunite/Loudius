@@ -84,21 +84,26 @@ private fun PullRequestItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .clickable(onClick = {
-                onClick(
-                    data.owner,
-                    data.shortRepositoryName,
-                    data.number.toString(),
-                    LocalDateTime
-                        .now()
-                        .toString()
-                )
-            }),
+            .clickable { onItemClick(onClick, data) },
     ) {
         PullRequestIcon()
         RepoDetails(pullRequestTitle = data.title, repositoryName = data.fullRepositoryName)
     }
     Divider(color = MaterialTheme.colorScheme.outlineVariant)
+}
+
+private fun onItemClick(
+    onClick: (String, String, String, String) -> Unit,
+    data: PullRequest
+) {
+    onClick(
+        data.owner,
+        data.shortRepositoryName,
+        data.number.toString(),
+        LocalDateTime
+            .now()
+            .toString()
+    )
 }
 
 @Composable
