@@ -12,10 +12,10 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
@@ -46,9 +46,8 @@ class ReviewersViewModel @Inject constructor(
         checkNotNull(savedStateHandle[Screen.Reviewers.ownerArg]),
         checkNotNull(savedStateHandle[Screen.Reviewers.repoArg]),
         checkNotNull(savedStateHandle[Screen.Reviewers.pullRequestNumberArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg])
+        checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg]),
     )
-
 
     private suspend fun fetchRequestedReviewers(initialValues: InitialValues) {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
@@ -72,7 +71,6 @@ class ReviewersViewModel @Inject constructor(
         repository.getReviews(owner, repo, pullRequestNumber).onSuccess { reviews ->
             val reviewersAfterReview = reviews.mapToReviewers(hoursFromPRStart)
             state = state.copy(reviewers = state.reviewers + reviewersAfterReview)
-
         }
     }
 
@@ -86,7 +84,7 @@ class ReviewersViewModel @Inject constructor(
                 latestReview.user.login,
                 true,
                 hoursFromPRStart,
-                hoursFromReviewDone
+                hoursFromReviewDone,
             )
         }
 

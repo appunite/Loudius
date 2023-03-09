@@ -35,19 +35,19 @@ import java.time.LocalDateTime
 @Composable
 fun PullRequestsScreen(
     viewModel: PullRequestsViewModel = hiltViewModel(),
-    navigateToReviewers: (String, String, String, String) -> Unit
+    navigateToReviewers: (String, String, String, String) -> Unit,
 ) {
     val state = viewModel.state
     PullRequestsScreenStateless(
         pullRequests = state.pullRequests,
-        onItemClick = navigateToReviewers
+        onItemClick = navigateToReviewers,
     )
 }
 
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
-    onItemClick: (String, String, String, String) -> Unit
+    onItemClick: (String, String, String, String) -> Unit,
 ) {
     Scaffold(topBar = {
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
@@ -94,7 +94,7 @@ private fun PullRequestItem(
 
 private fun onItemClick(
     onClick: (String, String, String, String) -> Unit,
-    data: PullRequest
+    data: PullRequest,
 ) {
     onClick(
         data.owner,
@@ -102,7 +102,7 @@ private fun onItemClick(
         data.number.toString(),
         LocalDateTime
             .now()
-            .toString()
+            .toString(),
     )
 }
 

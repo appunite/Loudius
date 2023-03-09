@@ -34,7 +34,7 @@ sealed class Screen(val route: String) {
             owner: String,
             repo: String,
             pullRequestNumber: String,
-            submissionDate: String
+            submissionDate: String,
         ): String = "reviewers_screen/$pullRequestNumber/$owner/$repo/$submissionDate"
     }
 }

@@ -31,13 +31,13 @@ import com.appunite.loudius.ui.utils.bottomBorder
 @Composable
 fun ReviewersScreen(
     navigateBack: () -> Unit,
-    viewModel: ReviewersViewModel = hiltViewModel()
+    viewModel: ReviewersViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
-        onClickBackArrow = navigateBack
+        onClickBackArrow = navigateBack,
     )
 }
 
@@ -46,13 +46,13 @@ fun ReviewersScreen(
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
-    onClickBackArrow: () -> Unit
+    onClickBackArrow: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             LoudiusTopAppBar(
                 onClickBackArrow = onClickBackArrow,
-                title = stringResource(id = R.string.details_title, pullRequestNumber)
+                title = stringResource(id = R.string.details_title, pullRequestNumber),
             )
         },
         content = { padding ->

@@ -57,13 +57,14 @@ class MainActivity : ComponentActivity() {
                                     owner = owner,
                                     repo = repo,
                                     pullRequestNumber = pullRequestNumber,
-                                    submissionDate = submissionTime
+                                    submissionDate = submissionTime,
                                 )
                                 navController.navigate(route)
                             }
                         }
                         composable(
-                            route = Screen.Reviewers.route, arguments = Screen.Reviewers.arguments
+                            route = Screen.Reviewers.route,
+                            arguments = Screen.Reviewers.arguments,
                         ) {
                             ReviewersScreen({ navController.popBackStack() })
                         }
