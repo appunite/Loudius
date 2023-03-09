@@ -1,6 +1,6 @@
 package com.appunite.loudius.network.datasource
 
-import com.appunite.loudius.network.model.AccessToken
+import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
@@ -12,7 +12,7 @@ interface AuthDataSource {
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessToken>
+    ): Result<AccessTokenResponse>
 }
 
 @Singleton
@@ -24,6 +24,6 @@ class AuthNetworkDataSource @Inject constructor(
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessToken> =
-        safeApiCall { authService.getAccessToken(clientId, clientSecret, code).accessToken }
+    ): Result<AccessTokenResponse> =
+        safeApiCall { authService.getAccessToken(clientId, clientSecret, code) }
 }
