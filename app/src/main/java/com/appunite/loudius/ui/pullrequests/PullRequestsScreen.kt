@@ -30,16 +30,24 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import java.time.LocalDateTime
 
 @Composable
-fun PullRequestsScreen(viewModel: PullRequestsViewModel = hiltViewModel()) {
+fun PullRequestsScreen(
+    viewModel: PullRequestsViewModel = hiltViewModel(),
+    navigateToReviewers: (String, String, String, String) -> Unit
+) {
     val state = viewModel.state
-    PullRequestsScreenStateless(pullRequests = state.pullRequests)
+    PullRequestsScreenStateless(
+        pullRequests = state.pullRequests,
+        onItemClick = navigateToReviewers
+    )
 }
 
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
+    onItemClick: (String, String, String, String) -> Unit
 ) {
     Scaffold(topBar = {
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
@@ -52,10 +60,9 @@ private fun PullRequestsScreenStateless(
             itemsIndexed(pullRequests) { index, item ->
                 val isIndexEven = index % 2 == 0
                 PullRequestItem(
-                    repositoryName = item.fullRepositoryName,
-                    pullRequestTitle = item.title,
+                    data = item,
                     darkBackground = isIndexEven,
-                    onClick = {},
+                    onClick = onItemClick,
                 )
             }
         }
@@ -64,10 +71,9 @@ private fun PullRequestsScreenStateless(
 
 @Composable
 private fun PullRequestItem(
-    repositoryName: String,
-    pullRequestTitle: String,
+    data: PullRequest,
     darkBackground: Boolean,
-    onClick: () -> Unit,
+    onClick: (String, String, String, String) -> Unit,
 ) {
     val backgroundColor = if (darkBackground) {
         MaterialTheme.colorScheme.onSurface.copy(0.08f)
@@ -78,10 +84,19 @@ private fun PullRequestItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .clickable(onClick = onClick),
+            .clickable(onClick = {
+                onClick(
+                    data.owner,
+                    data.shortRepositoryName,
+                    data.number.toString(),
+                    LocalDateTime
+                        .now()
+                        .toString()
+                )
+            }),
     ) {
         PullRequestIcon()
-        RepoDetails(pullRequestTitle = pullRequestTitle, repositoryName = repositoryName)
+        RepoDetails(pullRequestTitle = data.title, repositoryName = data.fullRepositoryName)
     }
     Divider(color = MaterialTheme.colorScheme.outlineVariant)
 }
@@ -113,7 +128,7 @@ private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
 @Composable
 fun PullRequestsScreenEmptyListPreview() {
     LoudiusTheme {
-        PullRequestsScreenStateless(emptyList())
+        PullRequestsScreenStateless(emptyList()) { _, _, _, _ -> }
     }
 }
 
@@ -156,6 +171,6 @@ fun PullRequestsScreenPreview() {
                     updatedAt = "2022-01-29T16:31:41Z",
                 ),
             ),
-        )
+        ) { _, _, _, _ -> }
     }
 }

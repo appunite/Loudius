@@ -14,11 +14,11 @@ sealed class Screen(val route: String) {
     object PullRequests : Screen("pull_requests_screen")
 
     object Reviewers :
-        Screen("reviewers_screen/{pullRequestNumber}/{owner}/{repo}/{submissionDate}") {
+        Screen("reviewers_screen/{pull_request_number}/{owner}/{repo}/{submission_date}") {
         const val pullRequestNumberArg = "pull_request_number"
-        const val ownerArg = "pull_request_number"
-        const val repoArg = "pull_request_number"
-        const val submissionDateArg = "pull_request_number"
+        const val ownerArg = "owner"
+        const val repoArg = "repo"
+        const val submissionDateArg = "submission_date"
 
         override val arguments: List<NamedNavArgument>
             get() {
@@ -29,5 +29,12 @@ sealed class Screen(val route: String) {
                     navArgument(submissionDateArg) { type = NavType.StringType },
                 )
             }
+
+        fun constructRoute(
+            owner: String,
+            repo: String,
+            pullRequestNumber: String,
+            submissionDate: String
+        ): String = "reviewers_screen/$pullRequestNumber/$owner/$repo/$submissionDate"
     }
 }

@@ -30,16 +30,12 @@ import com.appunite.loudius.ui.utils.bottomBorder
 
 @Composable
 fun ReviewersScreen(
-    pullRequestNumber: String?,
-    owner: String?,
-    repo: String?,
-    submissionDate: String?,
     navigateBack: () -> Unit,
     viewModel: ReviewersViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     ReviewersScreenStateless(
-        topBarTitle = "Pull request $pullRequestNumber",
+        pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack
     )
@@ -48,12 +44,17 @@ fun ReviewersScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReviewersScreenStateless(
-    topBarTitle: String,
+    pullRequestNumber: String,
     reviewers: List<Reviewer>,
     onClickBackArrow: () -> Unit
 ) {
     Scaffold(
-        topBar = { LoudiusTopAppBar(onClickBackArrow = onClickBackArrow, title = topBarTitle) },
+        topBar = {
+            LoudiusTopAppBar(
+                onClickBackArrow = onClickBackArrow,
+                title = stringResource(id = R.string.details_title, pullRequestNumber)
+            )
+        },
         content = { padding ->
             ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding))
         },
@@ -169,6 +170,6 @@ fun DetailsScreenPreview() {
     val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
-        ReviewersScreenStateless(topBarTitle = "Pull request #1", reviewers = reviewers, {})
+        ReviewersScreenStateless(pullRequestNumber = "Pull request #1", reviewers = reviewers, {})
     }
 }

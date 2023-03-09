@@ -13,6 +13,12 @@ data class PullRequest(
     val fullRepositoryName: String
         get() = repositoryUrl.removePrefix(REPOSITORY_PATH)
 
+    val shortRepositoryName: String
+        get() = fullRepositoryName.substringAfter('/')
+
+    val owner: String
+        get() = fullRepositoryName.substringBefore('/')
+
     companion object {
         private const val REPOSITORY_PATH = Constants.BASE_API_URL + "/repos/"
     }

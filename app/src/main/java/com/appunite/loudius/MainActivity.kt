@@ -52,27 +52,20 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable(route = Screen.PullRequests.route) {
-                            PullRequestsScreen()
+                            PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime ->
+                                val route = Screen.Reviewers.constructRoute(
+                                    owner = owner,
+                                    repo = repo,
+                                    pullRequestNumber = pullRequestNumber,
+                                    submissionDate = submissionTime
+                                )
+                                navController.navigate(route)
+                            }
                         }
                         composable(
                             route = Screen.Reviewers.route, arguments = Screen.Reviewers.arguments
-                        ) { navBackStackEntry ->
-                            val pullRequestNumber =
-                                navBackStackEntry.arguments?.getString(Screen.Reviewers.pullRequestNumberArg)
-                            val owner =
-                                navBackStackEntry.arguments?.getString(Screen.Reviewers.ownerArg)
-                            val repo =
-                                navBackStackEntry.arguments?.getString(Screen.Reviewers.repoArg)
-                            val submissionDate =
-                                navBackStackEntry.arguments?.getString(Screen.Reviewers.submissionDateArg)
-
-                            // TODO: Handle the case with null arguments
-                            ReviewersScreen(
-                                pullRequestNumber,
-                                owner,
-                                repo,
-                                submissionDate,
-                                { navController.popBackStack() })
+                        ) {
+                            ReviewersScreen({ navController.popBackStack() })
                         }
                     }
                 }
