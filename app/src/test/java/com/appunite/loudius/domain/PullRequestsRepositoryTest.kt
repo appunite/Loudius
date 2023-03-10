@@ -27,13 +27,13 @@ class PullRequestsRepositoryTest {
     )
 
     @Test
-    fun `GIVEN currently logged in user WHEN getting own pull requests THEN should return list of pull requests`() =
+    fun `GIVEN logged in user WHEN getting pull requests THEN return list of pull requests`() =
         runTest {
             repository.getCurrentUserPullRequests()
         }
 
     @Test
-    fun `GIVEN error during fetching user WHEN getting own pull requests THEN should return error`() =
+    fun `GIVEN error during fetching user WHEN getting pull requests THEN return error`() =
         runTest {
             coEvery { userDataSource.getUser() } returns
                     Result.failure(WebException.NetworkError())
@@ -47,7 +47,7 @@ class PullRequestsRepositoryTest {
         }
 
     @Test
-    fun `GIVEN error during fetching pull requests WHEN getting own pull requests THEN should return list of pull requests`() =
+    fun `GIVEN error during fetching pull requests WHEN getting pull requests THEN return list of pull requests`() =
         runTest {
             coEvery { userDataSource.getUser() } returns Result.success(User(1, "wrongUser"))
 
