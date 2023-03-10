@@ -29,7 +29,7 @@ class PullRequestsRepositoryTest {
     @Test
     fun `GIVEN logged in user WHEN getting pull requests THEN return list of pull requests`() =
         runTest {
-            repository.getCurrentUserPullRequests()
+            repository.getPullRequests()
         }
 
     @Test
@@ -38,7 +38,7 @@ class PullRequestsRepositoryTest {
             coEvery { userDataSource.getUser() } returns
                     Result.failure(WebException.NetworkError())
 
-            val response = repository.getCurrentUserPullRequests()
+            val response = repository.getPullRequests()
 
             Assertions.assertEquals(
                 Result.failure<PullRequestsResponse>(WebException.NetworkError()),
@@ -51,7 +51,7 @@ class PullRequestsRepositoryTest {
         runTest {
             coEvery { userDataSource.getUser() } returns Result.success(User(1, "wrongUser"))
 
-            val response = repository.getCurrentUserPullRequests()
+            val response = repository.getPullRequests()
 
             Assertions.assertEquals(
                 Result.failure<PullRequestsResponse>(WebException.NetworkError()),

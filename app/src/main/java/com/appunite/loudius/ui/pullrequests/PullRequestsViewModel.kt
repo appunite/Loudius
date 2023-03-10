@@ -24,7 +24,7 @@ class PullRequestsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            pullRequestsRepository.getCurrentUserPullRequests()
+            pullRequestsRepository.getPullRequests()
                 .onSuccess {
                     state = state.copy(pullRequests = it.items)
                 }
