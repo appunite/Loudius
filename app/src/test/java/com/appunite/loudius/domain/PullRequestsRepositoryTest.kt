@@ -66,7 +66,7 @@ class PullRequestsRepositoryTest {
         }
 
     @Test
-    fun `GIVEN error during fetching pull requests WHEN getting pull requests THEN return list of pull requests`() =
+    fun `GIVEN error during fetching pull requests WHEN getting pull requests THEN error`() =
         runTest {
             coEvery { userDataSource.getUser() } returns Result.success(User(1, "wrongUser"))
 
