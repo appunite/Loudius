@@ -1,7 +1,7 @@
 package com.appunite.loudius.domain
 
 import com.appunite.loudius.common.flatMap
-import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.PullRequestDataSource
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
@@ -25,7 +25,7 @@ interface PullRequestRepository {
 }
 
 class PullRequestsRepository @Inject constructor(
-    private val pullRequestsNetworkDataSource: PullRequestsNetworkDataSource,
+    private val pullRequestsNetworkDataSource: PullRequestDataSource,
     private val userDataSource: UserDataSource,
 ) :
     PullRequestRepository {

@@ -20,12 +20,14 @@ interface PullRequestDataSource {
         repository: String,
         pullRequestNumber: String,
     ): Result<List<Review>>
+
+    suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse>
 }
 
 @Singleton
 class PullRequestsNetworkDataSource @Inject constructor(private val service: PullRequestsService) :
     PullRequestDataSource {
-    suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = safeApiCall {
+    override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = safeApiCall {
         service.getPullRequestsForUser("author:$author type:pr state:open")
     }
 
