@@ -10,7 +10,6 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -21,6 +20,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -155,8 +155,8 @@ class PullRequestsNetworkDataSourceTest {
                             number = 1,
                             repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
                             title = "example title",
-                            LocalDateTime.parse("2023-03-07T09:24:24")
-                        )
+                            LocalDateTime.parse("2023-03-07T09:24:24"),
+                        ),
                     ),
                 ),
             )
