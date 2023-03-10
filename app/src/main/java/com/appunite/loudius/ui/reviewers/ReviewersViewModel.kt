@@ -12,10 +12,10 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
@@ -51,17 +51,20 @@ class ReviewersViewModel @Inject constructor(
 
     private suspend fun fetchRequestedReviewers(initialValues: InitialValues) {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
 
         repository.getReviewers(owner, repo, pullRequestNumber)
             .onSuccess { response ->
-                val reviewers = response.mapToReviewers(hoursFromPRStart)
+                val reviewers = response.mapToReviewers(submissionTime)
                 state = state.copy(reviewers = state.reviewers + reviewers)
             }
     }
 
-    private fun RequestedReviewersResponse.mapToReviewers(hoursFromPRStart: Long) = users.map {
-        Reviewer(it.id, it.login, false, hoursFromPRStart, null)
+    private fun RequestedReviewersResponse.mapToReviewers(submissionTime: String): List<Reviewer> {
+        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
+
+        return users.map {
+            Reviewer(it.id, it.login, false, hoursFromPRStart, null)
+        }
     }
 
     private suspend fun fetchReviews(initialValues: InitialValues) {
