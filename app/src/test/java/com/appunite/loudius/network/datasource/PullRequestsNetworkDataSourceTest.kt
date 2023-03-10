@@ -10,6 +10,7 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -387,7 +388,7 @@ class PullRequestsNetworkDataSourceTest {
                             "1",
                             User(33498031, "exampleUser"),
                             ReviewState.COMMENTED,
-                            ZonedDateTime.parse("2023-03-02T10:21:36Z").toLocalDateTime(),
+                            LocalDateTime.parse("2023-03-02T10:21:36Z"),
                         ),
                     ),
                 )
