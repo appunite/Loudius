@@ -6,7 +6,7 @@ import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.utils.WebException
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
 
 class FakePullRequestDataSource : PullRequestDataSource {
     override suspend fun getReviewers(
@@ -47,6 +47,6 @@ class FakePullRequestDataSource : PullRequestDataSource {
         number = id,
         repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo${id}",
         title = "example title $id",
-        ZonedDateTime.parse("2023-03-07T09:24:24Z").toLocalDateTime().plusHours(id.toLong()),
+        LocalDateTime.parse("2023-03-07T09:24:24"),
     )
 }
