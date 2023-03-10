@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             route = Screen.Reviewers.route,
                             arguments = Screen.Reviewers.arguments,
                         ) {
-                            ReviewersScreen({ navController.popBackStack() })
+                            ReviewersScreen { navController.popBackStack() }
                         }
                     }
                 }

@@ -30,8 +30,8 @@ import com.appunite.loudius.ui.utils.bottomBorder
 
 @Composable
 fun ReviewersScreen(
-    navigateBack: () -> Unit,
     viewModel: ReviewersViewModel = hiltViewModel(),
+    navigateBack: () -> Unit,
 ) {
     val state = viewModel.state
     ReviewersScreenStateless(
