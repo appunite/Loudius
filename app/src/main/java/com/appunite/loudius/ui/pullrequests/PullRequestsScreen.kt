@@ -32,10 +32,12 @@ import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
 
+typealias NavigateToReviewers = (String, String, String, String) -> Unit
+
 @Composable
 fun PullRequestsScreen(
     viewModel: PullRequestsViewModel = hiltViewModel(),
-    navigateToReviewers: (String, String, String, String) -> Unit,
+    navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state
     PullRequestsScreenStateless(
@@ -47,7 +49,7 @@ fun PullRequestsScreen(
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
-    onItemClick: (String, String, String, String) -> Unit,
+    onItemClick: NavigateToReviewers,
 ) {
     Scaffold(topBar = {
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
@@ -73,7 +75,7 @@ private fun PullRequestsScreenStateless(
 private fun PullRequestItem(
     data: PullRequest,
     darkBackground: Boolean,
-    onClick: (String, String, String, String) -> Unit,
+    onClick: NavigateToReviewers,
 ) {
     val backgroundColor = if (darkBackground) {
         MaterialTheme.colorScheme.onSurface.copy(0.08f)
@@ -93,7 +95,7 @@ private fun PullRequestItem(
 }
 
 private fun onItemClick(
-    onClick: (String, String, String, String) -> Unit,
+    onClick: NavigateToReviewers,
     data: PullRequest,
 ) {
     onClick(
