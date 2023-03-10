@@ -31,8 +31,7 @@ class FakePullRequestDataSource : PullRequestDataSource {
             else -> Result.failure(WebException.NetworkError())
         }
 
-    private fun getPullRequestResponse(): Result<PullRequestsResponse> {
-        val itemsAmount = 3
+    private fun getPullRequestResponse(itemsAmount: Int = 3): Result<PullRequestsResponse> {
         return Result.success(
             PullRequestsResponse(
                 incompleteResults = false,
