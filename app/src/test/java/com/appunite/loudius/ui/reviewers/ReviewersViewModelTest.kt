@@ -26,14 +26,18 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainDispatcherExtension::class)
 class ReviewersViewModelTest {
 
-    private val repository: PullRequestRepository = FakePullRequestRepository()
-    private val savedStateHandle: SavedStateHandle = mockk(relaxed = true)
     private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
     private val systemClockFixed =
         Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.systemDefault())
 
-    private fun createViewModel(): ReviewersViewModel =
-        ReviewersViewModel(repository, savedStateHandle)
+    private val repository: PullRequestRepository = FakePullRequestRepository()
+    private val savedStateHandle: SavedStateHandle = mockk(relaxed = true) {
+        every { get<String>(any()) } returns "example"
+        every { get<String>("submission_date") } returns "2022-01-29T08:00:00"
+        every { get<String>("pull_request_number") } returns "correctPullRequestNumber"
+    }
+
+    private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle)
 
     @BeforeEach
     fun setup() {
@@ -41,9 +45,8 @@ class ReviewersViewModelTest {
         every { Clock.systemDefaultZone() } returns systemClockFixed
     }
 
-
     @Test
-    fun `GIVEN no values in saved state WHEN init THEN throw IllegalArgumentException`() {
+    fun `GIVEN no values in saved state WHEN init THEN throw IllegalStateException`() {
         every { savedStateHandle.get<String>(any()) } returns null
 
         assertThrows<java.lang.IllegalStateException> {
@@ -53,10 +56,6 @@ class ReviewersViewModelTest {
 
     @Test
     fun `GIVEN correct initial values WHEN init THEN state is correct`() {
-        every { savedStateHandle.get<String>(any()) } returns "example"
-        every { savedStateHandle.get<String>("submission_date") } returns "2022-01-29T12:00:00"
-        every { savedStateHandle.get<String>("pull_request_number") } returns "correctPullRequestNumber"
-
         val viewModel = createViewModel()
 
         verify(exactly = 1) { savedStateHandle.get<String>("owner") }
@@ -69,22 +68,17 @@ class ReviewersViewModelTest {
 
     @Test
     fun `GIVEN empty reviewers source WHEN init THEN state is correct, no reviewers`() {
-        every { savedStateHandle.get<String>(any()) } returns "example"
-        every { savedStateHandle.get<String>("submission_date") } returns "2022-01-29T12:00:00"
+        every { savedStateHandle.get<String>("pull_request_number") } returns "pullRequestWithNoReviewers"
 
         val viewModel = createViewModel()
 
-        assertEquals("example", viewModel.state.pullRequestNumber)
+        assertEquals("pullRequestWithNoReviewers", viewModel.state.pullRequestNumber)
         assertEquals(emptyList<Reviewer>(), viewModel.state.reviewers)
     }
 
     @Test
     fun `GIVEN mix reviewers WHEN init THEN list of reviewers is fetched`() =
         runTest {
-            every { savedStateHandle.get<String>(any()) } returns "example"
-            every { savedStateHandle.get<String>("submission_date") } returns "2022-01-29T08:00:00"
-            every { savedStateHandle.get<String>("pull_request_number") } returns "correctPullRequestNumber"
-
             val viewModel = createViewModel()
 
             val expected = listOf(
@@ -103,8 +97,6 @@ class ReviewersViewModelTest {
     @Test
     fun `GIVEN reviewers with no review done WHEN init THEN list of reviewers is fetched`() =
         runTest {
-            every { savedStateHandle.get<String>(any()) } returns "example"
-            every { savedStateHandle.get<String>("submission_date") } returns "2022-01-29T08:00:00"
             every { savedStateHandle.get<String>("pull_request_number") } returns "onlyRequestedReviewers"
 
             val viewModel = createViewModel()
@@ -123,8 +115,6 @@ class ReviewersViewModelTest {
     @Test
     fun `GIVEN only reviewers who done reviews WHEN init THEN list of reviewers is fetched`() =
         runTest {
-            every { savedStateHandle.get<String>(any()) } returns "example"
-            every { savedStateHandle.get<String>("submission_date") } returns "2022-01-29T08:00:00"
             every { savedStateHandle.get<String>("pull_request_number") } returns "onlyReviewsNumber"
 
             val viewModel = createViewModel()
