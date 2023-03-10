@@ -264,7 +264,7 @@ class PullRequestsNetworkDataSourceTest {
             }
 
         @Test
-        fun `Given incorrect access token WHEN processing request THEN return failure with Network error`() =
+        fun `Given incorrect access token WHEN processing request THEN return failure with UnknownError error`() =
             runTest {
                 // language=JSON
                 val jsonResponse = """
@@ -392,7 +392,7 @@ class PullRequestsNetworkDataSourceTest {
             }
 
         @Test
-        fun `Given incorrect access token WHEN processing request THEN return failure with Network error`() =
+        fun `Given incorrect access token WHEN processing request THEN return failure with UnknownError error`() =
             runTest {
                 // language=JSON
                 val jsonResponse = """
