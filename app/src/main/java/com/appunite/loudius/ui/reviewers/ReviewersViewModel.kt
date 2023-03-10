@@ -51,17 +51,20 @@ class ReviewersViewModel @Inject constructor(
 
     private suspend fun fetchRequestedReviewers(initialValues: InitialValues) {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
 
         repository.getRequestedReviewers(owner, repo, pullRequestNumber)
             .onSuccess { response ->
-                val reviewers = response.mapToReviewers(hoursFromPRStart)
+                val reviewers = response.mapToReviewers(submissionTime)
                 state = state.copy(reviewers = state.reviewers + reviewers)
             }
     }
 
-    private fun RequestedReviewersResponse.mapToReviewers(hoursFromPRStart: Long) = users.map {
-        Reviewer(it.id, it.login, false, hoursFromPRStart, null)
+    private fun RequestedReviewersResponse.mapToReviewers(submissionTime: String): List<Reviewer> {
+        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
+
+        return users.map {
+            Reviewer(it.id, it.login, false, hoursFromPRStart, null)
+        }
     }
 
     private suspend fun fetchReviews(initialValues: InitialValues) {
