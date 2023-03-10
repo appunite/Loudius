@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,16 +41,22 @@ fun PullRequestsScreen(
     navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state
+    LaunchedEffect(state.navigateToReviewers) {
+        state.navigateToReviewers?.let {
+            navigateToReviewers(it.owner, it.repo, it.pullRequestNumber, it.submissionTime)
+            viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
+        }
+    }
     PullRequestsScreenStateless(
         pullRequests = state.pullRequests,
-        onItemClick = navigateToReviewers,
+        onItemClick = viewModel::onAction,
     )
 }
 
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
-    onItemClick: NavigateToReviewers,
+    onItemClick: (PulLRequestsAction) -> Unit,
 ) {
     Scaffold(topBar = {
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
@@ -75,7 +82,7 @@ private fun PullRequestsScreenStateless(
 private fun PullRequestItem(
     data: PullRequest,
     darkBackground: Boolean,
-    onClick: NavigateToReviewers,
+    onClick: (PulLRequestsAction) -> Unit,
 ) {
     val backgroundColor = if (darkBackground) {
         MaterialTheme.colorScheme.onSurface.copy(0.08f)
@@ -86,24 +93,12 @@ private fun PullRequestItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .clickable { onItemClick(onClick, data) },
+            .clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
     ) {
         PullRequestIcon()
         RepoDetails(pullRequestTitle = data.title, repositoryName = data.fullRepositoryName)
     }
     Divider(color = MaterialTheme.colorScheme.outlineVariant)
-}
-
-private fun onItemClick(
-    onClick: NavigateToReviewers,
-    data: PullRequest,
-) {
-    onClick(
-        data.owner,
-        data.shortRepositoryName,
-        data.number.toString(),
-        data.createdAt.toString(),
-    )
 }
 
 @Composable
@@ -133,7 +128,7 @@ private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
 @Composable
 fun PullRequestsScreenEmptyListPreview() {
     LoudiusTheme {
-        PullRequestsScreenStateless(emptyList()) { _, _, _, _ -> }
+        PullRequestsScreenStateless(emptyList()) { }
     }
 }
 
@@ -176,6 +171,6 @@ fun PullRequestsScreenPreview() {
                     createdAt = LocalDateTime.parse("2022-01-29T16:31:41Z"),
                 ),
             ),
-        ) { _, _, _, _ -> }
+        ) { }
     }
 }
