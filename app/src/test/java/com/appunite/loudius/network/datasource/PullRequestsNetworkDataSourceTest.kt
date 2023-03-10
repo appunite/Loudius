@@ -10,7 +10,6 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
-import java.time.ZonedDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -21,6 +20,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -45,14 +45,13 @@ class PullRequestsNetworkDataSourceTest {
                 )
 
                 val actualResponse = pullRequestDataSource.getPullRequestsForUser(
-                    "exampleUser"
+                    "exampleUser",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
                     actualResponse.exceptionOrNull(),
                 ) { "Exception thrown should be NetworkError type" }
             }
-
 
         @Test
         fun `Given correct params WHEN successful response THEN return success`() = runTest {
@@ -157,9 +156,9 @@ class PullRequestsNetworkDataSourceTest {
                             repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
                             title = "example title",
                             ZonedDateTime.parse("2023-03-07T09:24:24Z").toLocalDateTime(),
-                        )
+                        ),
                     ),
-                )
+                ),
             )
 
             assertEquals(expected, actualResponse) { "Data should be valid" }
@@ -191,8 +190,6 @@ class PullRequestsNetworkDataSourceTest {
 
                 assertEquals(expected, actualResponse) { "Data should be valid" }
             }
-
-
     }
 
     @Nested
@@ -259,7 +256,7 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleRepo",
                     "exampleNumber",
 
-                    )
+                )
 
                 val reviewer = Reviewer("1", "exampleLogin", "https://example/avatar")
                 val expected = Result.success(RequestedReviewersResponse(listOf(reviewer)))

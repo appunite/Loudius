@@ -30,7 +30,6 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @Composable
