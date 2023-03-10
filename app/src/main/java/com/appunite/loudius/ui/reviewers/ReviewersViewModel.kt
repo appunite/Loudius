@@ -69,27 +69,30 @@ class ReviewersViewModel @Inject constructor(
 
     private suspend fun fetchReviews(initialValues: InitialValues) {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
 
         repository.getReviews(owner, repo, pullRequestNumber).onSuccess { reviews ->
-            val reviewersAfterReview = reviews.mapToReviewers(hoursFromPRStart)
+            val reviewersAfterReview = reviews.mapToReviewers(submissionTime)
             state = state.copy(reviewers = state.reviewers + reviewersAfterReview)
         }
     }
 
-    private fun List<Review>.mapToReviewers(hoursFromPRStart: Long) = groupBy { it.user.id }
-        .map { reviewsForSingleUser ->
-            val latestReview = reviewsForSingleUser.value.minBy { it.submittedAt }
-            val hoursFromReviewDone = countHoursTillNow(latestReview.submittedAt)
+    private fun List<Review>.mapToReviewers(submissionTime: String): List<Reviewer> {
+        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
 
-            Reviewer(
-                latestReview.user.id,
-                latestReview.user.login,
-                true,
-                hoursFromPRStart,
-                hoursFromReviewDone,
-            )
-        }
+        return groupBy { it.user.id }
+            .map { reviewsForSingleUser ->
+                val latestReview = reviewsForSingleUser.value.minBy { it.submittedAt }
+                val hoursFromReviewDone = countHoursTillNow(latestReview.submittedAt)
+
+                Reviewer(
+                    latestReview.user.id,
+                    latestReview.user.login,
+                    true,
+                    hoursFromPRStart,
+                    hoursFromReviewDone,
+                )
+            }
+    }
 
     private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
         ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
