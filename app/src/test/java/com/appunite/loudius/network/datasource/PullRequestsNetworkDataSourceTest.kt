@@ -255,7 +255,6 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-
                 )
 
                 val reviewer = Reviewer("1", "exampleLogin", "https://example/avatar")
