@@ -1,6 +1,8 @@
-package com.appunite.loudius.ui.repos
+package com.appunite.loudius.ui.loading
 
-import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
@@ -10,10 +12,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class LoadingState(
+    val accessToken: String? = null,
+    val showErrorScreen: Boolean = false
+)
+
 @HiltViewModel
-class ReposViewModel @Inject constructor(
+class LoadingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
+
+    var state by mutableStateOf(LoadingState())
+        private set
 
     fun getAccessToken(code: String) {
         viewModelScope.launch {
@@ -22,9 +32,13 @@ class ReposViewModel @Inject constructor(
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code,
             ).onSuccess { token ->
-                Log.i("access_token", token.accessToken.toString())
+                state = if (token.accessToken != null) {
+                    state.copy(accessToken = token.accessToken)
+                } else {
+                    state.copy(showErrorScreen = true)
+                }
             }.onFailure {
-                Log.i("access_token", it.message.toString())
+                state = state.copy(showErrorScreen = true)
             }
         }
     }
