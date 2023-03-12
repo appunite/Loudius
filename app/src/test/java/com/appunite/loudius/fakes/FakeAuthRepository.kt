@@ -1,15 +1,15 @@
 package com.appunite.loudius.fakes
 
 import com.appunite.loudius.domain.AuthRepository
-import com.appunite.loudius.network.model.AccessToken
+import com.appunite.loudius.network.model.AccessTokenResponse
 
 class FakeAuthRepository : AuthRepository {
     override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessToken> {
-        return Result.success("validToken")
+    ): Result<AccessTokenResponse> {
+        return Result.success(AccessTokenResponse("validToken"))
     }
 
     override fun getAccessToken(): String {
