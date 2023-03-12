@@ -30,6 +30,7 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import java.time.LocalDateTime
 
 @Composable
 fun PullRequestsScreen(viewModel: PullRequestsViewModel = hiltViewModel()) {
@@ -129,7 +130,7 @@ fun PullRequestsScreenPreview() {
                     number = 0,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
                     title = "[SIL-67] Details screen - network layer",
-                    updatedAt = "2021-11-29T16:31:41Z",
+                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
                 ),
                 PullRequest(
                     id = 1,
@@ -137,7 +138,7 @@ fun PullRequestsScreenPreview() {
                     number = 1,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
                     title = "[SIL-66] Add client secret to build config",
-                    updatedAt = "2022-11-29T16:31:41Z",
+                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
                 ),
                 PullRequest(
                     id = 2,
@@ -145,7 +146,7 @@ fun PullRequestsScreenPreview() {
                     number = 2,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
                     title = "[SIL-73] Storing access token",
-                    updatedAt = "2023-01-29T16:31:41Z",
+                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
                 ),
                 PullRequest(
                     id = 3,
@@ -153,7 +154,7 @@ fun PullRequestsScreenPreview() {
                     number = 3,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
                     title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-                    updatedAt = "2022-01-29T16:31:41Z",
+                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
                 ),
             ),
         )
