@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 data class LoadingState(
     val accessToken: String? = null,
-    val showErrorScreen: Boolean = false
+    val showErrorScreen: Boolean = false,
 )
 
 @HiltViewModel

@@ -46,11 +46,11 @@ fun LoadingScreen(
 
 @Composable
 private fun ShowLoudiusErrorScreen(
-    onTryAgainClick: () -> Unit
+    onTryAgainClick: () -> Unit,
 ) {
     LoudiusErrorScreen(
         errorText = stringResource(id = R.string.error_dialog_text),
-        buttonText = stringResource(id = R.string.try_again)
+        buttonText = stringResource(id = R.string.try_again),
     ) {
         onTryAgainClick()
     }
@@ -58,7 +58,7 @@ private fun ShowLoudiusErrorScreen(
 
 @Composable
 private fun ShowLoadingIndicator(code: String?) {
-    //TODO add loading indicator
+    // TODO add loading indicator
     Column {
         Text(text = code ?: "code is already consumed")
     }
