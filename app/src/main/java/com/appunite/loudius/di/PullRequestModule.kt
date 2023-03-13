@@ -25,6 +25,6 @@ object PullRequestModule {
     @Singleton
     fun providePullRequestRepository(
         dataSource: PullRequestDataSource,
-        userDataSource: UserDataSource
+        userDataSource: UserDataSource,
     ): PullRequestRepository = PullRequestRepositoryImpl(dataSource, userDataSource)
 }

@@ -20,7 +20,7 @@ class FakePullRequestRepository : PullRequestRepository {
     override suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<List<Review>> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyReviewsNumber" -> Result.success(
             listOf(
@@ -30,7 +30,7 @@ class FakePullRequestRepository : PullRequestRepository {
                 Review("4", User(2, "user2"), COMMENTED, date1),
                 Review("5", User(2, "user2"), COMMENTED, date2),
                 Review("6", User(2, "user2"), APPROVED, date3),
-            )
+            ),
         )
         "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
         else -> Result.success(emptyList())
@@ -39,15 +39,15 @@ class FakePullRequestRepository : PullRequestRepository {
     override suspend fun getRequestedReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyRequestedReviewers" -> Result.success(
             RequestedReviewersResponse(
                 listOf(
                     RequestedReviewer(3, "user3"),
                     RequestedReviewer(4, "user4"),
-                )
-            )
+                ),
+            ),
         )
         "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
         else -> Result.success(RequestedReviewersResponse(emptyList()))

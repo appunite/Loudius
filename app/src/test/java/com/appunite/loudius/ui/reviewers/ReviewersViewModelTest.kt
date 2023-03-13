@@ -9,10 +9,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,6 +17,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
@@ -90,7 +90,7 @@ class ReviewersViewModelTest {
             val actual = viewModel.state.reviewers
 
             assertTrue(
-                actual.containsAll(expected) && expected.containsAll(actual)
+                actual.containsAll(expected) && expected.containsAll(actual),
             )
         }
 
@@ -108,7 +108,7 @@ class ReviewersViewModelTest {
             val actual = viewModel.state.reviewers
 
             assertTrue(
-                actual.containsAll(expected) && expected.containsAll(actual)
+                actual.containsAll(expected) && expected.containsAll(actual),
             )
         }
 
@@ -126,7 +126,7 @@ class ReviewersViewModelTest {
             val actual = viewModel.state.reviewers
 
             assertTrue(
-                actual.containsAll(expected) && expected.containsAll(actual)
+                actual.containsAll(expected) && expected.containsAll(actual),
             )
         }
 }

@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.domain.PullRequestRepositoryImpl
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
