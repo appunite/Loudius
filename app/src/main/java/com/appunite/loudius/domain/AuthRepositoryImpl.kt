@@ -1,6 +1,5 @@
 package com.appunite.loudius.domain
 
-import android.util.Log
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.model.AccessTokenResponse
 import javax.inject.Inject
@@ -18,15 +17,11 @@ class AuthRepositoryImpl @Inject constructor(
         code: String,
     ): Result<AccessTokenResponse> {
         val result = authDataSource.getAccessToken(clientId, clientSecret, code)
-        result
-            .onSuccess {
-                if (it.accessToken != null) {
-                    userLocalDataSource.saveAccessToken(it.accessToken)
-                } else {
-                    Log.i("failure", it.toString() + "bad_verification_code")
-                }
+        result.onSuccess { response ->
+            response.accessToken?.let {
+                userLocalDataSource.saveAccessToken(it)
             }
-            .onFailure { Log.i("failure", "incorrect_client_credentials") }
+        }
         return result
     }
 
