@@ -66,7 +66,7 @@ class ReviewersViewModelTest {
     }
 
     @Test
-    fun `GIVEN empty reviewers source WHEN init THEN state is correct, no reviewers`() {
+    fun `GIVEN no reviewers WHEN init THEN state is correct with no reviewers`() {
         every { savedStateHandle.get<String>("pull_request_number") } returns "pullRequestWithNoReviewers"
 
         viewModel = createViewModel()
@@ -76,7 +76,7 @@ class ReviewersViewModelTest {
     }
 
     @Test
-    fun `GIVEN mix reviewers WHEN init THEN list of reviewers is fetched`() =
+    fun `GIVEN mixed reviewers WHEN init THEN list of reviewers is fetched`() =
         runTest {
             viewModel = createViewModel()
 
@@ -121,6 +121,5 @@ class ReviewersViewModelTest {
             val actual = viewModel.state.reviewers
 
             assertEquals(expected, actual)
-
         }
 }
