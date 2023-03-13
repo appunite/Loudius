@@ -22,7 +22,7 @@ class FakePullRequestRepository : PullRequestRepository {
         repo: String,
         pullRequestNumber: String,
     ): Result<List<Review>> = when (pullRequestNumber) {
-        "correctPullRequestNumber", "onlyReviewsNumber" -> Result.success(
+        "correctPullRequestNumber", "onlyReviewsPullNumber" -> Result.success(
             listOf(
                 Review("1", User(1, "user1"), CHANGES_REQUESTED, date1),
                 Review("2", User(1, "user1"), COMMENTED, date2),
@@ -41,7 +41,7 @@ class FakePullRequestRepository : PullRequestRepository {
         repo: String,
         pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> = when (pullRequestNumber) {
-        "correctPullRequestNumber", "onlyRequestedReviewers" -> Result.success(
+        "correctPullRequestNumber", "onlyRequestedReviewersPullNumber" -> Result.success(
             RequestedReviewersResponse(
                 listOf(
                     RequestedReviewer(3, "user3"),
