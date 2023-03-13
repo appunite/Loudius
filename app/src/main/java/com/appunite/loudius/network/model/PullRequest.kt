@@ -1,6 +1,7 @@
 package com.appunite.loudius.network.model
 
 import com.appunite.loudius.common.Constants
+import java.time.LocalDateTime
 
 data class PullRequest(
     val id: Int,
@@ -8,10 +9,16 @@ data class PullRequest(
     val number: Int,
     val repositoryUrl: String,
     val title: String,
-    val updatedAt: String,
+    val createdAt: LocalDateTime,
 ) {
     val fullRepositoryName: String
         get() = repositoryUrl.removePrefix(REPOSITORY_PATH)
+
+    val shortRepositoryName: String
+        get() = fullRepositoryName.substringAfter('/')
+
+    val owner: String
+        get() = fullRepositoryName.substringBefore('/')
 
     companion object {
         private const val REPOSITORY_PATH = Constants.BASE_API_URL + "/repos/"

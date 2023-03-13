@@ -16,6 +16,7 @@ import com.appunite.loudius.common.Screen
 import com.appunite.loudius.ui.loading.LoadingScreen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
+import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,7 +52,21 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable(route = Screen.PullRequests.route) {
-                            PullRequestsScreen()
+                            PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime ->
+                                val route = Screen.Reviewers.constructRoute(
+                                    owner = owner,
+                                    repo = repo,
+                                    pullRequestNumber = pullRequestNumber,
+                                    submissionDate = submissionTime,
+                                )
+                                navController.navigate(route)
+                            }
+                        }
+                        composable(
+                            route = Screen.Reviewers.route,
+                            arguments = Screen.Reviewers.arguments,
+                        ) {
+                            ReviewersScreen { navController.popBackStack() }
                         }
                     }
                 }
