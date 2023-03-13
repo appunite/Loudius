@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,15 +33,30 @@ import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
 
+typealias NavigateToReviewers = (String, String, String, String) -> Unit
+
 @Composable
-fun PullRequestsScreen(viewModel: PullRequestsViewModel = hiltViewModel()) {
+fun PullRequestsScreen(
+    viewModel: PullRequestsViewModel = hiltViewModel(),
+    navigateToReviewers: NavigateToReviewers,
+) {
     val state = viewModel.state
-    PullRequestsScreenStateless(pullRequests = state.pullRequests)
+    LaunchedEffect(state.navigateToReviewers) {
+        state.navigateToReviewers?.let {
+            navigateToReviewers(it.owner, it.repo, it.pullRequestNumber, it.submissionTime)
+            viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
+        }
+    }
+    PullRequestsScreenStateless(
+        pullRequests = state.pullRequests,
+        onItemClick = viewModel::onAction,
+    )
 }
 
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
+    onItemClick: (PulLRequestsAction) -> Unit,
 ) {
     Scaffold(topBar = {
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
@@ -53,10 +69,9 @@ private fun PullRequestsScreenStateless(
             itemsIndexed(pullRequests) { index, item ->
                 val isIndexEven = index % 2 == 0
                 PullRequestItem(
-                    repositoryName = item.fullRepositoryName,
-                    pullRequestTitle = item.title,
+                    data = item,
                     darkBackground = isIndexEven,
-                    onClick = {},
+                    onClick = onItemClick,
                 )
             }
         }
@@ -65,10 +80,9 @@ private fun PullRequestsScreenStateless(
 
 @Composable
 private fun PullRequestItem(
-    repositoryName: String,
-    pullRequestTitle: String,
+    data: PullRequest,
     darkBackground: Boolean,
-    onClick: () -> Unit,
+    onClick: (PulLRequestsAction) -> Unit,
 ) {
     val backgroundColor = if (darkBackground) {
         MaterialTheme.colorScheme.onSurface.copy(0.08f)
@@ -79,10 +93,10 @@ private fun PullRequestItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
-            .clickable(onClick = onClick),
+            .clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
     ) {
         PullRequestIcon()
-        RepoDetails(pullRequestTitle = pullRequestTitle, repositoryName = repositoryName)
+        RepoDetails(pullRequestTitle = data.title, repositoryName = data.fullRepositoryName)
     }
     Divider(color = MaterialTheme.colorScheme.outlineVariant)
 }
@@ -114,7 +128,7 @@ private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
 @Composable
 fun PullRequestsScreenEmptyListPreview() {
     LoudiusTheme {
-        PullRequestsScreenStateless(emptyList())
+        PullRequestsScreenStateless(emptyList()) { }
     }
 }
 
@@ -130,7 +144,7 @@ fun PullRequestsScreenPreview() {
                     number = 0,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
                     title = "[SIL-67] Details screen - network layer",
-                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
+                    createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
                 ),
                 PullRequest(
                     id = 1,
@@ -138,7 +152,7 @@ fun PullRequestsScreenPreview() {
                     number = 1,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
                     title = "[SIL-66] Add client secret to build config",
-                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
+                    createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
                 ),
                 PullRequest(
                     id = 2,
@@ -146,7 +160,7 @@ fun PullRequestsScreenPreview() {
                     number = 2,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
                     title = "[SIL-73] Storing access token",
-                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
+                    createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
                 ),
                 PullRequest(
                     id = 3,
@@ -154,9 +168,9 @@ fun PullRequestsScreenPreview() {
                     number = 3,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
                     title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-                    updatedAt = LocalDateTime.parse("2023-03-07T09:24:24"),
+                    createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
                 ),
             ),
-        )
+        ) { }
     }
 }

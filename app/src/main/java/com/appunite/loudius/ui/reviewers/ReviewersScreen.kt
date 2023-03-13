@@ -1,4 +1,4 @@
-package com.appunite.loudius.ui
+package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,31 +21,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
 
+@Composable
+fun ReviewersScreen(
+    viewModel: ReviewersViewModel = hiltViewModel(),
+    navigateBack: () -> Unit,
+) {
+    val state = viewModel.state
+    ReviewersScreenStateless(
+        pullRequestNumber = state.pullRequestNumber,
+        reviewers = state.reviewers,
+        onClickBackArrow = navigateBack,
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailsScreenStateless(topBarTitle: String, reviewers: List<Reviewer>) {
+private fun ReviewersScreenStateless(
+    pullRequestNumber: String,
+    reviewers: List<Reviewer>,
+    onClickBackArrow: () -> Unit,
+) {
     Scaffold(
-        topBar = { LoudiusTopAppBar(onClickBackArrow = {}, title = topBarTitle) },
+        topBar = {
+            LoudiusTopAppBar(
+                onClickBackArrow = onClickBackArrow,
+                title = stringResource(id = R.string.details_title, pullRequestNumber),
+            )
+        },
         content = { padding ->
-            DetailsScreenContent(reviewers, modifier = Modifier.padding(padding))
+            ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding))
         },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
     )
 }
 
 @Composable
-private fun DetailsScreenContent(reviewers: List<Reviewer>, modifier: Modifier) {
+private fun ReviewersScreenContent(reviewers: List<Reviewer>, modifier: Modifier) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
     ) {
         itemsIndexed(reviewers) { index, reviewer ->
-            ReviewerView(
+            ReviewerItem(
                 reviewer = reviewer,
                 backgroundColor = resolveReviewerBackgroundColor(index),
                 onNotifyClick = {},
@@ -59,7 +82,7 @@ private fun resolveReviewerBackgroundColor(index: Int) =
     if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
 
 @Composable
-private fun ReviewerView(reviewer: Reviewer, backgroundColor: Color, onNotifyClick: () -> Unit) {
+private fun ReviewerItem(reviewer: Reviewer, backgroundColor: Color, onNotifyClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,7 +134,7 @@ private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDon
 @Composable
 private fun ReviewerName(reviewer: Reviewer) {
     Text(
-        text = reviewer.name,
+        text = reviewer.login,
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurface,
     )
@@ -131,8 +154,8 @@ private fun NotifyButton(onNotifyClick: () -> Unit, modifier: Modifier = Modifie
 @Composable
 private fun ReviewerViewPreview() {
     LoudiusTheme {
-        ReviewerView(
-            reviewer = Reviewer("Kezc", true, 12, 12),
+        ReviewerItem(
+            reviewer = Reviewer(1, "Kezc", true, 12, 12),
             backgroundColor = MaterialTheme.colorScheme.surface,
         ) {}
     }
@@ -141,12 +164,12 @@ private fun ReviewerViewPreview() {
 @Preview
 @Composable
 fun DetailsScreenPreview() {
-    val reviewer1 = Reviewer("Kezc", true, 24, 12)
-    val reviewer2 = Reviewer("Krzysiudan", false, 24, 0)
-    val reviewer3 = Reviewer("Weronika", false, 24, 0)
-    val reviewer4 = Reviewer("Jacek", false, 24, 0)
+    val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
+    val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
+    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0)
+    val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
-        DetailsScreenStateless(topBarTitle = "Pull request #1", reviewers = reviewers)
+        ReviewersScreenStateless(pullRequestNumber = "Pull request #1", reviewers = reviewers, {})
     }
 }
