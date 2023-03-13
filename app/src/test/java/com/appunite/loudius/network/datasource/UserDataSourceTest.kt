@@ -41,7 +41,6 @@ class UserDataSourceTest {
             ) { "Exception thrown should be NetworkError type" }
         }
 
-
     @Test
     fun `Given correct params WHEN successful response THEN return success`() = runTest {
         //language=JSON
@@ -92,14 +91,14 @@ class UserDataSourceTest {
             User(
                 id = 1,
                 login = "exampleUser",
-            )
+            ),
         )
 
         Assertions.assertEquals(expected, actualResponse) { "Data should be valid" }
     }
 
     @Test
-    fun `Given incorrect access token WHEN processing request THEN return failure with Network error`() =
+    fun `Given incorrect access token WHEN processing request THEN return failure with Unknown error`() =
         runTest {
             // language=JSON
             val jsonResponse = """
@@ -107,7 +106,7 @@ class UserDataSourceTest {
                         "message": "Bad credentials",
                         "documentation_url": "https://docs.github.com/rest"
                     }
-                """.trimIndent()
+            """.trimIndent()
 
             mockWebServer.enqueue(
                 MockResponse().setResponseCode(401).setBody(jsonResponse),
