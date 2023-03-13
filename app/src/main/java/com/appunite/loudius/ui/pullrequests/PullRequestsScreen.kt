@@ -144,7 +144,7 @@ fun PullRequestsScreenPreview() {
                     number = 0,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
                     title = "[SIL-67] Details screen - network layer",
-                    createdAt = LocalDateTime.parse("2021-11-29T16:31:41Z"),
+                    createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
                 ),
                 PullRequest(
                     id = 1,
@@ -152,7 +152,7 @@ fun PullRequestsScreenPreview() {
                     number = 1,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
                     title = "[SIL-66] Add client secret to build config",
-                    createdAt = LocalDateTime.parse("2022-11-29T16:31:41Z"),
+                    createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
                 ),
                 PullRequest(
                     id = 2,
@@ -160,7 +160,7 @@ fun PullRequestsScreenPreview() {
                     number = 2,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
                     title = "[SIL-73] Storing access token",
-                    createdAt = LocalDateTime.parse("2023-01-29T16:31:41Z"),
+                    createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
                 ),
                 PullRequest(
                     id = 3,
@@ -168,7 +168,7 @@ fun PullRequestsScreenPreview() {
                     number = 3,
                     repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
                     title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-                    createdAt = LocalDateTime.parse("2022-01-29T16:31:41Z"),
+                    createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
                 ),
             ),
         ) { }
