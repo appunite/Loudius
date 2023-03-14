@@ -20,7 +20,7 @@ class UserDataSourceTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val userService =
         retrofitTestDouble(mockWebServer = mockWebServer).create(UserService::class.java)
-    private val userDataSource = UserDataSource(userService)
+    private val userDataSource = UserDataSourceImpl(userService)
 
     @AfterEach
     fun tearDown() {
