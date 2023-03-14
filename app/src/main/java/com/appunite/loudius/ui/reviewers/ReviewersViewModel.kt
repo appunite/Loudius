@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Screen
-import com.appunite.loudius.domain.PullRequestsRepository
+import com.appunite.loudius.domain.PullRequestRepository
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
@@ -24,7 +24,7 @@ data class ReviewersState(
 
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
-    private val repository: PullRequestsRepository,
+    private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -52,7 +52,7 @@ class ReviewersViewModel @Inject constructor(
     private suspend fun fetchRequestedReviewers(initialValues: InitialValues) {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
-        repository.getReviewers(owner, repo, pullRequestNumber)
+        repository.getRequestedReviewers(owner, repo, pullRequestNumber)
             .onSuccess { response ->
                 val reviewers = response.mapToReviewers(submissionTime)
                 state = state.copy(reviewers = state.reviewers + reviewers)

@@ -258,7 +258,7 @@ class PullRequestsNetworkDataSourceTest {
                 )
 
                 val requestedReviewer =
-                    RequestedReviewer(1, "exampleLogin", "https://example/avatar")
+                    RequestedReviewer(1, "exampleLogin")
                 val expected = Result.success(RequestedReviewersResponse(listOf(requestedReviewer)))
 
                 assertEquals(expected, actualResponse) { "Data should be valid" }
