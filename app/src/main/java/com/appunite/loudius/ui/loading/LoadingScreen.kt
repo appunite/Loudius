@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
-import kotlinx.coroutines.delay
 
 @Composable
 fun LoadingScreen(
@@ -23,23 +22,22 @@ fun LoadingScreen(
         val rememberedCode = rememberUpdatedState(newValue = code)
         LaunchedEffect(key1 = rememberedCode) {
             rememberedCode.value?.let {
-                viewModel.getAccessToken(it)
-                delay(1000)
+                viewModel.setCodeAndGetAccessToken(it)
             }
         }
+        LaunchedEffect(key1 = state.navigateToPullRequests) {
+            state.navigateToPullRequests?.let {
+                onNavigateToPullRequest()
+                viewModel.onAction(LoadingAction.OnNavigateToPullRequests)
+            }
+        }
+
         if (state.showErrorScreen) {
             ShowLoudiusErrorScreen {
-                code?.let {
-                    viewModel.getAccessToken(it)
-                }
+                viewModel.onAction(LoadingAction.OnTryAgainClick)
             }
         } else {
             ShowLoadingIndicator(code = code)
-        }
-        if (state.accessToken != null) {
-            LaunchedEffect(key1 = null) {
-                onNavigateToPullRequest()
-            }
         }
     }
 }
