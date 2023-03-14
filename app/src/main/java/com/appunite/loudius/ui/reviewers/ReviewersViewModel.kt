@@ -12,10 +12,14 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.launch
+
+sealed class ReviewersAction {
+    data class Notify(val userLogin: String) : ReviewersAction()
+}
 
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
@@ -25,7 +29,7 @@ data class ReviewersState(
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     var state by mutableStateOf(ReviewersState())
@@ -96,6 +100,18 @@ class ReviewersViewModel @Inject constructor(
 
     private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
         ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
+
+    fun onAction(action: ReviewersAction) = when (action) {
+        is ReviewersAction.Notify -> notifyUser(action.userLogin)
+    }
+
+    private fun notifyUser(userLogin: String) {
+        val (owner, repo, pullRequestNumber) = getInitialValues(savedStateHandle)
+
+        viewModelScope.launch {
+            repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
+        }
+    }
 
     private data class InitialValues(
         val owner: String,

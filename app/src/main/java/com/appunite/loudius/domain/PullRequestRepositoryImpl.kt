@@ -26,6 +26,13 @@ interface PullRequestRepository {
     ): Result<RequestedReviewersResponse>
 
     suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse>
+
+    suspend fun notify(
+        owner: String,
+        repo: String,
+        pullRequestNumber: String,
+        message: String
+    ): Result<Unit>
 }
 
 class PullRequestRepositoryImpl @Inject constructor(
@@ -37,6 +44,14 @@ class PullRequestRepositoryImpl @Inject constructor(
         val currentUser = userDataSource.getUser()
         return currentUser.flatMap { pullRequestsNetworkDataSource.getPullRequestsForUser(it.login) }
     }
+
+    override suspend fun notify(
+        owner: String,
+        repo: String,
+        pullRequestNumber: String,
+        message: String
+    ): Result<Unit> = pullRequestsNetworkDataSource.notify(owner, repo, pullRequestNumber, message)
+
 
     override suspend fun getReviews(
         owner: String,

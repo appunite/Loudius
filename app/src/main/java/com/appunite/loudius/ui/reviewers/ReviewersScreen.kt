@@ -38,6 +38,7 @@ fun ReviewersScreen(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack,
+        onNotifyClick = viewModel::onAction
     )
 }
 
@@ -47,6 +48,7 @@ private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
     onClickBackArrow: () -> Unit,
+    onNotifyClick: (ReviewersAction) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -56,14 +58,18 @@ private fun ReviewersScreenStateless(
             )
         },
         content = { padding ->
-            ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding))
+            ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding), onNotifyClick)
         },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
     )
 }
 
 @Composable
-private fun ReviewersScreenContent(reviewers: List<Reviewer>, modifier: Modifier) {
+private fun ReviewersScreenContent(
+    reviewers: List<Reviewer>,
+    modifier: Modifier,
+    onNotifyClick: (ReviewersAction) -> Unit
+) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -71,7 +77,7 @@ private fun ReviewersScreenContent(reviewers: List<Reviewer>, modifier: Modifier
             ReviewerItem(
                 reviewer = reviewer,
                 backgroundColor = resolveReviewerBackgroundColor(index),
-                onNotifyClick = {},
+                onNotifyClick = onNotifyClick,
             )
         }
     }
@@ -82,7 +88,11 @@ private fun resolveReviewerBackgroundColor(index: Int) =
     if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
 
 @Composable
-private fun ReviewerItem(reviewer: Reviewer, backgroundColor: Color, onNotifyClick: () -> Unit) {
+private fun ReviewerItem(
+    reviewer: Reviewer,
+    backgroundColor: Color,
+    onNotifyClick: (ReviewersAction) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +110,10 @@ private fun ReviewerItem(reviewer: Reviewer, backgroundColor: Color, onNotifyCli
             IsReviewedHeadlineText(reviewer)
             ReviewerName(reviewer)
         }
-        NotifyButton(onNotifyClick, Modifier.align(CenterVertically))
+        NotifyButton(
+            { onNotifyClick(ReviewersAction.Notify(reviewer.login)) },
+            Modifier.align(CenterVertically)
+        )
     }
 }
 
@@ -170,6 +183,10 @@ fun DetailsScreenPreview() {
     val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
-        ReviewersScreenStateless(pullRequestNumber = "Pull request #1", reviewers = reviewers, {})
+        ReviewersScreenStateless(
+            pullRequestNumber = "Pull request #1",
+            reviewers = reviewers,
+            {},
+            {})
     }
 }
