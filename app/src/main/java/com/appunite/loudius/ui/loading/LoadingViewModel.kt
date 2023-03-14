@@ -14,9 +14,9 @@ import javax.inject.Inject
 
 sealed class LoadingAction {
 
-    object OnNavigateToPullRequests: LoadingAction()
+    object OnNavigateToPullRequests : LoadingAction()
 
-    object OnTryAgainClick: LoadingAction()
+    object OnTryAgainClick : LoadingAction()
 }
 data class LoadingState(
     val accessToken: String? = null,
@@ -68,7 +68,7 @@ class LoadingViewModel @Inject constructor(
                 state = if (token.accessToken != null) {
                     state.copy(
                         accessToken = token.accessToken,
-                        navigateToPullRequests = NavigateToPullRequests
+                        navigateToPullRequests = NavigateToPullRequests,
                     )
                 } else {
                     state.copy(showErrorScreen = true)
