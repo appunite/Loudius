@@ -9,6 +9,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,10 +20,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
@@ -54,13 +54,18 @@ class ReviewersViewModelTest {
     }
 
     @Test
-    fun `GIVEN correct initial values WHEN init THEN state is correct`() {
+    fun `GIVEN correct initial values WHEN init THEN all initial values are read once`() {
         viewModel = createViewModel()
 
         verify(exactly = 1) { savedStateHandle.get<String>("owner") }
         verify(exactly = 1) { savedStateHandle.get<String>("repo") }
         verify(exactly = 1) { savedStateHandle.get<String>("pull_request_number") }
         verify(exactly = 1) { savedStateHandle.get<String>("submission_date") }
+    }
+
+    @Test
+    fun `GIVEN correct initial values WHEN init THEN pull request number is correct`() {
+        viewModel = createViewModel()
 
         assertEquals("correctPullRequestNumber", viewModel.state.pullRequestNumber)
     }
