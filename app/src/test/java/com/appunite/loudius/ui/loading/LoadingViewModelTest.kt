@@ -27,10 +27,10 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN example valid code WHEN setCodeAndGetAccessToken THEN set code, access token and navigateToPullRequests`() {
-        //when
+        // when
         viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
 
-        //then
+        // then
         assert(viewModel.state.code == EXAMPLE_CODE)
         assert(viewModel.state.accessToken == EXAMPLE_ACCESS_TOKEN)
         assert(viewModel.state.navigateToPullRequests == NavigateToPullRequests)
@@ -38,37 +38,37 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN null as code WHEN setCodeAndGetAccessToken THEN set null as code`() {
-        //when
+        // when
         viewModel.setCodeAndGetAccessToken(null)
 
-        //then
+        // then
         assert(viewModel.state.code == null)
     }
 
     @Test
     fun `GIVEN OnTryAgain action WHEN onAction THEN set showErrorScreen and get access token`() {
-        //given
+        // given
         val action = LoadingAction.OnTryAgainClick
         viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
 
-        //when
+        // when
         viewModel.onAction(action)
 
-        //then
+        // then
         assert(!viewModel.state.showErrorScreen)
         assert(viewModel.state.accessToken == EXAMPLE_ACCESS_TOKEN)
     }
 
     @Test
     fun `GIVEN OnNavigateToPullRequests action WHEN onAction THEN set navigateToPullRequests as null`() {
-        //given
+        // given
         val action = LoadingAction.OnNavigateToPullRequests
         viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
 
-        //when
+        // when
         viewModel.onAction(action)
 
-        //then
+        // then
         assert(viewModel.state.navigateToPullRequests == null)
     }
 }
