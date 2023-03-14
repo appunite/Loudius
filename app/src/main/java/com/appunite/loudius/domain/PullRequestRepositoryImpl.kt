@@ -51,15 +51,13 @@ class PullRequestRepositoryImpl @Inject constructor(
         val reviews = reviewsDeferred.await()
 
         return@withContext currentUser.flatMap { user ->
-            reviews.map { excludeCurrentUserReviews(it, user) }
+            reviews.map { it.excludeUserReviews(user) }
         }
     }
 
-
-    private fun excludeCurrentUserReviews(
-        it: List<Review>,
+    private fun List<Review>.excludeUserReviews(
         user: User
-    ) = it.filter { review -> review.user.id != user.id }
+    ) = filter { review -> review.user.id != user.id }
 
     override suspend fun getRequestedReviewers(
         owner: String,
