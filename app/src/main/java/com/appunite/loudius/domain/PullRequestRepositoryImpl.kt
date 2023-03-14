@@ -6,6 +6,7 @@ import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
+import com.appunite.loudius.network.model.User
 import javax.inject.Inject
 
 interface PullRequestRepository {
@@ -37,8 +38,18 @@ class PullRequestRepositoryImpl @Inject constructor(
         owner: String,
         repo: String,
         pullRequestNumber: String,
-    ): Result<List<Review>> =
-        pullRequestsNetworkDataSource.getReviews(owner, repo, pullRequestNumber)
+    ): Result<List<Review>> {
+        val currentUser = userDataSource.getUser()
+        return currentUser.flatMap { user ->
+            pullRequestsNetworkDataSource.getReviews(owner, repo, pullRequestNumber)
+                .map { excludeCurrentUserReviews(it, user) }
+        }
+    }
+
+    private fun excludeCurrentUserReviews(
+        it: List<Review>,
+        user: User
+    ) = it.filter { review -> review.user.id != user.id }
 
     override suspend fun getRequestedReviewers(
         owner: String,
