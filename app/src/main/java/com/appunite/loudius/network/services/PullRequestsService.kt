@@ -3,6 +3,7 @@ package com.appunite.loudius.network.services
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
+import com.appunite.loudius.network.model.request.NotifyRequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -31,11 +32,12 @@ interface PullRequestsService {
         @Path("pull_number") pullRequestNumber: String,
     ): List<Review>
 
-    @POST("/repos/{owner}/{repo}/issues/{issues_number}/comments")
+    @POST("/repos/{owner}/{repo}/issues/{issue_number}/comments")
     suspend fun notify(
         @Path("owner") owner: String,
         @Path("repo") repo: String,
-        @Path("issue_number") pullRequestNumber: String,
-        @Body message: String
+        @Path("issue_number") issueNumber: String,
+        @Body body: NotifyRequestBody
     )
+
 }

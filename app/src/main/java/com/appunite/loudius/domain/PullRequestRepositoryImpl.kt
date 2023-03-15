@@ -45,14 +45,6 @@ class PullRequestRepositoryImpl @Inject constructor(
         return currentUser.flatMap { pullRequestsNetworkDataSource.getPullRequestsForUser(it.login) }
     }
 
-    override suspend fun notify(
-        owner: String,
-        repo: String,
-        pullRequestNumber: String,
-        message: String
-    ): Result<Unit> = pullRequestsNetworkDataSource.notify(owner, repo, pullRequestNumber, message)
-
-
     override suspend fun getReviews(
         owner: String,
         repo: String,
@@ -70,6 +62,7 @@ class PullRequestRepositoryImpl @Inject constructor(
         }
     }
 
+
     private fun List<Review>.excludeUserReviews(
         user: User
     ) = filter { review -> review.user.id != user.id }
@@ -80,4 +73,12 @@ class PullRequestRepositoryImpl @Inject constructor(
         pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> =
         pullRequestsNetworkDataSource.getReviewers(owner, repo, pullRequestNumber)
+
+    override suspend fun notify(
+        owner: String,
+        repo: String,
+        pullRequestNumber: String,
+        message: String
+    ): Result<Unit> =
+        pullRequestsNetworkDataSource.notify(owner, repo, pullRequestNumber, message)
 }

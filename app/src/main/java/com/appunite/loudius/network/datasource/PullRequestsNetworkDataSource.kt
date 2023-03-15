@@ -3,6 +3,7 @@ package com.appunite.loudius.network.datasource
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
+import com.appunite.loudius.network.model.request.NotifyRequestBody
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
@@ -61,6 +62,6 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Pul
         pullRequestNumber: String,
         message: String
     ): Result<Unit> = safeApiCall {
-        service.notify(owner, repository, pullRequestNumber, message)
+        service.notify(owner, repository, pullRequestNumber, NotifyRequestBody(message))
     }
 }
