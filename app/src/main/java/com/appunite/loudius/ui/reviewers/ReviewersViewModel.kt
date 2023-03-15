@@ -19,11 +19,13 @@ import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
+    object OnSnackbarDismiss : ReviewersAction()
 }
 
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
     val pullRequestNumber: String = "",
+    val showSuccessSnackbar: Unit? = null,
 )
 
 @HiltViewModel
@@ -103,6 +105,7 @@ class ReviewersViewModel @Inject constructor(
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyUser(action.userLogin)
+        is ReviewersAction.OnSnackbarDismiss -> state = state.copy(showSuccessSnackbar = null)
     }
 
     private fun notifyUser(userLogin: String) {
@@ -110,6 +113,9 @@ class ReviewersViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
+                .onSuccess {
+                    state = state.copy(showSuccessSnackbar = Unit)
+                }
         }
     }
 

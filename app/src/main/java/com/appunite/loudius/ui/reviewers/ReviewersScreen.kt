@@ -12,8 +12,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,12 +39,22 @@ fun ReviewersScreen(
     navigateBack: () -> Unit,
 ) {
     val state = viewModel.state
+    val snackbarHostState = remember { SnackbarHostState() }
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack,
-        onNotifyClick = viewModel::onAction
+        onNotifyClick = viewModel::onAction,
+        snackbarHostState = snackbarHostState
     )
+    LaunchedEffect(state.showSuccessSnackbar) {
+        state.showSuccessSnackbar?.let {
+            val result = snackbarHostState.showSnackbar(message = "Hurray person is notified")
+            if (result == SnackbarResult.Dismissed) {
+                viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +63,8 @@ private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
     onClickBackArrow: () -> Unit,
-    onNotifyClick: (ReviewersAction) -> Unit
+    onNotifyClick: (ReviewersAction) -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
         topBar = {
@@ -57,6 +73,7 @@ private fun ReviewersScreenStateless(
                 title = stringResource(id = R.string.details_title, pullRequestNumber),
             )
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { padding ->
             ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding), onNotifyClick)
         },
@@ -187,6 +204,7 @@ fun DetailsScreenPreview() {
             pullRequestNumber = "Pull request #1",
             reviewers = reviewers,
             {},
-            {})
+            {}, SnackbarHostState()
+        )
     }
 }
