@@ -74,7 +74,25 @@ class PullRequestRepositoryImpTest {
                 assertEquals(expected, actual)
             }
         // TODO: Write tests with failure cases
+    }
 
+    @Nested
+    inner class NotifyTest {
+
+        @Test
+        fun `GIVEN correct values WHEN notify THEN return success result`() = runTest {
+            val actual = repository.notify(
+                "exampleOwner",
+                "exampleRepo",
+                "correctPullRequestNumber",
+                "@ExampleUser"
+            )
+
+            val expected = Result.success(Unit)
+
+            assertEquals(expected, actual)
+        }
+        // TODO: Write tests with failure cases
     }
 
 }

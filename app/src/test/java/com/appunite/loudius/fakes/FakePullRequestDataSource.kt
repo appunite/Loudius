@@ -59,7 +59,9 @@ class FakePullRequestDataSource : PullRequestDataSource {
         repository: String,
         pullRequestNumber: String,
         message: String
-    ): Result<Unit> {
-        TODO("Not yet implemented")
+    ): Result<Unit> = when (pullRequestNumber) {
+        "correctPullRequestNumber" -> Result.success(Unit)
+        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
+        else -> Result.failure(WebException.NetworkError())
     }
 }
