@@ -28,7 +28,7 @@ interface PullRequestDataSource {
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        message: String
+        message: String,
     ): Result<Unit>
 }
 
@@ -60,7 +60,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Pul
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        message: String
+        message: String,
     ): Result<Unit> = safeApiCall {
         service.notify(owner, repository, pullRequestNumber, NotifyRequestBody(message))
     }

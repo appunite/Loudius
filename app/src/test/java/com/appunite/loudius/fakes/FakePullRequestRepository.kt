@@ -61,7 +61,7 @@ class FakePullRequestRepository : PullRequestRepository {
         owner: String,
         repo: String,
         pullRequestNumber: String,
-        message: String
+        message: String,
     ): Result<Unit> = when (pullRequestNumber) {
         "correctPullRequestNumber" -> Result.success(Unit)
         else -> Result.failure(WebException.NetworkError())

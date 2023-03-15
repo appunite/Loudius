@@ -45,7 +45,7 @@ fun ReviewersScreen(
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack,
         onNotifyClick = viewModel::onAction,
-        snackbarHostState = snackbarHostState
+        snackbarHostState = snackbarHostState,
     )
     LaunchedEffect(state.showSuccessSnackbar) {
         state.showSuccessSnackbar?.let {
@@ -85,7 +85,7 @@ private fun ReviewersScreenStateless(
 private fun ReviewersScreenContent(
     reviewers: List<Reviewer>,
     modifier: Modifier,
-    onNotifyClick: (ReviewersAction) -> Unit
+    onNotifyClick: (ReviewersAction) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
@@ -108,7 +108,7 @@ private fun resolveReviewerBackgroundColor(index: Int) =
 private fun ReviewerItem(
     reviewer: Reviewer,
     backgroundColor: Color,
-    onNotifyClick: (ReviewersAction) -> Unit
+    onNotifyClick: (ReviewersAction) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -129,7 +129,7 @@ private fun ReviewerItem(
         }
         NotifyButton(
             { onNotifyClick(ReviewersAction.Notify(reviewer.login)) },
-            Modifier.align(CenterVertically)
+            Modifier.align(CenterVertically),
         )
     }
 }
@@ -204,7 +204,8 @@ fun DetailsScreenPreview() {
             pullRequestNumber = "Pull request #1",
             reviewers = reviewers,
             {},
-            {}, SnackbarHostState()
+            {},
+            SnackbarHostState(),
         )
     }
 }

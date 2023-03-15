@@ -7,10 +7,10 @@ import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.User
-import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 interface PullRequestRepository {
     suspend fun getReviews(
@@ -31,7 +31,7 @@ interface PullRequestRepository {
         owner: String,
         repo: String,
         pullRequestNumber: String,
-        message: String
+        message: String,
     ): Result<Unit>
 }
 
@@ -40,7 +40,6 @@ class PullRequestRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource,
 ) : PullRequestRepository {
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
-
         val currentUser = userDataSource.getUser()
         return currentUser.flatMap { pullRequestsNetworkDataSource.getPullRequestsForUser(it.login) }
     }
@@ -62,9 +61,8 @@ class PullRequestRepositoryImpl @Inject constructor(
         }
     }
 
-
     private fun List<Review>.excludeUserReviews(
-        user: User
+        user: User,
     ) = filter { review -> review.user.id != user.id }
 
     override suspend fun getRequestedReviewers(
@@ -78,7 +76,7 @@ class PullRequestRepositoryImpl @Inject constructor(
         owner: String,
         repo: String,
         pullRequestNumber: String,
-        message: String
+        message: String,
     ): Result<Unit> =
         pullRequestsNetworkDataSource.notify(owner, repo, pullRequestNumber, message)
 }

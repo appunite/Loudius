@@ -10,7 +10,6 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -21,6 +20,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -441,7 +441,7 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "@ExampleUser"
+                    "@ExampleUser",
                 )
                 Assertions.assertInstanceOf(
                     WebException.NetworkError::class.java,
@@ -494,7 +494,7 @@ class PullRequestsNetworkDataSourceTest {
                 "exampleOwner",
                 "exampleRepo",
                 "exampleNumber",
-                "@ExampleUser"
+                "@ExampleUser",
             )
 
             assertEquals(Result.success(Unit), actual)
@@ -521,7 +521,7 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "@ExampleUser"
+                    "@ExampleUser",
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(

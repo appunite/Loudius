@@ -37,7 +37,6 @@ interface PullRequestsService {
         @Path("owner") owner: String,
         @Path("repo") repo: String,
         @Path("issue_number") issueNumber: String,
-        @Body body: NotifyRequestBody
+        @Body body: NotifyRequestBody,
     )
-
 }
