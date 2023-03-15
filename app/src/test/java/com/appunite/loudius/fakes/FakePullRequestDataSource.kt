@@ -53,4 +53,13 @@ class FakePullRequestDataSource : PullRequestDataSource {
     override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun notify(
+        owner: String,
+        repository: String,
+        pullRequestNumber: String,
+        message: String
+    ): Result<Unit> {
+        TODO("Not yet implemented")
+    }
 }

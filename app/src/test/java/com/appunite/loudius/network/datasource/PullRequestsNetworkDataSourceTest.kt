@@ -10,6 +10,7 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
+import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -413,6 +413,115 @@ class PullRequestsNetworkDataSourceTest {
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
+                )
+
+                val expected = Result.failure<RequestedReviewersResponse>(
+                    WebException.UnknownError(
+                        401,
+                        "Bad credentials",
+                    ),
+                )
+
+                assertEquals(expected, actualResponse)
+            }
+    }
+
+    @Nested
+    inner class NotifyRequestTest {
+
+        @Test
+        fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
+            runTest {
+                mockWebServer.enqueue(
+                    MockResponse()
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST),
+                )
+
+                val actualResponse = pullRequestDataSource.notify(
+                    "exampleOwner",
+                    "exampleRepo",
+                    "exampleNumber",
+                    "@ExampleUser"
+                )
+                Assertions.assertInstanceOf(
+                    WebException.NetworkError::class.java,
+                    actualResponse.exceptionOrNull(),
+                ) { "Exception thrown should be NetworkError type" }
+            }
+
+        @Test
+        fun `GIVEN correct params WHEN successful response THEN return success result`() = runTest {
+            // language=JSON
+            val jsonResponse = """
+                {
+                  "id": 1,
+                  "node_id": "MDEyOklzc3VlQ29tbWVudDE=",
+                  "url": "https://api.github.com/repos/octocat/Hello-World/issues/comments/1",
+                  "html_url": "https://github.com/octocat/Hello-World/issues/1347#issuecomment-1",
+                  "body": "Me too",
+                  "user": {
+                    "login": "octocat",
+                    "id": 1,
+                    "node_id": "MDQ6VXNlcjE=",
+                    "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+                    "gravatar_id": "",
+                    "url": "https://api.github.com/users/octocat",
+                    "html_url": "https://github.com/octocat",
+                    "followers_url": "https://api.github.com/users/octocat/followers",
+                    "following_url": "https://api.github.com/users/octocat/following{/other_user}",
+                    "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
+                    "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+                    "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
+                    "organizations_url": "https://api.github.com/users/octocat/orgs",
+                    "repos_url": "https://api.github.com/users/octocat/repos",
+                    "events_url": "https://api.github.com/users/octocat/events{/privacy}",
+                    "received_events_url": "https://api.github.com/users/octocat/received_events",
+                    "type": "User",
+                    "site_admin": false
+                  },
+                  "created_at": "2011-04-14T16:00:49Z",
+                  "updated_at": "2011-04-14T16:00:49Z",
+                  "issue_url": "https://api.github.com/repos/octocat/Hello-World/issues/1347",
+                  "author_association": "COLLABORATOR"
+                }
+            """.trimIndent()
+
+            mockWebServer.enqueue(
+                MockResponse().setResponseCode(200).setBody(jsonResponse),
+            )
+
+            val actual = pullRequestDataSource.notify(
+                "exampleOwner",
+                "exampleRepo",
+                "exampleNumber",
+                "@ExampleUser"
+            )
+
+            assertEquals(Result.success(Unit), actual)
+        }
+
+        @Test
+        fun `GIVEN auth error WHEN processing request THEN return failure with Unknown error`() =
+            runTest {
+                // language=JSON
+                val jsonResponse = """
+                    {
+                        "message": "Bad credentials",
+                        "documentation_url": "https://docs.github.com/rest"
+                    }
+                """.trimIndent()
+
+                mockWebServer.enqueue(
+                    MockResponse()
+                        .setResponseCode(401)
+                        .setBody(jsonResponse),
+                )
+
+                val actualResponse = pullRequestDataSource.notify(
+                    "exampleOwner",
+                    "exampleRepo",
+                    "exampleNumber",
+                    "@ExampleUser"
                 )
 
                 val expected = Result.failure<RequestedReviewersResponse>(
