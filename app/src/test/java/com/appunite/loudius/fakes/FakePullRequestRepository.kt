@@ -62,7 +62,8 @@ class FakePullRequestRepository : PullRequestRepository {
         repo: String,
         pullRequestNumber: String,
         message: String
-    ): Result<Unit> {
-        TODO("Not yet implemented")
+    ): Result<Unit> = when (pullRequestNumber) {
+        "correctPullRequestNumber" -> Result.success(Unit)
+        else -> Result.failure(WebException.NetworkError())
     }
 }
