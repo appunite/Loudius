@@ -17,28 +17,27 @@ fun LoadingScreen(
     viewModel: LoadingViewModel = hiltViewModel(),
     onNavigateToPullRequest: () -> Unit,
 ) {
-    viewModel.state.let { state ->
-        val code = intent.data?.getQueryParameter("code")
-        val rememberedCode = rememberUpdatedState(newValue = code)
-        LaunchedEffect(key1 = rememberedCode) {
-            rememberedCode.value?.let {
-                viewModel.setCodeAndGetAccessToken(it)
-            }
+    val state = viewModel.state
+    val code = intent.data?.getQueryParameter("code")
+    val rememberedCode = rememberUpdatedState(newValue = code)
+    LaunchedEffect(key1 = rememberedCode) {
+        rememberedCode.value?.let {
+            viewModel.setCodeAndGetAccessToken(it)
         }
-        LaunchedEffect(key1 = state.navigateToPullRequests) {
-            state.navigateToPullRequests?.let {
-                onNavigateToPullRequest()
-                viewModel.onAction(LoadingAction.OnNavigateToPullRequests)
-            }
+    }
+    LaunchedEffect(key1 = state.navigateToPullRequests) {
+        state.navigateToPullRequests?.let {
+            onNavigateToPullRequest()
+            viewModel.onAction(LoadingAction.OnNavigateToPullRequests)
         }
+    }
 
-        if (state.showErrorScreen) {
-            ShowLoudiusErrorScreen {
-                viewModel.onAction(LoadingAction.OnTryAgainClick)
-            }
-        } else {
-            ShowLoadingIndicator(code = code)
+    if (state.showErrorScreen) {
+        ShowLoudiusErrorScreen {
+            viewModel.onAction(LoadingAction.OnTryAgainClick)
         }
+    } else {
+        ShowLoadingIndicator(code = code)
     }
 }
 

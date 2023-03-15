@@ -2,11 +2,10 @@ package com.appunite.loudius.ui.loading
 
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.util.MainDispatcherExtension
-import io.mockk.mockkStatic
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.Clock
 
 @ExtendWith(MainDispatcherExtension::class)
 class LoadingViewModelTest {
@@ -21,28 +20,18 @@ class LoadingViewModelTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(Clock::class)
         viewModel = LoadingViewModel(repository)
     }
 
     @Test
-    fun `GIVEN example valid code WHEN setCodeAndGetAccessToken THEN set code, access token and navigateToPullRequests`() {
+    fun `GIVEN valid code WHEN setCodeAndGetAccessToken THEN set code, access token and navigateToPullRequests`() {
         // when
         viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
 
         // then
-        assert(viewModel.state.code == EXAMPLE_CODE)
-        assert(viewModel.state.accessToken == EXAMPLE_ACCESS_TOKEN)
-        assert(viewModel.state.navigateToPullRequests == NavigateToPullRequests)
-    }
-
-    @Test
-    fun `GIVEN null as code WHEN setCodeAndGetAccessToken THEN set null as code`() {
-        // when
-        viewModel.setCodeAndGetAccessToken(null)
-
-        // then
-        assert(viewModel.state.code == null)
+        assertEquals(viewModel.state.code, EXAMPLE_CODE)
+        assertEquals(viewModel.state.accessToken, EXAMPLE_ACCESS_TOKEN)
+        assertEquals(viewModel.state.navigateToPullRequests, NavigateToPullRequests)
     }
 
     @Test
@@ -55,8 +44,8 @@ class LoadingViewModelTest {
         viewModel.onAction(action)
 
         // then
-        assert(!viewModel.state.showErrorScreen)
-        assert(viewModel.state.accessToken == EXAMPLE_ACCESS_TOKEN)
+        assertEquals(viewModel.state.showErrorScreen, false)
+        assertEquals(viewModel.state.accessToken, EXAMPLE_ACCESS_TOKEN)
     }
 
     @Test
@@ -69,6 +58,6 @@ class LoadingViewModelTest {
         viewModel.onAction(action)
 
         // then
-        assert(viewModel.state.navigateToPullRequests == null)
+        assertEquals(viewModel.state.navigateToPullRequests, null)
     }
 }

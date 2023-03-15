@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.domain.AuthRepository
+import com.appunite.loudius.network.model.AccessTokenResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +19,7 @@ sealed class LoadingAction {
 
     object OnTryAgainClick : LoadingAction()
 }
+
 data class LoadingState(
     val accessToken: String? = null,
     val code: String? = null,
@@ -35,11 +37,9 @@ class LoadingViewModel @Inject constructor(
     var state by mutableStateOf(LoadingState())
         private set
 
-    fun setCodeAndGetAccessToken(code: String?) {
+    fun setCodeAndGetAccessToken(code: String) {
         state = state.copy(code = code)
-        code?.let {
-            getAccessToken(it)
-        }
+        getAccessToken(code)
     }
 
     fun onAction(action: LoadingAction) = when (action) {
@@ -65,17 +65,20 @@ class LoadingViewModel @Inject constructor(
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code,
             ).onSuccess { token ->
-                state = if (token.accessToken != null) {
-                    state.copy(
-                        accessToken = token.accessToken,
-                        navigateToPullRequests = NavigateToPullRequests,
-                    )
-                } else {
-                    state.copy(showErrorScreen = true)
-                }
+                state = handleGetAccessTokenSuccess(token)
             }.onFailure {
                 state = state.copy(showErrorScreen = true)
             }
         }
     }
+
+    private fun handleGetAccessTokenSuccess(token: AccessTokenResponse) =
+        if (token.accessToken != null) {
+            state.copy(
+                accessToken = token.accessToken,
+                navigateToPullRequests = NavigateToPullRequests,
+            )
+        } else {
+            state.copy(showErrorScreen = true)
+        }
 }
