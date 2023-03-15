@@ -199,7 +199,7 @@ fun PullRequestsScreenPreview() {
                     createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
                 ),
             ),
-            onAction = {}
+            onAction = {},
         )
     }
 }

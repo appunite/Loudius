@@ -7,7 +7,6 @@ import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.utils.neverCompletingSuspension
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.LocalDateTime
 
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
@@ -42,12 +42,12 @@ class PullRequestsViewModelTest {
                     repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
                     title = "example title",
                     LocalDateTime.parse("2023-03-07T09:21:45"),
-                )
-            ), viewModel.state.pullRequests
+                ),
+            ),
+            viewModel.state.pullRequests,
         )
         assertFalse(viewModel.state.isLoading)
     }
-
 
     @Test
     fun `GIVEN logged in user WHEN fetching failed THEN display error`() = runTest {
@@ -76,8 +76,9 @@ class PullRequestsViewModelTest {
                     repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
                     title = "example title",
                     LocalDateTime.parse("2023-03-07T09:21:45"),
-                )
-            ), viewModel.state.pullRequests
+                ),
+            ),
+            viewModel.state.pullRequests,
         )
         assertFalse(viewModel.state.isLoading)
     }
