@@ -47,9 +47,10 @@ fun ReviewersScreen(
         onNotifyClick = viewModel::onAction,
         snackbarHostState = snackbarHostState,
     )
+    val snackbarMessage = stringResource(id = R.string.reviewers_snackbar_message)
     LaunchedEffect(state.showSuccessSnackbar) {
         state.showSuccessSnackbar?.let {
-            val result = snackbarHostState.showSnackbar(message = "Hurray person is notified")
+            val result = snackbarHostState.showSnackbar(message = snackbarMessage)
             if (result == SnackbarResult.Dismissed) {
                 viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
             }
