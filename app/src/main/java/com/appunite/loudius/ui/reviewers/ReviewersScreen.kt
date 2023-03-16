@@ -42,7 +42,6 @@ fun ReviewersScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessage = stringResource(id = R.string.reviewers_snackbar_message)
 
-
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
@@ -54,7 +53,7 @@ fun ReviewersScreen(
         isSuccessSnackbarShown = state.isSuccessSnackbarShown,
         snackbarHostState = snackbarHostState,
         snackbarMessage = snackbarMessage,
-        onSnackbarDismiss = viewModel::onAction
+        onSnackbarDismiss = viewModel::onAction,
     )
 }
 
@@ -63,7 +62,7 @@ private fun SnackbarLaunchedEffect(
     isSuccessSnackbarShown: Boolean,
     snackbarHostState: SnackbarHostState,
     snackbarMessage: String,
-    onSnackbarDismiss: (ReviewersAction) -> Unit
+    onSnackbarDismiss: (ReviewersAction) -> Unit,
 ) {
     LaunchedEffect(isSuccessSnackbarShown) {
         if (isSuccessSnackbarShown) {
