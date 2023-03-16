@@ -9,6 +9,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -17,10 +21,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
@@ -141,17 +141,17 @@ class ReviewersViewModelTest {
 
             viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
 
-            assertEquals(Unit, viewModel.state.showSuccessSnackbar)
+            assertEquals(true, viewModel.state.isSuccessSnackbarShown)
         }
 
         @Test
-        fun `GIVEN user login WHEN on snackbar dismiss action THEN show snackbar state is null`() =
+        fun `GIVEN user login WHEN on snackbar dismiss action THEN snackbar is not shown`() =
             runTest {
                 viewModel = createViewModel()
 
                 viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
 
-                assertEquals(null, viewModel.state.showSuccessSnackbar)
+                assertEquals(false, viewModel.state.isSuccessSnackbarShown)
             }
     }
 }

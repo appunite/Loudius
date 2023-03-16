@@ -12,10 +12,10 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -25,7 +25,7 @@ sealed class ReviewersAction {
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
     val pullRequestNumber: String = "",
-    val showSuccessSnackbar: Unit? = null,
+    val isSuccessSnackbarShown: Boolean = false,
 )
 
 @HiltViewModel
@@ -105,7 +105,7 @@ class ReviewersViewModel @Inject constructor(
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyUser(action.userLogin)
-        is ReviewersAction.OnSnackbarDismiss -> state = state.copy(showSuccessSnackbar = null)
+        is ReviewersAction.OnSnackbarDismiss -> state = state.copy(isSuccessSnackbarShown = false)
     }
 
     private fun notifyUser(userLogin: String) {
@@ -114,7 +114,7 @@ class ReviewersViewModel @Inject constructor(
         viewModelScope.launch {
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess {
-                    state = state.copy(showSuccessSnackbar = Unit)
+                    state = state.copy(isSuccessSnackbarShown = true)
                 }
         }
     }

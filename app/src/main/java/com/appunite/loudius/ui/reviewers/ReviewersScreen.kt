@@ -47,24 +47,29 @@ fun ReviewersScreen(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack,
-        onNotifyClick = viewModel::onAction,
         snackbarHostState = snackbarHostState,
+        onNotifyClick = viewModel::onAction,
     )
-    SnackbarLaunchedEffect(state, snackbarHostState, snackbarMessage, viewModel)
+    SnackbarLaunchedEffect(
+        isSuccessSnackbarShown = state.isSuccessSnackbarShown,
+        snackbarHostState = snackbarHostState,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismiss = viewModel::onAction
+    )
 }
 
 @Composable
 private fun SnackbarLaunchedEffect(
-    state: ReviewersState,
+    isSuccessSnackbarShown: Boolean,
     snackbarHostState: SnackbarHostState,
     snackbarMessage: String,
-    viewModel: ReviewersViewModel
+    onSnackbarDismiss: (ReviewersAction) -> Unit
 ) {
-    LaunchedEffect(state.showSuccessSnackbar) {
-        state.showSuccessSnackbar?.let {
+    LaunchedEffect(isSuccessSnackbarShown) {
+        if (isSuccessSnackbarShown) {
             val result = snackbarHostState.showSnackbar(message = snackbarMessage)
             if (result == SnackbarResult.Dismissed) {
-                viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
+                onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
             }
         }
     }
@@ -76,8 +81,8 @@ private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
     onClickBackArrow: () -> Unit,
-    onNotifyClick: (ReviewersAction) -> Unit,
     snackbarHostState: SnackbarHostState,
+    onNotifyClick: (ReviewersAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -140,10 +145,9 @@ private fun ReviewerItem(
             IsReviewedHeadlineText(reviewer)
             ReviewerName(reviewer)
         }
-        NotifyButton(
-            { onNotifyClick(ReviewersAction.Notify(reviewer.login)) },
-            Modifier.align(CenterVertically),
-        )
+        NotifyButton(Modifier.align(CenterVertically)) {
+            onNotifyClick(ReviewersAction.Notify(reviewer.login))
+        }
     }
 }
 
@@ -184,7 +188,7 @@ private fun ReviewerName(reviewer: Reviewer) {
 }
 
 @Composable
-private fun NotifyButton(onNotifyClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun NotifyButton(modifier: Modifier = Modifier, onNotifyClick: () -> Unit) {
     OutlinedButton(onClick = onNotifyClick, modifier = modifier) {
         Text(
             text = stringResource(R.string.details_notify),
@@ -214,11 +218,11 @@ fun DetailsScreenPreview() {
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
         ReviewersScreenStateless(
-            pullRequestNumber = "Pull request #1",
+            pullRequestNumber = "1",
             reviewers = reviewers,
             {},
-            {},
             SnackbarHostState(),
+            {},
         )
     }
 }

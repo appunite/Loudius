@@ -10,6 +10,7 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
+import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {
@@ -430,7 +430,7 @@ class PullRequestsNetworkDataSourceTest {
     inner class NotifyRequestTest {
 
         @Test
-        fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
+        fun `GIVEN connectivity problem WHEN request THEN return failure with Network error`() =
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
@@ -485,7 +485,6 @@ class PullRequestsNetworkDataSourceTest {
                   "author_association": "COLLABORATOR"
                 }
             """.trimIndent()
-
             mockWebServer.enqueue(
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
@@ -510,7 +509,6 @@ class PullRequestsNetworkDataSourceTest {
                         "documentation_url": "https://docs.github.com/rest"
                     }
                 """.trimIndent()
-
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
@@ -530,7 +528,6 @@ class PullRequestsNetworkDataSourceTest {
                         "Bad credentials",
                     ),
                 )
-
                 assertEquals(expected, actualResponse)
             }
     }
