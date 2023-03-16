@@ -22,18 +22,18 @@ fun LoudiusLoaderIndicator() {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_indicator))
     val progress by animateLottieCompositionAsState(
         composition,
-        iterations = LottieConstants.IterateForever
+        iterations = LottieConstants.IterateForever,
     )
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         LottieAnimation(
             composition = composition,
             progress = { progress },
             modifier = Modifier
                 .align(Alignment.Center)
-                .size(96.dp)
+                .size(96.dp),
         )
     }
 }
