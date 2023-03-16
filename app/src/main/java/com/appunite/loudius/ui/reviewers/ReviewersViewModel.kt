@@ -12,10 +12,12 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -26,6 +28,8 @@ data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
     val pullRequestNumber: String = "",
     val isSuccessSnackbarShown: Boolean = false,
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
 )
 
 @HiltViewModel
@@ -39,13 +43,8 @@ class ReviewersViewModel @Inject constructor(
 
     init {
         val initialValues = getInitialValues(savedStateHandle)
-
-        state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
-
-        viewModelScope.launch {
-            fetchRequestedReviewers(initialValues)
-            fetchReviews(initialValues)
-        }
+        state = state.copy(pullRequestNumber = initialValues.pullRequestNumber, isLoading = true)
+        fetchData(initialValues)
     }
 
     private fun getInitialValues(savedStateHandle: SavedStateHandle) = InitialValues(
@@ -55,14 +54,35 @@ class ReviewersViewModel @Inject constructor(
         checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg]),
     )
 
-    private suspend fun fetchRequestedReviewers(initialValues: InitialValues) {
+    private fun fetchData(initialValues: InitialValues) {
+        viewModelScope.launch {
+            getMergedData(initialValues)
+                .onSuccess { state = state.copy(reviewers = it.orEmpty(), isLoading = false) }
+                .onFailure { state = state.copy(isError = true, isLoading = false) }
+        }
+    }
+
+    private suspend fun getMergedData(initialValues: InitialValues): Result<List<Reviewer>?> =
+        coroutineScope {
+            val requestedReviewersDeferred = async { fetchRequestedReviewers(initialValues) }
+            val reviewersDeferred = async { fetchReviews(initialValues) }
+
+            val requestedReviewerResult = requestedReviewersDeferred.await()
+            val reviewersResult = reviewersDeferred.await()
+
+            requestedReviewerResult.map { requestedReviewers ->
+                reviewersResult.map { it + requestedReviewers }
+                    .getOrNull()
+            }
+        }
+
+
+    private suspend fun fetchRequestedReviewers(initialValues: InitialValues): Result<List<Reviewer>> {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
-        repository.getRequestedReviewers(owner, repo, pullRequestNumber)
-            .onSuccess { response ->
-                val reviewers = response.mapToReviewers(submissionTime)
-                state = state.copy(reviewers = state.reviewers + reviewers)
-            }
+        return repository.getRequestedReviewers(owner, repo, pullRequestNumber)
+            .map { it.mapToReviewers(submissionTime) }
+
     }
 
     private fun RequestedReviewersResponse.mapToReviewers(submissionTime: String): List<Reviewer> {
@@ -73,13 +93,11 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchReviews(initialValues: InitialValues) {
+    private suspend fun fetchReviews(initialValues: InitialValues): Result<List<Reviewer>> {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
-        repository.getReviews(owner, repo, pullRequestNumber).onSuccess { reviews ->
-            val reviewersAfterReview = reviews.mapToReviewers(submissionTime)
-            state = state.copy(reviewers = state.reviewers + reviewersAfterReview)
-        }
+        return repository.getReviews(owner, repo, pullRequestNumber)
+            .map { it.mapToReviewers(submissionTime) }
     }
 
     private fun List<Review>.mapToReviewers(submissionTime: String): List<Reviewer> {
