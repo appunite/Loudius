@@ -2,12 +2,15 @@ package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -19,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.domain.model.Reviewer
+import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
@@ -45,9 +50,11 @@ fun ReviewersScreen(
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
+        isLoading = state.isLoading,
+        isError = state.isError,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
-        onNotifyClick = viewModel::onAction,
+        onAction = viewModel::onAction,
     )
     SnackbarLaunchedEffect(
         isSuccessSnackbarShown = state.isSuccessSnackbarShown,
@@ -79,9 +86,11 @@ private fun SnackbarLaunchedEffect(
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
+    isLoading: Boolean,
+    isError: Boolean,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
-    onNotifyClick: (ReviewersAction) -> Unit,
+    onAction: (ReviewersAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -91,11 +100,26 @@ private fun ReviewersScreenStateless(
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        content = { padding ->
-            ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding), onNotifyClick)
-        },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        content = { padding ->
+            when {
+                isError -> LoudiusErrorScreen(onButtonClick = { onAction(ReviewersAction.OnTryAgain) })
+                isLoading -> LoadingIndicator(Modifier.padding(padding))
+                else -> ReviewersScreenContent(
+                    reviewers = reviewers,
+                    modifier = Modifier.padding(padding),
+                    onNotifyClick = onAction
+                )
+            }
+        },
     )
+}
+
+@Composable
+private fun LoadingIndicator(modifier: Modifier) {
+    Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
+        CircularProgressIndicator()
+    }
 }
 
 @Composable
@@ -219,9 +243,11 @@ fun DetailsScreenPreview() {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
             reviewers = reviewers,
-            {},
-            SnackbarHostState(),
-            {},
+            isError = false,
+            isLoading = false,
+            onClickBackArrow = {},
+            snackbarHostState = SnackbarHostState(),
+            onAction = {},
         )
     }
 }

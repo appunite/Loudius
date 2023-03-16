@@ -19,12 +19,14 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun LoudiusErrorScreen(
-    errorText: String,
-    buttonText: String,
+    errorText: String = stringResource(id = R.string.error_dialog_text),
+    buttonText: String = stringResource(id = R.string.try_again),
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(top = 142.dp).fillMaxSize(),
+        modifier = Modifier
+            .padding(top = 142.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(56.dp),
     ) {

@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
     object OnSnackbarDismiss : ReviewersAction()
+    object OnTryAgain : ReviewersAction()
 }
 
 data class ReviewersState(
@@ -37,12 +38,12 @@ class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private val initialValues: InitialValues = getInitialValues(savedStateHandle)
 
     var state by mutableStateOf(ReviewersState())
         private set
 
     init {
-        val initialValues = getInitialValues(savedStateHandle)
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber, isLoading = true)
         fetchData(initialValues)
     }
@@ -124,6 +125,7 @@ class ReviewersViewModel @Inject constructor(
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyUser(action.userLogin)
         is ReviewersAction.OnSnackbarDismiss -> state = state.copy(isSuccessSnackbarShown = false)
+        is ReviewersAction.OnTryAgain -> fetchData(initialValues)
     }
 
     private fun notifyUser(userLogin: String) {
