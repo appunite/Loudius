@@ -14,5 +14,5 @@
     <string name="ok">OK</string>
     <string name="error_image_desc">error image</string>
     <string name="try_again_text">Try again</string>
-    <string name="reviewers_snackbar_message">Awesome! Your collaborators have been pinged for some serious code review action! 🎉</string>
+    <string name="reviewers_snackbar_message">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
 </resources>
