@@ -13,9 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
+import com.appunite.loudius.ui.loading.LoadingScreen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
-import com.appunite.loudius.ui.repos.ReposScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                                 },
                             ),
                         ) {
-                            ReposScreen(intent = intent) {
+                            LoadingScreen(intent = intent) {
                                 navController.navigate(Screen.PullRequests.route)
                             }
                         }
