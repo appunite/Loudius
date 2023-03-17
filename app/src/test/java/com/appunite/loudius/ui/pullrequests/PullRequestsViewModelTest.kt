@@ -60,7 +60,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN item id WHEN item click THEN redirect user`() = runTest {
+    fun `GIVEN item id WHEN item click THEN navigate the user to reviewers`() = runTest {
         val viewModel = createViewModel()
         assertNull(viewModel.state.navigateToReviewers)
         val pullRequest = Defaults.pullRequest()
