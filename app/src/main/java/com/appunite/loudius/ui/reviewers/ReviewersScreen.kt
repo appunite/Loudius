@@ -92,7 +92,11 @@ private fun ReviewersScreenStateless(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { padding ->
-            ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding), onNotifyClick)
+            ReviewersScreenContent(
+                reviewers = reviewers,
+                modifier = Modifier.padding(padding),
+                onNotifyClick = onNotifyClick
+            )
         },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
     )
@@ -219,9 +223,9 @@ fun DetailsScreenPreview() {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
             reviewers = reviewers,
-            {},
-            SnackbarHostState(),
-            {},
+            onNotifyClick = {},
+            snackbarHostState = SnackbarHostState(),
+            onClickBackArrow = {},
         )
     }
 }
