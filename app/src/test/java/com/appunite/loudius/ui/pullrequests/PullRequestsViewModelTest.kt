@@ -22,7 +22,7 @@ class PullRequestsViewModelTest {
     private fun getViewModel() = PullRequestsViewModel(pullRequestRepository)
 
     @Test
-    fun `GIVEN logged in user WHEN init THEN display loading`() = runTest {
+    fun `WHEN init THEN display loading`() = runTest {
         pullRequestRepository.setCurrentUserPullRequests { neverCompletingSuspension() }
         val viewModel = getViewModel()
 
@@ -30,7 +30,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN logged in user WHEN init THEN display pull requests list`() {
+    fun `WHEN init THEN display pull requests list`() {
         val viewModel = getViewModel()
 
         assertEquals(
@@ -50,7 +50,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN logged in user WHEN fetching failed THEN display error`() = runTest {
+    fun `WHEN fetching data failed on init THEN display error`() = runTest {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
         val viewModel = getViewModel()
 
@@ -58,7 +58,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN logged in user WHEN retry THEN fetch pull requests list again`() {
+    fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
         val viewModel = getViewModel()
         assertTrue(viewModel.state.isError)
