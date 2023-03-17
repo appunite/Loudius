@@ -95,7 +95,7 @@ private fun ReviewersScreenStateless(
             ReviewersScreenContent(
                 reviewers = reviewers,
                 modifier = Modifier.padding(padding),
-                onNotifyClick = onNotifyClick
+                onNotifyClick = onNotifyClick,
             )
         },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
