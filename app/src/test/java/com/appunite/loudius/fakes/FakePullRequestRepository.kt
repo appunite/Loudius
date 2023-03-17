@@ -10,6 +10,7 @@ import com.appunite.loudius.network.model.ReviewState.CHANGES_REQUESTED
 import com.appunite.loudius.network.model.ReviewState.COMMENTED
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.util.Defaults
 import java.time.LocalDateTime
 
 class FakePullRequestRepository : PullRequestRepository {
@@ -53,8 +54,29 @@ class FakePullRequestRepository : PullRequestRepository {
         else -> Result.success(RequestedReviewersResponse(emptyList()))
     }
 
+    private val initialPullRequestAnswer = Result.success(
+        PullRequestsResponse(
+            incompleteResults = false,
+            totalCount = 1,
+            items = listOf(
+                Defaults.pullRequest(),
+            ),
+        ),
+    )
+
+    private var lazyCurrentUserPullRequests: suspend () -> Result<PullRequestsResponse> =
+        { initialPullRequestAnswer }
+
+    fun setCurrentUserPullRequests(result: suspend () -> Result<PullRequestsResponse>) {
+        lazyCurrentUserPullRequests = result
+    }
+
+    fun resetCurrentUserPullRequestAnswer() {
+        lazyCurrentUserPullRequests = { initialPullRequestAnswer }
+    }
+
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
-        TODO("Not yet implemented")
+        return lazyCurrentUserPullRequests()
     }
 
     override suspend fun notify(
