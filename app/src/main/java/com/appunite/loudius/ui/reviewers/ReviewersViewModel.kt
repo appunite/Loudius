@@ -37,7 +37,7 @@ data class ReviewersState(
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val initialValues: InitialValues = getInitialValues(savedStateHandle)
 
@@ -130,7 +130,7 @@ class ReviewersViewModel @Inject constructor(
     }
 
     private fun notifyUser(userLogin: String) {
-        val (owner, repo, pullRequestNumber) = getInitialValues(savedStateHandle)
+        val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
