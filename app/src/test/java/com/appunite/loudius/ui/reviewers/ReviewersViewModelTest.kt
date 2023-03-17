@@ -150,7 +150,7 @@ class ReviewersViewModelTest {
 
 
         @Test
-        fun `WHEN there is an error during fetching data on init THEN error is shown`() =
+        fun `WHEN there is an error during fetching data from 2 requests on init THEN error is shown`() =
             runTest {
                 every { savedStateHandle.get<String>("pull_request_number") } returns "notExistingPullRequestNumber"
 
