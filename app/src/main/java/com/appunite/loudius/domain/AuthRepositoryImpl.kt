@@ -1,7 +1,7 @@
 package com.appunite.loudius.domain
 
 import com.appunite.loudius.network.datasource.AuthDataSource
-import com.appunite.loudius.network.model.AccessToken
+import com.appunite.loudius.network.model.AccessTokenResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,9 +15,13 @@ class AuthRepositoryImpl @Inject constructor(
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessToken> {
+    ): Result<AccessTokenResponse> {
         val result = authDataSource.getAccessToken(clientId, clientSecret, code)
-        result.onSuccess { userLocalDataSource.saveAccessToken(it) }
+        result.onSuccess { response ->
+            response.accessToken?.let {
+                userLocalDataSource.saveAccessToken(it)
+            }
+        }
         return result
     }
 

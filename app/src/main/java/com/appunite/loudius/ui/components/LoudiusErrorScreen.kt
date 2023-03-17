@@ -60,7 +60,7 @@ fun LoudiusErrorScreenPreview() {
     LoudiusTheme {
         LoudiusErrorScreen(
             errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again_text),
+            buttonText = stringResource(R.string.try_again),
             onButtonClick = {},
         )
     }

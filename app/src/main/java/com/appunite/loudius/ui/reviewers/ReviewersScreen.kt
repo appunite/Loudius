@@ -12,8 +12,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,11 +39,39 @@ fun ReviewersScreen(
     navigateBack: () -> Unit,
 ) {
     val state = viewModel.state
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarMessage = stringResource(id = R.string.reviewers_snackbar_message)
+
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
         onClickBackArrow = navigateBack,
+        snackbarHostState = snackbarHostState,
+        onNotifyClick = viewModel::onAction,
     )
+    SnackbarLaunchedEffect(
+        isSuccessSnackbarShown = state.isSuccessSnackbarShown,
+        snackbarHostState = snackbarHostState,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismiss = viewModel::onAction,
+    )
+}
+
+@Composable
+private fun SnackbarLaunchedEffect(
+    isSuccessSnackbarShown: Boolean,
+    snackbarHostState: SnackbarHostState,
+    snackbarMessage: String,
+    onSnackbarDismiss: (ReviewersAction) -> Unit,
+) {
+    LaunchedEffect(isSuccessSnackbarShown) {
+        if (isSuccessSnackbarShown) {
+            val result = snackbarHostState.showSnackbar(message = snackbarMessage)
+            if (result == SnackbarResult.Dismissed) {
+                onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,6 +80,8 @@ private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
     onClickBackArrow: () -> Unit,
+    snackbarHostState: SnackbarHostState,
+    onNotifyClick: (ReviewersAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -55,15 +90,24 @@ private fun ReviewersScreenStateless(
                 title = stringResource(id = R.string.details_title, pullRequestNumber),
             )
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { padding ->
-            ReviewersScreenContent(reviewers, modifier = Modifier.padding(padding))
+            ReviewersScreenContent(
+                reviewers = reviewers,
+                modifier = Modifier.padding(padding),
+                onNotifyClick = onNotifyClick,
+            )
         },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
     )
 }
 
 @Composable
-private fun ReviewersScreenContent(reviewers: List<Reviewer>, modifier: Modifier) {
+private fun ReviewersScreenContent(
+    reviewers: List<Reviewer>,
+    modifier: Modifier,
+    onNotifyClick: (ReviewersAction) -> Unit,
+) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -71,7 +115,7 @@ private fun ReviewersScreenContent(reviewers: List<Reviewer>, modifier: Modifier
             ReviewerItem(
                 reviewer = reviewer,
                 backgroundColor = resolveReviewerBackgroundColor(index),
-                onNotifyClick = {},
+                onNotifyClick = onNotifyClick,
             )
         }
     }
@@ -82,7 +126,11 @@ private fun resolveReviewerBackgroundColor(index: Int) =
     if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
 
 @Composable
-private fun ReviewerItem(reviewer: Reviewer, backgroundColor: Color, onNotifyClick: () -> Unit) {
+private fun ReviewerItem(
+    reviewer: Reviewer,
+    backgroundColor: Color,
+    onNotifyClick: (ReviewersAction) -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +148,9 @@ private fun ReviewerItem(reviewer: Reviewer, backgroundColor: Color, onNotifyCli
             IsReviewedHeadlineText(reviewer)
             ReviewerName(reviewer)
         }
-        NotifyButton(onNotifyClick, Modifier.align(CenterVertically))
+        NotifyButton(Modifier.align(CenterVertically)) {
+            onNotifyClick(ReviewersAction.Notify(reviewer.login))
+        }
     }
 }
 
@@ -141,7 +191,7 @@ private fun ReviewerName(reviewer: Reviewer) {
 }
 
 @Composable
-private fun NotifyButton(onNotifyClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun NotifyButton(modifier: Modifier = Modifier, onNotifyClick: () -> Unit) {
     OutlinedButton(onClick = onNotifyClick, modifier = modifier) {
         Text(
             text = stringResource(R.string.details_notify),
@@ -170,6 +220,12 @@ fun DetailsScreenPreview() {
     val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
-        ReviewersScreenStateless(pullRequestNumber = "Pull request #1", reviewers = reviewers, {})
+        ReviewersScreenStateless(
+            pullRequestNumber = "1",
+            reviewers = reviewers,
+            onNotifyClick = {},
+            snackbarHostState = SnackbarHostState(),
+            onClickBackArrow = {},
+        )
     }
 }
