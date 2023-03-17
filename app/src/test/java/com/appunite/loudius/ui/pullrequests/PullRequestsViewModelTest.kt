@@ -20,19 +20,19 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
     private val pullRequestRepository = FakePullRequestRepository()
-    private fun getViewModel() = PullRequestsViewModel(pullRequestRepository)
+    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
 
     @Test
     fun `WHEN init THEN display loading`() = runTest {
         pullRequestRepository.setCurrentUserPullRequests { neverCompletingSuspension() }
-        val viewModel = getViewModel()
+        val viewModel = createViewModel()
 
         assertTrue(viewModel.state.isLoading)
     }
 
     @Test
     fun `WHEN init THEN display pull requests list`() = runTest {
-        val viewModel = getViewModel()
+        val viewModel = createViewModel()
 
         assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
         assertFalse(viewModel.state.isLoading)
@@ -41,7 +41,7 @@ class PullRequestsViewModelTest {
     @Test
     fun `WHEN fetching data failed on init THEN display error`() = runTest {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
-        val viewModel = getViewModel()
+        val viewModel = createViewModel()
 
         assertEquals(emptyList<PullRequest>(), viewModel.state.pullRequests)
         assertTrue(viewModel.state.isError)
@@ -50,7 +50,7 @@ class PullRequestsViewModelTest {
     @Test
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
-        val viewModel = getViewModel()
+        val viewModel = createViewModel()
 
         pullRequestRepository.resetCurrentUserPullRequestAnswer()
         viewModel.onAction(PulLRequestsAction.RetryClick)
@@ -61,7 +61,7 @@ class PullRequestsViewModelTest {
 
     @Test
     fun `GIVEN item id WHEN item click THEN redirect user`() = runTest {
-        val viewModel = getViewModel()
+        val viewModel = createViewModel()
         assertNull(viewModel.state.navigateToReviewers)
         val pullRequest = Defaults.pullRequest()
 
@@ -78,7 +78,7 @@ class PullRequestsViewModelTest {
 
     @Test
     fun `GIVEN navigation payload WHEN navigating to reviewers THEN reset payload`() = runTest {
-        val viewModel = getViewModel()
+        val viewModel = createViewModel()
         val pullRequest = Defaults.pullRequest()
         viewModel.onAction(PulLRequestsAction.ItemClick(pullRequest.id))
 
