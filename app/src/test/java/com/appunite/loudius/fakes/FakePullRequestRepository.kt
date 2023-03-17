@@ -11,6 +11,7 @@ import com.appunite.loudius.network.model.ReviewState.CHANGES_REQUESTED
 import com.appunite.loudius.network.model.ReviewState.COMMENTED
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.util.Defaults
 import java.time.LocalDateTime
 
 class FakePullRequestRepository : PullRequestRepository {
@@ -59,14 +60,7 @@ class FakePullRequestRepository : PullRequestRepository {
             incompleteResults = false,
             totalCount = 1,
             items = listOf(
-                PullRequest(
-                    id = 1,
-                    draft = false,
-                    number = 1,
-                    repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
-                    title = "example title",
-                    LocalDateTime.parse("2023-03-07T09:21:45"),
-                ),
+                Defaults.pullRequest(),
             ),
         ),
     )

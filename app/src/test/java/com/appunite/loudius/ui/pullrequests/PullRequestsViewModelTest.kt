@@ -5,6 +5,7 @@ package com.appunite.loudius.ui.pullrequests
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.util.Defaults
 import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.utils.neverCompletingSuspension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,14 +36,7 @@ class PullRequestsViewModelTest {
 
         assertEquals(
             listOf(
-                PullRequest(
-                    id = 1,
-                    draft = false,
-                    number = 1,
-                    repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
-                    title = "example title",
-                    LocalDateTime.parse("2023-03-07T09:21:45"),
-                ),
+                Defaults.pullRequest(),
             ),
             viewModel.state.pullRequests,
         )
@@ -69,17 +63,11 @@ class PullRequestsViewModelTest {
 
         assertEquals(
             listOf(
-                PullRequest(
-                    id = 1,
-                    draft = false,
-                    number = 1,
-                    repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
-                    title = "example title",
-                    LocalDateTime.parse("2023-03-07T09:21:45"),
-                ),
+                Defaults.pullRequest(),
             ),
             viewModel.state.pullRequests,
         )
         assertFalse(viewModel.state.isLoading)
     }
+
 }

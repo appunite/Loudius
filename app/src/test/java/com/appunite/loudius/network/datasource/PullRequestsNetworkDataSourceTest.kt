@@ -10,6 +10,7 @@ import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.util.Defaults
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -149,14 +150,7 @@ class PullRequestsNetworkDataSourceTest {
                     incompleteResults = false,
                     totalCount = 1,
                     items = listOf(
-                        PullRequest(
-                            id = 1,
-                            draft = false,
-                            number = 1,
-                            repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
-                            title = "example title",
-                            LocalDateTime.parse("2023-03-07T09:21:45"),
-                        ),
+                        Defaults.pullRequest(),
                     ),
                 ),
             )
