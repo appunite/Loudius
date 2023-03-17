@@ -22,7 +22,7 @@ class FakePullRequestRepository : PullRequestRepository {
         repo: String,
         pullRequestNumber: String,
     ): Result<List<Review>> = when (pullRequestNumber) {
-        "correctPullRequestNumber", "onlyReviewsPullNumber" -> Result.success(
+        "failureOnlyOnRequestedReviewers", "correctPullRequestNumber", "onlyReviewsPullNumber" -> Result.success(
             listOf(
                 Review("1", User(1, "user1"), CHANGES_REQUESTED, date1),
                 Review("2", User(1, "user1"), COMMENTED, date2),
@@ -32,7 +32,9 @@ class FakePullRequestRepository : PullRequestRepository {
                 Review("6", User(2, "user2"), APPROVED, date3),
             ),
         )
-        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
+        "failureOnlyOnReviews", "notExistingPullRequestNumber" -> {
+            Result.failure(WebException.UnknownError(404, null))
+        }
         else -> Result.success(emptyList())
     }
 
@@ -41,7 +43,7 @@ class FakePullRequestRepository : PullRequestRepository {
         repo: String,
         pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> = when (pullRequestNumber) {
-        "correctPullRequestNumber", "onlyRequestedReviewersPullNumber" -> Result.success(
+        "correctPullRequestNumber", "onlyRequestedReviewersPullNumber", "failureOnlyOnReviews" -> Result.success(
             RequestedReviewersResponse(
                 listOf(
                     RequestedReviewer(3, "user3"),
@@ -49,7 +51,9 @@ class FakePullRequestRepository : PullRequestRepository {
                 ),
             ),
         )
-        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
+        "failureOnlyOnRequestedReviewers", "notExistingPullRequestNumber" -> Result.failure(
+            WebException.UnknownError(404, null)
+        )
         else -> Result.success(RequestedReviewersResponse(emptyList()))
     }
 

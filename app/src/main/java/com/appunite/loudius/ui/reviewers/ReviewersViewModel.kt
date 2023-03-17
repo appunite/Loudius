@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Screen
+import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.PullRequestRepository
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
@@ -44,7 +45,7 @@ class ReviewersViewModel @Inject constructor(
         private set
 
     init {
-        state = state.copy(pullRequestNumber = initialValues.pullRequestNumber, isLoading = true)
+        state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
         fetchData(initialValues)
     }
 
@@ -65,15 +66,15 @@ class ReviewersViewModel @Inject constructor(
 
     private suspend fun getMergedData(initialValues: InitialValues): Result<List<Reviewer>?> =
         coroutineScope {
+            state = state.copy(isLoading = true)
             val requestedReviewersDeferred = async { fetchRequestedReviewers(initialValues) }
             val reviewersDeferred = async { fetchReviews(initialValues) }
 
             val requestedReviewerResult = requestedReviewersDeferred.await()
             val reviewersResult = reviewersDeferred.await()
 
-            requestedReviewerResult.map { requestedReviewers ->
+            requestedReviewerResult.flatMap { requestedReviewers ->
                 reviewersResult.map { it + requestedReviewers }
-                    .getOrNull()
             }
         }
 
