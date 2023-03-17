@@ -13,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -44,87 +45,113 @@ class ReviewersViewModelTest {
         every { Clock.systemDefaultZone() } returns systemClockFixed
     }
 
-    @Test
-    fun `GIVEN no values in saved state WHEN init THEN throw IllegalStateException`() {
-        every { savedStateHandle.get<String>(any()) } returns null
+    @Nested
+    inner class InitTest {
+        @Test
+        fun `GIVEN no values in saved state WHEN init THEN throw IllegalStateException`() {
+            every { savedStateHandle.get<String>(any()) } returns null
 
-        assertThrows<java.lang.IllegalStateException> {
-            createViewModel()
+            assertThrows<java.lang.IllegalStateException> {
+                createViewModel()
+            }
         }
-    }
 
-    @Test
-    fun `GIVEN correct initial values WHEN init THEN all initial values are read once`() {
-        viewModel = createViewModel()
-
-        verify(exactly = 1) { savedStateHandle.get<String>("owner") }
-        verify(exactly = 1) { savedStateHandle.get<String>("repo") }
-        verify(exactly = 1) { savedStateHandle.get<String>("pull_request_number") }
-        verify(exactly = 1) { savedStateHandle.get<String>("submission_date") }
-    }
-
-    @Test
-    fun `GIVEN correct initial values WHEN init THEN pull request number is correct`() {
-        viewModel = createViewModel()
-
-        assertEquals("correctPullRequestNumber", viewModel.state.pullRequestNumber)
-    }
-
-    @Test
-    fun `GIVEN no reviewers WHEN init THEN state is correct with no reviewers`() {
-        every { savedStateHandle.get<String>("pull_request_number") } returns "pullRequestWithNoReviewers"
-
-        viewModel = createViewModel()
-
-        assertEquals("pullRequestWithNoReviewers", viewModel.state.pullRequestNumber)
-        assertEquals(emptyList<Reviewer>(), viewModel.state.reviewers)
-    }
-
-    @Test
-    fun `GIVEN mixed reviewers WHEN init THEN list of reviewers is fetched`() =
-        runTest {
+        @Test
+        fun `GIVEN correct initial values WHEN init THEN all initial values are read once`() {
             viewModel = createViewModel()
 
-            val expected = listOf(
-                Reviewer(3, "user3", false, 7, null),
-                Reviewer(4, "user4", false, 7, null),
-                Reviewer(1, "user1", true, 7, 5),
-                Reviewer(2, "user2", true, 7, 5),
-            )
-            val actual = viewModel.state.reviewers
-
-            assertEquals(expected, actual)
+            verify(exactly = 1) { savedStateHandle.get<String>("owner") }
+            verify(exactly = 1) { savedStateHandle.get<String>("repo") }
+            verify(exactly = 1) { savedStateHandle.get<String>("pull_request_number") }
+            verify(exactly = 1) { savedStateHandle.get<String>("submission_date") }
         }
 
-    @Test
-    fun `GIVEN reviewers with no review done WHEN init THEN list of reviewers is fetched`() =
-        runTest {
-            every { savedStateHandle.get<String>("pull_request_number") } returns "onlyRequestedReviewersPullNumber"
+        @Test
+        fun `GIVEN correct initial values WHEN init THEN pull request number is correct`() {
+            viewModel = createViewModel()
+
+            assertEquals("correctPullRequestNumber", viewModel.state.pullRequestNumber)
+        }
+
+        @Test
+        fun `GIVEN no reviewers WHEN init THEN state is correct with no reviewers`() {
+            every { savedStateHandle.get<String>("pull_request_number") } returns "pullRequestWithNoReviewers"
 
             viewModel = createViewModel()
 
-            val expected = listOf(
-                Reviewer(3, "user3", false, 7, null),
-                Reviewer(4, "user4", false, 7, null),
-            )
-            val actual = viewModel.state.reviewers
-
-            assertEquals(expected, actual)
+            assertEquals("pullRequestWithNoReviewers", viewModel.state.pullRequestNumber)
+            assertEquals(emptyList<Reviewer>(), viewModel.state.reviewers)
         }
 
-    @Test
-    fun `GIVEN only reviewers who done reviews WHEN init THEN list of reviewers is fetched`() =
-        runTest {
-            every { savedStateHandle.get<String>("pull_request_number") } returns "onlyReviewsPullNumber"
+        @Test
+        fun `GIVEN mixed reviewers WHEN init THEN list of reviewers is fetched`() =
+            runTest {
+                viewModel = createViewModel()
 
+                val expected = listOf(
+                    Reviewer(3, "user3", false, 7, null),
+                    Reviewer(4, "user4", false, 7, null),
+                    Reviewer(1, "user1", true, 7, 5),
+                    Reviewer(2, "user2", true, 7, 5),
+                )
+                val actual = viewModel.state.reviewers
+
+                assertEquals(expected, actual)
+            }
+
+        @Test
+        fun `GIVEN reviewers with no review done WHEN init THEN list of reviewers is fetched`() =
+            runTest {
+                every { savedStateHandle.get<String>("pull_request_number") } returns "onlyRequestedReviewersPullNumber"
+
+                viewModel = createViewModel()
+
+                val expected = listOf(
+                    Reviewer(3, "user3", false, 7, null),
+                    Reviewer(4, "user4", false, 7, null),
+                )
+                val actual = viewModel.state.reviewers
+
+                assertEquals(expected, actual)
+            }
+
+        @Test
+        fun `GIVEN only reviewers who done reviews WHEN init THEN list of reviewers is fetched`() =
+            runTest {
+                every { savedStateHandle.get<String>("pull_request_number") } returns "onlyReviewsPullNumber"
+
+                viewModel = createViewModel()
+
+                val expected = listOf(
+                    Reviewer(1, "user1", true, 7, 5),
+                    Reviewer(2, "user2", true, 7, 5),
+                )
+                val actual = viewModel.state.reviewers
+
+                assertEquals(expected, actual)
+            }
+    }
+
+    @Nested
+    inner class OnActionTest {
+
+        @Test
+        fun `GIVEN user login WHEN Notify action THEN show snackbar`() = runTest {
             viewModel = createViewModel()
 
-            val expected = listOf(
-                Reviewer(1, "user1", true, 7, 5),
-                Reviewer(2, "user2", true, 7, 5),
-            )
-            val actual = viewModel.state.reviewers
+            viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
 
-            assertEquals(expected, actual)
+            assertEquals(true, viewModel.state.isSuccessSnackbarShown)
         }
+
+        @Test
+        fun `GIVEN user login WHEN on snackbar dismiss action THEN snackbar is not shown`() =
+            runTest {
+                viewModel = createViewModel()
+
+                viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
+
+                assertEquals(false, viewModel.state.isSuccessSnackbarShown)
+            }
+    }
 }

@@ -17,7 +17,7 @@ class FakePullRequestDataSource : PullRequestDataSource {
     override suspend fun getReviews(
         owner: String,
         repository: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<List<Review>> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyReviewsPullNumber" -> Result.success(
             listOf(
@@ -36,7 +36,7 @@ class FakePullRequestDataSource : PullRequestDataSource {
     override suspend fun getReviewers(
         owner: String,
         repository: String,
-        pullRequestNumber: String
+        pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyRequestedReviewersPullNumber" -> Result.success(
             RequestedReviewersResponse(
@@ -52,5 +52,16 @@ class FakePullRequestDataSource : PullRequestDataSource {
 
     override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun notify(
+        owner: String,
+        repository: String,
+        pullRequestNumber: String,
+        message: String,
+    ): Result<Unit> = when (pullRequestNumber) {
+        "correctPullRequestNumber" -> Result.success(Unit)
+        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
+        else -> Result.failure(WebException.NetworkError())
     }
 }

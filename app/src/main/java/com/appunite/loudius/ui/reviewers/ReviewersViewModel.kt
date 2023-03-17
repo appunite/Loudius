@@ -17,15 +17,21 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
+sealed class ReviewersAction {
+    data class Notify(val userLogin: String) : ReviewersAction()
+    object OnSnackbarDismiss : ReviewersAction()
+}
+
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
     val pullRequestNumber: String = "",
+    val isSuccessSnackbarShown: Boolean = false,
 )
 
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     var state by mutableStateOf(ReviewersState())
@@ -96,6 +102,26 @@ class ReviewersViewModel @Inject constructor(
 
     private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
         ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
+
+    fun onAction(action: ReviewersAction) = when (action) {
+        is ReviewersAction.Notify -> notifyUser(action.userLogin)
+        is ReviewersAction.OnSnackbarDismiss -> dismissSnackbar()
+    }
+
+    private fun notifyUser(userLogin: String) {
+        val (owner, repo, pullRequestNumber) = getInitialValues(savedStateHandle)
+
+        viewModelScope.launch {
+            repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
+                .onSuccess {
+                    state = state.copy(isSuccessSnackbarShown = true)
+                }
+        }
+    }
+
+    private fun dismissSnackbar() {
+        state = state.copy(isSuccessSnackbarShown = false)
+    }
 
     private data class InitialValues(
         val owner: String,

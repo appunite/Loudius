@@ -9,12 +9,12 @@ import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PullRequestRepositoryImpTest {
@@ -36,12 +36,11 @@ class PullRequestRepositoryImpTest {
                 val date1 = LocalDateTime.parse("2022-01-29T10:00:00")
 
                 val expected = Result.success(
-                    listOf
-                        (
+                    listOf(
                         Review("4", User(2, "user2"), ReviewState.COMMENTED, date1),
                         Review("5", User(2, "user2"), ReviewState.COMMENTED, date1),
                         Review("6", User(2, "user2"), ReviewState.APPROVED, date1),
-                    )
+                    ),
                 )
 
                 assertEquals(expected, actual)
@@ -58,23 +57,39 @@ class PullRequestRepositoryImpTest {
                 val actual = repository.getRequestedReviewers(
                     "example",
                     "example",
-                    "correctPullRequestNumber"
+                    "correctPullRequestNumber",
                 )
 
                 val expected = Result.success(
                     RequestedReviewersResponse(
-                        listOf
-                            (
+                        listOf(
                             RequestedReviewer(3, "user3"),
                             RequestedReviewer(4, "user4"),
-                        )
-                    )
+                        ),
+                    ),
                 )
 
                 assertEquals(expected, actual)
             }
         // TODO: Write tests with failure cases
-
     }
 
+    @Nested
+    inner class NotifyTest {
+
+        @Test
+        fun `GIVEN correct values WHEN notify THEN return success result`() = runTest {
+            val actual = repository.notify(
+                "exampleOwner",
+                "exampleRepo",
+                "correctPullRequestNumber",
+                "@ExampleUser",
+            )
+
+            val expected = Result.success(Unit)
+
+            assertEquals(expected, actual)
+        }
+        // TODO: Write tests with failure cases
+    }
 }
