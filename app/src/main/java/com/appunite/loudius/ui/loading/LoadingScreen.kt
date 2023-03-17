@@ -32,13 +32,22 @@ fun LoadingScreen(
             viewModel.onAction(LoadingAction.OnNavigateToPullRequests)
         }
     }
+    ResolveScreenToShow(showErrorScreen = state.showErrorScreen) {
+        viewModel.onAction(LoadingAction.OnTryAgainClick)
+    }
+}
 
-    if (state.showErrorScreen) {
+@Composable
+fun ResolveScreenToShow(
+    showErrorScreen: Boolean,
+    onTryAgainClick: () -> Unit
+) {
+    if (showErrorScreen) {
         ShowLoudiusErrorScreen {
-            viewModel.onAction(LoadingAction.OnTryAgainClick)
+            onTryAgainClick()
         }
     } else {
-        ShowLoadingIndicator()
+        LoudiusLoadingIndicator()
     }
 }
 
@@ -54,23 +63,18 @@ private fun ShowLoudiusErrorScreen(
     }
 }
 
-@Composable
-private fun ShowLoadingIndicator() {
-    LoudiusLoadingIndicator()
-}
-
 @Preview(showSystemUi = true)
 @Composable
 fun ShowLoudiusErrorScreenPreview() {
     LoudiusTheme {
-        ShowLoudiusErrorScreen {}
+        ResolveScreenToShow(showErrorScreen = true) {}
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun ShowLoudiusLoadingIndicatorPreview() {
+fun ShowLoadingIndicatorScreenPreview() {
     LoudiusTheme {
-        ShowLoadingIndicator()
+        ResolveScreenToShow(showErrorScreen = false) {}
     }
 }
