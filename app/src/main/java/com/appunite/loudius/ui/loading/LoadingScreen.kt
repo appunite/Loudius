@@ -40,7 +40,7 @@ fun LoadingScreen(
 @Composable
 fun ResolveScreenToShow(
     showErrorScreen: Boolean,
-    onTryAgainClick: () -> Unit
+    onTryAgainClick: () -> Unit,
 ) {
     if (showErrorScreen) {
         ShowLoudiusErrorScreen {
