@@ -31,7 +31,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `WHEN init THEN display pull requests list`() {
+    fun `WHEN init THEN display pull requests list`() = runTest {
         val viewModel = getViewModel()
 
         assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
@@ -48,7 +48,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() {
+    fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
         val viewModel = getViewModel()
 
@@ -60,7 +60,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN item id WHEN item click THEN redirect user`() {
+    fun `GIVEN item id WHEN item click THEN redirect user`() = runTest {
         val viewModel = getViewModel()
         assertNull(viewModel.state.navigateToReviewers)
         val pullRequest = Defaults.pullRequest()
@@ -77,7 +77,7 @@ class PullRequestsViewModelTest {
     }
 
     @Test
-    fun `GIVEN navigation payload WHEN navigating to reviewers THEN reset payload`() {
+    fun `GIVEN navigation payload WHEN navigating to reviewers THEN reset payload`() = runTest {
         val viewModel = getViewModel()
         val pullRequest = Defaults.pullRequest()
         viewModel.onAction(PulLRequestsAction.ItemClick(pullRequest.id))
