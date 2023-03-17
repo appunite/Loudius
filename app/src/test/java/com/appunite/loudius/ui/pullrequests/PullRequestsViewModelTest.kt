@@ -34,12 +34,7 @@ class PullRequestsViewModelTest {
     fun `WHEN init THEN display pull requests list`() {
         val viewModel = getViewModel()
 
-        assertEquals(
-            listOf(
-                Defaults.pullRequest(),
-            ),
-            viewModel.state.pullRequests,
-        )
+        assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
         assertFalse(viewModel.state.isLoading)
     }
 
@@ -48,6 +43,7 @@ class PullRequestsViewModelTest {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
         val viewModel = getViewModel()
 
+        assertEquals(emptyList<PullRequest>(), viewModel.state.pullRequests)
         assertTrue(viewModel.state.isError)
     }
 
@@ -55,18 +51,11 @@ class PullRequestsViewModelTest {
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() {
         pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
         val viewModel = getViewModel()
-        assertTrue(viewModel.state.isError)
-        assertEquals(emptyList<PullRequest>(), viewModel.state.pullRequests)
 
         pullRequestRepository.resetCurrentUserPullRequestAnswer()
         viewModel.onAction(PulLRequestsAction.RetryClick)
 
-        assertEquals(
-            listOf(
-                Defaults.pullRequest(),
-            ),
-            viewModel.state.pullRequests,
-        )
+        assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
         assertFalse(viewModel.state.isLoading)
     }
 
