@@ -12,10 +12,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDateTime
 
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
@@ -70,4 +70,31 @@ class PullRequestsViewModelTest {
         assertFalse(viewModel.state.isLoading)
     }
 
+    @Test
+    fun `GIVEN item id WHEN item click THEN redirect user`() {
+        val viewModel = getViewModel()
+        assertNull(viewModel.state.navigateToReviewers)
+        val pullRequest = Defaults.pullRequest()
+
+        viewModel.onAction(PulLRequestsAction.ItemClick(pullRequest.id))
+
+        val expected = NavigationPayload(
+            pullRequest.owner,
+            pullRequest.shortRepositoryName,
+            pullRequest.number.toString(),
+            pullRequest.createdAt.toString()
+        )
+        assertEquals(expected, viewModel.state.navigateToReviewers)
+    }
+
+    @Test
+    fun `GIVEN navigation payload WHEN navigating to reviewers THEN reset payload`() {
+        val viewModel = getViewModel()
+        val pullRequest = Defaults.pullRequest()
+        viewModel.onAction(PulLRequestsAction.ItemClick(pullRequest.id))
+
+        viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
+
+        assertNull(viewModel.state.navigateToReviewers)
+    }
 }
