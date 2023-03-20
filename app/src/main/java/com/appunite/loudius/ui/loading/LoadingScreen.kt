@@ -54,7 +54,7 @@ private fun ShowLoudiusErrorScreen(
     onTryAgainClick: () -> Unit,
 ) {
     LoudiusErrorScreen(
-        onButtonClick = { onTryAgainClick() }
+        onButtonClick = { onTryAgainClick() },
     )
 }
 
