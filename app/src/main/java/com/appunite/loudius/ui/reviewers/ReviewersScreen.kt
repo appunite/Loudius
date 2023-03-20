@@ -105,7 +105,7 @@ private fun ReviewersScreenStateless(
                 else -> ReviewersScreenContent(
                     reviewers = reviewers,
                     modifier = Modifier.padding(padding),
-                    onNotifyClick = onAction
+                    onNotifyClick = onAction,
                 )
             }
         },

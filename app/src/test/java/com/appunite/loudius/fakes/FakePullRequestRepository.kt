@@ -53,7 +53,7 @@ class FakePullRequestRepository : PullRequestRepository {
             ),
         )
         "failureOnlyOnRequestedReviewers", "notExistingPullRequestNumber" -> Result.failure(
-            WebException.UnknownError(404, null)
+            WebException.UnknownError(404, null),
         )
         else -> Result.success(RequestedReviewersResponse(emptyList()))
     }
