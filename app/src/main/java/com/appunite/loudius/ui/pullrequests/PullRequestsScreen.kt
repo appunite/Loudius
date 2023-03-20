@@ -33,6 +33,7 @@ import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
@@ -75,7 +76,7 @@ private fun PullRequestsScreenStateless(
                 buttonText = stringResource(R.string.try_again),
                 onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
             )
-            isLoading -> LoadingIndicator(modifier = Modifier.padding(padding))
+            isLoading -> LoudiusLoadingIndicator()
             else -> PullRequestsList(
                 pullRequests = pullRequests,
                 modifier = Modifier.padding(padding),
@@ -83,13 +84,6 @@ private fun PullRequestsScreenStateless(
             )
         }
     })
-}
-
-@Composable
-private fun LoadingIndicator(modifier: Modifier) {
-    Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
-        CircularProgressIndicator()
-    }
 }
 
 @Composable
