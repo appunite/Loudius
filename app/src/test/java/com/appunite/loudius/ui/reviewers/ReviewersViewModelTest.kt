@@ -186,12 +186,22 @@ class ReviewersViewModelTest {
     inner class OnActionTest {
 
         @Test
-        fun `GIVEN user login WHEN Notify action THEN show snackbar`() = runTest {
+        fun `WHEN successful notify action THEN show success snackbar`() = runTest {
             viewModel = createViewModel()
 
             viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
 
-            assertEquals(true, viewModel.state.snackbarTypeShown)
+            assertEquals(ReviewersSnackbarType.SUCCESS, viewModel.state.snackbarTypeShown)
+        }
+
+        @Test
+        fun `WHEN failed notify action THEN show failure snackbar`() = runTest {
+            every { savedStateHandle.get<String>("pull_request_number") } returns "nonExistingPullRequestNumber"
+            viewModel = createViewModel()
+
+            viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
+
+            assertEquals(ReviewersSnackbarType.FAILURE, viewModel.state.snackbarTypeShown)
         }
 
         @Test
@@ -202,7 +212,7 @@ class ReviewersViewModelTest {
                 viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
                 viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
 
-                assertEquals(false, viewModel.state.snackbarTypeShown)
+                assertEquals(null, viewModel.state.snackbarTypeShown)
             }
 
         @Test
