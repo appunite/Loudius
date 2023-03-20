@@ -125,7 +125,7 @@ class ReviewersViewModel @Inject constructor(
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyUser(action.userLogin)
-        is ReviewersAction.OnSnackbarDismiss -> state = state.copy(isSuccessSnackbarShown = false)
+        is ReviewersAction.OnSnackbarDismiss -> dismissSnackbar()
         is ReviewersAction.OnTryAgain -> fetchData(initialValues)
     }
 
@@ -138,6 +138,10 @@ class ReviewersViewModel @Inject constructor(
                     state = state.copy(isSuccessSnackbarShown = true)
                 }
         }
+    }
+
+    private fun dismissSnackbar() {
+        state = state.copy(isSuccessSnackbarShown = false)
     }
 
     private data class InitialValues(

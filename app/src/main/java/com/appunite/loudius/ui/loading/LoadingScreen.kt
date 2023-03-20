@@ -1,15 +1,16 @@
 package com.appunite.loudius.ui.loading
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
+import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun LoadingScreen(
@@ -31,13 +32,22 @@ fun LoadingScreen(
             viewModel.onAction(LoadingAction.OnNavigateToPullRequests)
         }
     }
+    LoadingScreenStateless(showErrorScreen = state.showErrorScreen) {
+        viewModel.onAction(LoadingAction.OnTryAgainClick)
+    }
+}
 
-    if (state.showErrorScreen) {
+@Composable
+fun LoadingScreenStateless(
+    showErrorScreen: Boolean,
+    onTryAgainClick: () -> Unit,
+) {
+    if (showErrorScreen) {
         ShowLoudiusErrorScreen {
-            viewModel.onAction(LoadingAction.OnTryAgainClick)
+            onTryAgainClick()
         }
     } else {
-        ShowLoadingIndicator(code = code)
+        LoudiusLoadingIndicator()
     }
 }
 
@@ -53,10 +63,18 @@ private fun ShowLoudiusErrorScreen(
     }
 }
 
+@Preview(showSystemUi = true)
 @Composable
-private fun ShowLoadingIndicator(code: String?) {
-    // TODO add loading indicator
-    Column {
-        Text(text = code ?: "code is already consumed")
+fun ShowLoudiusErrorScreenPreview() {
+    LoudiusTheme {
+        LoadingScreenStateless(showErrorScreen = true) {}
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun ShowLoadingIndicatorScreenPreview() {
+    LoudiusTheme {
+        LoadingScreenStateless(showErrorScreen = false) {}
     }
 }
