@@ -191,7 +191,7 @@ class ReviewersViewModelTest {
 
             viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
 
-            assertEquals(true, viewModel.state.isSuccessSnackbarShown)
+            assertEquals(true, viewModel.state.snackbarTypeShown)
         }
 
         @Test
@@ -202,7 +202,7 @@ class ReviewersViewModelTest {
                 viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
                 viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
 
-                assertEquals(false, viewModel.state.isSuccessSnackbarShown)
+                assertEquals(false, viewModel.state.snackbarTypeShown)
             }
 
         @Test

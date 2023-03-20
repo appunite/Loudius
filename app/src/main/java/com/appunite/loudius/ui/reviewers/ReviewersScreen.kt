@@ -42,7 +42,6 @@ fun ReviewersScreen(
 ) {
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage = stringResource(id = R.string.reviewers_snackbar_message)
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
@@ -53,30 +52,41 @@ fun ReviewersScreen(
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
     )
-    SnackbarLaunchedEffect(
-        isSuccessSnackbarShown = state.isSuccessSnackbarShown,
-        snackbarHostState = snackbarHostState,
-        snackbarMessage = snackbarMessage,
-        onSnackbarDismiss = viewModel::onAction,
-    )
+    if (state.snackbarTypeShown != null) {
+        SnackbarLaunchedEffect(
+            snackbarTypeShown = state.snackbarTypeShown,
+            snackbarHostState = snackbarHostState,
+            onSnackbarDismiss = viewModel::onAction,
+        )
+    }
 }
 
 @Composable
 private fun SnackbarLaunchedEffect(
-    isSuccessSnackbarShown: Boolean,
+    snackbarTypeShown: ReviewersSnackbarType,
     snackbarHostState: SnackbarHostState,
-    snackbarMessage: String,
     onSnackbarDismiss: (ReviewersAction) -> Unit,
 ) {
-    LaunchedEffect(isSuccessSnackbarShown) {
-        if (isSuccessSnackbarShown) {
-            val result = snackbarHostState.showSnackbar(message = snackbarMessage)
-            if (result == SnackbarResult.Dismissed) {
-                onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
-            }
+    val snackbarMessage = resolveSnackbarMessage(snackbarTypeShown)
+
+    LaunchedEffect(snackbarTypeShown) {
+        val result = when (snackbarTypeShown) {
+            ReviewersSnackbarType.FAILURE -> snackbarHostState.showSnackbar(message = snackbarMessage)
+            ReviewersSnackbarType.SUCCESS -> snackbarHostState.showSnackbar(message = snackbarMessage)
+        }
+        if (result == SnackbarResult.Dismissed) {
+            onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
         }
     }
 }
+
+@Composable
+private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
+    if (snackbarTypeShown == ReviewersSnackbarType.SUCCESS) {
+        stringResource(id = R.string.reviewers_snackbar_success)
+    } else {
+        stringResource(id = R.string.reviewers_snackbar_failure)
+    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

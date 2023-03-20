@@ -12,13 +12,15 @@ import com.appunite.loudius.domain.PullRequestRepository
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -29,10 +31,14 @@ sealed class ReviewersAction {
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
     val pullRequestNumber: String = "",
-    val isSuccessSnackbarShown: Boolean = false,
+    val snackbarTypeShown: ReviewersSnackbarType? = null,
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 )
+
+enum class ReviewersSnackbarType {
+    SUCCESS, FAILURE
+}
 
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
@@ -132,14 +138,13 @@ class ReviewersViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
-                .onSuccess {
-                    state = state.copy(isSuccessSnackbarShown = true)
-                }
+                .onSuccess { state = state.copy(snackbarTypeShown = SUCCESS) }
+                .onFailure { state = state.copy(snackbarTypeShown = FAILURE) }
         }
     }
 
     private fun dismissSnackbar() {
-        state = state.copy(isSuccessSnackbarShown = false)
+        state = state.copy(snackbarTypeShown = null)
     }
 
     private data class InitialValues(
