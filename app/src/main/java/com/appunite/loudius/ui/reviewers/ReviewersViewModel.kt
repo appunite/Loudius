@@ -13,12 +13,12 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -66,7 +66,7 @@ class ReviewersViewModel @Inject constructor(
 
     private suspend fun getMergedData(initialValues: InitialValues): Result<List<Reviewer>?> =
         coroutineScope {
-            state = state.copy(isLoading = true)
+            state = state.copy(isLoading = true, isError = false)
             val requestedReviewersDeferred = async { fetchRequestedReviewers(initialValues) }
             val reviewersDeferred = async { fetchReviews(initialValues) }
 
