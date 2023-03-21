@@ -32,7 +32,7 @@ class ReviewersViewModelTest {
     private val systemClockFixed =
         Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
 
-    private val repository: FakePullRequestRepository = FakePullRequestRepository()
+    private val repository = FakePullRequestRepository()
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true) {
         every { get<String>(any()) } returns "example"
         every { get<String>("submission_date") } returns "2022-01-29T08:00:00"
