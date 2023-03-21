@@ -1,6 +1,6 @@
 package com.appunite.loudius.domain
 
-import com.appunite.loudius.network.model.AccessTokenResponse
+import com.appunite.loudius.network.model.AccessToken
 
 interface AuthRepository {
 
@@ -8,7 +8,7 @@ interface AuthRepository {
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessTokenResponse>
+    ): Result<AccessToken>
 
-    fun getAccessToken(): String
+    fun getAccessToken(): AccessToken
 }

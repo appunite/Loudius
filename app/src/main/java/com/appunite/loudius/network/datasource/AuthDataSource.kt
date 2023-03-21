@@ -1,5 +1,7 @@
 package com.appunite.loudius.network.datasource
 
+import com.appunite.loudius.common.flatMap
+import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.utils.safeApiCall
@@ -12,7 +14,7 @@ interface AuthDataSource {
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessTokenResponse>
+    ): Result<AccessToken>
 }
 
 @Singleton
@@ -24,6 +26,18 @@ class AuthNetworkDataSource @Inject constructor(
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessTokenResponse> =
+    ): Result<AccessToken> =
         safeApiCall { authService.getAccessToken(clientId, clientSecret, code) }
+            .flatMap { response ->
+                response.accessToken?.let { token -> Result.success(token) }
+                    ?: Result.failure(response.mapErrorToException())
+            }
+
+    private fun AccessTokenResponse.mapErrorToException() = when (error) {
+        "bad_verification_code" -> BadVerificationCodeException
+        else -> UnknownGithubException
+    }
 }
+
+object BadVerificationCodeException : Exception()
+object UnknownGithubException : Exception()

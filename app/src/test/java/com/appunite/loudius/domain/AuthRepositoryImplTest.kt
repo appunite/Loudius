@@ -16,7 +16,7 @@ class AuthRepositoryImplTest {
     private val networkDataSource: AuthDataSource = mockk {
         coEvery {
             getAccessToken(any(), any(), any())
-        } returns Result.success(AccessTokenResponse("validAccessToken"))
+        } returns Result.success("validAccessToken")
     }
     private val localDataSource: UserLocalDataSource = mockk {
         every { getAccessToken() } returns "validAccessToken"
@@ -27,11 +27,11 @@ class AuthRepositoryImplTest {
     @Test
     fun `GIVEN fetch access token function WHEN processing THEN return success with new valid token`() =
         runTest {
-            val result = repository.fetchAccessToken("clientId", "clientSecret", "code")
+            val result = repository.fetchAccessToken("clientId", "clientSecret", "validCode")
 
             coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
             assertEquals(
-                Result.success(AccessTokenResponse("validAccessToken")),
+                Result.success("validAccessToken"),
                 result,
             ) { "Expected success result with valid access token" }
         }
@@ -39,7 +39,7 @@ class AuthRepositoryImplTest {
     @Test
     fun `GIVEN fetch access token WHEN processing THEN new token should be saved`() =
         runTest {
-            repository.fetchAccessToken("clientId", "clientSecret", "code")
+            repository.fetchAccessToken("clientId", "clientSecret", "validCode")
 
             coVerify(exactly = 1) { localDataSource.saveAccessToken("validAccessToken") }
         }

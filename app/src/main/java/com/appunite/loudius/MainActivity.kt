@@ -47,9 +47,15 @@ class MainActivity : ComponentActivity() {
                                 },
                             ),
                         ) {
-                            LoadingScreen(intent = intent) {
-                                navController.navigate(Screen.PullRequests.route)
-                            }
+                            LoadingScreen(
+                                intent = intent,
+                                onNavigateToPullRequest = {
+                                    navController.navigate(Screen.PullRequests.route)
+                                },
+                                onNavigateToLogin = {
+                                    navController.navigate(Screen.Login.route)
+                                },
+                            )
                         }
                         composable(route = Screen.PullRequests.route) {
                             PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime ->

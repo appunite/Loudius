@@ -2,6 +2,7 @@ package com.appunite.loudius.domain
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.appunite.loudius.network.model.AccessToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,9 +18,9 @@ class UserLocalDataSource @Inject constructor(@ApplicationContext context: Conte
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
-    fun saveAccessToken(accessToken: String) {
+    fun saveAccessToken(accessToken: AccessToken) {
         sharedPreferences.edit().putString(KEY_ACCESS_TOKEN, accessToken).apply()
     }
 
-    fun getAccessToken(): String = sharedPreferences.getString(KEY_ACCESS_TOKEN, null) ?: ""
+    fun getAccessToken(): AccessToken = sharedPreferences.getString(KEY_ACCESS_TOKEN, null) ?: ""
 }

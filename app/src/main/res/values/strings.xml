@@ -14,5 +14,7 @@
     <string name="ok">OK</string>
     <string name="error_image_desc">error image</string>
     <string name="try_again">Try again</string>
+    <string name="error_login_text">Something went wrong…\nYou need to log in again.</string>
+    <string name="go_to_login">Take me to login</string>
     <string name="reviewers_snackbar_message">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
 </resources>
