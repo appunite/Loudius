@@ -13,12 +13,12 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()

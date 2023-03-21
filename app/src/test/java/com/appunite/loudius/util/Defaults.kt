@@ -34,6 +34,4 @@ object Defaults {
         RequestedReviewer(3, "user3"),
         RequestedReviewer(4, "user4"),
     )
-
-
 }

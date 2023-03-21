@@ -11,7 +11,7 @@ class FakePullRequestRepository : PullRequestRepository {
 
     private val initialReviewsAnswer = Result.success(Defaults.reviews())
     private val initialRequestedReviewersAnswer = Result.success(
-        RequestedReviewersResponse(Defaults.requestedReviewers())
+        RequestedReviewersResponse(Defaults.requestedReviewers()),
     )
     private val initialPullRequestAnswer = Result.success(
         PullRequestsResponse(
@@ -34,7 +34,6 @@ class FakePullRequestRepository : PullRequestRepository {
         repo: String,
         pullRequestNumber: String,
     ): Result<List<Review>> = lazyReviewsAnswer()
-
 
     fun setReviewsAnswer(result: suspend () -> Result<List<Review>>) {
         lazyReviewsAnswer = result
