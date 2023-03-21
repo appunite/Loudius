@@ -32,6 +32,7 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.*
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
 
@@ -70,10 +71,7 @@ private fun SnackbarLaunchedEffect(
     val snackbarMessage = resolveSnackbarMessage(snackbarTypeShown)
 
     LaunchedEffect(snackbarTypeShown) {
-        val result = when (snackbarTypeShown) {
-            ReviewersSnackbarType.FAILURE -> snackbarHostState.showSnackbar(message = snackbarMessage)
-            ReviewersSnackbarType.SUCCESS -> snackbarHostState.showSnackbar(message = snackbarMessage)
-        }
+        val result = snackbarHostState.showSnackbar(message = snackbarMessage)
         if (result == SnackbarResult.Dismissed) {
             onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
         }
@@ -82,10 +80,9 @@ private fun SnackbarLaunchedEffect(
 
 @Composable
 private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
-    if (snackbarTypeShown == ReviewersSnackbarType.SUCCESS) {
-        stringResource(id = R.string.reviewers_snackbar_success)
-    } else {
-        stringResource(id = R.string.reviewers_snackbar_failure)
+    when (snackbarTypeShown) {
+        SUCCESS -> stringResource(id = R.string.reviewers_snackbar_success)
+        FAILURE -> stringResource(id = R.string.reviewers_snackbar_failure)
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
