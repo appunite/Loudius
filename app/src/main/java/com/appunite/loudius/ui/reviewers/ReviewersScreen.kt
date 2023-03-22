@@ -32,7 +32,8 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
-import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.*
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
 
