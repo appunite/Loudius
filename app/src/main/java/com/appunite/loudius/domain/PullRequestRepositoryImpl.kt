@@ -7,10 +7,9 @@ import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.User
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 
 interface PullRequestRepository {
     suspend fun getReviews(
@@ -48,7 +47,7 @@ class PullRequestRepositoryImpl @Inject constructor(
         owner: String,
         repo: String,
         pullRequestNumber: String,
-    ): Result<List<Review>> = withContext(coroutineContext) {
+    ): Result<List<Review>> = coroutineScope {
         val currentUserDeferred = async { userDataSource.getUser() }
         val reviewsDeferred = async {
             pullRequestsNetworkDataSource.getReviews(owner, repo, pullRequestNumber)
@@ -56,7 +55,7 @@ class PullRequestRepositoryImpl @Inject constructor(
         val currentUser = currentUserDeferred.await()
         val reviews = reviewsDeferred.await()
 
-        return@withContext currentUser.flatMap { user ->
+        currentUser.flatMap { user ->
             reviews.map { it.excludeUserReviews(user) }
         }
     }

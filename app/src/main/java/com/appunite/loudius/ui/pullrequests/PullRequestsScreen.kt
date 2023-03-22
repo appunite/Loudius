@@ -127,7 +127,7 @@ private fun PullRequestItem(
 @Composable
 private fun PullRequestIcon() {
     Image(
-        painter = painterResource(id = R.drawable.ic_share),
+        painter = painterResource(id = R.drawable.ic_pull_request),
         contentDescription = null,
         modifier = Modifier
             .padding(start = 18.dp, top = 10.dp)
