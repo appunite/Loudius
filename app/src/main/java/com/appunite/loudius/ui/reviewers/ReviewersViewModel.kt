@@ -13,12 +13,12 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -46,7 +46,7 @@ class ReviewersViewModel @Inject constructor(
 
     init {
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
-        fetchData(initialValues)
+        fetchData()
     }
 
     private fun getInitialValues(savedStateHandle: SavedStateHandle) = InitialValues(
@@ -56,19 +56,19 @@ class ReviewersViewModel @Inject constructor(
         checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg]),
     )
 
-    private fun fetchData(initialValues: InitialValues) {
+    private fun fetchData() {
         viewModelScope.launch {
-            getMergedData(initialValues)
+            getMergedData()
                 .onSuccess { state = state.copy(reviewers = it.orEmpty(), isLoading = false) }
                 .onFailure { state = state.copy(isError = true, isLoading = false) }
         }
     }
 
-    private suspend fun getMergedData(initialValues: InitialValues): Result<List<Reviewer>?> =
+    private suspend fun getMergedData(): Result<List<Reviewer>?> =
         coroutineScope {
             state = state.copy(isLoading = true, isError = false)
-            val requestedReviewersDeferred = async { fetchRequestedReviewers(initialValues) }
-            val reviewersDeferred = async { fetchReviews(initialValues) }
+            val requestedReviewersDeferred = async { fetchRequestedReviewers() }
+            val reviewersDeferred = async { fetchReviews() }
 
             val requestedReviewerResult = requestedReviewersDeferred.await()
             val reviewersResult = reviewersDeferred.await()
@@ -78,7 +78,7 @@ class ReviewersViewModel @Inject constructor(
             }
         }
 
-    private suspend fun fetchRequestedReviewers(initialValues: InitialValues): Result<List<Reviewer>> {
+    private suspend fun fetchRequestedReviewers(): Result<List<Reviewer>> {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
         return repository.getRequestedReviewers(owner, repo, pullRequestNumber)
@@ -93,7 +93,7 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchReviews(initialValues: InitialValues): Result<List<Reviewer>> {
+    private suspend fun fetchReviews(): Result<List<Reviewer>> {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
         return repository.getReviews(owner, repo, pullRequestNumber)
@@ -124,7 +124,7 @@ class ReviewersViewModel @Inject constructor(
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyUser(action.userLogin)
         is ReviewersAction.OnSnackbarDismiss -> dismissSnackbar()
-        is ReviewersAction.OnTryAgain -> fetchData(initialValues)
+        is ReviewersAction.OnTryAgain -> fetchData()
     }
 
     private fun notifyUser(userLogin: String) {
