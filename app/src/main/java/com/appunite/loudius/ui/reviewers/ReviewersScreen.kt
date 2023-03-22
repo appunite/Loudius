@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.domain.model.Reviewer
+import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
@@ -45,9 +47,11 @@ fun ReviewersScreen(
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         reviewers = state.reviewers,
+        isLoading = state.isLoading,
+        isError = state.isError,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
-        onNotifyClick = viewModel::onAction,
+        onAction = viewModel::onAction,
     )
     SnackbarLaunchedEffect(
         isSuccessSnackbarShown = state.isSuccessSnackbarShown,
@@ -79,9 +83,11 @@ private fun SnackbarLaunchedEffect(
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     reviewers: List<Reviewer>,
+    isLoading: Boolean,
+    isError: Boolean,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
-    onNotifyClick: (ReviewersAction) -> Unit,
+    onAction: (ReviewersAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -91,14 +97,18 @@ private fun ReviewersScreenStateless(
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        content = { padding ->
-            ReviewersScreenContent(
-                reviewers = reviewers,
-                modifier = Modifier.padding(padding),
-                onNotifyClick = onNotifyClick,
-            )
-        },
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        content = { padding ->
+            when {
+                isError -> LoudiusErrorScreen(onButtonClick = { onAction(ReviewersAction.OnTryAgain) })
+                isLoading -> LoudiusLoadingIndicator()
+                else -> ReviewersScreenContent(
+                    reviewers = reviewers,
+                    modifier = Modifier.padding(padding),
+                    onNotifyClick = onAction,
+                )
+            }
+        },
     )
 }
 
@@ -223,9 +233,11 @@ fun DetailsScreenPreview() {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
             reviewers = reviewers,
-            onNotifyClick = {},
-            snackbarHostState = SnackbarHostState(),
+            isError = false,
+            isLoading = false,
             onClickBackArrow = {},
+            snackbarHostState = SnackbarHostState(),
+            onAction = {},
         )
     }
 }

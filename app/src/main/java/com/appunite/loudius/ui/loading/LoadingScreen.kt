@@ -4,10 +4,8 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.theme.LoudiusTheme
@@ -56,11 +54,8 @@ private fun ShowLoudiusErrorScreen(
     onTryAgainClick: () -> Unit,
 ) {
     LoudiusErrorScreen(
-        errorText = stringResource(id = R.string.error_dialog_text),
-        buttonText = stringResource(id = R.string.try_again),
-    ) {
-        onTryAgainClick()
-    }
+        onButtonClick = { onTryAgainClick() },
+    )
 }
 
 @Preview(showSystemUi = true)

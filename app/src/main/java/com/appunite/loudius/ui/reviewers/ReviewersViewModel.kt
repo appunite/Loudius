@@ -7,45 +7,46 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Screen
+import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.PullRequestRepository
 import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
     object OnSnackbarDismiss : ReviewersAction()
+    object OnTryAgain : ReviewersAction()
 }
 
 data class ReviewersState(
     val reviewers: List<Reviewer> = emptyList(),
     val pullRequestNumber: String = "",
     val isSuccessSnackbarShown: Boolean = false,
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
 )
 
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private val initialValues: InitialValues = getInitialValues(savedStateHandle)
 
     var state by mutableStateOf(ReviewersState())
         private set
 
     init {
-        val initialValues = getInitialValues(savedStateHandle)
-
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
-
-        viewModelScope.launch {
-            fetchRequestedReviewers(initialValues)
-            fetchReviews(initialValues)
-        }
+        fetchData()
     }
 
     private fun getInitialValues(savedStateHandle: SavedStateHandle) = InitialValues(
@@ -55,14 +56,33 @@ class ReviewersViewModel @Inject constructor(
         checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg]),
     )
 
-    private suspend fun fetchRequestedReviewers(initialValues: InitialValues) {
+    private fun fetchData() {
+        viewModelScope.launch {
+            getMergedData()
+                .onSuccess { state = state.copy(reviewers = it.orEmpty(), isLoading = false) }
+                .onFailure { state = state.copy(isError = true, isLoading = false) }
+        }
+    }
+
+    private suspend fun getMergedData(): Result<List<Reviewer>?> =
+        coroutineScope {
+            state = state.copy(isLoading = true, isError = false)
+            val requestedReviewersDeferred = async { fetchRequestedReviewers() }
+            val reviewersDeferred = async { fetchReviews() }
+
+            val requestedReviewerResult = requestedReviewersDeferred.await()
+            val reviewersResult = reviewersDeferred.await()
+
+            requestedReviewerResult.flatMap { requestedReviewers ->
+                reviewersResult.map { it + requestedReviewers }
+            }
+        }
+
+    private suspend fun fetchRequestedReviewers(): Result<List<Reviewer>> {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
-        repository.getRequestedReviewers(owner, repo, pullRequestNumber)
-            .onSuccess { response ->
-                val reviewers = response.mapToReviewers(submissionTime)
-                state = state.copy(reviewers = state.reviewers + reviewers)
-            }
+        return repository.getRequestedReviewers(owner, repo, pullRequestNumber)
+            .map { it.mapToReviewers(submissionTime) }
     }
 
     private fun RequestedReviewersResponse.mapToReviewers(submissionTime: String): List<Reviewer> {
@@ -73,13 +93,11 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchReviews(initialValues: InitialValues) {
+    private suspend fun fetchReviews(): Result<List<Reviewer>> {
         val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
-        repository.getReviews(owner, repo, pullRequestNumber).onSuccess { reviews ->
-            val reviewersAfterReview = reviews.mapToReviewers(submissionTime)
-            state = state.copy(reviewers = state.reviewers + reviewersAfterReview)
-        }
+        return repository.getReviews(owner, repo, pullRequestNumber)
+            .map { it.mapToReviewers(submissionTime) }
     }
 
     private fun List<Review>.mapToReviewers(submissionTime: String): List<Reviewer> {
@@ -106,10 +124,11 @@ class ReviewersViewModel @Inject constructor(
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyUser(action.userLogin)
         is ReviewersAction.OnSnackbarDismiss -> dismissSnackbar()
+        is ReviewersAction.OnTryAgain -> fetchData()
     }
 
     private fun notifyUser(userLogin: String) {
-        val (owner, repo, pullRequestNumber) = getInitialValues(savedStateHandle)
+        val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")

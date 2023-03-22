@@ -69,8 +69,6 @@ private fun PullRequestsScreenStateless(
     }, content = { padding ->
         when {
             isError -> LoudiusErrorScreen(
-                errorText = stringResource(id = R.string.error_dialog_text),
-                buttonText = stringResource(R.string.try_again),
                 onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
             )
             isLoading -> LoudiusLoadingIndicator()
