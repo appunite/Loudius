@@ -38,7 +38,7 @@ class AuthNetworkDataSourceTest {
             //language=JSON
             val jsonResponse = """
             { "access_token": "validAccessToken" }
-        """.trimIndent()
+            """.trimIndent()
 
             mockWebServer.enqueue(
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
@@ -59,7 +59,7 @@ class AuthNetworkDataSourceTest {
             //language=JSON
             val jsonResponse = """
             { "error": "bad_verification_code" }
-        """.trimIndent()
+            """.trimIndent()
 
             mockWebServer.enqueue(
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
@@ -79,7 +79,7 @@ class AuthNetworkDataSourceTest {
             //language=JSON
             val jsonResponse = """
             { "error": "error" }
-        """.trimIndent()
+            """.trimIndent()
 
             mockWebServer.enqueue(
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
