@@ -5,6 +5,7 @@ package com.appunite.loudius.network.datasource
 import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
+import com.appunite.loudius.network.utils.WebException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
@@ -37,12 +38,12 @@ class AuthNetworkDataSourceTest {
         }
 
     @Test
-    fun `GIVEN incorrect data WHEN processing THEN return failure with UnknownGithubException`() =
+    fun `GIVEN incorrect data WHEN processing THEN return failure with UnknownError`() =
         runTest {
             val result = authNetworkDataSource.getAccessToken("", "", "")
 
             Assertions.assertEquals(
-                Result.failure<AccessToken>(UnknownGithubException),
+                Result.failure<AccessToken>(WebException.UnknownError(null, "error")),
                 result,
             )
         }

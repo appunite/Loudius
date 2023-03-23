@@ -4,6 +4,7 @@ import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
+import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,10 +37,10 @@ class AuthNetworkDataSource @Inject constructor(
                 }
             }
 
-    private fun AccessTokenResponse.mapErrorToException(): java.lang.Exception {
+    private fun AccessTokenResponse.mapErrorToException(): Exception {
         return when (error) {
             BAD_VERIFICATION_CODE_ERROR -> BadVerificationCodeException
-            else -> UnknownGithubException
+            else -> WebException.UnknownError(null, error)
         }
     }
 
@@ -49,4 +50,3 @@ class AuthNetworkDataSource @Inject constructor(
 }
 
 object BadVerificationCodeException : Exception()
-object UnknownGithubException : Exception()
