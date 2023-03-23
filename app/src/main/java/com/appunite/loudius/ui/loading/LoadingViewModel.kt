@@ -10,8 +10,8 @@ import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.domain.AuthRepository
 import com.appunite.loudius.network.datasource.BadVerificationCodeException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 sealed class LoadingAction {
 
@@ -82,13 +82,13 @@ class LoadingViewModel @Inject constructor(
                     navigateTo = LoadingScreenNavigation.NavigateToPullRequests,
                 )
             }.onFailure {
-                state = state.copy(
-                    errorScreenType = when (it) {
-                        is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
-                        else -> LoadingErrorType.GENERIC_ERROR
-                    },
-                )
+                state = state.copy(errorScreenType = resolveErrorType(it))
             }
         }
+    }
+
+    private fun resolveErrorType(it: Throwable) = when (it) {
+        is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
+        else -> LoadingErrorType.GENERIC_ERROR
     }
 }
