@@ -13,6 +13,7 @@ class LoadingViewModelTest {
     companion object {
         private const val EXAMPLE_CODE = "validCode"
         private const val EXAMPLE_INVALID_CODE = "invalidCode"
+        private const val EXAMPLE_CODE_LEADING_TO_UNEXPECTED_ERROR = "codeLeadingToUnexpectedError"
         private const val EXAMPLE_ACCESS_TOKEN = "validToken"
     }
 
@@ -59,7 +60,7 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN unexpected Github behavior WHEN setCodeAndGetAccessToken THEN show generic error screen`() {
-        viewModel.setCodeAndGetAccessToken("codeLeadingToUnexpectedError")
+        viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE_LEADING_TO_UNEXPECTED_ERROR)
 
         assertEquals(LoadingErrorType.GENERIC_ERROR, viewModel.state.errorScreenType)
         assertNull(viewModel.state.navigateTo)
