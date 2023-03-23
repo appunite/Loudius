@@ -29,8 +29,11 @@ class AuthNetworkDataSource @Inject constructor(
     ): Result<AccessToken> =
         safeApiCall { authService.getAccessToken(clientId, clientSecret, code) }
             .flatMap { response ->
-                response.accessToken?.let { token -> Result.success(token) }
-                    ?: Result.failure(response.mapErrorToException())
+                if (response.accessToken != null) {
+                    Result.success(response.accessToken)
+                } else {
+                    Result.failure(response.mapErrorToException())
+                }
             }
 
     private fun AccessTokenResponse.mapErrorToException(): java.lang.Exception {
