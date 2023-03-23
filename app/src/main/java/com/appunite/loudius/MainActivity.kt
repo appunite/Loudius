@@ -50,10 +50,14 @@ class MainActivity : ComponentActivity() {
                             LoadingScreen(
                                 intent = intent,
                                 onNavigateToPullRequest = {
-                                    navController.navigate(Screen.PullRequests.route)
+                                    navController.navigate(Screen.PullRequests.route) {
+                                        popUpTo(Screen.Login.route) { inclusive = true }
+                                    }
                                 },
                                 onNavigateToLogin = {
-                                    navController.navigate(Screen.Login.route)
+                                    navController.navigate(Screen.Login.route) {
+                                        popUpTo(Screen.Login.route) { inclusive = true }
+                                    }
                                 },
                             )
                         }
