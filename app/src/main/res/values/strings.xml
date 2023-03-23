@@ -17,4 +17,6 @@
     <string name="error_login_text">Something went wrong…\nYou need to log in again.</string>
     <string name="go_to_login">Take me to login</string>
     <string name="reviewers_snackbar_message">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
+    <string name="reviewers_snackbar_success">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
+    <string name="reviewers_snackbar_failure">Uh-oh, it seems that Loudius has taken a vacation. Don\'t worry, we\'re sending a postcard to bring it back ASAP!</string>
 </resources>
