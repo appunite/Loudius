@@ -32,6 +32,8 @@ import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
+import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.ui.utils.bottomBorder
 
@@ -42,7 +44,6 @@ fun ReviewersScreen(
 ) {
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage = stringResource(id = R.string.reviewers_snackbar_message)
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
@@ -53,30 +54,37 @@ fun ReviewersScreen(
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
     )
-    SnackbarLaunchedEffect(
-        isSuccessSnackbarShown = state.isSuccessSnackbarShown,
-        snackbarHostState = snackbarHostState,
-        snackbarMessage = snackbarMessage,
-        onSnackbarDismiss = viewModel::onAction,
-    )
+    if (state.snackbarTypeShown != null) {
+        SnackbarLaunchedEffect(
+            snackbarTypeShown = state.snackbarTypeShown,
+            snackbarHostState = snackbarHostState,
+            onSnackbarDismiss = viewModel::onAction,
+        )
+    }
 }
 
 @Composable
 private fun SnackbarLaunchedEffect(
-    isSuccessSnackbarShown: Boolean,
+    snackbarTypeShown: ReviewersSnackbarType,
     snackbarHostState: SnackbarHostState,
-    snackbarMessage: String,
     onSnackbarDismiss: (ReviewersAction) -> Unit,
 ) {
-    LaunchedEffect(isSuccessSnackbarShown) {
-        if (isSuccessSnackbarShown) {
-            val result = snackbarHostState.showSnackbar(message = snackbarMessage)
-            if (result == SnackbarResult.Dismissed) {
-                onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
-            }
+    val snackbarMessage = resolveSnackbarMessage(snackbarTypeShown)
+
+    LaunchedEffect(snackbarTypeShown) {
+        val result = snackbarHostState.showSnackbar(message = snackbarMessage)
+        if (result == SnackbarResult.Dismissed) {
+            onSnackbarDismiss(ReviewersAction.OnSnackbarDismiss)
         }
     }
 }
+
+@Composable
+private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
+    when (snackbarTypeShown) {
+        SUCCESS -> stringResource(id = R.string.reviewers_snackbar_success)
+        FAILURE -> stringResource(id = R.string.reviewers_snackbar_failure)
+    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
