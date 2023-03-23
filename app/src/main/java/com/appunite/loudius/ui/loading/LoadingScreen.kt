@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.theme.LoudiusTheme
@@ -15,6 +17,7 @@ fun LoadingScreen(
     intent: Intent,
     viewModel: LoadingViewModel = hiltViewModel(),
     onNavigateToPullRequest: () -> Unit,
+    onNavigateToLogin: () -> Unit,
 ) {
     val state = viewModel.state
     val code = intent.data?.getQueryParameter("code")
@@ -24,45 +27,67 @@ fun LoadingScreen(
             viewModel.setCodeAndGetAccessToken(it)
         }
     }
-    LaunchedEffect(key1 = state.navigateToPullRequests) {
-        state.navigateToPullRequests?.let {
-            onNavigateToPullRequest()
-            viewModel.onAction(LoadingAction.OnNavigateToPullRequests)
+    LaunchedEffect(key1 = state.navigateTo) {
+        when (state.navigateTo) {
+            LoadingScreenNavigation.NavigateToLogin -> {
+                onNavigateToLogin()
+                viewModel.onAction(LoadingAction.OnNavigate)
+            }
+            LoadingScreenNavigation.NavigateToPullRequests -> {
+                onNavigateToPullRequest()
+                viewModel.onAction(LoadingAction.OnNavigate)
+            }
+            null -> {}
         }
     }
-    LoadingScreenStateless(showErrorScreen = state.showErrorScreen) {
+    LoadingScreenStateless(errorScreenType = state.errorScreenType) {
         viewModel.onAction(LoadingAction.OnTryAgainClick)
     }
 }
 
 @Composable
 fun LoadingScreenStateless(
-    showErrorScreen: Boolean,
+    errorScreenType: LoadingErrorType?,
     onTryAgainClick: () -> Unit,
 ) {
-    if (showErrorScreen) {
-        ShowLoudiusErrorScreen {
-            onTryAgainClick()
-        }
-    } else {
-        LoudiusLoadingIndicator()
+    when (errorScreenType) {
+        LoadingErrorType.GENERIC_ERROR -> ShowLoudiusGenericErrorScreen(onTryAgainClick)
+        LoadingErrorType.LOGIN_ERROR -> ShowLoudiusLoginErrorScreen(onTryAgainClick)
+        else -> LoudiusLoadingIndicator()
     }
 }
 
 @Composable
-private fun ShowLoudiusErrorScreen(
+private fun ShowLoudiusLoginErrorScreen(
     onTryAgainClick: () -> Unit,
 ) {
     LoudiusErrorScreen(
-        onButtonClick = { onTryAgainClick() },
+        errorText = stringResource(id = R.string.error_login_text),
+        buttonText = stringResource(id = R.string.go_to_login),
+        onButtonClick = onTryAgainClick,
     )
+}
+
+@Composable
+private fun ShowLoudiusGenericErrorScreen(
+    onTryAgainClick: () -> Unit,
+) {
+    LoudiusErrorScreen(onButtonClick = onTryAgainClick)
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun ShowLoudiusErrorScreenPreview() {
+fun ShowLoudiusGenericErrorScreenPreview() {
     LoudiusTheme {
-        LoadingScreenStateless(showErrorScreen = true) {}
+        LoadingScreenStateless(errorScreenType = LoadingErrorType.GENERIC_ERROR) {}
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun ShowLoudiusLoginErrorScreenPreview() {
+    LoudiusTheme {
+        LoadingScreenStateless(errorScreenType = LoadingErrorType.LOGIN_ERROR) {}
     }
 }
 
@@ -70,6 +95,6 @@ fun ShowLoudiusErrorScreenPreview() {
 @Composable
 fun ShowLoadingIndicatorScreenPreview() {
     LoudiusTheme {
-        LoadingScreenStateless(showErrorScreen = false) {}
+        LoadingScreenStateless(errorScreenType = null) {}
     }
 }

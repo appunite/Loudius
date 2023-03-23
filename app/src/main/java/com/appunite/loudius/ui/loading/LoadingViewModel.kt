@@ -8,26 +8,34 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.domain.AuthRepository
-import com.appunite.loudius.network.model.AccessTokenResponse
+import com.appunite.loudius.network.datasource.BadVerificationCodeException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class LoadingAction {
 
-    object OnNavigateToPullRequests : LoadingAction()
+    object OnNavigate : LoadingAction()
 
     object OnTryAgainClick : LoadingAction()
+}
+
+enum class LoadingErrorType {
+    LOGIN_ERROR,
+    GENERIC_ERROR,
 }
 
 data class LoadingState(
     val accessToken: String? = null,
     val code: String? = null,
-    val navigateToPullRequests: NavigateToPullRequests? = null,
-    val showErrorScreen: Boolean = false,
+    val navigateTo: LoadingScreenNavigation? = null,
+    val errorScreenType: LoadingErrorType? = null,
 )
 
-object NavigateToPullRequests
+sealed class LoadingScreenNavigation {
+    object NavigateToPullRequests : LoadingScreenNavigation()
+    object NavigateToLogin : LoadingScreenNavigation()
+}
 
 @HiltViewModel
 class LoadingViewModel @Inject constructor(
@@ -44,18 +52,22 @@ class LoadingViewModel @Inject constructor(
 
     fun onAction(action: LoadingAction) = when (action) {
         is LoadingAction.OnTryAgainClick -> onTryAgain()
-        is LoadingAction.OnNavigateToPullRequests -> onNavigateToPullRequests()
+        is LoadingAction.OnNavigate -> onNavigate()
     }
 
     private fun onTryAgain() {
-        state = state.copy(showErrorScreen = false)
-        state.code?.let {
-            getAccessToken(it)
+        if (state.errorScreenType == LoadingErrorType.LOGIN_ERROR) {
+            state = state.copy(navigateTo = LoadingScreenNavigation.NavigateToLogin)
+        } else {
+            state = state.copy(errorScreenType = null)
+            state.code?.let {
+                getAccessToken(it)
+            }
         }
     }
 
-    private fun onNavigateToPullRequests() {
-        state = state.copy(navigateToPullRequests = null)
+    private fun onNavigate() {
+        state = state.copy(navigateTo = null)
     }
 
     private fun getAccessToken(code: String) {
@@ -65,20 +77,18 @@ class LoadingViewModel @Inject constructor(
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code,
             ).onSuccess { token ->
-                state = handleGetAccessTokenSuccess(token)
+                state = state.copy(
+                    accessToken = token,
+                    navigateTo = LoadingScreenNavigation.NavigateToPullRequests,
+                )
             }.onFailure {
-                state = state.copy(showErrorScreen = true)
+                state = state.copy(errorScreenType = resolveErrorType(it))
             }
         }
     }
 
-    private fun handleGetAccessTokenSuccess(token: AccessTokenResponse) =
-        if (token.accessToken != null) {
-            state.copy(
-                accessToken = token.accessToken,
-                navigateToPullRequests = NavigateToPullRequests,
-            )
-        } else {
-            state.copy(showErrorScreen = true)
-        }
+    private fun resolveErrorType(it: Throwable) = when (it) {
+        is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
+        else -> LoadingErrorType.GENERIC_ERROR
+    }
 }

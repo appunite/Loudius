@@ -7,7 +7,7 @@ sealed class WebException : Exception() {
     /**
      * Represents exception which comes from backend.
      */
-    data class UnknownError(val code: Int, override val message: String?) : WebException()
+    data class UnknownError(val code: Int?, override val message: String?) : WebException()
 
     /**
      * Represents web exception which can be thrown during network communication.
