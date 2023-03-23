@@ -17,7 +17,7 @@ class AuthNetworkDataSourceTest {
     @Test
     fun `GIVEN correct data WHEN processing THEN return success with new valid token`() =
         runTest {
-            val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "correct_code")
+            val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "correctCode")
 
             Assertions.assertEquals(
                 Result.success("validAccessToken"),
@@ -28,7 +28,7 @@ class AuthNetworkDataSourceTest {
     @Test
     fun `GIVEN incorrect access code WHEN accessing token THEN return failure with BadVerificationCodeException`() =
         runTest {
-            val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrect_code")
+            val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
 
             Assertions.assertEquals(
                 Result.failure<AccessToken>(BadVerificationCodeException),
@@ -54,8 +54,8 @@ class FakeAuthService : AuthService {
         clientSecret: String,
         code: String,
     ): AccessTokenResponse = when (code) {
-        "correct_code" -> AccessTokenResponse("validAccessToken")
-        "incorrect_code" -> AccessTokenResponse(null, "bad_verification_code")
+        "correctCode" -> AccessTokenResponse("validAccessToken")
+        "incorrectCode" -> AccessTokenResponse(null, "bad_verification_code")
         else -> AccessTokenResponse(null, "error")
     }
 }

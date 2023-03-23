@@ -59,7 +59,7 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN unexpected Github behavior WHEN setCodeAndGetAccessToken THEN show generic error screen`() {
-        viewModel.setCodeAndGetAccessToken("code_leading_to_unexpected_error")
+        viewModel.setCodeAndGetAccessToken("codeLeadingToUnexpectedError")
 
         assertEquals(LoadingErrorType.GENERIC_ERROR, viewModel.state.errorScreenType)
         assertNull(viewModel.state.navigateTo)
