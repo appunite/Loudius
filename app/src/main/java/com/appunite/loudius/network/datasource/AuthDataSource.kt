@@ -33,9 +33,15 @@ class AuthNetworkDataSource @Inject constructor(
                     ?: Result.failure(response.mapErrorToException())
             }
 
-    private fun AccessTokenResponse.mapErrorToException() = when (error) {
-        "bad_verification_code" -> BadVerificationCodeException
-        else -> UnknownGithubException
+    private fun AccessTokenResponse.mapErrorToException(): java.lang.Exception {
+        return when (error) {
+            BAD_VERIFICATION_CODE_ERROR -> BadVerificationCodeException
+            else -> UnknownGithubException
+        }
+    }
+
+    companion object {
+        private const val BAD_VERIFICATION_CODE_ERROR = "bad_verification_code"
     }
 }
 
