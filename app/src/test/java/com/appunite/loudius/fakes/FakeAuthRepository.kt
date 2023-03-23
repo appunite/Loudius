@@ -16,7 +16,6 @@ class FakeAuthRepository : AuthRepository {
         else -> Result.failure(UnknownGithubException)
     }
 
-
     override fun getAccessToken(): String {
         return "validToken"
     }

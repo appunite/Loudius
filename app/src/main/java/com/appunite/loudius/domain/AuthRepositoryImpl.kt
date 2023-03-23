@@ -2,7 +2,6 @@ package com.appunite.loudius.domain
 
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.model.AccessToken
-import com.appunite.loudius.network.model.AccessTokenResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

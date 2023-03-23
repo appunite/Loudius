@@ -52,7 +52,7 @@ class FakeAuthService : AuthService {
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): AccessTokenResponse = when (code) {
         "correct_code" -> AccessTokenResponse("validAccessToken")
         "incorrect_code" -> AccessTokenResponse(null, "bad_verification_code")

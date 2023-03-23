@@ -55,7 +55,7 @@ private fun ErrorText(text: String) {
         color = MaterialTheme.colorScheme.error,
         style = MaterialTheme.typography.titleLarge,
         textAlign = TextAlign.Center,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
 

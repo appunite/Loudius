@@ -1,7 +1,6 @@
 package com.appunite.loudius.domain
 
 import com.appunite.loudius.network.datasource.AuthDataSource
-import com.appunite.loudius.network.model.AccessTokenResponse
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
