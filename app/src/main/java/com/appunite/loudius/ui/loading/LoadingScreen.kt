@@ -51,7 +51,7 @@ fun LoadingScreenStateless(
     onTryAgainClick: () -> Unit,
 ) {
     when (errorScreenType) {
-        LoadingErrorType.GENERIC_ERROR -> ShowLoudiusErrorScreen(onTryAgainClick)
+        LoadingErrorType.GENERIC_ERROR -> ShowLoudiusGenericErrorScreen(onTryAgainClick)
         LoadingErrorType.LOGIN_ERROR -> ShowLoudiusLoginErrorScreen(onTryAgainClick)
         else -> LoudiusLoadingIndicator()
     }
@@ -64,18 +64,15 @@ private fun ShowLoudiusLoginErrorScreen(
     LoudiusErrorScreen(
         errorText = stringResource(id = R.string.error_login_text),
         buttonText = stringResource(id = R.string.go_to_login),
-    ) {
-        onTryAgainClick()
-    }
+        onButtonClick = onTryAgainClick,
+    )
 }
 
 @Composable
-private fun ShowLoudiusErrorScreen(
+private fun ShowLoudiusGenericErrorScreen(
     onTryAgainClick: () -> Unit,
 ) {
-    LoudiusErrorScreen(
-        onButtonClick = { onTryAgainClick() },
-    )
+    LoudiusErrorScreen(onButtonClick = onTryAgainClick)
 }
 
 @Preview(showSystemUi = true)
