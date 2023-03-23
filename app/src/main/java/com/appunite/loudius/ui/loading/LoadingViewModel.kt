@@ -52,7 +52,7 @@ class LoadingViewModel @Inject constructor(
 
     fun onAction(action: LoadingAction) = when (action) {
         is LoadingAction.OnTryAgainClick -> onTryAgain()
-        is LoadingAction.OnNavigate -> onNavigateToPullRequests()
+        is LoadingAction.OnNavigate -> onNavigate()
     }
 
     private fun onTryAgain() {
@@ -66,7 +66,7 @@ class LoadingViewModel @Inject constructor(
         }
     }
 
-    private fun onNavigateToPullRequests() {
+    private fun onNavigate() {
         state = state.copy(navigateTo = null)
     }
 
