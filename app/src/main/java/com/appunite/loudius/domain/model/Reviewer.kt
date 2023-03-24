@@ -6,4 +6,5 @@ data class Reviewer(
     val isReviewDone: Boolean,
     val hoursFromPRStart: Long,
     val hoursFromReviewDone: Long?,
+    val isLoading: Boolean = false,
 )

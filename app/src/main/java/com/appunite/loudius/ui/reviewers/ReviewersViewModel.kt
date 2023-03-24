@@ -15,12 +15,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -137,11 +137,25 @@ class ReviewersViewModel @Inject constructor(
         val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
+            state = state.copy(reviewers = updateReviewerLoadingState(userLogin, true))
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
-                .onSuccess { state = state.copy(snackbarTypeShown = SUCCESS) }
-                .onFailure { state = state.copy(snackbarTypeShown = FAILURE) }
+                .onSuccess {
+                    state = state.copy(
+                        snackbarTypeShown = SUCCESS,
+                        reviewers = updateReviewerLoadingState(userLogin, false)
+                    )
+                }
+                .onFailure {
+                    state = state.copy(
+                        snackbarTypeShown = FAILURE,
+                        reviewers = updateReviewerLoadingState(userLogin, false)
+                    )
+                }
         }
     }
+
+    private fun updateReviewerLoadingState(userLogin: String, isLoading: Boolean) =
+        state.reviewers.map { if (it.login == userLogin) it.copy(isLoading = isLoading) else it }
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)

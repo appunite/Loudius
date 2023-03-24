@@ -2,12 +2,15 @@ package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -19,8 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -166,8 +171,22 @@ private fun ReviewerItem(
             IsReviewedHeadlineText(reviewer)
             ReviewerName(reviewer)
         }
-        NotifyButton(Modifier.align(CenterVertically)) {
-            onNotifyClick(ReviewersAction.Notify(reviewer.login))
+        NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
+    }
+}
+
+@Composable
+private fun NotifyButtonOrLoadingIndicator(
+    reviewer: Reviewer,
+    onNotifyClick: (ReviewersAction) -> Unit
+) {
+    Box(contentAlignment = Center) {
+        NotifyButton(
+            modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f)
+        ) { onNotifyClick(ReviewersAction.Notify(reviewer.login)) }
+
+        if (reviewer.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.size(24.dp))
         }
     }
 }
@@ -234,7 +253,7 @@ private fun ReviewerViewPreview() {
 fun DetailsScreenPreview() {
     val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
     val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
-    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0)
+    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0, true)
     val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
     val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {

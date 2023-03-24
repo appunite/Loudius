@@ -49,7 +49,7 @@ fun PullRequestsScreen(
             viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
         }
     }
-    PullRequestsScreenStateless(
+        PullRequestsScreenStateless(
         pullRequests = state.pullRequests,
         onAction = viewModel::onAction,
         isLoading = state.isLoading,
