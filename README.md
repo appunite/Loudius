@@ -1,5 +1,5 @@
 # Loudius - Android experimental playground
-This project serves as an example Android project and a playground for experimenting with new architectures, solutions, and libraries. Functionalities of the app are simple. It uses GithubAPI and let's user ping his collaborators for a faster code review. 
+This project serves as an example Android project and a playground for experimenting with new architectures, solutions, and libraries. Functionalities of the app are simple. It uses GithubAPI and let's user ping his collaborators for a faster code review.
 
 ## Contributing
 We believe that there is no ideal code and that every code can be improved. Therefore, we welcome every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn from each other.
@@ -14,7 +14,7 @@ We have a few rules for experiments to keep everything organized and consistent:
 - The branch should be named after the experiment.
 - The experiment should not be merged into the develop branch.
 - The experiment should have a clear purpose and goal.
-- The experiment should not interfere with the stability of the existing codebase. 
+- The experiment should not interfere with the stability of the existing codebase.
 
 
 ### Example Experiment
