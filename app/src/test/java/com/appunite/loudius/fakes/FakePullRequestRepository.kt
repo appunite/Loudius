@@ -1,6 +1,6 @@
 package com.appunite.loudius.fakes
 
-import com.appunite.loudius.domain.PullRequestRepository
+import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review

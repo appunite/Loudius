@@ -1,7 +1,7 @@
 package com.appunite.loudius.di
 
-import com.appunite.loudius.domain.PullRequestRepository
-import com.appunite.loudius.domain.PullRequestRepositoryImpl
+import com.appunite.loudius.domain.repository.PullRequestRepository
+import com.appunite.loudius.domain.repository.PullRequestRepositoryImpl
 import com.appunite.loudius.network.datasource.PullRequestDataSource
 import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
 import com.appunite.loudius.network.datasource.UserDataSource

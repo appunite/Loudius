@@ -1,4 +1,4 @@
-package com.appunite.loudius.domain
+package com.appunite.loudius.domain.repository
 
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.network.datasource.PullRequestDataSource
