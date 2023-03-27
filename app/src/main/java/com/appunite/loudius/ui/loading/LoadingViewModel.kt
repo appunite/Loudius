@@ -10,8 +10,8 @@ import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.datasource.BadVerificationCodeException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed class LoadingAction {
 

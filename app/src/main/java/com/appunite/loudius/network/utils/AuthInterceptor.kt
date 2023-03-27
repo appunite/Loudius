@@ -1,9 +1,9 @@
 package com.appunite.loudius.network.utils
 
 import com.appunite.loudius.domain.repository.AuthRepository
-import javax.inject.Inject
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
     private val authRepository: AuthRepository,
