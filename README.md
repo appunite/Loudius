@@ -20,10 +20,10 @@ We have a few rules for experiments to keep everything organized and consistent:
 ### Example Experiment
 Here's an example of an experiment that meets our rules:
 
-Branch Name: experiment/user-profile-ui
-Purpose: To experiment with different UI components for the user profile screen.
-Goal: To improve the user experience and make the screen more visually appealing.
-Method: Test different UI components and layouts on the screen and collect user feedback.
+Branch Name: experiment/navigation-by-voyager-library
+Purpose: Check compose navigation with voyager library. Compare that with standard way.
+Goal: To resolve which navigation is better for compose. What are the pros and cons of each way.
+Method: Implement navigation with voyager library.
 
 ### How to set environmental variable on mac?
 1. Launch zsh (command `zsh`)
