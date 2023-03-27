@@ -1,6 +1,6 @@
 package com.appunite.loudius.fakes
 
-import com.appunite.loudius.domain.AuthRepository
+import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.datasource.BadVerificationCodeException
 import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.utils.WebException
