@@ -1,13 +1,35 @@
 # Loudius - Android experimental playground
-This project serves as an example Android project and a playground for experimenting with new architectures, solutions, and libraries. Functionalities of the app are simple. It uses GithubAPI and let's user ping his collaborators for a faster code review.
+
+This project serves as an example Android project and a playground for experimenting with new
+architectures, solutions, and libraries. Functionalities of the app are simple. It uses GithubAPI
+and let's user ping his collaborators for a faster code review.
 
 ## Contributing
-We believe that there is no ideal code and that every code can be improved. Therefore, we welcome every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn from each other.
+
+We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
+every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn
+from each other.
 
 ## Experiments
-We have a dedicated folder called experiments Every experiment should be on a separate branch, and the branch should be named after the experiment. We ask that experimental branches not be merged into the develop branch. Instead, they serve as an experiment, and if someone wants to see how it looks, they should checkout the experimental branch.
+
+Our project is designed for those who want to experiment with different solutions, architectures,
+and libraries in the Android development world. We believe that experimenting is the key to
+improving your skills and finding the best solutions for your needs.
+
+We encourage everyone to join us and create their own experiments. You can experiment with anything
+related to Android development - UI, performance, architecture, libraries, and more.
+
+To create your own experiment, simply download our repository, create a new branch, and start
+experimenting. Once you're done, create a pull request, and our community will review it. We believe
+that by sharing our experiments with each other, we can all learn and improve.
+
+We welcome all levels of experience in our community, whether you're a beginner or an expert. We're
+all here to learn and grow together.
+
+So come and join us in Loudius - Android experimental playground, and let's experiment together!
 
 ### Rules for Experiments
+
 We have a few rules for experiments to keep everything organized and consistent:
 
 - Every experiment should be on a separate branch in the experiment folder.
@@ -15,7 +37,6 @@ We have a few rules for experiments to keep everything organized and consistent:
 - The experiment should not be merged into the develop branch.
 - The experiment should have a clear purpose and goal.
 - The experiment should not interfere with the stability of the existing codebase.
-
 
 ### Example Experiment
 Here's an example of an experiment that meets our rules:
