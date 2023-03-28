@@ -43,10 +43,8 @@ class AuthNetworkDataSource @Inject constructor(
 
     private fun AccessTokenResponse.mapErrorToException(): Exception {
         return when (error) {
-            BAD_VERIFICATION_CODE_ERROR -> BadVerificationCodeException
+            BAD_VERIFICATION_CODE_ERROR -> WebException.BadVerificationCodeException
             else -> WebException.UnknownError(null, error)
         }
     }
 }
-
-object BadVerificationCodeException : Exception()
