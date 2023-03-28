@@ -6,6 +6,10 @@ import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.domain.repository.AuthRepositoryImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.AuthNetworkDataSource
+import com.appunite.loudius.network.datasource.PullRequestDataSource
+import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.UserDataSource
+import com.appunite.loudius.network.datasource.UserDataSourceImpl
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.services.UserService
@@ -14,43 +18,30 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object GithubModule {
+object DataSourceModule {
 
-    @Singleton
     @Provides
-    fun provideAuthService(@AuthAPI retrofit: Retrofit): AuthService =
-        retrofit.create(AuthService::class.java)
+    @Singleton
+    fun providePullRequestNetworkDataSource(service: PullRequestsService): PullRequestDataSource =
+        PullRequestsNetworkDataSource(service)
 
-    @Singleton
     @Provides
-    fun provideUserService(@BaseAPI retrofit: Retrofit): UserService =
-        retrofit.create(UserService::class.java)
-
     @Singleton
-    @Provides
-    fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =
-        retrofit.create(PullRequestsService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideAuthRepository(
-        authDataSource: AuthDataSource,
-        userLocalDataSource: UserLocalDataSource,
-    ): AuthRepository = AuthRepositoryImpl(authDataSource, userLocalDataSource)
-
-    @Singleton
-    @Provides
-    fun provideAuthServiceDataSource(
-        service: AuthService,
-    ): AuthDataSource = AuthNetworkDataSource(service)
+    fun provideUserDataSource(userService: UserService): UserDataSource =
+        UserDataSourceImpl(userService)
 
     @Singleton
     @Provides
     fun provideUserLocalDataSource(@ApplicationContext context: Context): UserLocalDataSource =
         UserLocalDataSource(context)
+
+    @Singleton
+    @Provides
+    fun provideAuthNetworkDataSource(
+        service: AuthService,
+    ): AuthDataSource = AuthNetworkDataSource(service)
 }
