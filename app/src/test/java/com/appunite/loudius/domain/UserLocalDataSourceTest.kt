@@ -2,6 +2,7 @@ package com.appunite.loudius.domain
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.appunite.loudius.domain.store.UserLocalDataSource
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

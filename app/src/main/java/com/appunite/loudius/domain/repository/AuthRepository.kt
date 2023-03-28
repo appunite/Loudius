@@ -1,6 +1,6 @@
 package com.appunite.loudius.domain.repository
 
-import com.appunite.loudius.domain.UserLocalDataSource
+import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.model.AccessToken
 import javax.inject.Inject
