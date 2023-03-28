@@ -1,4 +1,4 @@
-package com.appunite.loudius.domain.model
+package com.appunite.loudius.ui.reviewers
 
 data class Reviewer(
     val id: Int,
@@ -6,4 +6,5 @@ data class Reviewer(
     val isReviewDone: Boolean,
     val hoursFromPRStart: Long,
     val hoursFromReviewDone: Long?,
+    val isLoading: Boolean = false,
 )

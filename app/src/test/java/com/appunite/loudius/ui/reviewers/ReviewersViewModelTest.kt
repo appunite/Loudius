@@ -1,7 +1,6 @@
 package com.appunite.loudius.ui.reviewers
 
 import androidx.lifecycle.SavedStateHandle
-import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
@@ -15,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -190,9 +190,24 @@ class ReviewersViewModelTest {
         fun `WHEN successful notify action THEN show success snackbar`() = runTest {
             viewModel = createViewModel()
 
-            viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
+            viewModel.onAction(ReviewersAction.Notify("user1"))
 
             assertEquals(ReviewersSnackbarType.SUCCESS, viewModel.state.snackbarTypeShown)
+        }
+
+        @Test
+        fun `WHEN successful notify action THEN show loading indicator`() = runTest {
+            viewModel = createViewModel()
+            repository.setNotifyResponse { neverCompletingSuspension() }
+
+            viewModel.onAction(ReviewersAction.Notify("user1"))
+
+            assertTrue(
+                viewModel.state.reviewers.first { it.login == "user1" }.isLoading,
+            ) { "Clicked item should have loading indicator" }
+            assertTrue(
+                viewModel.state.reviewers.filterNot { it.login == "user1" }.none { it.isLoading },
+            ) { "Only clicked item should have loading indicator" }
         }
 
         @Test
@@ -200,7 +215,7 @@ class ReviewersViewModelTest {
             every { savedStateHandle.get<String>("pull_request_number") } returns "nonExistingPullRequestNumber"
             viewModel = createViewModel()
 
-            viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
+            viewModel.onAction(ReviewersAction.Notify("user1"))
 
             assertEquals(ReviewersSnackbarType.FAILURE, viewModel.state.snackbarTypeShown)
         }
@@ -210,7 +225,7 @@ class ReviewersViewModelTest {
             runTest {
                 viewModel = createViewModel()
 
-                viewModel.onAction(ReviewersAction.Notify("ExampleUser"))
+                viewModel.onAction(ReviewersAction.Notify("user1"))
                 viewModel.onAction(ReviewersAction.OnSnackbarDismiss)
 
                 assertNull(viewModel.state.snackbarTypeShown)

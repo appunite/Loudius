@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.PullRequestRepository
-import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
@@ -137,11 +136,25 @@ class ReviewersViewModel @Inject constructor(
         val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
+            state = state.copy(reviewers = updateReviewerLoadingState(userLogin, true))
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
-                .onSuccess { state = state.copy(snackbarTypeShown = SUCCESS) }
-                .onFailure { state = state.copy(snackbarTypeShown = FAILURE) }
+                .onSuccess {
+                    state = state.copy(
+                        snackbarTypeShown = SUCCESS,
+                        reviewers = updateReviewerLoadingState(userLogin, false),
+                    )
+                }
+                .onFailure {
+                    state = state.copy(
+                        snackbarTypeShown = FAILURE,
+                        reviewers = updateReviewerLoadingState(userLogin, false),
+                    )
+                }
         }
     }
+
+    private fun updateReviewerLoadingState(userLogin: String, isLoading: Boolean) =
+        state.reviewers.map { if (it.login == userLogin) it.copy(isLoading = isLoading) else it }
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
