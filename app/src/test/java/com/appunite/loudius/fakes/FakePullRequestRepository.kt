@@ -28,12 +28,11 @@ class FakePullRequestRepository : PullRequestRepository {
             when (pullRequestNumber) {
                 "correctPullRequestNumber" -> Result.success(Unit)
                 "notExistingPullRequestNumber" -> Result.failure(
-                    WebException.UnknownError(404, null)
+                    WebException.UnknownError(404, null),
                 )
                 else -> Result.failure(WebException.NetworkError())
             }
         }
-
 
     private var lazyReviewsAnswer: suspend () -> Result<List<Review>> = { initialReviewsAnswer }
     private var lazyRequestedReviewersAnswer: suspend () -> Result<RequestedReviewersResponse> =

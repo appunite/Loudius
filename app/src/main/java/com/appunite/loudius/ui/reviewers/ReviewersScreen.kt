@@ -177,12 +177,12 @@ private fun ReviewerItem(
 @Composable
 private fun NotifyButtonOrLoadingIndicator(
     reviewer: Reviewer,
-    onNotifyClick: (ReviewersAction) -> Unit
+    onNotifyClick: (ReviewersAction) -> Unit,
 ) {
     val buttonAlpha = if (reviewer.isLoading) 0f else 1f
     Box(contentAlignment = Center) {
         NotifyButton(
-            modifier = Modifier.alpha(buttonAlpha)
+            modifier = Modifier.alpha(buttonAlpha),
         ) { onNotifyClick(ReviewersAction.Notify(reviewer.login)) }
 
         if (reviewer.isLoading) {
