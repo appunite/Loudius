@@ -1,5 +1,6 @@
 package com.appunite.loudius.domain
 
+import com.appunite.loudius.domain.repository.PullRequestRepositoryImpl
 import com.appunite.loudius.fakes.FakePullRequestDataSource
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.model.RequestedReviewer

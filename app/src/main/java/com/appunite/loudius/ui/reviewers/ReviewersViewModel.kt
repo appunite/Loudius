@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.common.flatMap
-import com.appunite.loudius.domain.PullRequestRepository
+import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE

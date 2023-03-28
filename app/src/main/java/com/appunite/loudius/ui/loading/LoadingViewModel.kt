@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.common.Constants.CLIENT_ID
-import com.appunite.loudius.domain.AuthRepository
+import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.datasource.BadVerificationCodeException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

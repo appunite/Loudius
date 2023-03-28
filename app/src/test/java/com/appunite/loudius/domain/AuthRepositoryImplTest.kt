@@ -1,5 +1,7 @@
 package com.appunite.loudius.domain
 
+import com.appunite.loudius.domain.repository.AuthRepositoryImpl
+import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.network.datasource.AuthDataSource
 import io.mockk.coEvery
 import io.mockk.coVerify

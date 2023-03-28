@@ -1,6 +1,6 @@
 package com.appunite.loudius.network.utils
 
-import com.appunite.loudius.domain.AuthRepository
+import com.appunite.loudius.domain.repository.AuthRepository
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

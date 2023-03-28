@@ -1,10 +1,10 @@
 package com.appunite.loudius.di
 
-import com.appunite.loudius.domain.AuthRepository
-import com.appunite.loudius.domain.AuthRepositoryImpl
-import com.appunite.loudius.domain.PullRequestRepository
-import com.appunite.loudius.domain.PullRequestRepositoryImpl
-import com.appunite.loudius.domain.UserLocalDataSource
+import com.appunite.loudius.domain.repository.AuthRepository
+import com.appunite.loudius.domain.repository.AuthRepositoryImpl
+import com.appunite.loudius.domain.repository.PullRequestRepository
+import com.appunite.loudius.domain.repository.PullRequestRepositoryImpl
+import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.PullRequestDataSource
 import com.appunite.loudius.network.datasource.UserDataSource

@@ -1,4 +1,4 @@
-package com.appunite.loudius.domain
+package com.appunite.loudius.domain.store
 
 import android.content.Context
 import android.content.SharedPreferences

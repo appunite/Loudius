@@ -1,6 +1,6 @@
 package com.appunite.loudius.network
 
-import com.appunite.loudius.domain.AuthRepository
+import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.utils.AuthInterceptor
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
