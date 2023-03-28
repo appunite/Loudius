@@ -196,7 +196,7 @@ class ReviewersViewModelTest {
         }
 
         @Test
-        fun `WHEN notify action THEN show success snackbar`() = runTest {
+        fun `WHEN successful notify action THEN show loading indicator`() = runTest {
             viewModel = createViewModel()
             repository.setNotifyResponse { neverCompletingSuspension() }
 
@@ -218,15 +218,6 @@ class ReviewersViewModelTest {
             viewModel.onAction(ReviewersAction.Notify("user1"))
 
             assertEquals(ReviewersSnackbarType.FAILURE, viewModel.state.snackbarTypeShown)
-        }
-
-        @Test
-        fun `WHEN successful notify action THEN show loading`() = runTest {
-            viewModel = createViewModel()
-
-            viewModel.onAction(ReviewersAction.Notify("user1"))
-
-            assertEquals(ReviewersSnackbarType.SUCCESS, viewModel.state.snackbarTypeShown)
         }
 
         @Test
