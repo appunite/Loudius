@@ -1,7 +1,6 @@
 package com.appunite.loudius.ui.reviewers
 
 import androidx.lifecycle.SavedStateHandle
-import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException

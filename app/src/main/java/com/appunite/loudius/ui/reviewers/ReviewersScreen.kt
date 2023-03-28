@@ -33,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.domain.model.Reviewer
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusTopAppBar

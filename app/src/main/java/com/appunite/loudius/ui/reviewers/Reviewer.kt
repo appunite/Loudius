@@ -1,4 +1,4 @@
-package com.appunite.loudius.domain.model
+package com.appunite.loudius.ui.reviewers
 
 data class Reviewer(
     val id: Int,
