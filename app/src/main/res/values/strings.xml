@@ -19,4 +19,6 @@
     <string name="reviewers_snackbar_message">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
     <string name="reviewers_snackbar_success">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
     <string name="reviewers_snackbar_failure">Uh-oh, it seems that Loudius has taken a vacation. Don\'t worry, we\'re sending a postcard to bring it back ASAP!</string>
+    <string name="you_dont_have_any_pull_request">Sorry! Your list of pull requests is empty.\nGet back to work! 🧑‍💻</string>
+    <string name="you_dont_have_any_reviewers">Sorry! Your list of reviewers is empty.\n Go to pull request and mark your colleagues as the reviewers! 🤞</string>
 </resources>
