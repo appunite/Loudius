@@ -1,4 +1,4 @@
-package com.appunite.loudius.network.utils
+package com.appunite.loudius.network.model.error
 
 data class DefaultErrorResponse(
     val message: String,

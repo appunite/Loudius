@@ -23,6 +23,10 @@ class AuthNetworkDataSource @Inject constructor(
     private val authService: AuthService,
 ) : AuthDataSource {
 
+    companion object {
+        private const val BAD_VERIFICATION_CODE_ERROR = "bad_verification_code"
+    }
+
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
@@ -39,14 +43,8 @@ class AuthNetworkDataSource @Inject constructor(
 
     private fun AccessTokenResponse.mapErrorToException(): Exception {
         return when (error) {
-            BAD_VERIFICATION_CODE_ERROR -> BadVerificationCodeException
+            BAD_VERIFICATION_CODE_ERROR -> WebException.BadVerificationCodeException
             else -> WebException.UnknownError(null, error)
         }
     }
-
-    companion object {
-        private const val BAD_VERIFICATION_CODE_ERROR = "bad_verification_code"
-    }
 }
-
-object BadVerificationCodeException : Exception()

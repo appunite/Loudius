@@ -68,7 +68,7 @@ class AuthNetworkDataSourceTest {
             val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
 
             Assertions.assertEquals(
-                Result.failure<AccessToken>(BadVerificationCodeException),
+                Result.failure<AccessToken>(WebException.BadVerificationCodeException),
                 result,
             )
         }

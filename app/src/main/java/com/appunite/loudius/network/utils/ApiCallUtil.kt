@@ -1,5 +1,6 @@
 package com.appunite.loudius.network.utils
 
+import com.appunite.loudius.network.model.error.DefaultErrorResponse
 import com.google.gson.Gson
 import org.json.JSONException
 import retrofit2.HttpException
