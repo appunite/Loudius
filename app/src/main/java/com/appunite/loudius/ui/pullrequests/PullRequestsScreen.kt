@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +32,7 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
+import com.appunite.loudius.ui.components.LoudiusPlaceholderText
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
@@ -72,6 +74,7 @@ private fun PullRequestsScreenStateless(
                 onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
             )
             isLoading -> LoudiusLoadingIndicator()
+            pullRequests.isEmpty() -> EmptyListPlaceholder(padding)
             else -> PullRequestsList(
                 pullRequests = pullRequests,
                 modifier = Modifier.padding(padding),
@@ -145,6 +148,14 @@ private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
+}
+
+@Composable
+private fun EmptyListPlaceholder(padding: PaddingValues) {
+    LoudiusPlaceholderText(
+        textId = R.string.you_dont_have_any_pull_request,
+        padding = padding,
+    )
 }
 
 @Preview("Pull requests - filled list")
