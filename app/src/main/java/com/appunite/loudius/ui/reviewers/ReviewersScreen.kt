@@ -279,6 +279,7 @@ fun DetailsScreenPreview() {
         )
     }
 }
+
 @Preview
 @Composable
 fun DetailsScreenNoReviewsPreview() {
