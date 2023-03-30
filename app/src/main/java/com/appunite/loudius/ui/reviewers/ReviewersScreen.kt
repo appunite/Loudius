@@ -1,9 +1,26 @@
+/*
+ * Copyright 2023 AppUnite S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,6 +52,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
+import com.appunite.loudius.ui.components.LoudiusPlaceholderText
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
@@ -114,6 +132,7 @@ private fun ReviewersScreenStateless(
             when {
                 isError -> LoudiusErrorScreen(onButtonClick = { onAction(ReviewersAction.OnTryAgain) })
                 isLoading -> LoudiusLoadingIndicator()
+                reviewers.isEmpty() -> EmptyListPlaceholder(padding)
                 else -> ReviewersScreenContent(
                     reviewers = reviewers,
                     modifier = Modifier.padding(padding),
@@ -237,6 +256,14 @@ private fun NotifyButton(modifier: Modifier = Modifier, onNotifyClick: () -> Uni
     }
 }
 
+@Composable
+private fun EmptyListPlaceholder(padding: PaddingValues) {
+    LoudiusPlaceholderText(
+        textId = R.string.you_dont_have_any_reviewers,
+        padding = padding,
+    )
+}
+
 @Preview
 @Composable
 private fun ReviewerViewPreview() {
@@ -260,6 +287,22 @@ fun DetailsScreenPreview() {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
             reviewers = reviewers,
+            isError = false,
+            isLoading = false,
+            onClickBackArrow = {},
+            snackbarHostState = SnackbarHostState(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DetailsScreenNoReviewsPreview() {
+    LoudiusTheme {
+        ReviewersScreenStateless(
+            pullRequestNumber = "1",
+            reviewers = emptyList(),
             isError = false,
             isLoading = false,
             onClickBackArrow = {},
