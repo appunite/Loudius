@@ -14,6 +14,15 @@ knowledge about Android development. The main functionalities are:
 The small range of functionalities leads to the ease of understanding the code and conducting
 experiments with different development libraries and tools.
 
+## Tech/framework used
+
+- Jetpack Compose
+- Hilt
+- Kotlin Coroutines
+- Retrofit
+- OkHttp3
+- Gson
+
 ## Contributing
 
 We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
