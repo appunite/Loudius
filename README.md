@@ -1,5 +1,7 @@
 # Loudius - Android experimental playground
 
+## 📢 Project overview
+
 Our app is a sample Android application designed to showcase some solutions to the architecture,
 networking layer, and Jetpack Compose. It provides a basic user interface and functionality that can
 be expanded upon to suit specific needs.
@@ -14,7 +16,9 @@ knowledge about Android development. The main functionalities are:
 The small range of functionalities leads to the ease of understanding the code and conducting
 experiments with different development libraries and tools.
 
-## Tech/framework used
+https://user-images.githubusercontent.com/72873966/228913610-6cce166f-37dd-4443-a8c3-83f6bf5fc489.mov
+
+## ⚙️ Tech/framework used
 
 - Jetpack Compose
 - Hilt
@@ -23,13 +27,13 @@ experiments with different development libraries and tools.
 - OkHttp3
 - Gson
 
-## Contributing
+## 🧑🏻‍🎓 Contributing
 
 We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
 every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn
 from each other.
 
-## Experiments, the purpose of the project
+## 🔬 Experiments, the purpose of the project
 
 Our project is designed for those who want to experiment with different solutions, architectures,
 and libraries in the Android development world. We believe that experimenting is the key to
@@ -66,6 +70,10 @@ Purpose: Check compose navigation with voyager library. Compare that with standa
 Goal: To resolve which navigation is better for compose. What are the pros and cons of each way.
 Method: Implement navigation with voyager library.
 
+## 🚀 Project setup
+
+In order to properly start the application and use it, the CLIENT_SECRET environment variable must be set on your computer.
+
 ### How to set environmental variable on mac?
 
 1. Launch zsh (command `zsh`)
@@ -73,7 +81,7 @@ Method: Implement navigation with voyager library.
 3. `$ echo $CLIENT_SECRET`
 4. Restart your computer.
 
-### License
+## ⭐️ License
 
      Copyright (C) 2023 AppUnite
 
