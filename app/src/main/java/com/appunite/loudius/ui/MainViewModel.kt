@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class MainState(
-    val authFailureEvent: Unit? = null
+    val authFailureEvent: Unit? = null,
 )
 
 @HiltViewModel

@@ -60,7 +60,6 @@ class AuthFailureInterceptorTest {
             coVerify(exactly = 1) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 
-
     @Test
     fun `GIVEN authorized user WHEN making an api call THEN auth failure is not emitted`() =
         runTest {
@@ -74,7 +73,6 @@ class AuthFailureInterceptorTest {
             }
             coVerify(exactly = 0) { fakeAuthFailureHandler.emitAuthFailure() }
         }
-
 
     private interface TestApi {
 

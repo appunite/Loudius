@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(
             this@MainActivity,
             getString(R.string.user_unauthorized_message),
-            Toast.LENGTH_LONG
+            Toast.LENGTH_LONG,
         ).show()
     }
 }

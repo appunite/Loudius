@@ -26,16 +26,16 @@ import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 
 fun testOkHttpClient(
     authRepository: AuthRepository = FakeAuthRepository(),
-    authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl()
+    authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl(),
 ) = OkHttpClient.Builder()
     .connectTimeout(1, TimeUnit.SECONDS)
     .readTimeout(1, TimeUnit.SECONDS)
