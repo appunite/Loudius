@@ -30,6 +30,6 @@ class MainViewModel @Inject constructor(private val authFailureHandler: AuthFail
     }
 
     fun onAuthFailureHandled() {
-        state = state.copy(authFailureEvent = null)
+        state = MainState(null)
     }
 }
