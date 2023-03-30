@@ -1,18 +1,23 @@
 package com.appunite.loudius
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
+import com.appunite.loudius.ui.MainViewModel
 import com.appunite.loudius.ui.loading.LoadingScreen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
@@ -22,6 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -32,6 +39,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     val navController = rememberNavController()
+
+                    LaunchedEffect(viewModel.state.authFailureEvent) {
+                        navigateToLoginOnAuthFailure(navController)
+                    }
+
                     NavHost(
                         navController = navController,
                         startDestination = Screen.Login.route,
@@ -82,5 +94,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun navigateToLoginOnAuthFailure(navController: NavHostController) {
+        if (viewModel.state.authFailureEvent != null) {
+            showAuthFailureToast()
+            navController.navigate(Screen.Login.route) {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+            viewModel.onAuthFailureHandled()
+        }
+    }
+
+    private fun showAuthFailureToast() {
+        Toast.makeText(
+            this@MainActivity,
+            getString(R.string.user_unauthorized_message),
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
