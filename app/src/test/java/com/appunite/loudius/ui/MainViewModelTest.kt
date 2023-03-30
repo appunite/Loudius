@@ -28,10 +28,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class MainViewModelTest {
-
     private val authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl()
     private lateinit var viewModel: MainViewModel
-
 
     @Test
     fun `WHEN init THEN auth failure event is null`() = runTest {
@@ -56,5 +54,4 @@ class MainViewModelTest {
 
         assertEquals(null, viewModel.state.authFailureEvent)
     }
-
 }

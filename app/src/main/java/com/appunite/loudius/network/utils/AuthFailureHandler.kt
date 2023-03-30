@@ -14,10 +14,10 @@ interface AuthFailureHandler {
 @Singleton
 class AuthFailureHandlerImpl @Inject constructor() : AuthFailureHandler {
 
-    private val _logoutFlow = MutableSharedFlow<Unit>()
-    override val authFailureFlow: SharedFlow<Unit> = _logoutFlow
+    private val _authFailureFlow = MutableSharedFlow<Unit>()
+    override val authFailureFlow: SharedFlow<Unit> = _authFailureFlow
 
     override suspend fun emitAuthFailure() {
-        _logoutFlow.emit(Unit)
+        _authFailureFlow.emit(Unit)
     }
 }

@@ -42,16 +42,12 @@ object DataSourceModule {
 
     @Provides
     @Singleton
-    fun providePullRequestNetworkDataSource(
-        service: PullRequestsService,
-    ): PullRequestDataSource =
+    fun providePullRequestNetworkDataSource(service: PullRequestsService): PullRequestDataSource =
         PullRequestsNetworkDataSource(service)
 
     @Provides
     @Singleton
-    fun provideUserDataSource(
-        userService: UserService,
-    ): UserDataSource =
+    fun provideUserDataSource(userService: UserService): UserDataSource =
         UserDataSourceImpl(userService)
 
     @Singleton

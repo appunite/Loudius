@@ -18,9 +18,9 @@
 
 package com.appunite.loudius.network.intercept
 
-import com.appunite.loudius.fakes.FakeAuthFailureHandler
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.testOkHttpClient
+import com.appunite.loudius.network.utils.AuthFailureHandler
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +35,7 @@ import retrofit2.HttpException
 import retrofit2.http.GET
 
 class AuthFailureInterceptorTest {
-    private val fakeAuthFailureHandler: FakeAuthFailureHandler = mockk(relaxed = true)
+    private val fakeAuthFailureHandler: AuthFailureHandler = mockk(relaxed = true)
     private val testOkHttpClient = testOkHttpClient(authFailureHandler = fakeAuthFailureHandler)
     private val mockWebServer: MockWebServer = MockWebServer()
     private val service = retrofitTestDouble(
@@ -49,7 +49,7 @@ class AuthFailureInterceptorTest {
     }
 
     @Test
-    fun `GIVEN not authorized user WHEN making an api call THEN auth failure should be handled`() {
+    fun `GIVEN not authorized user WHEN making an api call THEN auth failure should be handled`() =
         runTest {
             val testDataJson = "{\"message\":\"AuthFailureResponse\"}"
             val failureResponse =
@@ -59,10 +59,10 @@ class AuthFailureInterceptorTest {
             assertThrows<HttpException> { service.makeARequest() }
             coVerify(exactly = 1) { fakeAuthFailureHandler.emitAuthFailure() }
         }
-    }
+
 
     @Test
-    fun `GIVEN authorized user WHEN making an api call THEN auth failure is not emitted`() {
+    fun `GIVEN authorized user WHEN making an api call THEN auth failure is not emitted`() =
         runTest {
             val testDataJson = "{\"message\":\"successResponse\"}"
             val successResponse =
@@ -74,7 +74,7 @@ class AuthFailureInterceptorTest {
             }
             coVerify(exactly = 0) { fakeAuthFailureHandler.emitAuthFailure() }
         }
-    }
+
 
     private interface TestApi {
 
