@@ -1,8 +1,18 @@
 # Loudius - Android experimental playground
 
-This project serves as an example Android project and a playground for experimenting with new
-architectures, solutions, and libraries. Functionalities of the app are simple. It uses GithubAPI
-and let's user ping his collaborators for a faster code review.
+Our app is a sample Android application designed to showcase some solutions to the architecture,
+networking layer, and Jetpack Compose. It provides a basic user interface and functionality that can
+be expanded upon to suit specific needs.
+
+The app is open-source and intended for use by developers who are interested in expanding their
+knowledge about Android development. The main functionalities are:
+
+- login through GitHub OAuth,
+- list user’s pull requests,
+- ping collaborators for a faster code review.
+
+The small range of functionalities leads to the ease of understanding the code and conducting
+experiments with different development libraries and tools.
 
 ## Contributing
 
@@ -10,7 +20,7 @@ We believe that there is no ideal code and that every code can be improved. Ther
 every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn
 from each other.
 
-## Experiments
+## Experiments, the purpose of the project
 
 Our project is designed for those who want to experiment with different solutions, architectures,
 and libraries in the Android development world. We believe that experimenting is the key to
@@ -20,13 +30,13 @@ We encourage everyone to join us and create their own experiments. You can exper
 related to Android development - UI, performance, architecture, libraries, and more.
 
 To create your own experiment, simply download our repository, create a new branch, and start
-experimenting. Once you're done, create a pull request, and our community will review it. We believe
-that by sharing our experiments with each other, we can all learn and improve.
+exploring. Once you're done, create a pull request, and our community will review it. We believe
+that by sharing our ideas with each other, we can all learn and improve.
 
 We welcome all levels of experience in our community, whether you're a beginner or an expert. We're
 all here to learn and grow together.
 
-So come and join us in Loudius - Android experimental playground, and let's experiment together!
+So come, join us in Loudius - Android experimental playground, and let's experiment together!
 
 ### Rules for Experiments
 
@@ -39,6 +49,7 @@ We have a few rules for experiments to keep everything organized and consistent:
 - The experiment should not interfere with the stability of the existing codebase.
 
 ### Example Experiment
+
 Here's an example of an experiment that meets our rules:
 
 Branch Name: experiment/navigation-by-voyager-library
@@ -47,11 +58,11 @@ Goal: To resolve which navigation is better for compose. What are the pros and c
 Method: Implement navigation with voyager library.
 
 ### How to set environmental variable on mac?
+
 1. Launch zsh (command `zsh`)
 2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
 3. `$ echo $CLIENT_SECRET`
 4. Restart your computer.
-
 
 ### License
 
