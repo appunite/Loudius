@@ -16,9 +16,11 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package com.appunite.loudius.network
+package com.appunite.loudius.network.intercept
 
 import com.appunite.loudius.fakes.FakeAuthRepository
+import com.appunite.loudius.network.retrofitTestDouble
+import com.appunite.loudius.network.testOkHttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.utils
+package com.appunite.loudius.network.intercept
 
 import com.appunite.loudius.domain.repository.AuthRepository
 import okhttp3.Interceptor
