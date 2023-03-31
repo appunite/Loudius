@@ -16,7 +16,7 @@ knowledge about Android development. The main functionalities are:
 The small range of functionalities leads to the ease of understanding the code and conducting
 experiments with different development libraries and tools.
 
-https://user-images.githubusercontent.com/72873966/229077972-0e22227f-e90c-43e2-a604-b23410da7da2.mov
+<https://user-images.githubusercontent.com/72873966/229077972-0e22227f-e90c-43e2-a604-b23410da7da2.mov>
 
 ## ⚙️ Tech/framework used
 
