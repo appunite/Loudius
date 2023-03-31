@@ -16,7 +16,7 @@ knowledge about Android development. The main functionalities are:
 The small range of functionalities leads to the ease of understanding the code and conducting
 experiments with different development libraries and tools.
 
-<https://user-images.githubusercontent.com/72873966/228913610-6cce166f-37dd-4443-a8c3-83f6bf5fc489.mov>
+https://user-images.githubusercontent.com/72873966/229077972-0e22227f-e90c-43e2-a604-b23410da7da2.mov
 
 ## ⚙️ Tech/framework used
 
@@ -26,12 +26,6 @@ experiments with different development libraries and tools.
 - Retrofit
 - OkHttp3
 - Gson
-
-## 🧑🏻‍🎓 Contributing
-
-We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
-every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn
-from each other.
 
 ## 🔬 Experiments, the purpose of the project
 
@@ -65,14 +59,14 @@ We have a few rules for experiments to keep everything organized and consistent:
 
 Here's an example of an experiment that meets our rules:
 
-Branch Name: experiment/navigation-by-voyager-library
-Purpose: Check compose navigation with voyager library. Compare that with standard way.
-Goal: To resolve which navigation is better for compose. What are the pros and cons of each way.
-Method: Implement navigation with voyager library.
+**Branch Name:** experiment/navigation-by-voyager-library\
+**Purpose:** Check compose navigation with voyager library. Compare that with standard way.\
+**Goal:** To resolve which navigation is better for compose. What are the pros and cons of each way.\
+**Method:** Implement navigation with voyager library.
 
 ## 🚀 Project setup
 
-In order to properly start the application and use it, the CLIENT_SECRET environment variable must be set on your computer.
+In order to properly start the application and use it, the CLIENT_SECRET environment variable must be set on your computer. CLIENT_SECRET is a GitHub client secret key provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
 ### How to set environmental variable on mac?
 
@@ -80,6 +74,12 @@ In order to properly start the application and use it, the CLIENT_SECRET environ
 2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
 3. `$ echo $CLIENT_SECRET`
 4. Restart your computer.
+
+## 🧑🏻‍🎓 Contributing
+
+We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
+every issue and new idea. We encourage you to open a new issue or pull request, as we can all learn
+from each other.
 
 ## ⭐️ License
 
