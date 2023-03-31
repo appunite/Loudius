@@ -17,17 +17,17 @@
 package com.appunite.loudius.network.intercept
 
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
 class AuthFailureInterceptor @Inject constructor(
     private val authFailureHandler: AuthFailureHandler,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Default
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
