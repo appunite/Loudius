@@ -34,6 +34,7 @@ class AuthFailureInterceptor @Inject constructor(
         val response = chain.proceed(request)
 
         if (response.code == 401) {
+            // question: wouldn't be better to have coroutines only in AuthFailureHandler?
             CoroutineScope(dispatcher).launch {
                 authFailureHandler.emitAuthFailure()
             }

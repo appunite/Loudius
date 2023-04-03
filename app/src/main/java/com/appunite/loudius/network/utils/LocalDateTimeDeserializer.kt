@@ -28,12 +28,14 @@ import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime> {
 
     override fun deserialize(
+        // suggestion: check which of those can be nullable, and which can't
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?,
     ): LocalDateTime {
         try {
             val dateString = json?.asJsonPrimitive?.asString
+            // bug: `dateString` can be null, in this case it will throw exception
             val offsetDateTime = OffsetDateTime.parse(dateString, ISO_OFFSET_DATE_TIME)
             return offsetDateTime.toLocalDateTime()
         } catch (e: Exception) {

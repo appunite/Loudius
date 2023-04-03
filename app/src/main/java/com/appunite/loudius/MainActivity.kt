@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen()
                         }
                         composable(
+                            // suggestion: repos screen and Loading screen names?
                             route = Screen.Repos.route,
                             deepLinks = listOf(
                                 navDeepLink {
@@ -76,18 +77,16 @@ class MainActivity : ComponentActivity() {
                             ),
                         ) {
                             LoadingScreen(
-                                intent = intent,
                                 onNavigateToPullRequest = {
                                     navController.navigate(Screen.PullRequests.route) {
                                         popUpTo(Screen.Login.route) { inclusive = true }
                                     }
                                 },
-                                onNavigateToLogin = {
-                                    navController.navigate(Screen.Login.route) {
-                                        popUpTo(Screen.Login.route) { inclusive = true }
-                                    }
-                                },
-                            )
+                            ) {
+                                navController.navigate(Screen.Login.route) {
+                                    popUpTo(Screen.Login.route) { inclusive = true }
+                                }
+                            }
                         }
                         composable(route = Screen.PullRequests.route) {
                             PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime ->

@@ -31,6 +31,8 @@ sealed class WebException : Exception() {
      */
     data class NetworkError(override val cause: Throwable? = null) : WebException()
 
+    // suggestion: having this exception that can happen in one place kept in common class, is not the best solution.
+    // if the app grows much bigger, than we will have here all exception for all API endpoints.
     /**
      * Thrown during authorization with incorrect verification code.
      */

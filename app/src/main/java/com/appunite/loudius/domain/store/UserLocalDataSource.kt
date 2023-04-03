@@ -26,6 +26,7 @@ import javax.inject.Singleton
 @Singleton
 class UserLocalDataSource @Inject constructor(@ApplicationContext context: Context) {
 
+    // suggestion: it would be nice if would use some encrypted credentials store
     companion object {
         private const val FILE_NAME = "com.appunite.loudius.sharedPreferences"
         private const val KEY_ACCESS_TOKEN = "access_token"

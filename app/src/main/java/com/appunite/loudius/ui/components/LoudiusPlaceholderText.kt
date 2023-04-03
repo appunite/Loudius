@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
+// Suggestion: I wouldn't pass padding here, instead of passing the padding, I'd wrap the item with additional box.
 @Composable
 fun LoudiusPlaceholderText(@StringRes textId: Int, padding: PaddingValues) {
     Box(

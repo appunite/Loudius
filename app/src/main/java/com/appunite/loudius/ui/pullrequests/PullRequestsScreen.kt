@@ -75,6 +75,13 @@ fun PullRequestsScreen(
     )
 }
 
+// question: what do you think about using sealed class so we will know in which state, what is provided. I think about something like:
+//sealed class Data {
+//    object Error : Data()
+//    object Loading : Data()
+//    data class Loaded(val pullRequests: List<PullRequest>) : Data()
+//}
+// this will ensure if `Error` comes, we don't have pullRequests and Loading indicator
 @Composable
 private fun PullRequestsScreenStateless(
     pullRequests: List<PullRequest>,
@@ -86,6 +93,7 @@ private fun PullRequestsScreenStateless(
         LoudiusTopAppBar(title = stringResource(R.string.app_name))
     }, content = { padding ->
         when {
+            // question: why those padding are sometimes ignored, why sometimes are used?
             isError -> LoudiusErrorScreen(
                 onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
             )
@@ -126,6 +134,8 @@ private fun PullRequestItem(
     darkBackground: Boolean,
     onClick: (PulLRequestsAction) -> Unit,
 ) {
+    // question: What do you think about creating some default LoudiusIconListItem(icon: xyz, title: "xyz", subtitle: "abc", isEven = true/false)
+    // or maybe something different that will re-use styles in this screen and ReviewersScreen
     val backgroundColor = if (darkBackground) {
         MaterialTheme.colorScheme.onSurface.copy(0.08f)
     } else {
@@ -140,11 +150,13 @@ private fun PullRequestItem(
         PullRequestIcon()
         RepoDetails(pullRequestTitle = data.title, repositoryName = data.fullRepositoryName)
     }
+    // Suggestion: divider here and in ReviewerScreen are done differently.
     Divider(color = MaterialTheme.colorScheme.outlineVariant)
 }
 
 @Composable
 private fun PullRequestIcon() {
+    // question: should this icon be 512dp/512dp, won't it take more memory?
     Image(
         painter = painterResource(id = R.drawable.ic_pull_request),
         contentDescription = null,

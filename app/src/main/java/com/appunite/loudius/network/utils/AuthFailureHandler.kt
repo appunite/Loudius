@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import javax.inject.Singleton
 
+// Question: Do we need this interface if there is only one implementation of it?
 interface AuthFailureHandler {
     suspend fun emitAuthFailure()
 

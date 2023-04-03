@@ -16,11 +16,14 @@
 
 package com.appunite.loudius.ui.loading
 
+import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController.Companion.KEY_DEEP_LINK_INTENT
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.domain.repository.AuthRepository
@@ -44,6 +47,8 @@ enum class LoadingErrorType {
 data class LoadingState(
     val accessToken: String? = null,
     val code: String? = null,
+    // question: I wonder if this is relly beneficial having actions in state. We need to manage
+    // them separately and also remember to clear them. I wonder what it gives us.
     val navigateTo: LoadingScreenNavigation? = null,
     val errorScreenType: LoadingErrorType? = null,
 )
@@ -56,16 +61,28 @@ sealed class LoadingScreenNavigation {
 @HiltViewModel
 class LoadingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     var state by mutableStateOf(LoadingState())
         private set
 
-    fun setCodeAndGetAccessToken(code: String) {
+    init {
+        // suggestion: much cleaner solution for retrieving code from intent than doing this is UI:
+        val intent : Intent? = savedStateHandle[KEY_DEEP_LINK_INTENT]
+        val code = intent?.data?.getQueryParameter("code")
+        if (code != null) {
+            setCodeAndGetAccessToken(code)
+        }
+        // morover we can move part of the logic to Screen.Xyz class
+    }
+
+    private fun setCodeAndGetAccessToken(code: String) {
         state = state.copy(code = code)
         getAccessToken(code)
     }
 
+    // question: I wonder, what gives as creating onAction, then just calling `onTryAgain()` and `onNavigate()` methods?
     fun onAction(action: LoadingAction) = when (action) {
         is LoadingAction.OnTryAgainClick -> onTryAgain()
         is LoadingAction.OnNavigate -> onNavigate()

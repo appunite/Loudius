@@ -16,10 +16,8 @@
 
 package com.appunite.loudius.ui.loading
 
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,21 +26,14 @@ import com.appunite.loudius.ui.components.LoudiusErrorScreen
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
+// suggestion: I think we could have a better name for this screen. Maybe "AuthorizingScreen" or "OAuthCodeExchangeScreen" ?
 @Composable
 fun LoadingScreen(
-    intent: Intent,
     viewModel: LoadingViewModel = hiltViewModel(),
     onNavigateToPullRequest: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
     val state = viewModel.state
-    val code = intent.data?.getQueryParameter("code")
-    val rememberedCode = rememberUpdatedState(newValue = code)
-    LaunchedEffect(key1 = rememberedCode) {
-        rememberedCode.value?.let {
-            viewModel.setCodeAndGetAccessToken(it)
-        }
-    }
     LaunchedEffect(key1 = state.navigateTo) {
         when (state.navigateTo) {
             LoadingScreenNavigation.NavigateToLogin -> {
@@ -75,6 +66,7 @@ fun LoadingScreenStateless(
 
 @Composable
 private fun ShowLoudiusLoginErrorScreen(
+    // suggestion: it's not try again, it's "Take me to login" ;p
     onTryAgainClick: () -> Unit,
 ) {
     LoudiusErrorScreen(

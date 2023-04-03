@@ -70,3 +70,14 @@ fun LoudiusTopAppBar() {
         )
     }
 }
+
+// Suggestion: add this, so we can verify UI with different states
+@Preview
+@Composable
+fun LoudiusTopAppBarWithoutBackButton() {
+    LoudiusTheme {
+        LoudiusTopAppBar(
+            title = "Loudius",
+        )
+    }
+}

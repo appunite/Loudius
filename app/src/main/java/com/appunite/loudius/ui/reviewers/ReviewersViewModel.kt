@@ -70,6 +70,7 @@ class ReviewersViewModel @Inject constructor(
         fetchData()
     }
 
+    // question: can we move this `getInitialValues` to `Screen.Reviewers` class?
     private fun getInitialValues(savedStateHandle: SavedStateHandle) = InitialValues(
         checkNotNull(savedStateHandle[Screen.Reviewers.ownerArg]),
         checkNotNull(savedStateHandle[Screen.Reviewers.repoArg]),
@@ -85,15 +86,21 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
+    // question: why there is nullable questionmark in the result?
     private suspend fun getMergedData(): Result<List<Reviewer>?> =
         coroutineScope {
+            // suggestion: part of updating state is in fetchData and part is in getMergedData, so
+            // non of those methods are stateless. This makes harder to understand them.
+
             state = state.copy(isLoading = true, isError = false)
+            // suggestion: it would be nice if we could split logic for downloading data and for preparing it for display.
             val requestedReviewersDeferred = async { fetchRequestedReviewers() }
             val reviewersDeferred = async { fetchReviews() }
 
             val requestedReviewerResult = requestedReviewersDeferred.await()
             val reviewersResult = reviewersDeferred.await()
 
+            // question: doesn't look correct. Why `requestedReviewers` is added multiple times?
             requestedReviewerResult.flatMap { requestedReviewers ->
                 reviewersResult.map { it + requestedReviewers }
             }
@@ -152,6 +159,7 @@ class ReviewersViewModel @Inject constructor(
         val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
+            // suggestion: it would be better to make `updateReviewerLoadingState` stateful or stateless, this will make it easier to understand.
             state = state.copy(reviewers = updateReviewerLoadingState(userLogin, true))
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess {

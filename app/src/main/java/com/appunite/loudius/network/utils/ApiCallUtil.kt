@@ -38,6 +38,9 @@ suspend fun <T> safeApiCall(
 }
 
 private fun getApiErrorMessageIfExist(throwable: HttpException) = try {
+    // suggestion: it would be better to re-use the same gson, instead of creating new one here with the default settings.
+    // suggestion: instead of using string(), it's optimal to use charStream
+    // bug: if error body is null, we shouldn't crash the app.
     val errorResponse = Gson().fromJson(
         throwable.response()?.errorBody()?.string(),
         DefaultErrorResponse::class.java,

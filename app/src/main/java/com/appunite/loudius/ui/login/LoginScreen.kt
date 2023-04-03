@@ -73,6 +73,7 @@ private fun startAuthorizing(context: Context) {
     context.startActivity(intent)
 }
 
+// Suggestion: this could be moved out from UI logic. I.e. it could be in Constnats file
 private fun buildAuthorizationUrl() = AUTH_API_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID + SCOPE_PARAM
 
 @Preview(showSystemUi = true, showBackground = true)
