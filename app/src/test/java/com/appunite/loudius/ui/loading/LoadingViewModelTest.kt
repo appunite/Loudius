@@ -16,8 +16,14 @@
 
 package com.appunite.loudius.ui.loading
 
+import android.content.Intent
+import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavController
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.util.MainDispatcherExtension
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -27,39 +33,40 @@ import org.junit.jupiter.api.extension.ExtendWith
 class LoadingViewModelTest {
 
     companion object {
-        private const val EXAMPLE_CODE = "validCode"
-        private const val EXAMPLE_INVALID_CODE = "invalidCode"
-        private const val EXAMPLE_CODE_LEADING_TO_UNEXPECTED_ERROR = "codeLeadingToUnexpectedError"
-        private const val EXAMPLE_ACCESS_TOKEN = "validToken"
     }
 
     private val repository: FakeAuthRepository = FakeAuthRepository()
-    private val viewModel = LoadingViewModel(repository)
+    private val savedStateHandle = SavedStateHandle()
+
+    private fun create() = LoadingViewModel(repository, savedStateHandle)
 
     @Test
     fun `GIVEN valid code WHEN setCodeAndGetAccessToken THEN set code, access token and navigate to pull requests`() {
-        viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
+        setupIntent()
+        val viewModel = create()
 
-        assertEquals(EXAMPLE_CODE, viewModel.state.code)
-        assertEquals(EXAMPLE_ACCESS_TOKEN, viewModel.state.accessToken)
+        assertEquals("validCode", viewModel.state.code)
+        assertEquals("validToken", viewModel.state.accessToken)
         assertEquals(LoadingScreenNavigation.NavigateToPullRequests, viewModel.state.navigateTo)
     }
 
     @Test
     fun `GIVEN OnTryAgain action WHEN onAction THEN set showErrorScreen and get access token`() {
+        setupIntent()
+        val viewModel = create()
         val action = LoadingAction.OnTryAgainClick
-        viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
 
         viewModel.onAction(action)
 
         assertNull(viewModel.state.errorScreenType)
-        assertEquals(EXAMPLE_ACCESS_TOKEN, viewModel.state.accessToken)
+        assertEquals("validToken", viewModel.state.accessToken)
     }
 
     @Test
     fun `GIVEN OnNavigateToPullRequests action WHEN onAction THEN set navigateToPullRequests to null`() {
+        setupIntent()
+        val viewModel = create()
         val action = LoadingAction.OnNavigate
-        viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE)
 
         viewModel.onAction(action)
 
@@ -68,7 +75,8 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN invalid code WHEN setCodeAndGetAccessToken THEN show login error screen`() {
-        viewModel.setCodeAndGetAccessToken(EXAMPLE_INVALID_CODE)
+        setupIntent(intentCode = "invalidCode")
+        val viewModel = create()
 
         assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
         assertNull(viewModel.state.navigateTo)
@@ -76,7 +84,8 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN unexpected Github behavior WHEN setCodeAndGetAccessToken THEN show generic error screen`() {
-        viewModel.setCodeAndGetAccessToken(EXAMPLE_CODE_LEADING_TO_UNEXPECTED_ERROR)
+        setupIntent(intentCode = "codeLeadingToUnexpectedError")
+        val viewModel = create()
 
         assertEquals(LoadingErrorType.GENERIC_ERROR, viewModel.state.errorScreenType)
         assertNull(viewModel.state.navigateTo)
@@ -84,10 +93,21 @@ class LoadingViewModelTest {
 
     @Test
     fun `GIVEN retry click WHEN logging in error THEN redirect to login screen`() {
-        viewModel.setCodeAndGetAccessToken(EXAMPLE_INVALID_CODE)
+        setupIntent(intentCode = "invalidCode")
+        val viewModel = create()
 
         viewModel.onAction(LoadingAction.OnTryAgainClick)
 
         assertEquals(LoadingScreenNavigation.NavigateToLogin, viewModel.state.navigateTo)
+    }
+
+    private fun setupIntent(intentCode: String = "validCode") {
+        val uri = mockk<Uri> {
+            every { getQueryParameter("code")} returns intentCode
+        }
+        val intent = mockk<Intent> {
+            every { data } returns uri
+        }
+        savedStateHandle[NavController.KEY_DEEP_LINK_INTENT] = intent
     }
 }

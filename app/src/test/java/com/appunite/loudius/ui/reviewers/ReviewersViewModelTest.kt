@@ -22,9 +22,13 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.utils.neverCompletingSuspension
+import io.mockk.clearMocks
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.spyk
+import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -49,7 +53,7 @@ class ReviewersViewModelTest {
     private val systemClockFixed =
         Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
 
-    private val repository = FakePullRequestRepository()
+    private val repository = spyk(FakePullRequestRepository())
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true) {
         every { get<String>(any()) } returns "example"
         every { get<String>("submission_date") } returns "2022-01-29T08:00:00"
@@ -95,7 +99,7 @@ class ReviewersViewModelTest {
 
         @Test
         fun `GIVEN correct initial values WHEN init starts THEN state is loading`() = runTest {
-            repository.setReviewsAnswer { neverCompletingSuspension() }
+            coEvery { repository.getReviews(any(), any(), any()) } coAnswers { neverCompletingSuspension() }
             viewModel = createViewModel()
 
             assertEquals(true, viewModel.state.isLoading)
@@ -104,10 +108,8 @@ class ReviewersViewModelTest {
 
         @Test
         fun `GIVEN no reviewers WHEN init THEN state is correct with no reviewers`() {
-            repository.setReviewsAnswer { Result.success(emptyList()) }
-            repository.setRequestedReviewersAnswer {
-                Result.success(RequestedReviewersResponse(emptyList()))
-            }
+            coEvery { repository.getReviews(any(), any(), any()) } returns Result.success(emptyList())
+            coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.success(RequestedReviewersResponse(emptyList()))
 
             viewModel = createViewModel()
 
@@ -135,7 +137,7 @@ class ReviewersViewModelTest {
         @Test
         fun `GIVEN reviewers with no review done WHEN init THEN list of reviewers is fetched`() =
             runTest {
-                repository.setReviewsAnswer { Result.success(emptyList()) }
+                coEvery { repository.getReviews(any(), any(), any()) } returns Result.success(emptyList())
                 viewModel = createViewModel()
 
                 val expected = listOf(
@@ -167,8 +169,8 @@ class ReviewersViewModelTest {
         @Test
         fun `WHEN there is an error during fetching data from 2 requests on init THEN error is shown`() =
             runTest {
-                repository.setReviewsAnswer { Result.failure(WebException.NetworkError()) }
-                repository.setRequestedReviewersAnswer { Result.failure(WebException.NetworkError()) }
+                coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
+                coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
                 assertEquals(true, viewModel.state.isError)
@@ -179,7 +181,7 @@ class ReviewersViewModelTest {
         @Test
         fun `WHEN there is an error during fetching data on init only from requested reviewers request THEN error is shown`() =
             runTest {
-                repository.setRequestedReviewersAnswer { Result.failure(WebException.NetworkError()) }
+                coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
                 assertEquals(true, viewModel.state.isError)
@@ -190,7 +192,7 @@ class ReviewersViewModelTest {
         @Test
         fun `WHEN there is an error during fetching data on init only from reviews request THEN error is shown`() =
             runTest {
-                repository.setReviewsAnswer { Result.failure(WebException.NetworkError()) }
+                coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
                 assertEquals(true, viewModel.state.isError)
@@ -250,12 +252,11 @@ class ReviewersViewModelTest {
         @Test
         fun `GIVEN error state WHEN on try again action with success result THEN state has reviewers`() =
             runTest {
-                repository.setReviewsAnswer { Result.failure(WebException.NetworkError()) }
-                repository.setRequestedReviewersAnswer { Result.failure(WebException.NetworkError()) }
+                coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
+                coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
-                repository.resetReviewsAnswer()
-                repository.resetRequestedReviewersAnswer()
+                clearMocks(repository)
                 viewModel.onAction(ReviewersAction.OnTryAgain)
 
                 val expected = listOf(
@@ -274,8 +275,8 @@ class ReviewersViewModelTest {
         @Test
         fun `GIVEN error state WHEN on try again action with failure result THEN error is shown`() =
             runTest {
-                repository.setReviewsAnswer { Result.failure(WebException.NetworkError()) }
-                repository.setRequestedReviewersAnswer { Result.failure(WebException.NetworkError()) }
+                coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
+                coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
                 viewModel.onAction(ReviewersAction.OnTryAgain)

@@ -23,6 +23,7 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 
+// suggestion: this become a little to comples. I think we need to consider rewriting this
 class FakePullRequestRepository : PullRequestRepository {
 
     private val initialReviewsAnswer = Result.success(Defaults.reviews())

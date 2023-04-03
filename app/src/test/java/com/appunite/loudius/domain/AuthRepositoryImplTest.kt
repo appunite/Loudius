@@ -35,14 +35,16 @@ class AuthRepositoryImplTest {
             getAccessToken(any(), any(), any())
         } returns Result.success("validAccessToken")
     }
+    // suggestion: this should be fake instead of mock, it would be easier to test the app
     private val localDataSource: UserLocalDataSource = mockk {
-        every { getAccessToken() } returns "validAccessToken"
-        every { saveAccessToken(any()) } returns Unit
+        var token = ""
+        every { getAccessToken() } answers { token }
+        every { saveAccessToken(any()) } answers { token = arg(0) }
     }
     private val repository = AuthRepositoryImpl(networkDataSource, localDataSource)
 
     @Test
-    fun `GIVEN fetch access token function WHEN processing THEN return success with new valid token`() =
+    fun `GIVEN code is valid WHEN fetching access token THEN return success with new valid token`() =
         runTest {
             val result = repository.fetchAccessToken("clientId", "clientSecret", "validCode")
 
@@ -54,15 +56,18 @@ class AuthRepositoryImplTest {
         }
 
     @Test
-    fun `GIVEN fetch access token WHEN processing THEN new token should be saved`() =
+    fun `GIVEN code is valid WHEN fetching access token THEN THEN new token should be stored`() =
         runTest {
             repository.fetchAccessToken("clientId", "clientSecret", "validCode")
 
-            coVerify(exactly = 1) { localDataSource.saveAccessToken("validAccessToken") }
+            val result = repository.getAccessToken()
+            assertEquals("validAccessToken", result) { "Expected valid access token" }
         }
 
     @Test
     fun `GIVEN token stored WHEN getting access token THEN return stored access token`() = runTest {
+        localDataSource.saveAccessToken("validAccessToken")
+
         val result = repository.getAccessToken()
 
         assertEquals("validAccessToken", result) { "Expected valid access token" }
@@ -71,8 +76,6 @@ class AuthRepositoryImplTest {
     @Test
     fun `GIVEN not stored access token WHEN getting access token THEN return empty string`() =
         runTest {
-            every { repository.getAccessToken() } returns ""
-
             val result = repository.getAccessToken()
 
             assertEquals("", result) { "Expected empty string" }

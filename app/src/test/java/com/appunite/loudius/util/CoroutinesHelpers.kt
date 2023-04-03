@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// chore: fix package name
 package com.appunite.loudius.utils
 
 import kotlinx.coroutines.suspendCancellableCoroutine

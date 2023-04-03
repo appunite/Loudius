@@ -45,7 +45,9 @@ enum class LoadingErrorType {
 }
 
 data class LoadingState(
+    // question: why do we need this token in the state?
     val accessToken: String? = null,
+    // suggestion: we can remove this code from the state
     val code: String? = null,
     // question: I wonder if this is relly beneficial having actions in state. We need to manage
     // them separately and also remember to clear them. I wonder what it gives us.

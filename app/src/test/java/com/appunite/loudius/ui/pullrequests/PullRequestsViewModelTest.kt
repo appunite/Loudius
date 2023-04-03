@@ -24,6 +24,7 @@ import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.utils.neverCompletingSuspension
+import io.mockk.mockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -43,6 +44,7 @@ class PullRequestsViewModelTest {
         pullRequestRepository.setCurrentUserPullRequests { neverCompletingSuspension() }
         val viewModel = createViewModel()
 
+        mockkObject()
         assertTrue(viewModel.state.isLoading)
     }
 
@@ -50,6 +52,7 @@ class PullRequestsViewModelTest {
     fun `WHEN init THEN display pull requests list`() = runTest {
         val viewModel = createViewModel()
 
+        // I think it would be better to test non empty list there
         assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
         assertFalse(viewModel.state.isLoading)
     }
