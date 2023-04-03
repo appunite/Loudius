@@ -103,7 +103,7 @@ class LoadingViewModelTest {
 
     private fun setupIntent(intentCode: String = "validCode") {
         val uri = mockk<Uri> {
-            every { getQueryParameter("code")} returns intentCode
+            every { getQueryParameter("code") } returns intentCode
         }
         val intent = mockk<Intent> {
             every { data } returns uri

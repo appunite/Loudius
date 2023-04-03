@@ -35,6 +35,7 @@ class AuthRepositoryImplTest {
             getAccessToken(any(), any(), any())
         } returns Result.success("validAccessToken")
     }
+
     // suggestion: this should be fake instead of mock, it would be easier to test the app
     private val localDataSource: UserLocalDataSource = mockk {
         var token = ""

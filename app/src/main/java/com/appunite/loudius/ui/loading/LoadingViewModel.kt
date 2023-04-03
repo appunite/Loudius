@@ -71,7 +71,7 @@ class LoadingViewModel @Inject constructor(
 
     init {
         // suggestion: much cleaner solution for retrieving code from intent than doing this is UI:
-        val intent : Intent? = savedStateHandle[KEY_DEEP_LINK_INTENT]
+        val intent: Intent? = savedStateHandle[KEY_DEEP_LINK_INTENT]
         val code = intent?.data?.getQueryParameter("code")
         if (code != null) {
             setCodeAndGetAccessToken(code)

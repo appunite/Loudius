@@ -40,7 +40,6 @@ class FakeSharedPreferences : SharedPreferences {
         override fun apply() {
             map.putAll(updates)
         }
-
     }
     override fun getAll(): MutableMap<String, *> = TODO("Not yet implemented")
 
@@ -66,5 +65,4 @@ class FakeSharedPreferences : SharedPreferences {
 
     override fun unregisterOnSharedPreferenceChangeListener(p0: SharedPreferences.OnSharedPreferenceChangeListener?): Unit =
         TODO("Not yet implemented")
-
 }

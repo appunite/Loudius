@@ -76,11 +76,11 @@ fun PullRequestsScreen(
 }
 
 // question: what do you think about using sealed class so we will know in which state, what is provided. I think about something like:
-//sealed class Data {
+// sealed class Data {
 //    object Error : Data()
 //    object Loading : Data()
 //    data class Loaded(val pullRequests: List<PullRequest>) : Data()
-//}
+// }
 // this will ensure if `Error` comes, we don't have pullRequests and Loading indicator
 @Composable
 private fun PullRequestsScreenStateless(
