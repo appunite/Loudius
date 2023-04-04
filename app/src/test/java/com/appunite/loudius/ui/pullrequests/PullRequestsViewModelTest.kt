@@ -24,6 +24,9 @@ import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.utils.neverCompletingSuspension
+import io.mockk.clearMocks
+import io.mockk.coEvery
+import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -35,12 +38,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
-    private val pullRequestRepository = FakePullRequestRepository()
+    private val pullRequestRepository = spyk(FakePullRequestRepository())
     private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
 
     @Test
     fun `WHEN init THEN display loading`() = runTest {
-        pullRequestRepository.setCurrentUserPullRequests { neverCompletingSuspension() }
+        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { neverCompletingSuspension() }
+
         val viewModel = createViewModel()
 
         assertTrue(viewModel.state.isLoading)
@@ -56,7 +60,7 @@ class PullRequestsViewModelTest {
 
     @Test
     fun `WHEN fetching data failed on init THEN display error`() = runTest {
-        pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
+        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { Result.failure(WebException.NetworkError()) }
         val viewModel = createViewModel()
 
         assertEquals(emptyList<PullRequest>(), viewModel.state.pullRequests)
@@ -65,10 +69,10 @@ class PullRequestsViewModelTest {
 
     @Test
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
-        pullRequestRepository.setCurrentUserPullRequests { Result.failure(WebException.NetworkError()) }
+        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { Result.failure(WebException.NetworkError()) }
         val viewModel = createViewModel()
 
-        pullRequestRepository.resetCurrentUserPullRequestAnswer()
+        clearMocks(pullRequestRepository)
         viewModel.onAction(PulLRequestsAction.RetryClick)
 
         assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
