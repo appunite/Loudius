@@ -17,6 +17,7 @@
 package com.appunite.loudius.util
 
 import com.appunite.loudius.network.model.PullRequest
+import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
@@ -49,5 +50,11 @@ object Defaults {
     fun requestedReviewers() = listOf(
         RequestedReviewer(3, "user3"),
         RequestedReviewer(4, "user4"),
+    )
+
+    fun pullRequestsResponse() = PullRequestsResponse(
+        incompleteResults = false,
+        totalCount = 1,
+        items = listOf(pullRequest()),
     )
 }

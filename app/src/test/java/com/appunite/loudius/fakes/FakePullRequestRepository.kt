@@ -38,13 +38,7 @@ class FakePullRequestRepository : PullRequestRepository {
         Result.success(RequestedReviewersResponse(Defaults.requestedReviewers()))
 
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> =
-        Result.success(
-            PullRequestsResponse(
-                incompleteResults = false,
-                totalCount = 1,
-                items = listOf(Defaults.pullRequest()),
-            ),
-        )
+        Result.success(Defaults.pullRequestsResponse())
 
     override suspend fun notify(
         owner: String,

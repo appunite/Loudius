@@ -24,6 +24,7 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.util.Defaults
 import java.time.LocalDateTime
 
 class FakePullRequestDataSource : PullRequestDataSource {
@@ -45,8 +46,7 @@ class FakePullRequestDataSource : PullRequestDataSource {
                 Review("6", User(2, "user2"), ReviewState.APPROVED, date1),
             ),
         )
-        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
-        else -> Result.success(emptyList())
+        else -> Result.failure(WebException.UnknownError(404, null))
     }
 
     override suspend fun getReviewers(
@@ -62,12 +62,12 @@ class FakePullRequestDataSource : PullRequestDataSource {
                 ),
             ),
         )
-        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
-        else -> Result.success(RequestedReviewersResponse(emptyList()))
+        else -> Result.failure(WebException.UnknownError(404, null))
     }
 
-    override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> {
-        TODO("Not yet implemented")
+    override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> = when (author) {
+        "correctAuthor" -> Result.success(Defaults.pullRequestsResponse())
+        else -> Result.failure(WebException.UnknownError(422, null))
     }
 
     override suspend fun notify(
@@ -77,7 +77,6 @@ class FakePullRequestDataSource : PullRequestDataSource {
         message: String,
     ): Result<Unit> = when (pullRequestNumber) {
         "correctPullRequestNumber" -> Result.success(Unit)
-        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
-        else -> Result.failure(WebException.NetworkError())
+        else -> Result.failure(WebException.UnknownError(404, null))
     }
 }
