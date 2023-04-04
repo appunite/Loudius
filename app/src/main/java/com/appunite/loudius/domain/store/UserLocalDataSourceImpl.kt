@@ -23,8 +23,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface UserLocalDataSource {
+    fun saveAccessToken(accessToken: AccessToken)
+    fun getAccessToken(): AccessToken
+}
+
 @Singleton
-class UserLocalDataSource @Inject constructor(@ApplicationContext context: Context) {
+class UserLocalDataSourceImpl @Inject constructor(@ApplicationContext context: Context) :
+    UserLocalDataSource {
 
     companion object {
         private const val FILE_NAME = "com.appunite.loudius.sharedPreferences"
@@ -34,9 +40,10 @@ class UserLocalDataSource @Inject constructor(@ApplicationContext context: Conte
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
-    fun saveAccessToken(accessToken: AccessToken) {
+    override fun saveAccessToken(accessToken: AccessToken) {
         sharedPreferences.edit().putString(KEY_ACCESS_TOKEN, accessToken).apply()
     }
 
-    fun getAccessToken(): AccessToken = sharedPreferences.getString(KEY_ACCESS_TOKEN, null) ?: ""
+    override fun getAccessToken(): AccessToken =
+        sharedPreferences.getString(KEY_ACCESS_TOKEN, null) ?: ""
 }

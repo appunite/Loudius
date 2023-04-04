@@ -18,7 +18,7 @@ package com.appunite.loudius.domain
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.appunite.loudius.domain.store.UserLocalDataSource
+import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -32,7 +32,7 @@ class UserLocalDataSourceTest {
     private val context = mockk<Context> {
         every { getSharedPreferences(any(), any()) } returns sharedPreferences
     }
-    private val userLocalDataSource = UserLocalDataSource(context)
+    private val userLocalDataSource = UserLocalDataSourceImpl(context)
 
     @Test
     fun `GIVEN filled data source WHEN getting access token THEN return access token`() {
