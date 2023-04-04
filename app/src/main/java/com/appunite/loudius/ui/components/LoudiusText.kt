@@ -18,12 +18,13 @@ enum class LoudiusTextStyle {
     TitleLarge,
     ScreenContent,
 }
+
 @Composable
 fun LoudiusText(
     text: String,
     modifier: Modifier = Modifier,
     style: LoudiusTextStyle = LoudiusTextStyle.ListCaption,
-    ) {
+) {
     Text(
         modifier = modifier,
         text = text,
@@ -39,7 +40,6 @@ fun LoudiusText(
             LoudiusTextStyle.Button -> MaterialTheme.typography.labelLarge
             LoudiusTextStyle.TitleLarge -> MaterialTheme.typography.titleLarge
             LoudiusTextStyle.ScreenContent -> MaterialTheme.typography.bodyLarge
-
         },
         color = when (style) {
             LoudiusTextStyle.ListHeaderWarning -> MaterialTheme.colorScheme.error

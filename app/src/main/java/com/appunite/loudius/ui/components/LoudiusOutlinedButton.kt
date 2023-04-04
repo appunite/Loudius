@@ -68,7 +68,7 @@ inline fun <T> T.applyIf(predicate: Boolean, block: T.() -> T): T {
 @Composable
 fun LoudiusOutlinedButtonIcon(
     painter: Painter,
-    contentDescription: String
+    contentDescription: String,
 ) {
     Icon(
         painter = painter,
@@ -87,6 +87,7 @@ fun LoudiusOutlinedButtonPreview() {
         )
     }
 }
+
 @Composable
 @Preview(showBackground = true)
 fun LoudiusOutlinedButtonLargePreview() {
@@ -109,12 +110,13 @@ fun LoudiusOutlinedButtonWithIconPreview() {
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.ic_github),
-                    "Github Icon"
+                    "Github Icon",
                 )
-            }
+            },
         )
     }
 }
+
 @Composable
 @Preview(showBackground = true)
 fun LoudiusOutlinedButtonDisabledPreview() {
@@ -126,9 +128,9 @@ fun LoudiusOutlinedButtonDisabledPreview() {
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.ic_github),
-                    "Github Icon"
+                    "Github Icon",
                 )
-            }
+            },
         )
     }
 }
@@ -144,9 +146,9 @@ fun LoudiusOutlinedButtonWithIconLargePreview() {
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.ic_github),
-                    "Github Icon"
+                    "Github Icon",
                 )
-            }
+            },
         )
     }
 }

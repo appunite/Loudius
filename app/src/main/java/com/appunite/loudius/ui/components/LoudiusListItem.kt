@@ -19,11 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.utils.bottomBorder
 
-
 @Composable
 fun resolveListItemBackgroundColor(index: Int): Color =
     if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
-
 
 @Composable
 fun LoudiusListItem(
@@ -45,7 +43,7 @@ fun LoudiusListItem(
             Modifier
                 .weight(1f)
                 .padding(start = 16.dp)
-                .align(Alignment.CenterVertically)
+                .align(Alignment.CenterVertically),
         )
         action()
     }
@@ -121,7 +119,6 @@ fun LoudiusListItemWithHeaderPreview() {
                     text = "Title",
                     style = LoudiusTextStyle.ListItem,
                 )
-
             }
         },
     )
@@ -175,7 +172,7 @@ private fun LoudiusListItemExample(index: Int) {
             LoudiusListIcon(
                 modifier = modifier,
                 painter = painterResource(id = R.drawable.person_outline_24px),
-                contentDescription = "Test"
+                contentDescription = "Test",
             )
         },
         content = { modifier ->

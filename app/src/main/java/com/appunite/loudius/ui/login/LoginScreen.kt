@@ -61,7 +61,7 @@ fun LoginScreen() {
                     painter = painterResource(id = R.drawable.ic_github),
                     contentDescription = stringResource(R.string.github_icon),
                 )
-            }
+            },
 
         )
     }

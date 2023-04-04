@@ -132,9 +132,9 @@ private fun PullRequestItem(
             RepoDetails(
                 modifier = modifier,
                 pullRequestTitle = data.title,
-                repositoryName = data.fullRepositoryName
+                repositoryName = data.fullRepositoryName,
             )
-        }
+        },
     )
 }
 

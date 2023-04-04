@@ -174,7 +174,7 @@ private fun ReviewerItem(
         },
         action = {
             NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
-        }
+        },
     )
 }
 
@@ -210,7 +210,7 @@ private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
 private fun IsReviewedHeadlineText(reviewer: Reviewer) {
     LoudiusText(
         text = resolveIsReviewedText(reviewer),
-        style = if (reviewer.isReviewDone) LoudiusTextStyle.ListHeader else LoudiusTextStyle.ListHeaderWarning
+        style = if (reviewer.isReviewDone) LoudiusTextStyle.ListHeader else LoudiusTextStyle.ListHeaderWarning,
     )
 }
 
