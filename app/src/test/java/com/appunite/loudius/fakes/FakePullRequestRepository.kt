@@ -42,8 +42,8 @@ class FakePullRequestRepository : PullRequestRepository {
             PullRequestsResponse(
                 incompleteResults = false,
                 totalCount = 1,
-                items = listOf(Defaults.pullRequest())
-            )
+                items = listOf(Defaults.pullRequest()),
+            ),
         )
 
     override suspend fun notify(
