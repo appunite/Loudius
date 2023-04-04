@@ -34,7 +34,7 @@ import androidx.navigation.navDeepLink
 import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.ui.MainViewModel
-import com.appunite.loudius.ui.loading.LoadingScreen
+import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
@@ -68,15 +68,10 @@ class MainActivity : ComponentActivity() {
                             LoginScreen()
                         }
                         composable(
-                            route = Screen.Repos.route,
-                            deepLinks = listOf(
-                                navDeepLink {
-                                    uriPattern = REDIRECT_URL
-                                },
-                            ),
+                            route = Screen.Authenticating.route,
+                            deepLinks = Screen.Authenticating.deepLinks,
                         ) {
-                            LoadingScreen(
-                                intent = intent,
+                            AuthenticatingScreen(
                                 onNavigateToPullRequest = {
                                     navController.navigate(Screen.PullRequests.route) {
                                         popUpTo(Screen.Login.route) { inclusive = true }
