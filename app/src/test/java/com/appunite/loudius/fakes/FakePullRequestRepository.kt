@@ -53,7 +53,6 @@ class FakePullRequestRepository : PullRequestRepository {
         message: String,
     ): Result<Unit> = when (pullRequestNumber) {
         "correctPullRequestNumber" -> Result.success(Unit)
-        "notExistingPullRequestNumber" -> Result.failure(WebException.UnknownError(404, null))
-        else -> Result.failure(WebException.NetworkError())
+        else -> Result.failure(WebException.UnknownError(404, null))
     }
 }
