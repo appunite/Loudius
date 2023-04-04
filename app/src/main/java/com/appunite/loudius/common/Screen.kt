@@ -16,16 +16,33 @@
 
 package com.appunite.loudius.common
 
+import android.content.Intent
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavController
+import androidx.navigation.NavDeepLink
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 
 sealed class Screen(val route: String) {
     open val arguments: List<NamedNavArgument> = emptyList()
 
     object Login : Screen("login_screen")
 
-    object Repos : Screen("repos_screen")
+    object Authenticating : Screen("repos_screen") {
+        fun getCode(savedStateHandle: SavedStateHandle): Result<String> {
+            val intent: Intent? = savedStateHandle[NavController.KEY_DEEP_LINK_INTENT]
+            val code = intent?.data?.getQueryParameter("code")
+            return code?.let { Result.success(it) } ?: Result.failure(Exception("No error code"))
+        }
+
+        val deepLinks: List<NavDeepLink> get() = listOf(
+            navDeepLink {
+                uriPattern = Constants.REDIRECT_URL
+            },
+        )
+    }
 
     object PullRequests : Screen("pull_requests_screen")
 

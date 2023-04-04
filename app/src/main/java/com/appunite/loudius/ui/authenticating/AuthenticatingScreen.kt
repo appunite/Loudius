@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.loading
+package com.appunite.loudius.ui.authenticating
 
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,40 +27,32 @@ import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
-fun LoadingScreen(
-    intent: Intent,
-    viewModel: LoadingViewModel = hiltViewModel(),
+fun AuthenticatingScreen(
+    viewModel: AuthenticatingViewModel = hiltViewModel(),
     onNavigateToPullRequest: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
     val state = viewModel.state
-    val code = intent.data?.getQueryParameter("code")
-    val rememberedCode = rememberUpdatedState(newValue = code)
-    LaunchedEffect(key1 = rememberedCode) {
-        rememberedCode.value?.let {
-            viewModel.setCodeAndGetAccessToken(it)
-        }
-    }
     LaunchedEffect(key1 = state.navigateTo) {
         when (state.navigateTo) {
-            LoadingScreenNavigation.NavigateToLogin -> {
+            AuthenticatingScreenNavigation.NavigateToLogin -> {
                 onNavigateToLogin()
-                viewModel.onAction(LoadingAction.OnNavigate)
+                viewModel.onAction(AuthenticatingAction.OnNavigate)
             }
-            LoadingScreenNavigation.NavigateToPullRequests -> {
+            AuthenticatingScreenNavigation.NavigateToPullRequests -> {
                 onNavigateToPullRequest()
-                viewModel.onAction(LoadingAction.OnNavigate)
+                viewModel.onAction(AuthenticatingAction.OnNavigate)
             }
             null -> {}
         }
     }
-    LoadingScreenStateless(errorScreenType = state.errorScreenType) {
-        viewModel.onAction(LoadingAction.OnTryAgainClick)
+    AuthenticatingScreenStateless(errorScreenType = state.errorScreenType) {
+        viewModel.onAction(AuthenticatingAction.OnTryAgainClick)
     }
 }
 
 @Composable
-fun LoadingScreenStateless(
+fun AuthenticatingScreenStateless(
     errorScreenType: LoadingErrorType?,
     onTryAgainClick: () -> Unit,
 ) {
@@ -95,7 +85,7 @@ private fun ShowLoudiusGenericErrorScreen(
 @Composable
 fun ShowLoudiusGenericErrorScreenPreview() {
     LoudiusTheme {
-        LoadingScreenStateless(errorScreenType = LoadingErrorType.GENERIC_ERROR) {}
+        AuthenticatingScreenStateless(errorScreenType = LoadingErrorType.GENERIC_ERROR) {}
     }
 }
 
@@ -103,7 +93,7 @@ fun ShowLoudiusGenericErrorScreenPreview() {
 @Composable
 fun ShowLoudiusLoginErrorScreenPreview() {
     LoudiusTheme {
-        LoadingScreenStateless(errorScreenType = LoadingErrorType.LOGIN_ERROR) {}
+        AuthenticatingScreenStateless(errorScreenType = LoadingErrorType.LOGIN_ERROR) {}
     }
 }
 
@@ -111,6 +101,6 @@ fun ShowLoudiusLoginErrorScreenPreview() {
 @Composable
 fun ShowLoadingIndicatorScreenPreview() {
     LoudiusTheme {
-        LoadingScreenStateless(errorScreenType = null) {}
+        AuthenticatingScreenStateless(errorScreenType = null) {}
     }
 }
