@@ -30,8 +30,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navDeepLink
-import com.appunite.loudius.common.Constants.REDIRECT_URL
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.ui.MainViewModel
 import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
