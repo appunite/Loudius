@@ -16,42 +16,137 @@
 
 package com.appunite.loudius.ui.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.appunite.loudius.R
+import com.appunite.loudius.ui.theme.LoudiusTheme
+
+enum class LoudiusOutlinedButtonStyle {
+    Large,
+    Regular,
+}
 
 @Composable
 fun LoudiusOutlinedButton(
     text: String,
-    iconPainter: Painter? = null,
-    iconDescription: String? = null,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    icon: @Composable (() -> Unit)? = null,
+    style: LoudiusOutlinedButtonStyle = LoudiusOutlinedButtonStyle.Regular,
     onClick: () -> Unit,
 ) {
     OutlinedButton(
+        enabled = enabled,
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 46.dp),
+        modifier = modifier
+            .applyIf(style == LoudiusOutlinedButtonStyle.Large) { padding(horizontal = 46.dp) },
     ) {
-        if (iconPainter != null) {
-            Icon(
-                painter = iconPainter,
-                contentDescription = iconDescription,
-                tint = Color.Black,
-            )
-        }
-        Text(
-            modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
+        icon?.invoke()
+
+        LoudiusText(
             text = text,
-            color = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier
+                .applyIf<Modifier>(style == LoudiusOutlinedButtonStyle.Large) { padding(8.dp) }
+                .applyIf(style == LoudiusOutlinedButtonStyle.Regular && icon != null) { padding(start = 8.dp) },
+            style = LoudiusTextStyle.Button,
+        )
+    }
+}
+
+inline fun <T> T.applyIf(predicate: Boolean, block: T.() -> T): T {
+    return if (predicate) block() else this
+}
+
+@Composable
+fun LoudiusOutlinedButtonIcon(
+    painter: Painter,
+    contentDescription: String
+) {
+    Icon(
+        painter = painter,
+        contentDescription = contentDescription,
+        tint = Color.Black,
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+fun LoudiusOutlinedButtonPreview() {
+    LoudiusTheme {
+        LoudiusOutlinedButton(
+            onClick = { },
+            text = "Some button",
+        )
+    }
+}
+@Composable
+@Preview(showBackground = true)
+fun LoudiusOutlinedButtonLargePreview() {
+    LoudiusTheme {
+        LoudiusOutlinedButton(
+            onClick = { },
+            text = "Some button",
+            style = LoudiusOutlinedButtonStyle.Large,
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun LoudiusOutlinedButtonWithIconPreview() {
+    LoudiusTheme {
+        LoudiusOutlinedButton(
+            onClick = { },
+            text = "Log In",
+            icon = {
+                LoudiusOutlinedButtonIcon(
+                    painter = painterResource(id = R.drawable.ic_github),
+                    "Github Icon"
+                )
+            }
+        )
+    }
+}
+@Composable
+@Preview(showBackground = true)
+fun LoudiusOutlinedButtonDisabledPreview() {
+    LoudiusTheme {
+        LoudiusOutlinedButton(
+            onClick = { },
+            text = "Disabled button",
+            enabled = false,
+            icon = {
+                LoudiusOutlinedButtonIcon(
+                    painter = painterResource(id = R.drawable.ic_github),
+                    "Github Icon"
+                )
+            }
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun LoudiusOutlinedButtonWithIconLargePreview() {
+    LoudiusTheme {
+        LoudiusOutlinedButton(
+            onClick = { },
+            text = "Log In",
+            style = LoudiusOutlinedButtonStyle.Large,
+            icon = {
+                LoudiusOutlinedButtonIcon(
+                    painter = painterResource(id = R.drawable.ic_github),
+                    "Github Icon"
+                )
+            }
         )
     }
 }

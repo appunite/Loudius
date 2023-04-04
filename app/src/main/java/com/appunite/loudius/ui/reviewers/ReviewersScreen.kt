@@ -16,12 +16,9 @@
 
 package com.appunite.loudius.ui.reviewers
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,21 +26,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,13 +43,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusListIcon
+import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
+import com.appunite.loudius.ui.components.LoudiusOutlinedButton
 import com.appunite.loudius.ui.components.LoudiusPlaceholderText
+import com.appunite.loudius.ui.components.LoudiusText
+import com.appunite.loudius.ui.components.LoudiusTextStyle
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import com.appunite.loudius.ui.theme.LoudiusTheme
-import com.appunite.loudius.ui.utils.bottomBorder
 
 @Composable
 fun ReviewersScreen(
@@ -127,7 +123,6 @@ private fun ReviewersScreenStateless(
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         content = { padding ->
             when {
                 isError -> LoudiusErrorScreen(onButtonClick = { onAction(ReviewersAction.OnTryAgain) })
@@ -155,7 +150,7 @@ private fun ReviewersScreenContent(
         itemsIndexed(reviewers) { index, reviewer ->
             ReviewerItem(
                 reviewer = reviewer,
-                backgroundColor = resolveReviewerBackgroundColor(index),
+                index = index,
                 onNotifyClick = onNotifyClick,
             )
         }
@@ -163,34 +158,24 @@ private fun ReviewersScreenContent(
 }
 
 @Composable
-private fun resolveReviewerBackgroundColor(index: Int) =
-    if (index % 2 == 0) MaterialTheme.colorScheme.onSurface.copy(0.08f) else MaterialTheme.colorScheme.surface
-
-@Composable
 private fun ReviewerItem(
     reviewer: Reviewer,
-    backgroundColor: Color,
+    index: Int,
     onNotifyClick: (ReviewersAction) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-            .bottomBorder(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            .padding(16.dp),
-    ) {
-        ReviewerAvatarView(Modifier.align(CenterVertically))
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
-                .align(CenterVertically),
-        ) {
-            IsReviewedHeadlineText(reviewer)
-            ReviewerName(reviewer)
+    LoudiusListItem(
+        index = index,
+        icon = { ReviewerAvatarView(it) },
+        content = {
+            Column(modifier = it) {
+                IsReviewedHeadlineText(reviewer)
+                ReviewerName(reviewer)
+            }
+        },
+        action = {
+            NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
         }
-        NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
-    }
+    )
 }
 
 @Composable
@@ -198,12 +183,12 @@ private fun NotifyButtonOrLoadingIndicator(
     reviewer: Reviewer,
     onNotifyClick: (ReviewersAction) -> Unit,
 ) {
-    val buttonAlpha = if (reviewer.isLoading) 0f else 1f
     Box(contentAlignment = Center) {
-        NotifyButton(
-            modifier = Modifier.alpha(buttonAlpha),
-        ) { onNotifyClick(ReviewersAction.Notify(reviewer.login)) }
-
+        LoudiusOutlinedButton(
+            text = stringResource(R.string.details_notify),
+            onClick = { onNotifyClick(ReviewersAction.Notify(reviewer.login)) },
+            modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f),
+        )
         if (reviewer.isLoading) {
             CircularProgressIndicator(modifier = Modifier.size(24.dp))
         }
@@ -212,7 +197,7 @@ private fun NotifyButtonOrLoadingIndicator(
 
 @Composable
 private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
-    Image(
+    LoudiusListIcon(
         painter = painterResource(id = R.drawable.person_outline_24px),
         contentDescription = stringResource(
             R.string.details_screen_user_image_description,
@@ -223,10 +208,9 @@ private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
 
 @Composable
 private fun IsReviewedHeadlineText(reviewer: Reviewer) {
-    Text(
+    LoudiusText(
         text = resolveIsReviewedText(reviewer),
-        style = MaterialTheme.typography.labelMedium,
-        color = if (reviewer.isReviewDone) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.error,
+        style = if (reviewer.isReviewDone) LoudiusTextStyle.ListHeader else LoudiusTextStyle.ListHeaderWarning
     )
 }
 
@@ -239,21 +223,10 @@ private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDon
 
 @Composable
 private fun ReviewerName(reviewer: Reviewer) {
-    Text(
+    LoudiusText(
         text = reviewer.login,
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onSurface,
+        style = LoudiusTextStyle.ListItem,
     )
-}
-
-@Composable
-private fun NotifyButton(modifier: Modifier = Modifier, onNotifyClick: () -> Unit) {
-    OutlinedButton(onClick = onNotifyClick, modifier = modifier) {
-        Text(
-            text = stringResource(R.string.details_notify),
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-    }
 }
 
 @Composable
@@ -264,13 +237,13 @@ private fun EmptyListPlaceholder(padding: PaddingValues) {
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ReviewerViewPreview() {
     LoudiusTheme {
         ReviewerItem(
+            index = 0,
             reviewer = Reviewer(1, "Kezc", true, 12, 12),
-            backgroundColor = MaterialTheme.colorScheme.surface,
         ) {}
     }
 }

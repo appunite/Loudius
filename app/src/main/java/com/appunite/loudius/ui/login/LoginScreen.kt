@@ -23,6 +23,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +39,8 @@ import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Constants.NAME_PARAM_CLIENT_ID
 import com.appunite.loudius.common.Constants.SCOPE_PARAM
 import com.appunite.loudius.ui.components.LoudiusOutlinedButton
+import com.appunite.loudius.ui.components.LoudiusOutlinedButtonIcon
+import com.appunite.loudius.ui.components.LoudiusOutlinedButtonStyle
 
 @Composable
 fun LoginScreen() {
@@ -49,10 +52,17 @@ fun LoginScreen() {
     ) {
         LoginImage()
         LoudiusOutlinedButton(
+            modifier = Modifier.fillMaxWidth(),
             onClick = { startAuthorizing(context) },
             text = stringResource(id = R.string.login),
-            iconPainter = painterResource(id = R.drawable.ic_github),
-            iconDescription = stringResource(R.string.github_icon),
+            style = LoudiusOutlinedButtonStyle.Large,
+            icon = {
+                LoudiusOutlinedButtonIcon(
+                    painter = painterResource(id = R.drawable.ic_github),
+                    contentDescription = stringResource(R.string.github_icon),
+                )
+            }
+
         )
     }
 }
