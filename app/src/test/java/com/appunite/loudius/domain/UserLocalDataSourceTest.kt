@@ -22,8 +22,10 @@ import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isEmpty
+import strikt.assertions.isEqualTo
 
 class UserLocalDataSourceTest {
     private val sharedPreferences = mockk<SharedPreferences>(relaxed = true) {
@@ -37,7 +39,8 @@ class UserLocalDataSourceTest {
     @Test
     fun `GIVEN filled data source WHEN getting access token THEN return access token`() {
         val result = userLocalDataSource.getAccessToken()
-        assertEquals("exampleAccessToken", result) { "Access token should be correct" }
+
+        expectThat(result).isEqualTo("exampleAccessToken")
     }
 
     @Test
@@ -45,7 +48,7 @@ class UserLocalDataSourceTest {
         every { sharedPreferences.getString("access_token", null) } returns null
 
         val result = userLocalDataSource.getAccessToken()
-        assertEquals("", result)
+        expectThat(result).isEmpty()
     }
 
     @Test

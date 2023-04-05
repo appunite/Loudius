@@ -19,7 +19,6 @@
 package com.appunite.loudius.ui.pullrequests
 
 import com.appunite.loudius.fakes.FakePullRequestRepository
-import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import com.appunite.loudius.util.MainDispatcherExtension
@@ -29,12 +28,15 @@ import io.mockk.coEvery
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import strikt.api.expectThat
+import strikt.assertions.isEmpty
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
+import strikt.assertions.isNull
+import strikt.assertions.isTrue
+import strikt.assertions.single
 
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
@@ -47,15 +49,22 @@ class PullRequestsViewModelTest {
 
         val viewModel = createViewModel()
 
-        assertTrue(viewModel.state.isLoading)
+        expectThat(viewModel.state) {
+            get(PullRequestState::isLoading).isTrue()
+            get(PullRequestState::isError).isFalse()
+            get(PullRequestState::pullRequests).isEmpty()
+        }
     }
 
     @Test
     fun `WHEN init THEN display pull requests list`() = runTest {
         val viewModel = createViewModel()
 
-        assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
-        assertFalse(viewModel.state.isLoading)
+        expectThat(viewModel.state) {
+            get(PullRequestState::isLoading).isFalse()
+            get(PullRequestState::isError).isFalse()
+            get(PullRequestState::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
     }
 
     @Test
@@ -63,8 +72,11 @@ class PullRequestsViewModelTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { Result.failure(WebException.NetworkError()) }
         val viewModel = createViewModel()
 
-        assertEquals(emptyList<PullRequest>(), viewModel.state.pullRequests)
-        assertTrue(viewModel.state.isError)
+        expectThat(viewModel.state) {
+            get(PullRequestState::isLoading).isFalse()
+            get(PullRequestState::isError).isTrue()
+            get(PullRequestState::pullRequests).isEmpty()
+        }
     }
 
     @Test
@@ -75,25 +87,33 @@ class PullRequestsViewModelTest {
         clearMocks(pullRequestRepository)
         viewModel.onAction(PulLRequestsAction.RetryClick)
 
-        assertEquals(listOf(Defaults.pullRequest()), viewModel.state.pullRequests)
-        assertFalse(viewModel.state.isLoading)
+        expectThat(viewModel.state) {
+            get(PullRequestState::isLoading).isFalse()
+            get(PullRequestState::isError).isFalse()
+            get(PullRequestState::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
     }
 
     @Test
     fun `GIVEN item id WHEN item click THEN navigate the user to reviewers`() = runTest {
         val viewModel = createViewModel()
-        assertNull(viewModel.state.navigateToReviewers)
+        expectThat(viewModel.state)
+            .get(PullRequestState::navigateToReviewers)
+            .isNull()
         val pullRequest = Defaults.pullRequest()
 
         viewModel.onAction(PulLRequestsAction.ItemClick(pullRequest.id))
 
-        val expected = NavigationPayload(
-            pullRequest.owner,
-            pullRequest.shortRepositoryName,
-            pullRequest.number.toString(),
-            pullRequest.createdAt.toString(),
-        )
-        assertEquals(expected, viewModel.state.navigateToReviewers)
+        expectThat(viewModel.state)
+            .get(PullRequestState::navigateToReviewers)
+            .isEqualTo(
+                NavigationPayload(
+                    pullRequest.owner,
+                    pullRequest.shortRepositoryName,
+                    pullRequest.number.toString(),
+                    pullRequest.createdAt.toString(),
+                )
+            )
     }
 
     @Test
@@ -104,6 +124,8 @@ class PullRequestsViewModelTest {
 
         viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
 
-        assertNull(viewModel.state.navigateToReviewers)
+        expectThat(viewModel.state)
+            .get(PullRequestState::navigateToReviewers)
+            .isNull()
     }
 }

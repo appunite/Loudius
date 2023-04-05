@@ -21,9 +21,11 @@ import com.appunite.loudius.network.utils.AuthFailureHandlerImpl
 import com.appunite.loudius.util.MainDispatcherExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
@@ -34,7 +36,10 @@ class MainViewModelTest {
     @Test
     fun `WHEN init THEN auth failure event is null`() = runTest {
         viewModel = MainViewModel(authFailureHandler)
-        assertEquals(null, viewModel.state.authFailureEvent)
+
+        expectThat(viewModel.state)
+            .get(MainState::authFailureEvent)
+            .isNull()
     }
 
     @Test
@@ -42,7 +47,9 @@ class MainViewModelTest {
         viewModel = MainViewModel(authFailureHandler)
         authFailureHandler.emitAuthFailure()
 
-        assertEquals(Unit, viewModel.state.authFailureEvent)
+        expectThat(viewModel.state)
+            .get(MainState::authFailureEvent)
+            .isEqualTo(Unit)
     }
 
     @Test
@@ -52,6 +59,8 @@ class MainViewModelTest {
 
         viewModel.onAuthFailureHandled()
 
-        assertEquals(null, viewModel.state.authFailureEvent)
+        expectThat(viewModel.state)
+            .get(MainState::authFailureEvent)
+            .isNull()
     }
 }

@@ -26,9 +26,10 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import retrofit2.http.GET
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 class AuthInterceptorTest {
     private val fakeUserRepository = FakeAuthRepository()
@@ -53,9 +54,10 @@ class AuthInterceptorTest {
 
             service.test()
             val request = mockWebServer.takeRequest()
-            val header = request.getHeader("authorization")
 
-            assertEquals("Bearer validToken", header)
+            expectThat(request)
+                .get("Authorization header") { getHeader("authorization") }
+                .isEqualTo("Bearer validToken")
         }
     }
 

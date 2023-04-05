@@ -29,10 +29,13 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
 import retrofit2.http.GET
+import strikt.api.expectCatching
+import strikt.api.expectThat
+import strikt.assertions.isA
+import strikt.assertions.isFailure
+import strikt.assertions.isSuccess
 
 class AuthFailureInterceptorTest {
     private val fakeAuthFailureHandler: AuthFailureHandler = mockk(relaxed = true)
@@ -56,7 +59,9 @@ class AuthFailureInterceptorTest {
                 MockResponse().setResponseCode(401).setBody(testDataJson)
             mockWebServer.enqueue(failureResponse)
 
-            assertThrows<HttpException> { service.makeARequest() }
+            expectCatching { service.makeARequest() }
+                .isFailure()
+                .isA<HttpException>()
             coVerify(exactly = 1) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 
@@ -68,9 +73,8 @@ class AuthFailureInterceptorTest {
                 MockResponse().setResponseCode(200).setBody(testDataJson)
             mockWebServer.enqueue(successResponse)
 
-            assertDoesNotThrow("Should not throw Http exception") {
-                service.makeARequest()
-            }
+            expectCatching { service.makeARequest() }
+                .isSuccess()
             coVerify(exactly = 0) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 

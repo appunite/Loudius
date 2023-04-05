@@ -19,7 +19,6 @@
 package com.appunite.loudius.network.datasource
 
 import com.appunite.loudius.fakes.FakeAuthRepository
-import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.testOkHttpClient
@@ -29,9 +28,13 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFailure
+import strikt.assertions.isSuccess
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AuthNetworkDataSourceTest {
     private val fakeUserRepository = FakeAuthRepository()
     private val testOkHttpClient = testOkHttpClient(fakeUserRepository)
@@ -63,10 +66,9 @@ class AuthNetworkDataSourceTest {
             val result =
                 authNetworkDataSource.getAccessToken("clientId", "clientSecret", "correctCode")
 
-            Assertions.assertEquals(
-                Result.success("validAccessToken"),
-                result,
-            )
+            expectThat(result)
+                .isSuccess()
+                .isEqualTo("validAccessToken")
         }
 
     @Test
@@ -83,10 +85,9 @@ class AuthNetworkDataSourceTest {
 
             val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
 
-            Assertions.assertEquals(
-                Result.failure<AccessToken>(WebException.BadVerificationCodeException),
-                result,
-            )
+            expectThat(result)
+                .isFailure()
+                .isEqualTo(WebException.BadVerificationCodeException)
         }
 
     @Test
@@ -103,9 +104,8 @@ class AuthNetworkDataSourceTest {
 
             val result = authNetworkDataSource.getAccessToken("", "", "")
 
-            Assertions.assertEquals(
-                Result.failure<AccessToken>(WebException.UnknownError(null, "error")),
-                result,
-            )
+            expectThat(result)
+                .isFailure()
+                .isEqualTo(WebException.UnknownError(null, "error"))
         }
 }

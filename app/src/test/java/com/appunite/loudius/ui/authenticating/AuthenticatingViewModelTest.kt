@@ -28,10 +28,11 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
+import strikt.assertions.isNull
 
 @ExtendWith(MainDispatcherExtension::class)
 class AuthenticatingViewModelTest {
@@ -46,11 +47,17 @@ class AuthenticatingViewModelTest {
         setupIntent("validCode")
         val viewModel = create()
 
-        assertNull(viewModel.state.errorScreenType)
-        assertEquals(AuthenticatingScreenNavigation.NavigateToPullRequests, viewModel.state.navigateTo)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isNull()
+            get(AuthenticatingState::navigateTo).isEqualTo(AuthenticatingScreenNavigation.NavigateToPullRequests)
+        }
 
         viewModel.onAction(AuthenticatingAction.OnNavigate)
-        assertNull(viewModel.state.navigateTo)
+
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isNull()
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     @Test
@@ -58,8 +65,10 @@ class AuthenticatingViewModelTest {
         setupIntent("invalidCode")
         val viewModel = create()
 
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
-        assertNull(viewModel.state.navigateTo)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     @Test
@@ -70,8 +79,10 @@ class AuthenticatingViewModelTest {
         setupIntent("validCode")
         val viewModel = create()
 
-        assertEquals(LoadingErrorType.GENERIC_ERROR, viewModel.state.errorScreenType)
-        assertNull(viewModel.state.navigateTo)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.GENERIC_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     @Test
@@ -84,35 +95,51 @@ class AuthenticatingViewModelTest {
         val viewModel = create()
 
         // ensure error screen is displayed
-        assertEquals(LoadingErrorType.GENERIC_ERROR, viewModel.state.errorScreenType)
-        assertNull(viewModel.state.navigateTo)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.GENERIC_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
 
         // simulate success response and click try again
         clearMocks(repository)
         viewModel.onAction(AuthenticatingAction.OnTryAgainClick)
 
         // ensure user is navigated to the pull requests screen
-        assertEquals(AuthenticatingScreenNavigation.NavigateToPullRequests, viewModel.state.navigateTo)
-        assertNull(viewModel.state.errorScreenType)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isNull()
+            get(AuthenticatingState::navigateTo).isEqualTo(AuthenticatingScreenNavigation.NavigateToPullRequests)
+        }
 
         // clear the navigation state
         viewModel.onAction(AuthenticatingAction.OnNavigate)
-        assertNull(viewModel.state.navigateTo)
-        assertNull(viewModel.state.errorScreenType)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isNull()
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     @Test
     fun `GIVEN invalid screen and error is presented WHEN retry click THEN navigate to the login screen`() {
         setupIntent("invalidCode")
         val viewModel = create()
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
 
         viewModel.onAction(AuthenticatingAction.OnTryAgainClick)
 
-        assertEquals(AuthenticatingScreenNavigation.NavigateToLogin, viewModel.state.navigateTo)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isEqualTo(AuthenticatingScreenNavigation.NavigateToLogin)
+        }
+
         viewModel.onAction(AuthenticatingAction.OnNavigate)
-        assertNull(viewModel.state.navigateTo)
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
+
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     @Test
@@ -120,26 +147,35 @@ class AuthenticatingViewModelTest {
         savedStateHandle[NavController.KEY_DEEP_LINK_INTENT] = null
         val viewModel = create()
 
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
-        assertNull(viewModel.state.navigateTo)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     @Test
     fun `GIVEN no intent is provided and login error is presented WHEN retry is clicked THEN navigate to the login screen`() {
         savedStateHandle[NavController.KEY_DEEP_LINK_INTENT] = null
         val viewModel = create()
-        assertNull(viewModel.state.navigateTo)
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
+
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
 
         viewModel.onAction(AuthenticatingAction.OnTryAgainClick)
 
-        assertEquals(AuthenticatingScreenNavigation.NavigateToLogin, viewModel.state.navigateTo)
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isEqualTo(AuthenticatingScreenNavigation.NavigateToLogin)
+        }
 
         viewModel.onAction(AuthenticatingAction.OnNavigate)
 
-        assertNull(viewModel.state.navigateTo)
-        assertEquals(LoadingErrorType.LOGIN_ERROR, viewModel.state.errorScreenType)
+        expectThat(viewModel.state) {
+            get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
+            get(AuthenticatingState::navigateTo).isNull()
+        }
     }
 
     private fun setupIntent(intentCode: String) {

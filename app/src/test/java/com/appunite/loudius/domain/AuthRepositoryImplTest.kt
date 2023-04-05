@@ -25,8 +25,11 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isEmpty
+import strikt.assertions.isEqualTo
+import strikt.assertions.isSuccess
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthRepositoryImplTest {
@@ -44,13 +47,12 @@ class AuthRepositoryImplTest {
         runTest {
             val code = "validCode"
 
-            val result = repository.fetchAccessToken("clientId", "clientSecret", code)
+            val accessToken = repository.fetchAccessToken("clientId", "clientSecret", code)
 
             coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
-            assertEquals(
-                Result.success("validAccessToken"),
-                result,
-            ) { "Expected success result with valid access token" }
+            expectThat(accessToken)
+                .isSuccess()
+                .isEqualTo("validAccessToken")
         }
 
     @Test
@@ -60,24 +62,25 @@ class AuthRepositoryImplTest {
 
             repository.fetchAccessToken("clientId", "clientSecret", code)
 
-            val result = repository.getAccessToken()
-            assertEquals("validAccessToken", result) { "Expected valid access token" }
+            val accessToken = repository.getAccessToken()
+
+            expectThat(accessToken).isEqualTo("validAccessToken")
         }
 
     @Test
     fun `GIVEN token stored WHEN getting access token THEN return stored access token`() = runTest {
         localDataSource.saveAccessToken("validAccessToken")
 
-        val result = repository.getAccessToken()
+        val accessToken = repository.getAccessToken()
 
-        assertEquals("validAccessToken", result) { "Expected valid access token" }
+        expectThat(accessToken).isEqualTo("validAccessToken")
     }
 
     @Test
     fun `GIVEN not stored access token WHEN getting access token THEN return empty string`() =
         runTest {
-            val result = repository.getAccessToken()
+            val accessToken = repository.getAccessToken()
 
-            assertEquals("", result) { "Expected empty string" }
+            expectThat(accessToken).isEmpty()
         }
 }

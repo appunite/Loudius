@@ -28,9 +28,12 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.containsExactly
+import strikt.assertions.isEqualTo
+import strikt.assertions.isSuccess
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -48,19 +51,30 @@ class PullRequestRepositoryImpTest {
         @Test
         fun `GIVEN correct values WHEN get reviews THEN return result with reviews excluding ones from current user`() =
             runTest {
-                val actual = repository.getReviews("example", "example", "correctPullRequestNumber")
+                val result = repository.getReviews("example", "example", "correctPullRequestNumber")
 
-                val date1 = LocalDateTime.parse("2022-01-29T10:00:00")
-
-                val expected = Result.success(
-                    listOf(
-                        Review("4", User(2, "user2"), ReviewState.COMMENTED, date1),
-                        Review("5", User(2, "user2"), ReviewState.COMMENTED, date1),
-                        Review("6", User(2, "user2"), ReviewState.APPROVED, date1),
-                    ),
-                )
-
-                assertEquals(expected, actual)
+                expectThat(result)
+                    .isSuccess()
+                    .containsExactly(
+                        Review(
+                            "4",
+                            User(2, "user2"),
+                            ReviewState.COMMENTED,
+                            LocalDateTime.parse("2022-01-29T10:00:00")
+                        ),
+                        Review(
+                            "5",
+                            User(2, "user2"),
+                            ReviewState.COMMENTED,
+                            LocalDateTime.parse("2022-01-29T10:00:00")
+                        ),
+                        Review(
+                            "6",
+                            User(2, "user2"),
+                            ReviewState.APPROVED,
+                            LocalDateTime.parse("2022-01-29T10:00:00")
+                        ),
+                    )
             }
 
         // TODO: Write tests with failure cases
@@ -71,22 +85,20 @@ class PullRequestRepositoryImpTest {
         @Test
         fun `GIVEN correct values WHEN get requested reviewers THEN return result with requested reviewers`() =
             runTest {
-                val actual = repository.getRequestedReviewers(
+                val result = repository.getRequestedReviewers(
                     "example",
                     "example",
                     "correctPullRequestNumber",
                 )
 
-                val expected = Result.success(
+                expectThat(result).isSuccess().isEqualTo(
                     RequestedReviewersResponse(
                         listOf(
                             RequestedReviewer(3, "user3"),
                             RequestedReviewer(4, "user4"),
                         ),
-                    ),
+                    )
                 )
-
-                assertEquals(expected, actual)
             }
         // TODO: Write tests with failure cases
     }
@@ -96,16 +108,14 @@ class PullRequestRepositoryImpTest {
 
         @Test
         fun `GIVEN correct values WHEN notify THEN return success result`() = runTest {
-            val actual = repository.notify(
+            val result = repository.notify(
                 "exampleOwner",
                 "exampleRepo",
                 "correctPullRequestNumber",
                 "@ExampleUser",
             )
 
-            val expected = Result.success(Unit)
-
-            assertEquals(expected, actual)
+            expectThat(result).isSuccess()
         }
         // TODO: Write tests with failure cases
     }
