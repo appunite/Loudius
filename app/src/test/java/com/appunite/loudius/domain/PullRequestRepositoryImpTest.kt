@@ -24,8 +24,11 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
+import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.util.Defaults
 import io.mockk.coEvery
 import io.mockk.mockk
+import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
@@ -33,15 +36,15 @@ import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 import strikt.assertions.isEqualTo
+import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
-import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PullRequestRepositoryImpTest {
 
-    private val pullRequestDataSource = FakePullRequestDataSource()
+    private val pullRequestDataSource = spyk(FakePullRequestDataSource())
     private val userDataSource: UserDataSource = mockk {
-        coEvery { getUser() } returns Result.success(User(1, "user1"))
+        coEvery { getUser() } returns Result.success(Defaults.currentUser())
     }
     private val repository = PullRequestRepositoryImpl(pullRequestDataSource, userDataSource)
 
@@ -49,46 +52,45 @@ class PullRequestRepositoryImpTest {
     inner class GetReviewsFunctionTest {
 
         @Test
-        fun `GIVEN correct values WHEN get reviews THEN return result with reviews excluding ones from current user`() =
+        fun `GIVEN correct pull request data WHEN getting reviews THEN return result with reviews excluding ones from current user`() =
             runTest {
-                val result = repository.getReviews("example", "example", "correctPullRequestNumber")
+                val pullRequestNumber = "correctPullRequestNumber"
 
-                expectThat(result)
+                val response = repository.getReviews("example", "example", pullRequestNumber)
+
+                expectThat(response)
                     .isSuccess()
                     .containsExactly(
-                        Review(
-                            "4",
-                            User(2, "user2"),
-                            ReviewState.COMMENTED,
-                            LocalDateTime.parse("2022-01-29T10:00:00")
-                        ),
-                        Review(
-                            "5",
-                            User(2, "user2"),
-                            ReviewState.COMMENTED,
-                            LocalDateTime.parse("2022-01-29T10:00:00")
-                        ),
-                        Review(
-                            "6",
-                            User(2, "user2"),
-                            ReviewState.APPROVED,
-                            LocalDateTime.parse("2022-01-29T10:00:00")
-                        ),
-                    )
+                        Review("4", User(1, "user1"), ReviewState.COMMENTED, Defaults.date1),
+                        Review("5", User(1, "user1"), ReviewState.COMMENTED, Defaults.date2),
+                        Review("6", User(1, "user1"), ReviewState.APPROVED, Defaults.date3),
+                        )
             }
 
-        // TODO: Write tests with failure cases
+        @Test
+        fun `GIVEN incorrect pull request number WHEN getting reviews THEN return Unknown Error with 404 code`() =
+            runTest {
+                val pullRequestNumber = "incorrectPullRequestNumber"
+
+                val response = repository.getReviews("example", "example", pullRequestNumber)
+
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(404, null))
+            }
     }
 
     @Nested
     inner class GetRequestedReviewersTest {
         @Test
-        fun `GIVEN correct values WHEN get requested reviewers THEN return result with requested reviewers`() =
+        fun `GIVEN correct pull request number WHEN get requesting reviewers THEN return result with requested reviewers`() =
             runTest {
+                val pullRequestNumber = "correctPullRequestNumber"
+
                 val result = repository.getRequestedReviewers(
                     "example",
                     "example",
-                    "correctPullRequestNumber",
+                    pullRequestNumber,
                 )
 
                 expectThat(result).isSuccess().isEqualTo(
@@ -100,23 +102,94 @@ class PullRequestRepositoryImpTest {
                     )
                 )
             }
-        // TODO: Write tests with failure cases
+
+        @Test
+        fun `GIVEN incorrect pull request number WHEN get requested reviewers THEN return Unknown Error with 404 code`() =
+            runTest {
+                val pullRequestNumber = "incorrectPullRequestNumber"
+
+                val response = repository.getRequestedReviewers(
+                    "example",
+                    "example",
+                    pullRequestNumber,
+                )
+
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(404, null))
+            }
     }
 
     @Nested
     inner class NotifyTest {
 
         @Test
-        fun `GIVEN correct values WHEN notify THEN return success result`() = runTest {
+        fun `GIVEN correct pull request number WHEN notifying THEN return success result`() = runTest {
+            val pullRequestNumber = "correctPullRequestNumber"
+
             val result = repository.notify(
                 "exampleOwner",
                 "exampleRepo",
-                "correctPullRequestNumber",
+                pullRequestNumber,
                 "@ExampleUser",
             )
 
-            expectThat(result).isSuccess()
+            expectThat(result)
+                .isSuccess()
         }
-        // TODO: Write tests with failure cases
+
+        @Test
+        fun `GIVEN incorrect pull request number WHEN notifying THEN return Unknown Error with 404 code`() = runTest {
+            coEvery {
+                repository.notify(any(), any(), any(), any())
+            } returns Result.failure(WebException.UnknownError(404, null))
+            val pullRequestNumber = "incorrectPullRequestNumber"
+
+            val response = repository.notify(
+                "exampleOwner",
+                "exampleRepo",
+                pullRequestNumber,
+                "@ExampleUser",
+            )
+
+            expectThat(response)
+                .isFailure()
+                .isEqualTo(WebException.UnknownError(404, null))
+        }
+    }
+
+    @Nested
+    inner class GetPullRequestsForUserTest {
+        @Test
+        fun `GIVEN logged in user WHEN getting user's pull requests THEN return pull requests`() =
+            runTest {
+                coEvery { userDataSource.getUser() } returns Result.success(
+                    User(
+                        0,
+                        "correctAuthor",
+                    ),
+                )
+
+                val response = repository.getCurrentUserPullRequests()
+
+                expectThat(response)
+                    .isSuccess()
+                    .isEqualTo(Defaults.pullRequestsResponse())
+            }
+
+        @Test
+        fun `WHEN Network Error is returned during fetching user's pull request THEN return Network Error`() =
+            runTest {
+                coEvery {
+                    pullRequestDataSource.getPullRequestsForUser(any())
+                } returns Result.failure(WebException.NetworkError())
+
+                val response = repository.getCurrentUserPullRequests()
+
+
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.NetworkError())
+            }
     }
 }

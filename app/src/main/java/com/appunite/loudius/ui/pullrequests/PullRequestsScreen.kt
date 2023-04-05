@@ -18,37 +18,32 @@
 
 package com.appunite.loudius.ui.pullrequests
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusListIcon
+import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusPlaceholderText
+import com.appunite.loudius.ui.components.LoudiusText
+import com.appunite.loudius.ui.components.LoudiusTextStyle
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
@@ -82,22 +77,26 @@ private fun PullRequestsScreenStateless(
     isLoading: Boolean,
     isError: Boolean,
 ) {
-    Scaffold(topBar = {
-        LoudiusTopAppBar(title = stringResource(R.string.app_name))
-    }, content = { padding ->
-        when {
-            isError -> LoudiusErrorScreen(
-                onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
-            )
-            isLoading -> LoudiusLoadingIndicator()
-            pullRequests.isEmpty() -> EmptyListPlaceholder(padding)
-            else -> PullRequestsList(
-                pullRequests = pullRequests,
-                modifier = Modifier.padding(padding),
-                onItemClick = onAction,
-            )
-        }
-    })
+    Scaffold(
+        topBar = {
+            LoudiusTopAppBar(title = stringResource(R.string.app_name))
+        },
+        content = { padding ->
+            when {
+                isError -> LoudiusErrorScreen(
+                    onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
+                )
+
+                isLoading -> LoudiusLoadingIndicator()
+                pullRequests.isEmpty() -> EmptyListPlaceholder(padding)
+                else -> PullRequestsList(
+                    pullRequests = pullRequests,
+                    modifier = Modifier.padding(padding),
+                    onItemClick = onAction,
+                )
+            }
+        },
+    )
 }
 
 @Composable
@@ -110,10 +109,9 @@ private fun PullRequestsList(
         modifier = modifier.fillMaxSize(),
     ) {
         itemsIndexed(pullRequests) { index, item ->
-            val isIndexEven = index % 2 == 0
             PullRequestItem(
+                index = index,
                 data = item,
-                darkBackground = isIndexEven,
                 onClick = onItemClick,
             )
         }
@@ -122,46 +120,43 @@ private fun PullRequestsList(
 
 @Composable
 private fun PullRequestItem(
+    index: Int,
     data: PullRequest,
-    darkBackground: Boolean,
     onClick: (PulLRequestsAction) -> Unit,
 ) {
-    val backgroundColor = if (darkBackground) {
-        MaterialTheme.colorScheme.onSurface.copy(0.08f)
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-            .clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
-    ) {
-        PullRequestIcon()
-        RepoDetails(pullRequestTitle = data.title, repositoryName = data.fullRepositoryName)
-    }
-    Divider(color = MaterialTheme.colorScheme.outlineVariant)
-}
-
-@Composable
-private fun PullRequestIcon() {
-    Image(
-        painter = painterResource(id = R.drawable.ic_pull_request),
-        contentDescription = null,
-        modifier = Modifier
-            .padding(start = 18.dp, top = 10.dp)
-            .size(width = 18.dp, height = 20.dp),
+    LoudiusListItem(
+        index = index,
+        modifier = Modifier.clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
+        icon = { modifier -> PullRequestIcon(modifier) },
+        content = { modifier ->
+            RepoDetails(
+                modifier = modifier,
+                pullRequestTitle = data.title,
+                repositoryName = data.fullRepositoryName,
+            )
+        },
     )
 }
 
 @Composable
-private fun RepoDetails(pullRequestTitle: String, repositoryName: String) {
-    Column(Modifier.padding(start = 18.dp, top = 8.dp, bottom = 8.dp)) {
-        Text(text = pullRequestTitle, style = MaterialTheme.typography.bodyLarge)
-        Text(
+private fun PullRequestIcon(modifier: Modifier) {
+    LoudiusListIcon(
+        modifier = modifier,
+        painter = painterResource(id = R.drawable.ic_pull_request),
+        contentDescription = stringResource(id = R.string.pull_requests_screen_pull_request_content_description),
+    )
+}
+
+@Composable
+private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repositoryName: String) {
+    Column(modifier = modifier) {
+        LoudiusText(
+            text = pullRequestTitle,
+            style = LoudiusTextStyle.ListItem,
+        )
+        LoudiusText(
             text = repositoryName,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = LoudiusTextStyle.ListCaption,
         )
     }
 }

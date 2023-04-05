@@ -28,7 +28,8 @@ class FakePullRequestRepository : PullRequestRepository {
         owner: String,
         repo: String,
         pullRequestNumber: String,
-    ): Result<List<Review>> = Result.success(Defaults.reviews())
+    ): Result<List<Review>> =
+        Result.success(Defaults.reviews().filterNot { it.user == Defaults.currentUser() })
 
     override suspend fun getRequestedReviewers(
         owner: String,
@@ -38,13 +39,7 @@ class FakePullRequestRepository : PullRequestRepository {
         Result.success(RequestedReviewersResponse(Defaults.requestedReviewers()))
 
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> =
-        Result.success(
-            PullRequestsResponse(
-                incompleteResults = false,
-                totalCount = 1,
-                items = listOf(Defaults.pullRequest()),
-            ),
-        )
+        Result.success(Defaults.pullRequestsResponse())
 
     override suspend fun notify(
         owner: String,

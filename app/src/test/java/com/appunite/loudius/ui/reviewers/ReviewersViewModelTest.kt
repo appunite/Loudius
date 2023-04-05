@@ -157,9 +157,8 @@ class ReviewersViewModelTest {
                     get(ReviewersState::isError).isFalse()
                     get(ReviewersState::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
-                        Reviewer(2, "user2", true, 7, 5),
-                        Reviewer(3, "user3", false, 7, null),
-                        Reviewer(4, "user4", false, 7, null),
+                        Reviewer(2, "user2", false, 7, null),
+                        Reviewer(3, "user3",  false, 7, null),
                     )
                 }
             }
@@ -175,8 +174,8 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state)
                     .get(ReviewersState::reviewers)
                     .containsExactly(
+                        Reviewer(2, "user2", false, 7, null),
                         Reviewer(3, "user3", false, 7, null),
-                        Reviewer(4, "user4", false, 7, null),
                     )
 
             }
@@ -197,8 +196,7 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state)
                     .get(ReviewersState::reviewers)
                     .containsExactly(
-                        Reviewer(1, "user1", true, 7, 5),
-                        Reviewer(2, "user2", true, 7, 5),
+                        Reviewer(1, "user1", true, 7, 5)
                     )
             }
 
@@ -349,9 +347,8 @@ class ReviewersViewModelTest {
                     get(ReviewersState::isError).isFalse()
                     get(ReviewersState::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
-                        Reviewer(2, "user2", true, 7, 5),
-                        Reviewer(3, "user3", false, 7, null),
-                        Reviewer(4, "user4", false, 7, null),
+                        Reviewer(2, "user2", false, 7, null),
+                        Reviewer(3, "user3",  false, 7, null),
                     )
                 }
             }
