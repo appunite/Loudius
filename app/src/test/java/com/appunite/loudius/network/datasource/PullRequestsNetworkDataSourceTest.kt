@@ -166,16 +166,6 @@ class PullRequestsNetworkDataSourceTest {
 
             expectThat(response).isSuccess()
                 .isEqualTo(Defaults.pullRequestsResponse())
-
-            val expected = Result.success(
-                PullRequestsResponse(
-                    incompleteResults = false,
-                    totalCount = 1,
-                    items = listOf(
-                        Defaults.pullRequest(),
-                    ),
-                ),
-            )
         }
 
         @Test
