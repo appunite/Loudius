@@ -29,6 +29,7 @@ import com.appunite.loudius.util.Defaults
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.spyk
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
@@ -65,6 +66,7 @@ class PullRequestRepositoryImpTest {
                         Review("5", User(1, "user1"), ReviewState.COMMENTED, Defaults.date2),
                         Review("6", User(1, "user1"), ReviewState.APPROVED, Defaults.date3),
                     )
+                assertEquals("test", "test")
             }
 
         @Test
