@@ -271,9 +271,9 @@ class PullRequestsNetworkDataSourceTest {
                     .isEqualTo(
                         RequestedReviewersResponse(
                             listOf(
-                                RequestedReviewer(1, "exampleLogin")
-                            )
-                        )
+                                RequestedReviewer(1, "exampleLogin"),
+                            ),
+                        ),
                     )
             }
 
