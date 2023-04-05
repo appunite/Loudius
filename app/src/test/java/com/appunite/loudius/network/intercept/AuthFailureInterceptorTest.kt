@@ -42,7 +42,7 @@ class AuthFailureInterceptorTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val service = retrofitTestDouble(
         mockWebServer = mockWebServer,
-        client = testOkHttpClient
+        client = testOkHttpClient,
     ).create(TestApi::class.java)
 
     @AfterEach

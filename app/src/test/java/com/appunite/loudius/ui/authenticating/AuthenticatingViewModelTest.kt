@@ -74,7 +74,7 @@ class AuthenticatingViewModelTest {
     @Test
     fun `GIVEN unexpected Github behavior WHEN authenticating screen is opened THEN show generic error screen`() {
         coEvery { repository.fetchAccessToken(any(), any(), any()) } returns Result.failure(
-            WebException.UnknownError(null, null)
+            WebException.UnknownError(null, null),
         )
         setupIntent("validCode")
         val viewModel = create()
@@ -89,7 +89,7 @@ class AuthenticatingViewModelTest {
     fun `GIVEN unexpected error is presented WHEN try again success THEN navigate to pull requests`() {
         // simulate unknown error response
         coEvery { repository.fetchAccessToken(any(), any(), any()) } returns Result.failure(
-            WebException.UnknownError(null, null)
+            WebException.UnknownError(null, null),
         )
         setupIntent("validCode")
         val viewModel = create()

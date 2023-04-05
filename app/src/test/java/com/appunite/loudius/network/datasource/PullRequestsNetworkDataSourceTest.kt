@@ -61,11 +61,11 @@ class PullRequestsNetworkDataSourceTest {
         fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
             runTest {
                 mockWebServer.enqueue(
-                    MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                    MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
                 val response = pullRequestDataSource.getPullRequestsForUser(
-                    "exampleUser"
+                    "exampleUser",
                 )
 
                 expectThat(response)
@@ -159,7 +159,7 @@ class PullRequestsNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse)
+                MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
 
             val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
@@ -172,9 +172,9 @@ class PullRequestsNetworkDataSourceTest {
                     incompleteResults = false,
                     totalCount = 1,
                     items = listOf(
-                        Defaults.pullRequest()
-                    )
-                )
+                        Defaults.pullRequest(),
+                    ),
+                ),
             )
         }
 
@@ -190,7 +190,7 @@ class PullRequestsNetworkDataSourceTest {
                 """.trimIndent()
 
                 mockWebServer.enqueue(
-                    MockResponse().setResponseCode(401).setBody(jsonResponse)
+                    MockResponse().setResponseCode(401).setBody(jsonResponse),
                 )
 
                 val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
@@ -200,8 +200,8 @@ class PullRequestsNetworkDataSourceTest {
                     .isEqualTo(
                         WebException.UnknownError(
                             401,
-                            "Bad credentials"
-                        )
+                            "Bad credentials",
+                        ),
                     )
             }
     }
@@ -213,13 +213,13 @@ class PullRequestsNetworkDataSourceTest {
         fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
             runTest {
                 mockWebServer.enqueue(
-                    MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                    MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
                 val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber"
+                    "exampleNumber",
                 )
 
                 expectThat(response)
@@ -262,13 +262,13 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber"
+                    "exampleNumber",
                 )
 
                 expectThat(response)
@@ -278,10 +278,10 @@ class PullRequestsNetworkDataSourceTest {
                             listOf(
                                 RequestedReviewer(
                                     1,
-                                    "exampleLogin"
-                                )
-                            )
-                        )
+                                    "exampleLogin",
+                                ),
+                            ),
+                        ),
                     )
             }
 
@@ -299,13 +299,13 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber"
+                    "exampleNumber",
                 )
 
                 expectThat(response)
@@ -313,8 +313,8 @@ class PullRequestsNetworkDataSourceTest {
                     .isEqualTo(
                         WebException.UnknownError(
                             401,
-                            "Bad credentials"
-                        )
+                            "Bad credentials",
+                        ),
                     )
             }
     }
@@ -327,13 +327,13 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
-                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
                 val resposne = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber"
+                    "exampleNumber",
                 )
 
                 expectThat(resposne)
@@ -390,13 +390,13 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val response = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber"
+                    "exampleNumber",
                 )
 
                 expectThat(response)
@@ -407,8 +407,8 @@ class PullRequestsNetworkDataSourceTest {
                             "1",
                             User(10000000, "exampleUser"),
                             ReviewState.COMMENTED,
-                            LocalDateTime.parse("2023-03-02T10:21:36")
-                        )
+                            LocalDateTime.parse("2023-03-02T10:21:36"),
+                        ),
                     )
             }
 
@@ -426,13 +426,13 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val response = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber"
+                    "exampleNumber",
                 )
 
                 expectThat(response)
@@ -440,8 +440,8 @@ class PullRequestsNetworkDataSourceTest {
                     .isEqualTo(
                         WebException.UnknownError(
                             401,
-                            "Bad credentials"
-                        )
+                            "Bad credentials",
+                        ),
                     )
             }
     }
@@ -454,14 +454,14 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
-                        .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST),
                 )
 
                 val response = pullRequestDataSource.notify(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "@ExampleUser"
+                    "@ExampleUser",
                 )
 
                 expectThat(response)
@@ -506,14 +506,14 @@ class PullRequestsNetworkDataSourceTest {
                 }
             """.trimIndent()
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse)
+                MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
 
             val response = pullRequestDataSource.notify(
                 "exampleOwner",
                 "exampleRepo",
                 "exampleNumber",
-                "@ExampleUser"
+                "@ExampleUser",
             )
 
             expectThat(response).isSuccess()
@@ -532,14 +532,14 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse)
+                        .setBody(jsonResponse),
                 )
 
                 val response = pullRequestDataSource.notify(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "@ExampleUser"
+                    "@ExampleUser",
                 )
 
                 expectThat(response)
@@ -547,8 +547,8 @@ class PullRequestsNetworkDataSourceTest {
                     .isEqualTo(
                         WebException.UnknownError(
                             401,
-                            "Bad credentials"
-                        )
+                            "Bad credentials",
+                        ),
                     )
             }
     }

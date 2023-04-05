@@ -21,7 +21,6 @@ class UseStriktAssertionLibraryTest {
             .hasLintViolationWithoutAutoCorrect(2, 1, "Instead of using junit.framework.TestCase use strikt.api.expectThat")
     }
 
-
     @Test
     fun `do not allow jupiter assertions library`() {
         //language=kotlin
@@ -49,6 +48,7 @@ class UseStriktAssertionLibraryTest {
         wrappingRuleAssertThat(code)
             .hasLintViolationWithoutAutoCorrect(2, 1, "Instead of using org.junit.Assert use strikt.api.expectThat")
     }
+
     @Test
     fun `do not allow junit assertions framework`() {
         //language=kotlin

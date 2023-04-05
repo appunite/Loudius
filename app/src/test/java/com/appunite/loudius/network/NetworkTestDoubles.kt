@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit
 
 fun testOkHttpClient(
     authRepository: AuthRepository = FakeAuthRepository(),
-    authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl()
+    authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl(),
 ) = OkHttpClient.Builder()
     .connectTimeout(1, TimeUnit.SECONDS)
     .readTimeout(1, TimeUnit.SECONDS)
@@ -52,7 +52,7 @@ private fun testGson() =
 fun retrofitTestDouble(
     client: OkHttpClient = testOkHttpClient(),
     gson: Gson = testGson(),
-    mockWebServer: MockWebServer
+    mockWebServer: MockWebServer,
 ): Retrofit = Retrofit.Builder()
     .client(client)
     .addConverterFactory(GsonConverterFactory.create(gson))

@@ -24,7 +24,7 @@ class FakeAuthRepository : AuthRepository {
     override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken> = when (code) {
         "validCode" -> Result.success("validToken")
         "invalidCode" -> Result.failure(WebException.BadVerificationCodeException)

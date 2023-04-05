@@ -15,7 +15,7 @@ class UseStriktAssertionLibrary : Rule("use-strikt-assertion-library") {
     override fun beforeVisitChildNodes(
         node: ASTNode,
         autoCorrect: Boolean,
-        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit
+        emit: (offset: Int, errorMessage: String, canBeAutoCorrected: Boolean) -> Unit,
     ) {
         if (node.elementType == KtStubElementTypes.IMPORT_DIRECTIVE) {
             val importDirective = node.psi as KtImportDirective
@@ -32,5 +32,4 @@ class UseStriktAssertionLibrary : Rule("use-strikt-assertion-library") {
             }
         }
     }
-
 }
