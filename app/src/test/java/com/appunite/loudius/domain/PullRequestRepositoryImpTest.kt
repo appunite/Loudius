@@ -42,7 +42,7 @@ class PullRequestRepositoryImpTest {
 
     private val pullRequestDataSource = spyk(FakePullRequestDataSource())
     private val userDataSource: UserDataSource = mockk {
-        coEvery { getUser() } returns Result.success(User(1, "user1"))
+        coEvery { getUser() } returns Result.success(Defaults.currentUser())
     }
     private val repository = PullRequestRepositoryImpl(pullRequestDataSource, userDataSource)
 
@@ -56,12 +56,11 @@ class PullRequestRepositoryImpTest {
 
                 val actual = repository.getReviews("example", "example", pullRequestNumber)
 
-                val date1 = LocalDateTime.parse("2022-01-29T10:00:00")
                 val expected = Result.success(
                     listOf(
-                        Review("4", User(2, "user2"), ReviewState.COMMENTED, date1),
-                        Review("5", User(2, "user2"), ReviewState.COMMENTED, date1),
-                        Review("6", User(2, "user2"), ReviewState.APPROVED, date1),
+                        Review("4", User(1, "user1"), ReviewState.COMMENTED, Defaults.date1),
+                        Review("5", User(1, "user1"), ReviewState.COMMENTED, Defaults.date2),
+                        Review("6", User(1, "user1"), ReviewState.APPROVED, Defaults.date3),
                     ),
                 )
                 assertEquals(expected, actual)

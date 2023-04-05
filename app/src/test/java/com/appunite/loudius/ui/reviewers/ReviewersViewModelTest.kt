@@ -29,6 +29,10 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.verify
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,10 +43,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
@@ -121,9 +121,8 @@ class ReviewersViewModelTest {
 
                 val expected = listOf(
                     Reviewer(1, "user1", true, 7, 5),
-                    Reviewer(2, "user2", true, 7, 5),
+                    Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null),
-                    Reviewer(4, "user4", false, 7, null),
                 )
                 val actual = viewModel.state.reviewers
 
@@ -138,8 +137,8 @@ class ReviewersViewModelTest {
                 viewModel = createViewModel()
 
                 val expected = listOf(
+                    Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null),
-                    Reviewer(4, "user4", false, 7, null),
                 )
                 val actual = viewModel.state.reviewers
 
@@ -152,10 +151,7 @@ class ReviewersViewModelTest {
                 coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.success(RequestedReviewersResponse(emptyList()))
                 viewModel = createViewModel()
 
-                val expected = listOf(
-                    Reviewer(1, "user1", true, 7, 5),
-                    Reviewer(2, "user2", true, 7, 5),
-                )
+                val expected = listOf(Reviewer(1, "user1", true, 7, 5))
                 val actual = viewModel.state.reviewers
 
                 assertEquals(expected, actual)
@@ -260,9 +256,8 @@ class ReviewersViewModelTest {
 
                 val expected = listOf(
                     Reviewer(1, "user1", true, 7, 5),
-                    Reviewer(2, "user2", true, 7, 5),
+                    Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null),
-                    Reviewer(4, "user4", false, 7, null),
                 )
                 val actual = viewModel.state.reviewers
 
