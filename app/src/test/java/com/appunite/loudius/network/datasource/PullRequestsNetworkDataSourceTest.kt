@@ -197,12 +197,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(
-                        WebException.UnknownError(
-                            401,
-                            "Bad credentials",
-                        ),
-                    )
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 
@@ -276,12 +271,9 @@ class PullRequestsNetworkDataSourceTest {
                     .isEqualTo(
                         RequestedReviewersResponse(
                             listOf(
-                                RequestedReviewer(
-                                    1,
-                                    "exampleLogin",
-                                ),
-                            ),
-                        ),
+                                RequestedReviewer(1, "exampleLogin")
+                            )
+                        )
                     )
             }
 
@@ -310,12 +302,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(
-                        WebException.UnknownError(
-                            401,
-                            "Bad credentials",
-                        ),
-                    )
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 
@@ -437,12 +424,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(
-                        WebException.UnknownError(
-                            401,
-                            "Bad credentials",
-                        ),
-                    )
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 
@@ -544,12 +526,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(
-                        WebException.UnknownError(
-                            401,
-                            "Bad credentials",
-                        ),
-                    )
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 }

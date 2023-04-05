@@ -108,12 +108,7 @@ class UserDataSourceTest {
 
         expectThat(response)
             .isSuccess()
-            .isEqualTo(
-                User(
-                    id = 1,
-                    login = "exampleUser",
-                ),
-            )
+            .isEqualTo(User(id = 1, login = "exampleUser"))
     }
 
     @Test
@@ -135,11 +130,6 @@ class UserDataSourceTest {
 
             expectThat(response)
                 .isFailure()
-                .isEqualTo(
-                    WebException.UnknownError(
-                        401,
-                        "Bad credentials",
-                    ),
-                )
+                .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
         }
 }
