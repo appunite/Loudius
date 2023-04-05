@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    compileOnly 'com.pinterest.ktlint:ktlint-core:0.48.2'
+    compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:0.48.2'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.strikt:strikt-core:0.34.0'
+    testImplementation 'org.assertj:assertj-core:3.10.0'
+    testImplementation 'com.pinterest.ktlint:ktlint-core:0.48.2'
+    testImplementation 'com.pinterest.ktlint:ktlint-test:0.48.2'
+}
