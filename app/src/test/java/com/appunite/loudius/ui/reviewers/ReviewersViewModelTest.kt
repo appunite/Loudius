@@ -121,9 +121,8 @@ class ReviewersViewModelTest {
 
                 val expected = listOf(
                     Reviewer(1, "user1", true, 7, 5),
-                    Reviewer(2, "user2", true, 7, 5),
+                    Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null),
-                    Reviewer(4, "user4", false, 7, null),
                 )
                 val actual = viewModel.state.reviewers
 
@@ -138,8 +137,8 @@ class ReviewersViewModelTest {
                 viewModel = createViewModel()
 
                 val expected = listOf(
+                    Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null),
-                    Reviewer(4, "user4", false, 7, null),
                 )
                 val actual = viewModel.state.reviewers
 
@@ -152,10 +151,7 @@ class ReviewersViewModelTest {
                 coEvery { repository.getRequestedReviewers(any(), any(), any()) } returns Result.success(RequestedReviewersResponse(emptyList()))
                 viewModel = createViewModel()
 
-                val expected = listOf(
-                    Reviewer(1, "user1", true, 7, 5),
-                    Reviewer(2, "user2", true, 7, 5),
-                )
+                val expected = listOf(Reviewer(1, "user1", true, 7, 5))
                 val actual = viewModel.state.reviewers
 
                 assertEquals(expected, actual)
@@ -260,9 +256,8 @@ class ReviewersViewModelTest {
 
                 val expected = listOf(
                     Reviewer(1, "user1", true, 7, 5),
-                    Reviewer(2, "user2", true, 7, 5),
+                    Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null),
-                    Reviewer(4, "user4", false, 7, null),
                 )
                 val actual = viewModel.state.reviewers
 
