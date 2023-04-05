@@ -21,8 +21,6 @@ import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
-import com.appunite.loudius.network.model.ReviewState
-import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import java.time.LocalDateTime
@@ -37,7 +35,7 @@ class FakePullRequestDataSource : PullRequestDataSource {
         pullRequestNumber: String,
     ): Result<List<Review>> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyReviewsPullNumber" -> Result.success(
-            Defaults.reviews()
+            Defaults.reviews(),
         )
         else -> Result.failure(WebException.UnknownError(404, null))
     }

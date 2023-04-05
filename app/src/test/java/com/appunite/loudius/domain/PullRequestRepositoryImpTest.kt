@@ -30,7 +30,6 @@ import com.appunite.loudius.util.Defaults
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.spyk
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -75,7 +74,7 @@ class PullRequestRepositoryImpTest {
 
                 assertEquals(
                     Result.failure<List<Review>>(WebException.UnknownError(404, null)),
-                    actual
+                    actual,
                 )
             }
     }
@@ -117,9 +116,9 @@ class PullRequestRepositoryImpTest {
 
                 assertEquals(
                     Result.failure<List<RequestedReviewersResponse>>(
-                        WebException.UnknownError(404, null)
+                        WebException.UnknownError(404, null),
                     ),
-                    actual
+                    actual,
                 )
             }
     }
@@ -157,7 +156,7 @@ class PullRequestRepositoryImpTest {
 
             assertEquals(
                 Result.failure<Unit>(WebException.UnknownError(404, null)),
-                actual
+                actual,
             )
         }
     }
@@ -170,8 +169,8 @@ class PullRequestRepositoryImpTest {
                 coEvery { userDataSource.getUser() } returns Result.success(
                     User(
                         0,
-                        "correctAuthor"
-                    )
+                        "correctAuthor",
+                    ),
                 )
 
                 val actual = repository.getCurrentUserPullRequests()
@@ -190,9 +189,8 @@ class PullRequestRepositoryImpTest {
 
                 assertEquals(
                     Result.failure<PullRequestsResponse>(WebException.NetworkError()),
-                    actual
+                    actual,
                 )
             }
     }
-
 }
