@@ -2,6 +2,7 @@
     <string name="app_name">Loudius</string>
     <string name="back_button">Back button</string>
     <string name="login">Log in</string>
+    <string name="pull_requests_screen_pull_request_content_description">Pull request</string>
     <string name="details_screen_user_image_description">User image</string>
     <string name="details_notify">Notify</string>
     <string name="details_reviewed">Reviewed %d h ago.</string>
