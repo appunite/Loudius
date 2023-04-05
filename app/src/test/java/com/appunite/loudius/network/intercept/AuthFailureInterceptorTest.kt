@@ -32,7 +32,6 @@ import org.junit.jupiter.api.Test
 import retrofit2.HttpException
 import retrofit2.http.GET
 import strikt.api.expectCatching
-import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
@@ -43,7 +42,7 @@ class AuthFailureInterceptorTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val service = retrofitTestDouble(
         mockWebServer = mockWebServer,
-        client = testOkHttpClient,
+        client = testOkHttpClient
     ).create(TestApi::class.java)
 
     @AfterEach

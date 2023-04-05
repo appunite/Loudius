@@ -50,7 +50,7 @@ class UserDataSourceTest {
     fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
         runTest {
             mockWebServer.enqueue(
-                MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
+                MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
             )
 
             val response = userDataSource.getUser()
@@ -101,17 +101,19 @@ class UserDataSourceTest {
         """.trimIndent()
 
         mockWebServer.enqueue(
-            MockResponse().setResponseCode(200).setBody(jsonResponse),
+            MockResponse().setResponseCode(200).setBody(jsonResponse)
         )
 
         val response = userDataSource.getUser()
 
         expectThat(response)
             .isSuccess()
-            .isEqualTo(User(
-                id = 1,
-                login = "exampleUser",
-            ))
+            .isEqualTo(
+                User(
+                    id = 1,
+                    login = "exampleUser"
+                )
+            )
     }
 
     @Test
@@ -126,16 +128,18 @@ class UserDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(401).setBody(jsonResponse),
+                MockResponse().setResponseCode(401).setBody(jsonResponse)
             )
 
             val response = userDataSource.getUser()
 
             expectThat(response)
                 .isFailure()
-                .isEqualTo(WebException.UnknownError(
-                    401,
-                    "Bad credentials",
-                ))
+                .isEqualTo(
+                    WebException.UnknownError(
+                        401,
+                        "Bad credentials"
+                    )
+                )
         }
 }

@@ -111,7 +111,7 @@ class PullRequestsViewModelTest {
                     pullRequest.owner,
                     pullRequest.shortRepositoryName,
                     pullRequest.number.toString(),
-                    pullRequest.createdAt.toString(),
+                    pullRequest.createdAt.toString()
                 )
             )
     }

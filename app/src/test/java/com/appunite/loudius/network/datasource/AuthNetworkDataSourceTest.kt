@@ -41,7 +41,7 @@ class AuthNetworkDataSourceTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val authService = retrofitTestDouble(
         mockWebServer = mockWebServer,
-        client = testOkHttpClient,
+        client = testOkHttpClient
     ).create(AuthService::class.java)
 
     @AfterEach
@@ -60,7 +60,7 @@ class AuthNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse().setResponseCode(200).setBody(jsonResponse)
             )
 
             val result =
@@ -80,7 +80,7 @@ class AuthNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse().setResponseCode(200).setBody(jsonResponse)
             )
 
             val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
@@ -99,7 +99,7 @@ class AuthNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse().setResponseCode(200).setBody(jsonResponse)
             )
 
             val result = authNetworkDataSource.getAccessToken("", "", "")
