@@ -142,7 +142,7 @@ class PullRequestRepositoryImpTest {
         }
 
         @Test
-        fun `GIVEN incorrect pull request number WHEN notifying THEN return success result`() = runTest {
+        fun `GIVEN incorrect pull request number WHEN notifying THEN return Unknown Error with 404 code`() = runTest {
             coEvery {
                 repository.notify(any(), any(), any(), any())
             } returns Result.failure(WebException.UnknownError(404, null))
