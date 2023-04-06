@@ -182,6 +182,53 @@ private fun ReviewerItem(
 }
 
 @Composable
+private fun NotReviewerItem(
+    reviewer: Reviewer,
+    index: Int,
+    onNotifyClick: (ReviewersAction) -> Unit,
+) {
+    LoudiusListItem(
+        index = index,
+        icon = { ReviewerAvatarView(it) },
+        content = {
+            Column(modifier = it) {
+                IsReviewedHeadlineText(reviewer)
+                ReviewerName(reviewer)
+            }
+        },
+        action = {
+            NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
+        },
+    )
+    LoudiusListItem(
+        index = index,
+        icon = { ReviewerAvatarView(it) },
+        content = {
+            Column(modifier = it) {
+                IsReviewedHeadlineText(reviewer)
+                ReviewerName(reviewer)
+            }
+        },
+        action = {
+            NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
+        },
+    )
+    LoudiusListItem(
+        index = index,
+        icon = { ReviewerAvatarView(it) },
+        content = {
+            Column(modifier = it) {
+                IsReviewedHeadlineText(reviewer)
+                ReviewerName(reviewer)
+            }
+        },
+        action = {
+            NotifyButtonOrLoadingIndicator(reviewer = reviewer, onNotifyClick = onNotifyClick)
+        },
+    )
+}
+
+@Composable
 private fun NotifyButtonOrLoadingIndicator(
     reviewer: Reviewer,
     onNotifyClick: (ReviewersAction) -> Unit,
