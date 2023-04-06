@@ -33,11 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.appunite.loudius.R
-import com.appunite.loudius.common.Constants.AUTH_API_URL
-import com.appunite.loudius.common.Constants.AUTH_PATH
-import com.appunite.loudius.common.Constants.CLIENT_ID
-import com.appunite.loudius.common.Constants.NAME_PARAM_CLIENT_ID
-import com.appunite.loudius.common.Constants.SCOPE_PARAM
+import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
 import com.appunite.loudius.ui.components.LoudiusOutlinedButton
 import com.appunite.loudius.ui.components.LoudiusOutlinedButtonIcon
 import com.appunite.loudius.ui.components.LoudiusOutlinedButtonStyle
@@ -63,7 +59,7 @@ fun LoginScreen() {
                 )
             },
 
-        )
+            )
     }
 }
 
@@ -78,12 +74,9 @@ fun LoginImage() {
 }
 
 private fun startAuthorizing(context: Context) {
-    val url = buildAuthorizationUrl()
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(AUTHORIZATION_URL))
     context.startActivity(intent)
 }
-
-private fun buildAuthorizationUrl() = AUTH_API_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID + SCOPE_PARAM
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
