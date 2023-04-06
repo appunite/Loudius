@@ -101,6 +101,11 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    // assertion library
+    testImplementation 'io.strikt:strikt-core:0.34.0'
+    testImplementation 'io.strikt:strikt-mockk:0.34.0'
+    androidTestImplementation 'io.strikt:strikt-core:0.34.0'
+
     //testing
     testImplementation "io.mockk:mockk:1.13.3"
     testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
@@ -108,6 +113,9 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // ktlint
+    ktlintRuleset project(":custom-ktlint-rules")
 }
 
 tasks.withType(Test) {

@@ -19,7 +19,6 @@ package com.appunite.loudius.domain
 import com.appunite.loudius.domain.repository.PullRequestRepositoryImpl
 import com.appunite.loudius.fakes.FakePullRequestDataSource
 import com.appunite.loudius.network.datasource.UserDataSource
-import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
@@ -32,9 +31,13 @@ import io.mockk.mockk
 import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.containsExactly
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFailure
+import strikt.assertions.isSuccess
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PullRequestRepositoryImpTest {
@@ -53,16 +56,15 @@ class PullRequestRepositoryImpTest {
             runTest {
                 val pullRequestNumber = "correctPullRequestNumber"
 
-                val actual = repository.getReviews("example", "example", pullRequestNumber)
+                val response = repository.getReviews("example", "example", pullRequestNumber)
 
-                val expected = Result.success(
-                    listOf(
+                expectThat(response)
+                    .isSuccess()
+                    .containsExactly(
                         Review("4", User(1, "user1"), ReviewState.COMMENTED, Defaults.date1),
                         Review("5", User(1, "user1"), ReviewState.COMMENTED, Defaults.date2),
                         Review("6", User(1, "user1"), ReviewState.APPROVED, Defaults.date3),
-                    ),
-                )
-                assertEquals(expected, actual)
+                    )
             }
 
         @Test
@@ -70,12 +72,11 @@ class PullRequestRepositoryImpTest {
             runTest {
                 val pullRequestNumber = "incorrectPullRequestNumber"
 
-                val actual = repository.getReviews("example", "example", pullRequestNumber)
+                val response = repository.getReviews("example", "example", pullRequestNumber)
 
-                assertEquals(
-                    Result.failure<List<Review>>(WebException.UnknownError(404, null)),
-                    actual,
-                )
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(404, null))
             }
     }
 
@@ -86,13 +87,13 @@ class PullRequestRepositoryImpTest {
             runTest {
                 val pullRequestNumber = "correctPullRequestNumber"
 
-                val actual = repository.getRequestedReviewers(
+                val result = repository.getRequestedReviewers(
                     "example",
                     "example",
                     pullRequestNumber,
                 )
 
-                val expected = Result.success(
+                expectThat(result).isSuccess().isEqualTo(
                     RequestedReviewersResponse(
                         listOf(
                             RequestedReviewer(3, "user3"),
@@ -100,7 +101,6 @@ class PullRequestRepositoryImpTest {
                         ),
                     ),
                 )
-                assertEquals(expected, actual)
             }
 
         @Test
@@ -108,18 +108,15 @@ class PullRequestRepositoryImpTest {
             runTest {
                 val pullRequestNumber = "incorrectPullRequestNumber"
 
-                val actual = repository.getRequestedReviewers(
+                val response = repository.getRequestedReviewers(
                     "example",
                     "example",
                     pullRequestNumber,
                 )
 
-                assertEquals(
-                    Result.failure<List<RequestedReviewersResponse>>(
-                        WebException.UnknownError(404, null),
-                    ),
-                    actual,
-                )
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(404, null))
             }
     }
 
@@ -130,14 +127,15 @@ class PullRequestRepositoryImpTest {
         fun `GIVEN correct pull request number WHEN notifying THEN return success result`() = runTest {
             val pullRequestNumber = "correctPullRequestNumber"
 
-            val actual = repository.notify(
+            val result = repository.notify(
                 "exampleOwner",
                 "exampleRepo",
                 pullRequestNumber,
                 "@ExampleUser",
             )
 
-            assertEquals(Result.success(Unit), actual)
+            expectThat(result)
+                .isSuccess()
         }
 
         @Test
@@ -147,17 +145,16 @@ class PullRequestRepositoryImpTest {
             } returns Result.failure(WebException.UnknownError(404, null))
             val pullRequestNumber = "incorrectPullRequestNumber"
 
-            val actual = repository.notify(
+            val response = repository.notify(
                 "exampleOwner",
                 "exampleRepo",
                 pullRequestNumber,
                 "@ExampleUser",
             )
 
-            assertEquals(
-                Result.failure<Unit>(WebException.UnknownError(404, null)),
-                actual,
-            )
+            expectThat(response)
+                .isFailure()
+                .isEqualTo(WebException.UnknownError(404, null))
         }
     }
 
@@ -173,9 +170,11 @@ class PullRequestRepositoryImpTest {
                     ),
                 )
 
-                val actual = repository.getCurrentUserPullRequests()
+                val response = repository.getCurrentUserPullRequests()
 
-                assertEquals(Result.success(Defaults.pullRequestsResponse()), actual)
+                expectThat(response)
+                    .isSuccess()
+                    .isEqualTo(Defaults.pullRequestsResponse())
             }
 
         @Test
@@ -185,12 +184,11 @@ class PullRequestRepositoryImpTest {
                     pullRequestDataSource.getPullRequestsForUser(any())
                 } returns Result.failure(WebException.NetworkError())
 
-                val actual = repository.getCurrentUserPullRequests()
+                val response = repository.getCurrentUserPullRequests()
 
-                assertEquals(
-                    Result.failure<PullRequestsResponse>(WebException.NetworkError()),
-                    actual,
-                )
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.NetworkError())
             }
     }
 }

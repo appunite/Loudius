@@ -31,10 +31,14 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isA
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFailure
+import strikt.assertions.isSuccess
+import strikt.assertions.single
 import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
@@ -59,13 +63,13 @@ class PullRequestsNetworkDataSourceTest {
                     MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
-                val actualResponse = pullRequestDataSource.getPullRequestsForUser(
+                val response = pullRequestDataSource.getPullRequestsForUser(
                     "exampleUser",
                 )
-                Assertions.assertInstanceOf(
-                    WebException.NetworkError::class.java,
-                    actualResponse.exceptionOrNull(),
-                ) { "Exception thrown should be NetworkError type" }
+
+                expectThat(response)
+                    .isFailure()
+                    .isA<WebException.NetworkError>()
             }
 
         @Test
@@ -157,12 +161,10 @@ class PullRequestsNetworkDataSourceTest {
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
 
-            val actualResponse = pullRequestDataSource.getPullRequestsForUser("exampleUser")
+            val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
 
-            assertEquals(
-                Result.success(Defaults.pullRequestsResponse()),
-                actualResponse,
-            ) { "Data should be valid" }
+            expectThat(response).isSuccess()
+                .isEqualTo(Defaults.pullRequestsResponse())
         }
 
         @Test
@@ -180,16 +182,11 @@ class PullRequestsNetworkDataSourceTest {
                     MockResponse().setResponseCode(401).setBody(jsonResponse),
                 )
 
-                val actualResponse = pullRequestDataSource.getPullRequestsForUser("exampleUser")
+                val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
 
-                val expected = Result.failure<RequestedReviewersResponse>(
-                    WebException.UnknownError(
-                        401,
-                        "Bad credentials",
-                    ),
-                )
-
-                assertEquals(expected, actualResponse) { "Data should be valid" }
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 
@@ -203,15 +200,15 @@ class PullRequestsNetworkDataSourceTest {
                     MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
-                val actualResponse = pullRequestDataSource.getReviewers(
+                val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                 )
-                Assertions.assertInstanceOf(
-                    WebException.NetworkError::class.java,
-                    actualResponse.exceptionOrNull(),
-                ) { "Exception thrown should be NetworkError type" }
+
+                expectThat(response)
+                    .isFailure()
+                    .isA<WebException.NetworkError>()
             }
 
         @Test
@@ -252,17 +249,21 @@ class PullRequestsNetworkDataSourceTest {
                         .setBody(jsonResponse),
                 )
 
-                val actualResponse = pullRequestDataSource.getReviewers(
+                val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                 )
 
-                val requestedReviewer =
-                    RequestedReviewer(1, "exampleLogin")
-                val expected = Result.success(RequestedReviewersResponse(listOf(requestedReviewer)))
-
-                assertEquals(expected, actualResponse) { "Data should be valid" }
+                expectThat(response)
+                    .isSuccess()
+                    .isEqualTo(
+                        RequestedReviewersResponse(
+                            listOf(
+                                RequestedReviewer(1, "exampleLogin"),
+                            ),
+                        ),
+                    )
             }
 
         @Test
@@ -282,20 +283,15 @@ class PullRequestsNetworkDataSourceTest {
                         .setBody(jsonResponse),
                 )
 
-                val actualResponse = pullRequestDataSource.getReviewers(
+                val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                 )
 
-                val expected = Result.failure<RequestedReviewersResponse>(
-                    WebException.UnknownError(
-                        401,
-                        "Bad credentials",
-                    ),
-                )
-
-                assertEquals(expected, actualResponse) { "Data should be valid" }
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 
@@ -310,15 +306,15 @@ class PullRequestsNetworkDataSourceTest {
                         .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
                 )
 
-                val actualResponse = pullRequestDataSource.getReviews(
+                val resposne = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                 )
-                Assertions.assertInstanceOf(
-                    WebException.NetworkError::class.java,
-                    actualResponse.exceptionOrNull(),
-                ) { "Exception thrown should be NetworkError type" }
+
+                expectThat(resposne)
+                    .isFailure()
+                    .isA<WebException.NetworkError>()
             }
 
         @Test
@@ -373,24 +369,23 @@ class PullRequestsNetworkDataSourceTest {
                         .setBody(jsonResponse),
                 )
 
-                val actualResponse = pullRequestDataSource.getReviews(
+                val response = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                 )
 
-                val expected = Result.success(
-                    listOf(
+                expectThat(response)
+                    .isSuccess()
+                    .single()
+                    .isEqualTo(
                         Review(
                             "1",
                             User(10000000, "exampleUser"),
                             ReviewState.COMMENTED,
                             LocalDateTime.parse("2023-03-02T10:21:36"),
                         ),
-                    ),
-                )
-
-                assertEquals(expected, actualResponse) { "Data should be valid" }
+                    )
             }
 
         @Test
@@ -410,20 +405,15 @@ class PullRequestsNetworkDataSourceTest {
                         .setBody(jsonResponse),
                 )
 
-                val actualResponse = pullRequestDataSource.getReviews(
+                val response = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                 )
 
-                val expected = Result.failure<RequestedReviewersResponse>(
-                    WebException.UnknownError(
-                        401,
-                        "Bad credentials",
-                    ),
-                )
-
-                assertEquals(expected, actualResponse)
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 
@@ -438,16 +428,16 @@ class PullRequestsNetworkDataSourceTest {
                         .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST),
                 )
 
-                val actualResponse = pullRequestDataSource.notify(
+                val response = pullRequestDataSource.notify(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                     "@ExampleUser",
                 )
-                Assertions.assertInstanceOf(
-                    WebException.NetworkError::class.java,
-                    actualResponse.exceptionOrNull(),
-                ) { "Exception thrown should be NetworkError type" }
+
+                expectThat(response)
+                    .isFailure()
+                    .isA<WebException.NetworkError>()
             }
 
         @Test
@@ -490,14 +480,14 @@ class PullRequestsNetworkDataSourceTest {
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
 
-            val actual = pullRequestDataSource.notify(
+            val response = pullRequestDataSource.notify(
                 "exampleOwner",
                 "exampleRepo",
                 "exampleNumber",
                 "@ExampleUser",
             )
 
-            assertEquals(Result.success(Unit), actual)
+            expectThat(response).isSuccess()
         }
 
         @Test
@@ -516,20 +506,16 @@ class PullRequestsNetworkDataSourceTest {
                         .setBody(jsonResponse),
                 )
 
-                val actualResponse = pullRequestDataSource.notify(
+                val response = pullRequestDataSource.notify(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
                     "@ExampleUser",
                 )
 
-                val expected = Result.failure<RequestedReviewersResponse>(
-                    WebException.UnknownError(
-                        401,
-                        "Bad credentials",
-                    ),
-                )
-                assertEquals(expected, actualResponse)
+                expectThat(response)
+                    .isFailure()
+                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
             }
     }
 }

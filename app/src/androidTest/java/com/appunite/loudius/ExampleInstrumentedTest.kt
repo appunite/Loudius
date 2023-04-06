@@ -18,9 +18,10 @@ package com.appunite.loudius
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -33,6 +34,8 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.appunite.loudius", appContext.packageName)
+
+        expectThat(appContext.packageName)
+            .isEqualTo("com.appunite.loudius")
     }
 }

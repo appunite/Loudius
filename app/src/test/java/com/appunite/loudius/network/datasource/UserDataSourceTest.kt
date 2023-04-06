@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.network.datasource
 
-import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.UserService
@@ -27,8 +26,12 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isA
+import strikt.assertions.isEqualTo
+import strikt.assertions.isFailure
+import strikt.assertions.isSuccess
 
 @ExperimentalCoroutinesApi
 class UserDataSourceTest {
@@ -50,11 +53,11 @@ class UserDataSourceTest {
                 MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
             )
 
-            val actualResponse = userDataSource.getUser()
-            Assertions.assertInstanceOf(
-                WebException.NetworkError::class.java,
-                actualResponse.exceptionOrNull(),
-            ) { "Exception thrown should be NetworkError type" }
+            val response = userDataSource.getUser()
+
+            expectThat(response)
+                .isFailure()
+                .isA<WebException.NetworkError>()
         }
 
     @Test
@@ -101,16 +104,11 @@ class UserDataSourceTest {
             MockResponse().setResponseCode(200).setBody(jsonResponse),
         )
 
-        val actualResponse = userDataSource.getUser()
+        val response = userDataSource.getUser()
 
-        val expected = Result.success(
-            User(
-                id = 1,
-                login = "exampleUser",
-            ),
-        )
-
-        Assertions.assertEquals(expected, actualResponse) { "Data should be valid" }
+        expectThat(response)
+            .isSuccess()
+            .isEqualTo(User(id = 1, login = "exampleUser"))
     }
 
     @Test
@@ -128,15 +126,10 @@ class UserDataSourceTest {
                 MockResponse().setResponseCode(401).setBody(jsonResponse),
             )
 
-            val actualResponse = userDataSource.getUser()
+            val response = userDataSource.getUser()
 
-            val expected = Result.failure<RequestedReviewersResponse>(
-                WebException.UnknownError(
-                    401,
-                    "Bad credentials",
-                ),
-            )
-
-            Assertions.assertEquals(expected, actualResponse) { "Data should be valid" }
+            expectThat(response)
+                .isFailure()
+                .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
         }
 }
