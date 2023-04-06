@@ -155,25 +155,35 @@ class ReviewersViewModel @Inject constructor(
         val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
-            state = state.copy(reviewers = updateReviewerLoadingState(userLogin, true))
+            state = state.copy(reviewers = state.reviewers.updateLoadingState(userLogin, true))
+
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess {
                     state = state.copy(
                         snackbarTypeShown = SUCCESS,
-                        reviewers = updateReviewerLoadingState(userLogin, false),
+                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
                     )
                 }
                 .onFailure {
                     state = state.copy(
                         snackbarTypeShown = FAILURE,
-                        reviewers = updateReviewerLoadingState(userLogin, false),
+                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
                     )
                 }
         }
     }
 
-    private fun updateReviewerLoadingState(userLogin: String, isLoading: Boolean) =
-        state.reviewers.map { if (it.login == userLogin) it.copy(isLoading = isLoading) else it }
+    private fun List<Reviewer>.updateLoadingState(
+        userLogin: String,
+        isLoading: Boolean
+    ): List<Reviewer> = map {
+        if (it.login == userLogin) {
+            it.copy(isLoading = isLoading)
+        } else {
+            it
+        }
+    }
+
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
