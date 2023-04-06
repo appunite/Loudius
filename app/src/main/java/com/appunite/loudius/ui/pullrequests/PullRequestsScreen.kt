@@ -19,6 +19,7 @@
 package com.appunite.loudius.ui.pullrequests
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -163,10 +164,11 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 
 @Composable
 private fun EmptyListPlaceholder(padding: PaddingValues) {
-    LoudiusPlaceholderText(
-        textId = R.string.you_dont_have_any_pull_request,
-        padding = padding,
-    )
+    Box(modifier = Modifier.padding(padding)) {
+        LoudiusPlaceholderText(
+            textId = R.string.you_dont_have_any_pull_request,
+        )
+    }
 }
 
 @Preview("Pull requests - filled list")

@@ -231,10 +231,11 @@ private fun ReviewerName(reviewer: Reviewer) {
 
 @Composable
 private fun EmptyListPlaceholder(padding: PaddingValues) {
-    LoudiusPlaceholderText(
-        textId = R.string.you_dont_have_any_reviewers,
-        padding = padding,
-    )
+    Box(modifier = Modifier.padding(padding)) {
+        LoudiusPlaceholderText(
+            textId = R.string.you_dont_have_any_reviewers,
+        )
+    }
 }
 
 @Preview(showBackground = true)
