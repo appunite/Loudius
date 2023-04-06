@@ -72,64 +72,74 @@ class ReviewersViewModel @Inject constructor(
 
     private fun fetchData() {
         viewModelScope.launch {
+            state = state.copy(isLoading = true, isError = false)
+
             getMergedData()
                 .onSuccess { state = state.copy(reviewers = it, isLoading = false) }
                 .onFailure { state = state.copy(isError = true, isLoading = false) }
         }
     }
 
-    private suspend fun getMergedData(): Result<List<Reviewer>> =
+    private suspend fun getMergedData(): Result<List<Reviewer>> = downloadData()
+        .mapData()
+
+
+    private suspend fun downloadData(): Pair<Result<RequestedReviewersResponse>, Result<List<Review>>> =
         coroutineScope {
-            state = state.copy(isLoading = true, isError = false)
-            val requestedReviewersDeferred = async { fetchRequestedReviewers() }
-            val reviewersDeferred = async { fetchReviews() }
+            val (owner, repo, pullRequestNumber) = initialValues
 
-            val requestedReviewerResult = requestedReviewersDeferred.await()
-            val reviewersResult = reviewersDeferred.await()
+            val requestedReviewersDeferred =
+                async { repository.getRequestedReviewers(owner, repo, pullRequestNumber) }
+            val reviewsDeferred = async { repository.getReviews(owner, repo, pullRequestNumber) }
 
-            requestedReviewerResult.flatMap { requestedReviewers ->
-                reviewersResult.map { it + requestedReviewers }
-            }
+            Pair(requestedReviewersDeferred.await(), reviewsDeferred.await())
         }
 
-    private suspend fun fetchRequestedReviewers(): Result<List<Reviewer>> {
-        val (owner, repo, pullRequestNumber, submissionTime) = initialValues
 
-        return repository.getRequestedReviewers(owner, repo, pullRequestNumber)
-            .map { it.mapToReviewers(submissionTime) }
+    private fun Pair<Result<RequestedReviewersResponse>, Result<List<Review>>>.mapData() =
+        mergeData(first.mapRequestedReviewers(), second.mapReviews())
+
+    private fun mergeData(
+        requestedReviewers: Result<List<Reviewer>>,
+        reviewersWithReviews: Result<List<Reviewer>>
+    ) = requestedReviewers.flatMap { list ->
+        reviewersWithReviews.map { it + list }
     }
 
-    private fun RequestedReviewersResponse.mapToReviewers(submissionTime: String): List<Reviewer> {
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
+    private fun Result<RequestedReviewersResponse>.mapRequestedReviewers(): Result<List<Reviewer>> =
+        map {
+            val hoursFromPRStart =
+                countHoursTillNow(LocalDateTime.parse(initialValues.submissionTime))
 
-        return users.map {
-            Reviewer(it.id, it.login, false, hoursFromPRStart, null)
-        }
-    }
-
-    private suspend fun fetchReviews(): Result<List<Reviewer>> {
-        val (owner, repo, pullRequestNumber, submissionTime) = initialValues
-
-        return repository.getReviews(owner, repo, pullRequestNumber)
-            .map { it.mapToReviewers(submissionTime) }
-    }
-
-    private fun List<Review>.mapToReviewers(submissionTime: String): List<Reviewer> {
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
-
-        return groupBy { it.user.id }
-            .map { reviewsForSingleUser ->
-                val latestReview = reviewsForSingleUser.value.minBy { it.submittedAt }
-                val hoursFromReviewDone = countHoursTillNow(latestReview.submittedAt)
-
+            it.users.map { requestedReviewer ->
                 Reviewer(
-                    latestReview.user.id,
-                    latestReview.user.login,
-                    true,
+                    requestedReviewer.id,
+                    requestedReviewer.login,
+                    false,
                     hoursFromPRStart,
-                    hoursFromReviewDone,
+                    null
                 )
             }
+        }
+
+    private fun Result<List<Review>>.mapReviews(): Result<List<Reviewer>> {
+        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(initialValues.submissionTime))
+
+        return map { list ->
+            list.groupBy { it.user.id }
+                .map { reviewsForSingleUser ->
+                    val latestReview = reviewsForSingleUser.value.minBy { it.submittedAt }
+                    val hoursFromReviewDone = countHoursTillNow(latestReview.submittedAt)
+
+                    Reviewer(
+                        latestReview.user.id,
+                        latestReview.user.login,
+                        true,
+                        hoursFromPRStart,
+                        hoursFromReviewDone,
+                    )
+                }
+        }
     }
 
     private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
