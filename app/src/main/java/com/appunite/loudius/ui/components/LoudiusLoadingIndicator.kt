@@ -34,14 +34,14 @@ import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
-fun LoudiusLoadingIndicator() {
+fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_indicator))
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever,
     )
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         LottieAnimation(
             composition = composition,

@@ -25,4 +25,6 @@ object Constants {
     const val SCOPE_PARAM = "&scope=repo"
     const val CLIENT_ID = "91131449e417c7e29912"
     const val REDIRECT_URL = "loudius://callback"
+    const val AUTHORIZATION_URL =
+        AUTH_API_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID + SCOPE_PARAM
 }

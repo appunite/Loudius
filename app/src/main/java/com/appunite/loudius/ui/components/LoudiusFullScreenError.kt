@@ -32,13 +32,14 @@ import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
-fun LoudiusErrorScreen(
+fun LoudiusFullScreenError(
+    modifier: Modifier = Modifier,
     errorText: String = stringResource(id = R.string.error_dialog_text),
     buttonText: String = stringResource(id = R.string.try_again),
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 142.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -74,7 +75,7 @@ private fun ErrorText(text: String) {
 @Composable
 fun LoudiusErrorScreenPreview() {
     LoudiusTheme {
-        LoudiusErrorScreen(
+        LoudiusFullScreenError(
             errorText = stringResource(id = R.string.error_dialog_text),
             buttonText = stringResource(R.string.try_again),
             onButtonClick = {},

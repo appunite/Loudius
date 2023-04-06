@@ -18,7 +18,6 @@ package com.appunite.loudius.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -31,10 +30,9 @@ import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
-fun LoudiusPlaceholderText(@StringRes textId: Int, padding: PaddingValues) {
+fun LoudiusPlaceholderText(@StringRes textId: Int) {
     Box(
         modifier = Modifier
-            .padding(padding)
             .fillMaxSize()
             .padding(16.dp),
         contentAlignment = Alignment.Center,
@@ -50,6 +48,6 @@ fun LoudiusPlaceholderText(@StringRes textId: Int, padding: PaddingValues) {
 @Composable
 fun PreviewLoudiusPlaceholderText() {
     LoudiusTheme {
-        LoudiusPlaceholderText(R.string.you_dont_have_any_pull_request, PaddingValues(0.dp))
+        LoudiusPlaceholderText(R.string.you_dont_have_any_pull_request)
     }
 }

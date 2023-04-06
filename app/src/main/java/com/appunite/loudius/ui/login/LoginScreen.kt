@@ -34,11 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.common.Constants.AUTH_API_URL
-import com.appunite.loudius.common.Constants.AUTH_PATH
-import com.appunite.loudius.common.Constants.CLIENT_ID
-import com.appunite.loudius.common.Constants.NAME_PARAM_CLIENT_ID
-import com.appunite.loudius.common.Constants.SCOPE_PARAM
+import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
 import com.appunite.loudius.ui.components.LoudiusDialog
 import com.appunite.loudius.ui.components.LoudiusOutlinedButton
 import com.appunite.loudius.ui.components.LoudiusOutlinedButtonIcon
@@ -56,13 +52,11 @@ fun LoginScreen(
         when (navigateTo) {
             LoginNavigateTo.OpenGithubAuth -> {
                 context.startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(buildAuthorizationUrl()),
-                    ),
+                    Intent(Intent.ACTION_VIEW, Uri.parse(AUTHORIZATION_URL)),
                 )
                 viewModel.onAction(LoginAction.ClearNavigation)
             }
+
             LoginNavigateTo.OpenXiaomiPermissionManager -> {
                 context.startActivity(GithubHelper.xiaomiPermissionManagerForGithub())
             }
@@ -135,8 +129,6 @@ fun LoginImage() {
         ),
     )
 }
-
-private fun buildAuthorizationUrl() = AUTH_API_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID + SCOPE_PARAM
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
