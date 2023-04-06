@@ -30,12 +30,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -83,7 +83,6 @@ class ReviewersViewModel @Inject constructor(
     private suspend fun getMergedData(): Result<List<Reviewer>> = downloadData()
         .mapData()
 
-
     private suspend fun downloadData(): Pair<Result<RequestedReviewersResponse>, Result<List<Review>>> =
         coroutineScope {
             val (owner, repo, pullRequestNumber) = initialValues
@@ -95,13 +94,12 @@ class ReviewersViewModel @Inject constructor(
             Pair(requestedReviewersDeferred.await(), reviewsDeferred.await())
         }
 
-
     private fun Pair<Result<RequestedReviewersResponse>, Result<List<Review>>>.mapData() =
         mergeData(first.mapRequestedReviewers(), second.mapReviews())
 
     private fun mergeData(
         requestedReviewers: Result<List<Reviewer>>,
-        reviewersWithReviews: Result<List<Reviewer>>
+        reviewersWithReviews: Result<List<Reviewer>>,
     ) = requestedReviewers.flatMap { list ->
         reviewersWithReviews.map { it + list }
     }
@@ -117,7 +115,7 @@ class ReviewersViewModel @Inject constructor(
                     requestedReviewer.login,
                     false,
                     hoursFromPRStart,
-                    null
+                    null,
                 )
             }
         }
@@ -175,7 +173,7 @@ class ReviewersViewModel @Inject constructor(
 
     private fun List<Reviewer>.updateLoadingState(
         userLogin: String,
-        isLoading: Boolean
+        isLoading: Boolean,
     ): List<Reviewer> = map {
         if (it.login == userLogin) {
             it.copy(isLoading = isLoading)
@@ -183,7 +181,6 @@ class ReviewersViewModel @Inject constructor(
             it
         }
     }
-
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
