@@ -65,12 +65,12 @@ fun AuthenticatingScreenStateless(
 
 @Composable
 private fun ShowLoudiusLoginErrorScreen(
-    onTryAgainClick: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     LoudiusFullScreenError(
         errorText = stringResource(id = R.string.error_login_text),
         buttonText = stringResource(id = R.string.go_to_login),
-        onButtonClick = onTryAgainClick,
+        onButtonClick = navigateToLogin,
     )
 }
 
