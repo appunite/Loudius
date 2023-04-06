@@ -42,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusFullScreenError
 import com.appunite.loudius.ui.components.LoudiusListIcon
 import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
@@ -125,8 +125,11 @@ private fun ReviewersScreenStateless(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { padding ->
             when {
-                isError -> LoudiusErrorScreen(onButtonClick = { onAction(ReviewersAction.OnTryAgain) })
-                isLoading -> LoudiusLoadingIndicator()
+                isError -> LoudiusFullScreenError(
+                    modifier = Modifier.padding(padding),
+                    onButtonClick = { onAction(ReviewersAction.OnTryAgain) },
+                )
+                isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 reviewers.isEmpty() -> EmptyListPlaceholder(padding)
                 else -> ReviewersScreenContent(
                     reviewers = reviewers,
@@ -231,10 +234,11 @@ private fun ReviewerName(reviewer: Reviewer) {
 
 @Composable
 private fun EmptyListPlaceholder(padding: PaddingValues) {
-    LoudiusPlaceholderText(
-        textId = R.string.you_dont_have_any_reviewers,
-        padding = padding,
-    )
+    Box(modifier = Modifier.padding(padding)) {
+        LoudiusPlaceholderText(
+            textId = R.string.you_dont_have_any_reviewers,
+        )
+    }
 }
 
 @Preview(showBackground = true)

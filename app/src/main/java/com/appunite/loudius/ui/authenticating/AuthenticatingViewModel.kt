@@ -56,7 +56,7 @@ sealed class AuthenticatingScreenNavigation {
 @HiltViewModel
 class AuthenticatingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)

@@ -19,6 +19,7 @@
 package com.appunite.loudius.ui.pullrequests
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
-import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusFullScreenError
 import com.appunite.loudius.ui.components.LoudiusListIcon
 import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
@@ -83,11 +84,12 @@ private fun PullRequestsScreenStateless(
         },
         content = { padding ->
             when {
-                isError -> LoudiusErrorScreen(
+                isError -> LoudiusFullScreenError(
+                    modifier = Modifier.padding(padding),
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
 
-                isLoading -> LoudiusLoadingIndicator()
+                isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 pullRequests.isEmpty() -> EmptyListPlaceholder(padding)
                 else -> PullRequestsList(
                     pullRequests = pullRequests,
@@ -163,10 +165,11 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 
 @Composable
 private fun EmptyListPlaceholder(padding: PaddingValues) {
-    LoudiusPlaceholderText(
-        textId = R.string.you_dont_have_any_pull_request,
-        padding = padding,
-    )
+    Box(modifier = Modifier.padding(padding)) {
+        LoudiusPlaceholderText(
+            textId = R.string.you_dont_have_any_pull_request,
+        )
+    }
 }
 
 @Preview("Pull requests - filled list")
