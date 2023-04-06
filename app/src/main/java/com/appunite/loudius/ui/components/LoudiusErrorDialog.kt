@@ -40,34 +40,14 @@ fun LoudiusErrorDialog(
 ) {
     var openDialog by remember { mutableStateOf(true) }
     if (openDialog) {
-        AlertDialog(
+        LoudiusDialog(
             onDismissRequest = { openDialog = false },
-            title = { Text(text = dialogTitle) },
-            text = { Text(text = dialogText) },
+            title = dialogTitle,
+            text = { LoudiusText(style = LoudiusTextStyle.ScreenContent, text = dialogText) },
             confirmButton = {
-                ConfirmButton(
-                    confirmText = confirmText,
-                    confirm = onConfirmButtonClick,
-                )
+                LoudiusOutlinedButton(text = confirmText, onClick = onConfirmButtonClick)
             },
-            containerColor = MaterialTheme.colorScheme.surface,
         )
-    }
-}
-
-@Composable
-private fun ConfirmButton(
-    confirmText: String,
-    confirm: () -> Unit,
-) {
-    Button(
-        onClick = confirm,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.tertiary,
-        ),
-    ) {
-        Text(text = confirmText)
     }
 }
 
