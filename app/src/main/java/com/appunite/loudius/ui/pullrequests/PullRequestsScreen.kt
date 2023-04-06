@@ -37,7 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
-import com.appunite.loudius.ui.components.LoudiusErrorScreen
+import com.appunite.loudius.ui.components.LoudiusFullScreenError
 import com.appunite.loudius.ui.components.LoudiusListIcon
 import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
@@ -83,7 +83,7 @@ private fun PullRequestsScreenStateless(
         },
         content = { padding ->
             when {
-                isError -> LoudiusErrorScreen(
+                isError -> LoudiusFullScreenError(
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
 
