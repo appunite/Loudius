@@ -12,6 +12,7 @@ sealed class LoginAction {
     object ClickLogIn : LoginAction()
     object XiaomiPermissionDialogDismiss : LoginAction()
     object XiaomiPermissionDialogGrantPermission : LoginAction()
+    object XiaomiPermissionDialogAlreadyGrantedPermission : LoginAction()
 }
 
 sealed class LoginNavigateTo {
@@ -56,8 +57,14 @@ class LoginScreenViewModel @Inject constructor(
 
             LoginAction.XiaomiPermissionDialogGrantPermission -> {
                 state = state.copy(
-                    showXiaomiPermissionDialog = false,
                     navigateTo = LoginNavigateTo.OpenXiaomiPermissionManager,
+                )
+            }
+
+            LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission -> {
+                state = state.copy(
+                    showXiaomiPermissionDialog = false,
+                    navigateTo = LoginNavigateTo.OpenGithubAuth,
                 )
             }
         }

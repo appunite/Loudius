@@ -111,8 +111,8 @@ fun LoginScreenStateless(
                     }
                 },
                 dismissButton = {
-                    LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_cancel)) {
-                        onAction(LoginAction.XiaomiPermissionDialogDismiss)
+                    LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_already_granted)) {
+                        onAction(LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission)
                     }
                 },
             )

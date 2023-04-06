@@ -46,18 +46,7 @@ class GithubHelper @Inject constructor(@ApplicationContext private val context: 
             return false
         }
 
-        if (isAlertWindowPermissionGranted()) {
-            return false
-        }
         return true
-    }
-
-    private fun isAlertWindowPermissionGranted(): Boolean {
-        val permissionNeeded = "Manifest.permission.SYSTEM_ALERT_WINDOW"
-        return context.packageManager.checkPermission(
-            permissionNeeded,
-            GITHUB_APP_PACKAGE_NAME,
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun isGithubAppInstalled(): Boolean {

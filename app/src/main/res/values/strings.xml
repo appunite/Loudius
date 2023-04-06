@@ -24,9 +24,9 @@
     <!-- LoginScreen -->
     <string name="login_screen_login">Log in</string>
     <string name="login_screen_loudius_logo_content_description">Loudius logo</string>
-    <string name="login_screen_xiaomi_dialog_grant_permission">Grant Permission</string>
-    <string name="login_screen_xiaomi_dialog_text">You\'re using a Xiaomi device and you have Github App installed, please note that there\'s a known bug that requires you to grant the "Display pup-up windows while running in the background" permission. This will allow you to continue using the app without any interruptions.</string>
+    <string name="login_screen_xiaomi_dialog_grant_permission">Grant permission</string>
+    <string name="login_screen_xiaomi_dialog_text">You\'re using a Xiaomi device and you have Github App installed, please note that there\'s a known bug that requires you to grant the \"Display pup-up windows while running in the background\" permission. This will allow you to continue using the app without any interruptions.</string>
     <string name="login_screen_xiaomi_dialog_title">Necessary permissions</string>
-    <string name="login_screen_xiaomi_dialog_cancel">Cancel</string>
+    <string name="login_screen_xiaomi_dialog_already_granted">I\'ve already granted</string>
 
 </resources>
