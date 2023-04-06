@@ -37,21 +37,22 @@ sealed class Screen(val route: String) {
             return code?.let { Result.success(it) } ?: Result.failure(Exception("No error code"))
         }
 
-        val deepLinks: List<NavDeepLink> get() = listOf(
-            navDeepLink {
-                uriPattern = Constants.REDIRECT_URL
-            },
-        )
+        val deepLinks: List<NavDeepLink>
+            get() = listOf(
+                navDeepLink {
+                    uriPattern = Constants.REDIRECT_URL
+                },
+            )
     }
 
     object PullRequests : Screen("pull_requests_screen")
 
     object Reviewers :
         Screen("reviewers_screen/{pull_request_number}/{owner}/{repo}/{submission_date}") {
-        const val pullRequestNumberArg = "pull_request_number"
-        const val ownerArg = "owner"
-        const val repoArg = "repo"
-        const val submissionDateArg = "submission_date"
+        private const val pullRequestNumberArg = "pull_request_number"
+        private const val ownerArg = "owner"
+        private const val repoArg = "repo"
+        private const val submissionDateArg = "submission_date"
 
         override val arguments: List<NamedNavArgument>
             get() {
@@ -69,5 +70,19 @@ sealed class Screen(val route: String) {
             pullRequestNumber: String,
             submissionDate: String,
         ): String = "reviewers_screen/$pullRequestNumber/$owner/$repo/$submissionDate"
+
+        fun getInitialValues(savedStateHandle: SavedStateHandle) = ReviewersInitialValues(
+            checkNotNull(savedStateHandle[ownerArg]),
+            checkNotNull(savedStateHandle[repoArg]),
+            checkNotNull(savedStateHandle[pullRequestNumberArg]),
+            checkNotNull(savedStateHandle[submissionDateArg]),
+        )
+
+        data class ReviewersInitialValues(
+            val owner: String,
+            val repo: String,
+            val pullRequestNumber: String,
+            val submissionTime: String,
+        )
     }
 }

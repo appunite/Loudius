@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appunite.loudius.common.Screen
+import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
@@ -30,12 +30,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -60,7 +60,7 @@ class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val initialValues: InitialValues = getInitialValues(savedStateHandle)
+    private val initialValues = getInitialValues(savedStateHandle)
 
     var state by mutableStateOf(ReviewersState())
         private set
@@ -70,22 +70,15 @@ class ReviewersViewModel @Inject constructor(
         fetchData()
     }
 
-    private fun getInitialValues(savedStateHandle: SavedStateHandle) = InitialValues(
-        checkNotNull(savedStateHandle[Screen.Reviewers.ownerArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.repoArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.pullRequestNumberArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg]),
-    )
-
     private fun fetchData() {
         viewModelScope.launch {
             getMergedData()
-                .onSuccess { state = state.copy(reviewers = it.orEmpty(), isLoading = false) }
+                .onSuccess { state = state.copy(reviewers = it, isLoading = false) }
                 .onFailure { state = state.copy(isError = true, isLoading = false) }
         }
     }
 
-    private suspend fun getMergedData(): Result<List<Reviewer>?> =
+    private suspend fun getMergedData(): Result<List<Reviewer>> =
         coroutineScope {
             state = state.copy(isLoading = true, isError = false)
             val requestedReviewersDeferred = async { fetchRequestedReviewers() }
@@ -175,11 +168,4 @@ class ReviewersViewModel @Inject constructor(
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
     }
-
-    private data class InitialValues(
-        val owner: String,
-        val repo: String,
-        val pullRequestNumber: String,
-        val submissionTime: String,
-    )
 }
