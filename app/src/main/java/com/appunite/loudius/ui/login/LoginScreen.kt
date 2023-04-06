@@ -59,7 +59,7 @@ fun LoginScreen() {
                 )
             },
 
-            )
+        )
     }
 }
 

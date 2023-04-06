@@ -127,7 +127,7 @@ private fun ReviewersScreenStateless(
             when {
                 isError -> LoudiusFullScreenError(
                     modifier = Modifier.padding(padding),
-                    onButtonClick = { onAction(ReviewersAction.OnTryAgain) }
+                    onButtonClick = { onAction(ReviewersAction.OnTryAgain) },
                 )
                 isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 reviewers.isEmpty() -> EmptyListPlaceholder(padding)
