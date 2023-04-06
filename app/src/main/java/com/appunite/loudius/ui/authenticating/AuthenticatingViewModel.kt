@@ -28,8 +28,8 @@ import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.utils.WebException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 sealed class AuthenticatingAction {
 
@@ -56,7 +56,7 @@ sealed class AuthenticatingScreenNavigation {
 @HiltViewModel
 class AuthenticatingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)

@@ -85,10 +85,11 @@ private fun PullRequestsScreenStateless(
         content = { padding ->
             when {
                 isError -> LoudiusFullScreenError(
+                    modifier = Modifier.padding(padding),
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
 
-                isLoading -> LoudiusLoadingIndicator()
+                isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 pullRequests.isEmpty() -> EmptyListPlaceholder(padding)
                 else -> PullRequestsList(
                     pullRequests = pullRequests,

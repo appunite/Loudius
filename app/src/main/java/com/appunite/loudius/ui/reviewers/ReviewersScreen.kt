@@ -125,8 +125,11 @@ private fun ReviewersScreenStateless(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { padding ->
             when {
-                isError -> LoudiusFullScreenError(onButtonClick = { onAction(ReviewersAction.OnTryAgain) })
-                isLoading -> LoudiusLoadingIndicator()
+                isError -> LoudiusFullScreenError(
+                    modifier = Modifier.padding(padding),
+                    onButtonClick = { onAction(ReviewersAction.OnTryAgain) }
+                )
+                isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 reviewers.isEmpty() -> EmptyListPlaceholder(padding)
                 else -> ReviewersScreenContent(
                     reviewers = reviewers,

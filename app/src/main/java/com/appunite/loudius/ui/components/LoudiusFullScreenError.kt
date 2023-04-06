@@ -33,12 +33,13 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun LoudiusFullScreenError(
+    modifier: Modifier = Modifier,
     errorText: String = stringResource(id = R.string.error_dialog_text),
     buttonText: String = stringResource(id = R.string.try_again),
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 142.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
