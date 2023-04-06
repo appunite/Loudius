@@ -70,5 +70,4 @@ class LoginScreenViewModelTest {
             get(LoginState::showXiaomiPermissionDialog).isFalse()
         }
     }
-
 }

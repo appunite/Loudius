@@ -32,10 +32,9 @@ class GithubHelper @Inject constructor(@ApplicationContext private val context: 
             Intent("miui.intent.action.APP_PERM_EDITOR")
                 .setClassName(
                     "com.miui.securitycenter",
-                    "com.miui.permcenter.permissions.PermissionsEditorActivity"
+                    "com.miui.permcenter.permissions.PermissionsEditorActivity",
                 )
                 .putExtra("extra_pkgname", GITHUB_APP_PACKAGE_NAME)
-
     }
 
     fun shouldAskForXiaomiIntent(): Boolean {
@@ -57,17 +56,16 @@ class GithubHelper @Inject constructor(@ApplicationContext private val context: 
         val permissionNeeded = "Manifest.permission.SYSTEM_ALERT_WINDOW"
         return context.packageManager.checkPermission(
             permissionNeeded,
-            GITHUB_APP_PACKAGE_NAME
+            GITHUB_APP_PACKAGE_NAME,
         ) == PackageManager.PERMISSION_GRANTED
     }
-
 
     private fun isGithubAppInstalled(): Boolean {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 context.packageManager.getPackageInfo(
                     GITHUB_APP_PACKAGE_NAME,
-                    PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong())
+                    PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong()),
                 )
             } else {
                 @Suppress("DEPRECATION")

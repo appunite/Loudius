@@ -26,7 +26,7 @@ data class LoginState(
 
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(
-    private val githubHelper: GithubHelper
+    private val githubHelper: GithubHelper,
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState(showXiaomiPermissionDialog = false, navigateTo = null))
@@ -41,11 +41,11 @@ class LoginScreenViewModel @Inject constructor(
             LoginAction.ClickLogIn -> {
                 if (githubHelper.shouldAskForXiaomiIntent()) {
                     state = state.copy(
-                        showXiaomiPermissionDialog = true
+                        showXiaomiPermissionDialog = true,
                     )
                 } else {
                     state = state.copy(
-                        navigateTo = LoginNavigateTo.OpenGithubAuth
+                        navigateTo = LoginNavigateTo.OpenGithubAuth,
                     )
                 }
             }
