@@ -20,8 +20,10 @@ class LoginScreenTest {
 
 //    @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
+
 //    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<TestActivity>()
+
     @get:Rule
     val rule: RuleChain = RuleChain.outerRule(hiltRule)
         .around(composeTestRule)
