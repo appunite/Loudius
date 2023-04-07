@@ -22,14 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.utils.WebException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 sealed class AuthenticatingAction {
 
@@ -91,7 +90,7 @@ class AuthenticatingViewModel @Inject constructor(
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
                     clientId = CLIENT_ID,
-                    clientSecret = BuildConfig.CLIENT_SECRET,
+                    clientSecret = "c5f435d1a1a1a1a1a0f74d1b1b1b1b1bd82c2c2c2c2c9",
                     code = code,
                 ).onSuccess {
                     state = state.copy(
