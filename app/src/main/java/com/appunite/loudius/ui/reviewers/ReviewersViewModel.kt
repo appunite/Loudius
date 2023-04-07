@@ -30,12 +30,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -172,11 +172,17 @@ class ReviewersViewModel @Inject constructor(
                     )
                 }
                 .onFailure {
-                    state = state.copy(
-                        snackbarTypeShown = FAILURE,
-                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
-                    )
+
+
+                    state = state
+
+                        .copy(
+                            snackbarTypeShown = FAILURE,
+                            reviewers = state.reviewers.updateLoadingState(userLogin, false),
+                        )
                 }
+
+
         }
     }
 
@@ -184,6 +190,8 @@ class ReviewersViewModel @Inject constructor(
         userLogin: String,
         isLoading: Boolean,
     ): List<Reviewer> = map {
+
+
         if (it.login == userLogin) {
             it.copy(isLoading = isLoading)
         } else {
@@ -191,7 +199,11 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
+
     private fun dismissSnackbar() {
-        state = state.copy(snackbarTypeShown = null)
+
+
+        state =
+            state.copy(snackbarTypeShown = null)
     }
 }
