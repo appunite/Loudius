@@ -60,6 +60,14 @@ class AuthRepositoryImpl @Inject constructor(
 
     fun executeQuery(query: String) = "executed"
 
+    fun login(username: String, password: String) {
+        if (password == "password123") {
+            println("Success!")
+        } else {
+            println("Incorrect password")
+        }
+    }
+
 
     override fun getAccessToken(): AccessToken = userLocalDataSource.getAccessToken()
 }
