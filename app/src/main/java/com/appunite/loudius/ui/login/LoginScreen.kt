@@ -56,7 +56,6 @@ fun LoginScreen(
                 )
                 viewModel.onAction(LoginAction.ClearNavigation)
             }
-
             LoginNavigateTo.OpenXiaomiPermissionManager -> {
                 context.startActivity(GithubHelper.xiaomiPermissionManagerForGithub())
             }
@@ -93,31 +92,35 @@ fun LoginScreenStateless(
                     contentDescription = stringResource(R.string.github_icon),
                 )
             },
-
         )
         if (state.showXiaomiPermissionDialog) {
-            LoudiusDialog(
-                onDismissRequest = { onAction(LoginAction.XiaomiPermissionDialogDismiss) },
-                title = stringResource(R.string.login_screen_xiaomi_dialog_title),
-                text = {
-                    LoudiusText(
-                        style = LoudiusTextStyle.ScreenContent,
-                        text = stringResource(R.string.login_screen_xiaomi_dialog_text),
-                    )
-                },
-                confirmButton = {
-                    LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_grant_permission)) {
-                        onAction(LoginAction.XiaomiPermissionDialogGrantPermission)
-                    }
-                },
-                dismissButton = {
-                    LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_already_granted)) {
-                        onAction(LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission)
-                    }
-                },
-            )
+            XiaomiPermissionDialog(onAction)
         }
     }
+}
+
+@Composable
+private fun XiaomiPermissionDialog(onAction: (LoginAction) -> Unit) {
+    LoudiusDialog(
+        onDismissRequest = { onAction(LoginAction.XiaomiPermissionDialogDismiss) },
+        title = stringResource(R.string.login_screen_xiaomi_dialog_title),
+        text = {
+            LoudiusText(
+                style = LoudiusTextStyle.ScreenContent,
+                text = stringResource(R.string.login_screen_xiaomi_dialog_text),
+            )
+        },
+        confirmButton = {
+            LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_grant_permission)) {
+                onAction(LoginAction.XiaomiPermissionDialogGrantPermission)
+            }
+        },
+        dismissButton = {
+            LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_already_granted)) {
+                onAction(LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission)
+            }
+        },
+    )
 }
 
 @Composable

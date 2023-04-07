@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 AppUnite S.A.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.appunite.loudius.ui.login
 
 import androidx.compose.runtime.getValue
@@ -21,8 +37,8 @@ sealed class LoginNavigateTo {
 }
 
 data class LoginState(
-    val showXiaomiPermissionDialog: Boolean,
-    val navigateTo: LoginNavigateTo?,
+    val showXiaomiPermissionDialog: Boolean = false,
+    val navigateTo: LoginNavigateTo? = null,
 )
 
 @HiltViewModel
@@ -30,7 +46,7 @@ class LoginScreenViewModel @Inject constructor(
     private val githubHelper: GithubHelper,
 ) : ViewModel() {
 
-    var state by mutableStateOf(LoginState(showXiaomiPermissionDialog = false, navigateTo = null))
+    var state by mutableStateOf(LoginState())
         private set
 
     fun onAction(action: LoginAction) {
@@ -45,9 +61,7 @@ class LoginScreenViewModel @Inject constructor(
                         showXiaomiPermissionDialog = true,
                     )
                 } else {
-                    state = state.copy(
-                        navigateTo = LoginNavigateTo.OpenGithubAuth,
-                    )
+                    state = state.copy(navigateTo = LoginNavigateTo.OpenGithubAuth)
                 }
             }
 
@@ -56,9 +70,7 @@ class LoginScreenViewModel @Inject constructor(
             }
 
             LoginAction.XiaomiPermissionDialogGrantPermission -> {
-                state = state.copy(
-                    navigateTo = LoginNavigateTo.OpenXiaomiPermissionManager,
-                )
+                state = state.copy(navigateTo = LoginNavigateTo.OpenXiaomiPermissionManager)
             }
 
             LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission -> {
