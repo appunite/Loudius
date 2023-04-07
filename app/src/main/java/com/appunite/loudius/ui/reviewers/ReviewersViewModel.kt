@@ -30,12 +30,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -85,11 +85,20 @@ class ReviewersViewModel @Inject constructor(
 
     private suspend fun downloadData(): Pair<Result<RequestedReviewersResponse>, Result<List<Review>>> =
         coroutineScope {
-            val (owner, repo, pullRequestNumber) = initialValues
-
-            val requestedReviewersDeferred =
-                async { repository.getRequestedReviewers(owner, repo, pullRequestNumber) }
-            val reviewsDeferred = async { repository.getReviews(owner, repo, pullRequestNumber) }
+            val requestedReviewersDeferred = async {
+                repository.getRequestedReviewers(
+                    initialValues.owner,
+                    initialValues.repo,
+                    initialValues.pullRequestNumber
+                )
+            }
+            val reviewsDeferred = async {
+                repository.getReviews(
+                    initialValues.owner,
+                    initialValues.repo,
+                    initialValues.pullRequestNumber
+                )
+            }
 
             Pair(requestedReviewersDeferred.await(), reviewsDeferred.await())
         }
@@ -107,7 +116,7 @@ class ReviewersViewModel @Inject constructor(
     private fun Result<RequestedReviewersResponse>.mapRequestedReviewers(): Result<List<Reviewer>> =
         map {
             val hoursFromPRStart =
-                countHoursTillNow(LocalDateTime.parse(initialValues.submissionTime))
+                countHoursTillNow(initialValues.submissionTime)
 
             it.users.map { requestedReviewer ->
                 Reviewer(
@@ -121,7 +130,7 @@ class ReviewersViewModel @Inject constructor(
         }
 
     private fun Result<List<Review>>.mapReviews(): Result<List<Reviewer>> {
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(initialValues.submissionTime))
+        val hoursFromPRStart = countHoursTillNow(initialValues.submissionTime)
 
         return map { list ->
             list.groupBy { it.user.id }
