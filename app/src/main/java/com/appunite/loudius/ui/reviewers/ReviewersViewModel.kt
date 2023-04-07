@@ -30,12 +30,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -89,14 +89,14 @@ class ReviewersViewModel @Inject constructor(
                 repository.getRequestedReviewers(
                     initialValues.owner,
                     initialValues.repo,
-                    initialValues.pullRequestNumber
+                    initialValues.pullRequestNumber,
                 )
             }
             val reviewsDeferred = async {
                 repository.getReviews(
                     initialValues.owner,
                     initialValues.repo,
-                    initialValues.pullRequestNumber
+                    initialValues.pullRequestNumber,
                 )
             }
 
