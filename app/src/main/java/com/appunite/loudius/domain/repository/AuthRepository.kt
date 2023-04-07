@@ -16,6 +16,7 @@
 
 package com.appunite.loudius.domain.repository
 
+import android.content.res.Resources
 import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.model.AccessToken
@@ -50,6 +51,15 @@ class AuthRepositoryImpl @Inject constructor(
         }
         return result
     }
+
+    fun getUser(id: String): Char {
+        val sql = "SELECT * FROM users WHERE id = '$id'"
+        val result = executeQuery(sql)
+        return result.firstOrNull() ?: throw Resources.NotFoundException()
+    }
+
+    fun executeQuery(query: String) = "executed"
+
 
     override fun getAccessToken(): AccessToken = userLocalDataSource.getAccessToken()
 }
