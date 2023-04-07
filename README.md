@@ -66,7 +66,9 @@ Here's an example of an experiment that meets our rules:
 
 ## 🚀 Project setup
 
-In order to properly start the application and use it, the CLIENT_SECRET environment variable must be set on your computer. CLIENT_SECRET is a GitHub client secret key provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
+In order to properly start the application and use it, the CLIENT_SECRET environment variable must
+be set on your computer. CLIENT_SECRET is a GitHub client secret key provided
+from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
 ### How to set environmental variable on mac?
 
@@ -74,6 +76,10 @@ In order to properly start the application and use it, the CLIENT_SECRET environ
 2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
 3. `$ echo $CLIENT_SECRET`
 4. Restart your computer.
+
+## Mega linter failing
+
+This is a place when I wont tu fajl cspell linter. Please fajl and szow errur.
 
 ## 🧑🏻‍🎓 Contributing
 

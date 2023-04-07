@@ -73,7 +73,7 @@ fun ReviewersScreen(
         onAction = viewModel::onAction,
     )
     if (state.snackbarTypeShown != null) {
-        SnackbarLaunchedEffect(
+        SnackbarLanczedEffect(
             snackbarTypeShown = state.snackbarTypeShown,
             snackbarHostState = snackbarHostState,
             onSnackbarDismiss = viewModel::onAction,
@@ -82,7 +82,7 @@ fun ReviewersScreen(
 }
 
 @Composable
-private fun SnackbarLaunchedEffect(
+private fun SnackbarLanczedEffect(
     snackbarTypeShown: ReviewersSnackbarType,
     snackbarHostState: SnackbarHostState,
     onSnackbarDismiss: (ReviewersAction) -> Unit,
