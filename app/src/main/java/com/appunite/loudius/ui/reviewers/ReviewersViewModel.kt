@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appunite.loudius.common.Screen
+import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
@@ -60,7 +60,7 @@ class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val initialValues: InitialValues = getInitialValues(savedStateHandle)
+    private val initialValues = getInitialValues(savedStateHandle)
 
     var state by mutableStateOf(ReviewersState())
         private set
@@ -70,73 +70,83 @@ class ReviewersViewModel @Inject constructor(
         fetchData()
     }
 
-    private fun getInitialValues(savedStateHandle: SavedStateHandle) = InitialValues(
-        checkNotNull(savedStateHandle[Screen.Reviewers.ownerArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.repoArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.pullRequestNumberArg]),
-        checkNotNull(savedStateHandle[Screen.Reviewers.submissionDateArg]),
-    )
-
     private fun fetchData() {
         viewModelScope.launch {
+            state = state.copy(isLoading = true, isError = false)
+
             getMergedData()
-                .onSuccess { state = state.copy(reviewers = it.orEmpty(), isLoading = false) }
+                .onSuccess { state = state.copy(reviewers = it, isLoading = false) }
                 .onFailure { state = state.copy(isError = true, isLoading = false) }
         }
     }
 
-    private suspend fun getMergedData(): Result<List<Reviewer>?> =
+    private suspend fun getMergedData(): Result<List<Reviewer>> = downloadData()
+        .mapData()
+
+    private suspend fun downloadData(): Pair<Result<RequestedReviewersResponse>, Result<List<Review>>> =
         coroutineScope {
-            state = state.copy(isLoading = true, isError = false)
-            val requestedReviewersDeferred = async { fetchRequestedReviewers() }
-            val reviewersDeferred = async { fetchReviews() }
-
-            val requestedReviewerResult = requestedReviewersDeferred.await()
-            val reviewersResult = reviewersDeferred.await()
-
-            requestedReviewerResult.flatMap { requestedReviewers ->
-                reviewersResult.map { it + requestedReviewers }
-            }
-        }
-
-    private suspend fun fetchRequestedReviewers(): Result<List<Reviewer>> {
-        val (owner, repo, pullRequestNumber, submissionTime) = initialValues
-
-        return repository.getRequestedReviewers(owner, repo, pullRequestNumber)
-            .map { it.mapToReviewers(submissionTime) }
-    }
-
-    private fun RequestedReviewersResponse.mapToReviewers(submissionTime: String): List<Reviewer> {
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
-
-        return users.map {
-            Reviewer(it.id, it.login, false, hoursFromPRStart, null)
-        }
-    }
-
-    private suspend fun fetchReviews(): Result<List<Reviewer>> {
-        val (owner, repo, pullRequestNumber, submissionTime) = initialValues
-
-        return repository.getReviews(owner, repo, pullRequestNumber)
-            .map { it.mapToReviewers(submissionTime) }
-    }
-
-    private fun List<Review>.mapToReviewers(submissionTime: String): List<Reviewer> {
-        val hoursFromPRStart = countHoursTillNow(LocalDateTime.parse(submissionTime))
-
-        return groupBy { it.user.id }
-            .map { reviewsForSingleUser ->
-                val latestReview = reviewsForSingleUser.value.minBy { it.submittedAt }
-                val hoursFromReviewDone = countHoursTillNow(latestReview.submittedAt)
-
-                Reviewer(
-                    latestReview.user.id,
-                    latestReview.user.login,
-                    true,
-                    hoursFromPRStart,
-                    hoursFromReviewDone,
+            val requestedReviewersDeferred = async {
+                repository.getRequestedReviewers(
+                    initialValues.owner,
+                    initialValues.repo,
+                    initialValues.pullRequestNumber,
                 )
             }
+            val reviewsDeferred = async {
+                repository.getReviews(
+                    initialValues.owner,
+                    initialValues.repo,
+                    initialValues.pullRequestNumber,
+                )
+            }
+
+            Pair(requestedReviewersDeferred.await(), reviewsDeferred.await())
+        }
+
+    private fun Pair<Result<RequestedReviewersResponse>, Result<List<Review>>>.mapData() =
+        mergeData(first.mapRequestedReviewers(), second.mapReviews())
+
+    private fun mergeData(
+        requestedReviewers: Result<List<Reviewer>>,
+        reviewersWithReviews: Result<List<Reviewer>>,
+    ) = requestedReviewers.flatMap { list ->
+        reviewersWithReviews.map { it + list }
+    }
+
+    private fun Result<RequestedReviewersResponse>.mapRequestedReviewers(): Result<List<Reviewer>> =
+        map {
+            val hoursFromPRStart =
+                countHoursTillNow(initialValues.submissionTime)
+
+            it.users.map { requestedReviewer ->
+                Reviewer(
+                    requestedReviewer.id,
+                    requestedReviewer.login,
+                    false,
+                    hoursFromPRStart,
+                    null,
+                )
+            }
+        }
+
+    private fun Result<List<Review>>.mapReviews(): Result<List<Reviewer>> {
+        val hoursFromPRStart = countHoursTillNow(initialValues.submissionTime)
+
+        return map { list ->
+            list.groupBy { it.user.id }
+                .map { reviewsForSingleUser ->
+                    val latestReview = reviewsForSingleUser.value.minBy { it.submittedAt }
+                    val hoursFromReviewDone = countHoursTillNow(latestReview.submittedAt)
+
+                    Reviewer(
+                        latestReview.user.id,
+                        latestReview.user.login,
+                        true,
+                        hoursFromPRStart,
+                        hoursFromReviewDone,
+                    )
+                }
+        }
     }
 
     private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
@@ -152,34 +162,36 @@ class ReviewersViewModel @Inject constructor(
         val (owner, repo, pullRequestNumber) = initialValues
 
         viewModelScope.launch {
-            state = state.copy(reviewers = updateReviewerLoadingState(userLogin, true))
+            state = state.copy(reviewers = state.reviewers.updateLoadingState(userLogin, true))
+
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess {
                     state = state.copy(
                         snackbarTypeShown = SUCCESS,
-                        reviewers = updateReviewerLoadingState(userLogin, false),
+                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
                     )
                 }
                 .onFailure {
                     state = state.copy(
                         snackbarTypeShown = FAILURE,
-                        reviewers = updateReviewerLoadingState(userLogin, false),
+                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
                     )
                 }
         }
     }
 
-    private fun updateReviewerLoadingState(userLogin: String, isLoading: Boolean) =
-        state.reviewers.map { if (it.login == userLogin) it.copy(isLoading = isLoading) else it }
+    private fun List<Reviewer>.updateLoadingState(
+        userLogin: String,
+        isLoading: Boolean,
+    ): List<Reviewer> = map {
+        if (it.login == userLogin) {
+            it.copy(isLoading = isLoading)
+        } else {
+            it
+        }
+    }
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
     }
-
-    private data class InitialValues(
-        val owner: String,
-        val repo: String,
-        val pullRequestNumber: String,
-        val submissionTime: String,
-    )
 }
