@@ -21,7 +21,7 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.request.NotifyRequestBody
 import com.appunite.loudius.network.services.PullRequestsService
-import com.appunite.loudius.network.utils.safeApiCall
+import com.appunite.loudius.network.utils.ApiRequester
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,10 +49,13 @@ interface PullRequestDataSource {
 }
 
 @Singleton
-class PullRequestsNetworkDataSource @Inject constructor(private val service: PullRequestsService) :
+class PullRequestsNetworkDataSource @Inject constructor(
+    private val service: PullRequestsService,
+    private val apiRequester: ApiRequester
+) :
     PullRequestDataSource {
     override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> =
-        safeApiCall {
+        apiRequester.safeApiCall {
             service.getPullRequestsForUser("author:$author type:pr state:open")
         }
 
@@ -60,7 +63,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Pul
         owner: String,
         repository: String,
         pullRequestNumber: String,
-    ): Result<RequestedReviewersResponse> = safeApiCall {
+    ): Result<RequestedReviewersResponse> = apiRequester.safeApiCall {
         service.getReviewers(owner, repository, pullRequestNumber)
     }
 
@@ -68,7 +71,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Pul
         owner: String,
         repository: String,
         pullRequestNumber: String,
-    ): Result<List<Review>> = safeApiCall {
+    ): Result<List<Review>> = apiRequester.safeApiCall {
         service.getReviews(owner, repository, pullRequestNumber)
     }
 
@@ -77,7 +80,7 @@ class PullRequestsNetworkDataSource @Inject constructor(private val service: Pul
         repository: String,
         pullRequestNumber: String,
         message: String,
-    ): Result<Unit> = safeApiCall {
+    ): Result<Unit> = apiRequester.safeApiCall {
         service.notify(owner, repository, pullRequestNumber, NotifyRequestBody(message))
     }
 }

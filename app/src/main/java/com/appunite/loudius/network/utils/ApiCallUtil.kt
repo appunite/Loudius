@@ -20,38 +20,43 @@ import com.appunite.loudius.network.model.error.DefaultErrorResponse
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import java.io.IOException
+import javax.inject.Inject
 import org.json.JSONException
 import retrofit2.HttpException
 
-suspend fun <T> safeApiCall(
-    errorParser: RequestErrorParser = DefaultErrorParser,
-    apiCall: suspend () -> T,
-): Result<T> {
-    return try {
-        val response = apiCall()
-        Result.success(response)
-    } catch (throwable: HttpException) {
-        val message = getApiErrorMessageIfExist(throwable)
-        Result.failure(errorParser(throwable.code(), message ?: throwable.message()))
-    } catch (throwable: IOException) {
-        Result.failure(WebException.NetworkError(throwable))
-    } catch (throwable: JsonParseException) {
-        Result.failure(WebException.UnknownError(null, throwable.message))
+class ApiRequester @Inject constructor(private val gson: Gson) {
+
+    suspend fun <T> safeApiCall(
+        errorParser: RequestErrorParser = DefaultErrorParser,
+        apiCall: suspend () -> T,
+    ): Result<T> {
+        return try {
+            val response = apiCall()
+            Result.success(response)
+        } catch (throwable: HttpException) {
+            val message = getApiErrorMessageIfExist(throwable)
+            Result.failure(errorParser(throwable.code(), message ?: throwable.message()))
+        } catch (throwable: IOException) {
+            Result.failure(WebException.NetworkError(throwable))
+        } catch (throwable: JsonParseException) {
+            Result.failure(WebException.UnknownError(null, throwable.message))
+        }
     }
-}
 
-private fun getApiErrorMessageIfExist(throwable: HttpException) = try {
-    val errorResponse = Gson().fromJson(
-        throwable.response()?.errorBody()?.string(),
-        DefaultErrorResponse::class.java,
-    )
-    errorResponse.message
-} catch (throwable: JSONException) {
-    null
-}
+    private fun getApiErrorMessageIfExist(throwable: HttpException) = try {
+        val errorResponse = gson.fromJson(
+            throwable.response()?.errorBody()?.charStream(),
+            DefaultErrorResponse::class.java,
+        )
+        errorResponse.message
+    } catch (throwable: JSONException) {
+        null
+    }
 
-object DefaultErrorParser : RequestErrorParser {
+    object DefaultErrorParser : RequestErrorParser {
 
-    override fun invoke(responseCode: Int, responseMessage: String): Exception =
-        WebException.UnknownError(responseCode, responseMessage)
+        override fun invoke(responseCode: Int, responseMessage: String): Exception =
+            WebException.UnknownError(responseCode, responseMessage)
+    }
+
 }
