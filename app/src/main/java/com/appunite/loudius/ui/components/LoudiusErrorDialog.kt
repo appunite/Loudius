@@ -16,11 +16,6 @@
 
 package com.appunite.loudius.ui.components
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,34 +35,14 @@ fun LoudiusErrorDialog(
 ) {
     var openDialog by remember { mutableStateOf(true) }
     if (openDialog) {
-        AlertDialog(
+        LoudiusDialog(
             onDismissRequest = { openDialog = false },
-            title = { Text(text = dialogTitle) },
-            text = { Text(text = dialogText) },
+            title = dialogTitle,
+            text = { LoudiusText(style = LoudiusTextStyle.ScreenContent, text = dialogText) },
             confirmButton = {
-                ConfirmButton(
-                    confirmText = confirmText,
-                    confirm = onConfirmButtonClick,
-                )
+                LoudiusOutlinedButton(text = confirmText, onClick = onConfirmButtonClick)
             },
-            containerColor = MaterialTheme.colorScheme.surface,
         )
-    }
-}
-
-@Composable
-private fun ConfirmButton(
-    confirmText: String,
-    confirm: () -> Unit,
-) {
-    Button(
-        onClick = confirm,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.tertiary,
-        ),
-    ) {
-        Text(text = confirmText)
     }
 }
 

@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.ui.login
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -26,21 +25,54 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
+import com.appunite.loudius.ui.components.LoudiusDialog
 import com.appunite.loudius.ui.components.LoudiusOutlinedButton
 import com.appunite.loudius.ui.components.LoudiusOutlinedButtonIcon
 import com.appunite.loudius.ui.components.LoudiusOutlinedButtonStyle
+import com.appunite.loudius.ui.components.LoudiusText
+import com.appunite.loudius.ui.components.LoudiusTextStyle
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    viewModel: LoginScreenViewModel = hiltViewModel(),
+) {
     val context = LocalContext.current
+    val navigateTo = viewModel.state.navigateTo
+    LaunchedEffect(navigateTo) {
+        when (navigateTo) {
+            LoginNavigateTo.OpenGithubAuth -> {
+                context.startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse(AUTHORIZATION_URL)),
+                )
+                viewModel.onAction(LoginAction.ClearNavigation)
+            }
+            LoginNavigateTo.OpenXiaomiPermissionManager -> {
+                context.startActivity(GithubHelper.xiaomiPermissionManagerForGithub())
+            }
+            null -> Unit
+        }
+    }
+    LoginScreenStateless(
+        state = viewModel.state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+fun LoginScreenStateless(
+    state: LoginState,
+    onAction: (LoginAction) -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -49,8 +81,10 @@ fun LoginScreen() {
         LoginImage()
         LoudiusOutlinedButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { startAuthorizing(context) },
-            text = stringResource(id = R.string.login),
+            onClick = {
+                onAction(LoginAction.ClickLogIn)
+            },
+            text = stringResource(id = R.string.login_screen_login),
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
@@ -58,9 +92,35 @@ fun LoginScreen() {
                     contentDescription = stringResource(R.string.github_icon),
                 )
             },
-
         )
+        if (state.showXiaomiPermissionDialog) {
+            XiaomiPermissionDialog(onAction)
+        }
     }
+}
+
+@Composable
+private fun XiaomiPermissionDialog(onAction: (LoginAction) -> Unit) {
+    LoudiusDialog(
+        onDismissRequest = { onAction(LoginAction.XiaomiPermissionDialogDismiss) },
+        title = stringResource(R.string.login_screen_xiaomi_dialog_title),
+        text = {
+            LoudiusText(
+                style = LoudiusTextStyle.ScreenContent,
+                text = stringResource(R.string.login_screen_xiaomi_dialog_text),
+            )
+        },
+        confirmButton = {
+            LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_grant_permission)) {
+                onAction(LoginAction.XiaomiPermissionDialogGrantPermission)
+            }
+        },
+        dismissButton = {
+            LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_already_granted)) {
+                onAction(LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission)
+            }
+        },
+    )
 }
 
 @Composable
@@ -68,20 +128,29 @@ fun LoginImage() {
     Image(
         painter = painterResource(id = R.drawable.loudius_logo),
         contentDescription = stringResource(
-            R.string.login_screen,
+            R.string.login_screen_loudius_logo_content_description,
         ),
     )
-}
-
-private fun startAuthorizing(context: Context) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(AUTHORIZATION_URL))
-    context.startActivity(intent)
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     MaterialTheme {
-        LoginScreen()
+        LoginScreenStateless(
+            state = LoginState(showXiaomiPermissionDialog = false, navigateTo = null),
+            onAction = {},
+        )
+    }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun LoginScreenPreviewWithDialog() {
+    MaterialTheme {
+        LoginScreenStateless(
+            state = LoginState(showXiaomiPermissionDialog = true, navigateTo = null),
+            onAction = {},
+        )
     }
 }
