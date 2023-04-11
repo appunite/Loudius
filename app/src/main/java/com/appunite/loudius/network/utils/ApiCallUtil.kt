@@ -18,9 +18,10 @@ package com.appunite.loudius.network.utils
 
 import com.appunite.loudius.network.model.error.DefaultErrorResponse
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
+import java.io.IOException
 import org.json.JSONException
 import retrofit2.HttpException
-import java.io.IOException
 
 suspend fun <T> safeApiCall(
     errorParser: RequestErrorParser = DefaultErrorParser,
@@ -34,6 +35,8 @@ suspend fun <T> safeApiCall(
         Result.failure(errorParser(throwable.code(), message ?: throwable.message()))
     } catch (throwable: IOException) {
         Result.failure(WebException.NetworkError(throwable))
+    } catch (throwable: JsonParseException) {
+        Result.failure(WebException.UnknownError(null, throwable.message))
     }
 }
 
