@@ -51,7 +51,7 @@ interface PullRequestDataSource {
 @Singleton
 class PullRequestsNetworkDataSource @Inject constructor(
     private val service: PullRequestsService,
-    private val apiRequester: ApiRequester
+    private val apiRequester: ApiRequester,
 ) :
     PullRequestDataSource {
     override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> =

@@ -26,7 +26,6 @@ import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.testRequester
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
-import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -41,6 +40,7 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 import strikt.assertions.single
+import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsNetworkDataSourceTest {

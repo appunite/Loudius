@@ -29,7 +29,7 @@ interface UserDataSource {
 @Singleton
 class UserDataSourceImpl @Inject constructor(
     private val userService: UserService,
-    private val apiRequester: ApiRequester
+    private val apiRequester: ApiRequester,
 ) :
     UserDataSource {
     override suspend fun getUser(): Result<User> = apiRequester.safeApiCall {
