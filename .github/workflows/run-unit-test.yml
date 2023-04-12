@@ -14,23 +14,11 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Cancel previous runs for the same branch
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: "11"
-          distribution: "adopt"
-          cache: gradle
-
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
 
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
@@ -42,8 +30,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clean-up Gradle cache
-        # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
-        # Restoring these files from a GitHub Actions cache might cause problems for future builds.
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
+        uses: ./.github/actions/clean-up-gradle-cache
