@@ -29,11 +29,12 @@ class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime> {
 
     override fun deserialize(
         json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?,
+        typeOfT: Type,
+        context: JsonDeserializationContext,
     ): LocalDateTime {
         try {
-            val dateString = json?.asJsonPrimitive?.asString
+            json ?: throw JsonParseException("Cannot deserialize null value")
+            val dateString = json.asJsonPrimitive.asString
             val offsetDateTime = OffsetDateTime.parse(dateString, ISO_OFFSET_DATE_TIME)
             return offsetDateTime.toLocalDateTime()
         } catch (e: Exception) {

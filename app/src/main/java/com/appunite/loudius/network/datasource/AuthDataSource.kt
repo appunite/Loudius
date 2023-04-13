@@ -20,8 +20,8 @@ import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
+import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.WebException
-import com.appunite.loudius.network.utils.safeApiCall
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,6 +37,7 @@ interface AuthDataSource {
 @Singleton
 class AuthNetworkDataSource @Inject constructor(
     private val authService: AuthService,
+    private val apiRequester: ApiRequester,
 ) : AuthDataSource {
 
     companion object {
@@ -48,7 +49,7 @@ class AuthNetworkDataSource @Inject constructor(
         clientSecret: String,
         code: String,
     ): Result<AccessToken> =
-        safeApiCall { authService.getAccessToken(clientId, clientSecret, code) }
+        apiRequester.safeApiCall { authService.getAccessToken(clientId, clientSecret, code) }
             .flatMap { response ->
                 if (response.accessToken != null) {
                     Result.success(response.accessToken)
@@ -59,8 +60,13 @@ class AuthNetworkDataSource @Inject constructor(
 
     private fun AccessTokenResponse.mapErrorToException(): Exception {
         return when (error) {
-            BAD_VERIFICATION_CODE_ERROR -> WebException.BadVerificationCodeException
+            BAD_VERIFICATION_CODE_ERROR -> BadVerificationCodeException
             else -> WebException.UnknownError(null, error)
         }
     }
 }
+
+/**
+ * Thrown during authorization with incorrect verification code.
+ */
+object BadVerificationCodeException : Exception()

@@ -22,6 +22,7 @@ import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.testOkHttpClient
+import com.appunite.loudius.network.testRequester
 import com.appunite.loudius.network.utils.WebException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -49,7 +50,7 @@ class AuthNetworkDataSourceTest {
         mockWebServer.shutdown()
     }
 
-    private val authNetworkDataSource = AuthNetworkDataSource(authService)
+    private val authNetworkDataSource = AuthNetworkDataSource(authService, testRequester())
 
     @Test
     fun `GIVEN correct data WHEN accessing token THEN return success with new valid token`() =
@@ -83,11 +84,12 @@ class AuthNetworkDataSourceTest {
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
 
-            val result = authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
+            val result =
+                authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
 
             expectThat(result)
                 .isFailure()
-                .isEqualTo(WebException.BadVerificationCodeException)
+                .isEqualTo(BadVerificationCodeException)
         }
 
     @Test

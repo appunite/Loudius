@@ -30,9 +30,4 @@ sealed class WebException : Exception() {
      * For example [IOException].
      */
     data class NetworkError(override val cause: Throwable? = null) : WebException()
-
-    /**
-     * Thrown during authorization with incorrect verification code.
-     */
-    object BadVerificationCodeException : WebException()
 }

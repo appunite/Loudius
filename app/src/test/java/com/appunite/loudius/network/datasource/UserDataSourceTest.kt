@@ -19,6 +19,7 @@ package com.appunite.loudius.network.datasource
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.UserService
+import com.appunite.loudius.network.testRequester
 import com.appunite.loudius.network.utils.WebException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -39,7 +40,7 @@ class UserDataSourceTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val userService =
         retrofitTestDouble(mockWebServer = mockWebServer).create(UserService::class.java)
-    private val userDataSource = UserDataSourceImpl(userService)
+    private val userDataSource = UserDataSourceImpl(userService, testRequester())
 
     @AfterEach
     fun tearDown() {

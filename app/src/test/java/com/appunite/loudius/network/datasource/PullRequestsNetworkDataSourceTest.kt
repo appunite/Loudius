@@ -23,6 +23,7 @@ import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.PullRequestsService
+import com.appunite.loudius.network.testRequester
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,7 +48,8 @@ class PullRequestsNetworkDataSourceTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val pullRequestsService =
         retrofitTestDouble(mockWebServer = mockWebServer).create(PullRequestsService::class.java)
-    private val pullRequestDataSource = PullRequestsNetworkDataSource(pullRequestsService)
+    private val pullRequestDataSource =
+        PullRequestsNetworkDataSource(pullRequestsService, testRequester())
 
     @AfterEach
     fun tearDown() {
