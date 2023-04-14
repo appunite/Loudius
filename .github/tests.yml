@@ -5,5 +5,5 @@ android-pixel-2:
   device:
     - model: Pixel2
       version: 30
-      locale: 'en'
+      locale: "en"
       orientation: portrait
