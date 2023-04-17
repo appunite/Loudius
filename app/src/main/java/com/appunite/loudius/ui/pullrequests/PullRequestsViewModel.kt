@@ -24,8 +24,8 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
@@ -33,12 +33,14 @@ sealed class PulLRequestsAction {
     object RetryClick : PulLRequestsAction()
 }
 
-data class PullRequestState(
-    val pullRequests: List<PullRequest> = emptyList(),
-    val navigateToReviewers: NavigationPayload? = null,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-)
+sealed class PullRequestState {
+    object Loading : PullRequestState()
+    object Error : PullRequestState()
+    data class Loaded(
+        val pullRequests: List<PullRequest> = emptyList(),
+        val navigateToReviewers: NavigationPayload? = null,
+    ) : PullRequestState()
+}
 
 data class NavigationPayload(
     val owner: String,
@@ -51,7 +53,7 @@ data class NavigationPayload(
 class PullRequestsViewModel @Inject constructor(
     private val pullRequestsRepository: PullRequestRepository,
 ) : ViewModel() {
-    var state by mutableStateOf(PullRequestState())
+    var state: PullRequestState by mutableStateOf(PullRequestState.Loading)
         private set
 
     init {
@@ -60,12 +62,12 @@ class PullRequestsViewModel @Inject constructor(
 
     private fun fetchData() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true, isError = false)
+            state = PullRequestState.Loading
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
-                    state = state.copy(pullRequests = it.items, isLoading = false)
+                    state = PullRequestState.Loaded(it.items)
                 }.onFailure {
-                    state = state.copy(isLoading = false, isError = true)
+                    state = PullRequestState.Error
                 }
         }
     }
@@ -77,9 +79,10 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     private fun navigateToReviewers(itemClickedId: Int) {
-        val index = state.pullRequests.indexOfFirst { it.id == itemClickedId }
-        val itemClickedData = state.pullRequests[index]
-        state = state.copy(
+        val loadedState = state as? PullRequestState.Loaded ?: return
+        val index = loadedState.pullRequests.indexOfFirst { it.id == itemClickedId }
+        val itemClickedData = loadedState.pullRequests[index]
+        state = loadedState.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
                 itemClickedData.shortRepositoryName,
@@ -90,6 +93,7 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     private fun resetNavigationState() {
-        state = state.copy(navigateToReviewers = null)
+        val loadedState = state as? PullRequestState.Loaded ?: return
+        state = loadedState.copy(navigateToReviewers = null)
     }
 }

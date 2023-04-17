@@ -57,48 +57,65 @@ fun PullRequestsScreen(
     navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state
-    LaunchedEffect(state.navigateToReviewers) {
-        state.navigateToReviewers?.let {
-            navigateToReviewers(it.owner, it.repo, it.pullRequestNumber, it.submissionTime)
-            viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
-        }
-    }
     PullRequestsScreenStateless(
-        pullRequests = state.pullRequests,
+        state = state,
         onAction = viewModel::onAction,
-        isLoading = state.isLoading,
-        isError = state.isError,
+        navigateToReviewers = navigateToReviewers,
     )
 }
 
 @Composable
 private fun PullRequestsScreenStateless(
-    pullRequests: List<PullRequest>,
+    state: PullRequestState,
     onAction: (PulLRequestsAction) -> Unit,
-    isLoading: Boolean,
-    isError: Boolean,
+    navigateToReviewers: NavigateToReviewers,
 ) {
     Scaffold(
         topBar = {
             LoudiusTopAppBar(title = stringResource(R.string.app_name))
         },
         content = { padding ->
-            when {
-                isError -> LoudiusFullScreenError(
+            when (state) {
+                is PullRequestState.Error -> LoudiusFullScreenError(
                     modifier = Modifier.padding(padding),
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
 
-                isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                pullRequests.isEmpty() -> EmptyListPlaceholder(padding)
-                else -> PullRequestsList(
-                    pullRequests = pullRequests,
-                    modifier = Modifier.padding(padding),
-                    onItemClick = onAction,
-                )
+                is PullRequestState.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
+                is PullRequestState.Loaded -> {
+                    PullRequestContent(state, padding, onAction)
+                    LaunchedEffect(state.navigateToReviewers) {
+                        state.navigateToReviewers?.let {
+                            navigateToReviewers(
+                                it.owner,
+                                it.repo,
+                                it.pullRequestNumber,
+                                it.submissionTime
+                            )
+                            onAction(PulLRequestsAction.OnNavigateToReviewers)
+                        }
+                    }
+                }
             }
         },
     )
+}
+
+@Composable
+private fun PullRequestContent(
+    state: PullRequestState.Loaded,
+    padding: PaddingValues,
+    onAction: (PulLRequestsAction) -> Unit
+) {
+    if (state.pullRequests.isEmpty()) {
+        EmptyListPlaceholder(padding)
+    } else {
+        PullRequestsList(
+            pullRequests = state.pullRequests,
+            modifier = Modifier.padding(padding),
+            onItemClick = onAction,
+        )
+    }
 }
 
 @Composable
@@ -177,43 +194,44 @@ private fun EmptyListPlaceholder(padding: PaddingValues) {
 fun PullRequestsScreenPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
-            isLoading = false,
-            isError = false,
-            pullRequests = listOf(
-                PullRequest(
-                    id = 0,
-                    draft = false,
-                    number = 0,
-                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
-                    title = "[SIL-67] Details screen - network layer",
-                    createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
-                ),
-                PullRequest(
-                    id = 1,
-                    draft = true,
-                    number = 1,
-                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
-                    title = "[SIL-66] Add client secret to build config",
-                    createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
-                ),
-                PullRequest(
-                    id = 2,
-                    draft = false,
-                    number = 2,
-                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
-                    title = "[SIL-73] Storing access token",
-                    createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
-                ),
-                PullRequest(
-                    id = 3,
-                    draft = false,
-                    number = 3,
-                    repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
-                    title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-                    createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
+            state = PullRequestState.Loaded(
+                listOf(
+                    PullRequest(
+                        id = 0,
+                        draft = false,
+                        number = 0,
+                        repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
+                        title = "[SIL-67] Details screen - network layer",
+                        createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
+                    ),
+                    PullRequest(
+                        id = 1,
+                        draft = true,
+                        number = 1,
+                        repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
+                        title = "[SIL-66] Add client secret to build config",
+                        createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
+                    ),
+                    PullRequest(
+                        id = 2,
+                        draft = false,
+                        number = 2,
+                        repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
+                        title = "[SIL-73] Storing access token",
+                        createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
+                    ),
+                    PullRequest(
+                        id = 3,
+                        draft = false,
+                        number = 3,
+                        repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
+                        title = "[SIL-62/SIL-75] Provide new annotation for API instances",
+                        createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
+                    ),
                 ),
             ),
             onAction = {},
+            navigateToReviewers = { _, _, _, _ -> },
         )
     }
 }
@@ -223,10 +241,9 @@ fun PullRequestsScreenPreview() {
 fun PullRequestsScreenEmptyListPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
-            emptyList(),
-            isLoading = false,
-            isError = false,
+            PullRequestState.Loaded(emptyList()),
             onAction = {},
+            navigateToReviewers = { _, _, _, _ -> },
         )
     }
 }
@@ -236,10 +253,9 @@ fun PullRequestsScreenEmptyListPreview() {
 fun PullRequestsScreenLoadingPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
-            emptyList(),
-            isLoading = true,
-            isError = false,
+            PullRequestState.Loading,
             onAction = {},
+            navigateToReviewers = { _, _, _, _ -> },
         )
     }
 }
@@ -249,10 +265,9 @@ fun PullRequestsScreenLoadingPreview() {
 fun PullRequestsScreenErrorPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
-            emptyList(),
-            isLoading = false,
-            isError = true,
+            PullRequestState.Error,
             onAction = {},
+            navigateToReviewers = { _, _, _, _ -> },
         )
     }
 }
