@@ -28,6 +28,3 @@ jobs:
         env:
           GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Clean-up Gradle cache
-        uses: ./.github/actions/clean-up-gradle-cache

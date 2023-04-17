@@ -33,6 +33,3 @@ jobs:
           arg-spec: ".github/tests.yml:android-pixel-2"
         env:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - name: Clean-up Gradle cache
-        uses: ./.github/actions/clean-up-gradle-cache
