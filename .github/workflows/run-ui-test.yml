@@ -1,0 +1,32 @@
+name: Android Release
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "develop"
+      - "main"
+
+permissions: read-all
+
+jobs:
+  apk:
+    name: Run UI tests on Firebase Test Lab
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
+      - name: Assemble App Debug APK and Android Instrumentation Tests
+        run: ./gradlew assembleDebug assembleDebugAndroidTest
+
+      - name: Run tests on Firebase Test Lab
+        uses: asadmansr/Firebase-Test-Lab-Action@v1.0
+        with:
+          arg-spec: ".github/tests.yml:android-pixel-2"
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}

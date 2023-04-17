@@ -1,0 +1,22 @@
+name: "Prepare Environment to build Android app"
+description: "Cancels previous runs, set ups jdk, validates gradle wrapper and uses gradle cache"
+runs:
+  using: "composite"
+  steps:
+    - name: Cancel previous runs for the same branch
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: "11"
+        distribution: "adopt"
+        cache: gradle
+
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: Gradle cache
+      uses: gradle/gradle-build-action@v2
