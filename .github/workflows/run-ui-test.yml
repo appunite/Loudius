@@ -21,11 +21,8 @@ jobs:
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
-      - name: Assemble app debug APK
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Assemble Android Instrumentation Tests
-        run: ./gradlew assembleDebugAndroidTest
+      - name: Assemble App Debug APK and Android Instrumentation Tests
+        run: ./gradlew assembleDebug assembleDebugAndroidTest
 
       - name: Run tests on Firebase Test Lab
         uses: asadmansr/Firebase-Test-Lab-Action@v1.0
