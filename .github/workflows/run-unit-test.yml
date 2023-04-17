@@ -20,9 +20,6 @@ jobs:
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
-      - name: Gradle cache
-        uses: gradle/gradle-build-action@v2
-
       - name: Run test
         run: ./gradlew testDebugUnitTest
         env:
