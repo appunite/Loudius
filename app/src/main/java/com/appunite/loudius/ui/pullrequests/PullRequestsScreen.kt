@@ -90,7 +90,7 @@ private fun PullRequestsScreenStateless(
                                 it.owner,
                                 it.repo,
                                 it.pullRequestNumber,
-                                it.submissionTime
+                                it.submissionTime,
                             )
                             onAction(PulLRequestsAction.OnNavigateToReviewers)
                         }
@@ -105,7 +105,7 @@ private fun PullRequestsScreenStateless(
 private fun PullRequestContent(
     state: PullRequestState.Loaded,
     padding: PaddingValues,
-    onAction: (PulLRequestsAction) -> Unit
+    onAction: (PulLRequestsAction) -> Unit,
 ) {
     if (state.pullRequests.isEmpty()) {
         EmptyListPlaceholder(padding)
