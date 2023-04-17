@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.intercept
+package com.appunite.loudius.di
 
-import com.appunite.loudius.network.utils.AuthFailureHandler
-import javax.inject.Inject
-import okhttp3.Interceptor
-import okhttp3.Response
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-class AuthFailureInterceptor @Inject constructor(
-    private val authFailureHandler: AuthFailureHandler,
-) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val response = chain.proceed(request)
+@InstallIn(SingletonComponent::class)
+@Module
+object GeneralModule {
 
-        if (response.code == 401) {
-            authFailureHandler.emitAuthFailure()
-        }
-
-        return response
-    }
+    @Provides
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }

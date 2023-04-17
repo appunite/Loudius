@@ -18,16 +18,22 @@ package com.appunite.loudius.network.utils
 
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
 @Singleton
-class AuthFailureHandler @Inject constructor() {
-
+class AuthFailureHandler @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
+) {
     private val _authFailureFlow = MutableSharedFlow<Unit>()
     val authFailureFlow: SharedFlow<Unit> = _authFailureFlow
 
-    suspend fun emitAuthFailure() {
-        _authFailureFlow.emit(Unit)
+    fun emitAuthFailure() {
+        CoroutineScope(dispatcher).launch {
+            _authFailureFlow.emit(Unit)
+        }
     }
 }
