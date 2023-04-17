@@ -22,7 +22,7 @@ import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import com.appunite.loudius.util.MainDispatcherExtension
-import com.appunite.loudius.utils.neverCompletingSuspension
+import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.spyk
