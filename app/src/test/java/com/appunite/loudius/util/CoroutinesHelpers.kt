@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.utils
+package com.appunite.loudius.util
 
 import kotlinx.coroutines.suspendCancellableCoroutine
 
