@@ -19,17 +19,23 @@ package com.appunite.loudius.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
+
+private const val minHeightToFitSpacer = 1856
 
 @Composable
 fun LoudiusFullScreenError(
@@ -38,12 +44,67 @@ fun LoudiusFullScreenError(
     buttonText: String = stringResource(id = R.string.try_again),
     onButtonClick: () -> Unit,
 ) {
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val screenHeight = with(density) { configuration.screenHeightDp.dp.roundToPx() }
+
+    if (screenHeight >= minHeightToFitSpacer) {
+        ScreenErrorWithSpacers(
+            modifier = modifier,
+            errorText = errorText,
+            buttonText = buttonText,
+            onButtonClick = onButtonClick
+        )
+    } else {
+        ScreenErrorWithoutSpacers(
+            modifier = modifier,
+            errorText = errorText,
+            buttonText = buttonText,
+            onButtonClick = onButtonClick
+        )
+    }
+}
+
+@Composable
+fun ScreenErrorWithSpacers(
+    modifier: Modifier,
+    errorText: String,
+    buttonText: String,
+    onButtonClick: () -> Unit,
+) {
     Column(
-        modifier = modifier
-            .padding(top = 142.dp)
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize()
+    ) {
+        Spacer(modifier = Modifier.weight(weight = 0.170f))
+        Column(
+            modifier = modifier
+                .weight(weight = 0.550f)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            ErrorImage()
+            ErrorText(text = errorText)
+            LoudiusOutlinedButton(
+                onClick = onButtonClick,
+                text = buttonText,
+            )
+        }
+        Spacer(modifier = Modifier.weight(weight = 0.280f))
+    }
+}
+
+@Composable
+fun ScreenErrorWithoutSpacers(
+    modifier: Modifier,
+    errorText: String,
+    buttonText: String,
+    onButtonClick: () -> Unit,
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(56.dp),
+        verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         ErrorImage()
         ErrorText(text = errorText)
