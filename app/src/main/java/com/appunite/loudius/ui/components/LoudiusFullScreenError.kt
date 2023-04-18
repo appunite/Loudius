@@ -53,14 +53,14 @@ fun LoudiusFullScreenError(
             modifier = modifier,
             errorText = errorText,
             buttonText = buttonText,
-            onButtonClick = onButtonClick
+            onButtonClick = onButtonClick,
         )
     } else {
         ScreenErrorWithoutSpacers(
             modifier = modifier,
             errorText = errorText,
             buttonText = buttonText,
-            onButtonClick = onButtonClick
+            onButtonClick = onButtonClick,
         )
     }
 }
@@ -73,7 +73,7 @@ fun ScreenErrorWithSpacers(
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.170f))
         Column(
