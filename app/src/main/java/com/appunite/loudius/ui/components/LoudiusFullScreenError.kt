@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -73,13 +72,13 @@ fun ScreenErrorWithSpacers(
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
     ) {
-        Spacer(modifier = Modifier.weight(weight = 0.170f))
+        Spacer(modifier = Modifier.weight(weight = 0.15f))
         Column(
             modifier = modifier
-                .weight(weight = 0.550f)
-                .fillMaxWidth(),
+                .weight(weight = 0.6f)
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -90,7 +89,7 @@ fun ScreenErrorWithSpacers(
                 text = buttonText,
             )
         }
-        Spacer(modifier = Modifier.weight(weight = 0.280f))
+        Spacer(modifier = Modifier.weight(weight = 0.25f))
     }
 }
 
@@ -106,13 +105,26 @@ fun ScreenErrorWithoutSpacers(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        ErrorImage()
-        ErrorText(text = errorText)
-        LoudiusOutlinedButton(
-            onClick = onButtonClick,
-            text = buttonText,
+        ScreenErrorContent(
+            errorText = errorText,
+            buttonText = buttonText,
+            onButtonClick = onButtonClick
         )
     }
+}
+
+@Composable
+fun ScreenErrorContent(
+    errorText: String,
+    buttonText: String,
+    onButtonClick: () -> Unit,
+) {
+    ErrorImage()
+    ErrorText(text = errorText)
+    LoudiusOutlinedButton(
+        onClick = onButtonClick,
+        text = buttonText,
+    )
 }
 
 @Composable
