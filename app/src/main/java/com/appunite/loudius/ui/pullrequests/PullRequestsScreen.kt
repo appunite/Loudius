@@ -97,10 +97,10 @@ private fun PullRequestsScreenStateless(
                     modifier = Modifier.padding(padding),
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
-
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 is Data.Loaded -> PullRequestContent(state.data, padding, onAction)
             }
+
         },
     )
 }
