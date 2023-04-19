@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.appunite.loudius.ui.pullrequests
 
 import com.appunite.loudius.fakes.FakePullRequestRepository
@@ -63,7 +62,7 @@ class PullRequestsViewModelTest {
     fun `WHEN fetching data failed on init THEN display error`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
             Result.failure(
-                WebException.NetworkError()
+                WebException.NetworkError(),
             )
         }
         val viewModel = createViewModel()
@@ -75,7 +74,7 @@ class PullRequestsViewModelTest {
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
             Result.failure(
-                WebException.NetworkError()
+                WebException.NetworkError(),
             )
         }
         val viewModel = createViewModel()

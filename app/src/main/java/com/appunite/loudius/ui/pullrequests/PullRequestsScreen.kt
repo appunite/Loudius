@@ -69,7 +69,7 @@ fun PullRequestsScreen(
 private fun navigateToReviewers(
     state: PullRequestState,
     navigateToReviewers: NavigateToReviewers,
-    viewModel: PullRequestsViewModel
+    viewModel: PullRequestsViewModel,
 ) {
     state.navigateToReviewers?.let {
         navigateToReviewers(
@@ -100,7 +100,6 @@ private fun PullRequestsScreenStateless(
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 is Data.Loaded -> PullRequestContent(state.data, padding, onAction)
             }
-
         },
     )
 }
@@ -234,7 +233,7 @@ fun PullRequestsScreenPreview() {
                             createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
                         ),
                     ),
-                )
+                ),
             ),
             onAction = {},
         )
