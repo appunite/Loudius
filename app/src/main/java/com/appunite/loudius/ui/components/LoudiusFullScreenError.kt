@@ -21,16 +21,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,12 +41,12 @@ fun LoudiusFullScreenError(
     buttonText: String = stringResource(id = R.string.try_again),
     onButtonClick: () -> Unit,
 ) {
-        ScreenErrorWithSpacers(
-            modifier = modifier,
-            errorText = errorText,
-            buttonText = buttonText,
-            onButtonClick = onButtonClick,
-        )
+    ScreenErrorWithSpacers(
+        modifier = modifier,
+        errorText = errorText,
+        buttonText = buttonText,
+        onButtonClick = onButtonClick,
+    )
 }
 
 @Composable
@@ -66,7 +61,7 @@ fun ScreenErrorWithSpacers(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.15f))
-        ErrorImage(modifier = Modifier.weight(weight = .35f).sizeIn(maxWidth =400.dp, maxHeight = 400.dp).fillMaxWidth())
+        ErrorImage(modifier = Modifier.weight(weight = .35f).sizeIn(maxWidth = 400.dp, maxHeight = 400.dp).fillMaxWidth())
         Spacer(modifier = Modifier.weight(weight = 0.05f))
         ErrorText(text = errorText)
         LoudiusOutlinedButton(
@@ -110,7 +105,6 @@ fun LoudiusErrorScreenPreview() {
     }
 }
 
-
 @Preview(showSystemUi = true, device = ReferenceDevices.SmallPhone)
 @Composable
 fun LoudiusErrorScreenPreviewSmallPhone() {
@@ -122,6 +116,7 @@ fun LoudiusErrorScreenPreviewSmallPhone() {
         )
     }
 }
+
 @Preview(showSystemUi = true, device = ReferenceDevices.SmallPhoneLandscape)
 @Composable
 fun LoudiusErrorScreenPreviewSmallPhoneLandscape() {
