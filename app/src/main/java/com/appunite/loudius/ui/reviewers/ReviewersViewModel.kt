@@ -79,12 +79,7 @@ class ReviewersViewModel @Inject constructor(
             state = state.copy(data = Data.Loading)
 
             getMergedData()
-                .onSuccess {
-                    state = state.copy(
-                        data = Data.Success(reviewers = it),
-                        pullRequestNumber = initialValues.pullRequestNumber
-                    )
-                }
+                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
                 .onFailure { state = state.copy(data = Data.Error) }
         }
     }
@@ -162,17 +157,17 @@ class ReviewersViewModel @Inject constructor(
         ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
 
     fun onAction(action: ReviewersAction) = when (action) {
-        is ReviewersAction.Notify -> notifyUser(action.userLogin)
+        is ReviewersAction.Notify -> notifyReviewer(action.userLogin)
         is ReviewersAction.OnSnackbarDismiss -> dismissSnackbar()
         is ReviewersAction.OnTryAgain -> fetchData()
     }
 
-    private fun notifyUser(userLogin: String) {
+    private fun notifyReviewer(userLogin: String) {
         val (owner, repo, pullRequestNumber) = initialValues
         val successData = state.data as? Data.Success ?: return
 
         viewModelScope.launch {
-            setUserItemLoading(successData, userLogin)
+            setReviewerToLoading(successData, userLogin)
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess { onNotifyUserSuccess(successData, userLogin) }
@@ -180,7 +175,7 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
-    private fun setUserItemLoading(
+    private fun setReviewerToLoading(
         successData: Data.Success,
         userLogin: String
     ) {
