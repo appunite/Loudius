@@ -137,7 +137,7 @@ private fun ReviewersScreenStateless(
 private fun ReviewersScreenContent(
     data: Data.Success,
     padding: PaddingValues,
-    onAction: (ReviewersAction) -> Unit
+    onAction: (ReviewersAction) -> Unit,
 ) {
     if (data.reviewers.isNotEmpty()) {
         ReviewersList(
