@@ -30,12 +30,12 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -44,12 +44,16 @@ sealed class ReviewersAction {
 }
 
 data class ReviewersState(
-    val reviewers: List<Reviewer> = emptyList(),
+    val data: Data = Data.Loading,
     val pullRequestNumber: String = "",
     val snackbarTypeShown: ReviewersSnackbarType? = null,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
 )
+
+sealed class Data {
+    object Loading : Data()
+    object Error : Data()
+    data class Loaded(val reviewers: List<Reviewer> = emptyList()) : Data()
+}
 
 enum class ReviewersSnackbarType {
     SUCCESS, FAILURE
@@ -62,7 +66,7 @@ class ReviewersViewModel @Inject constructor(
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
-    var state by mutableStateOf(ReviewersState())
+    var state: ReviewersState by mutableStateOf(ReviewersState())
         private set
 
     init {
@@ -72,11 +76,16 @@ class ReviewersViewModel @Inject constructor(
 
     private fun fetchData() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true, isError = false)
+            state = state.copy(data = Data.Loading)
 
             getMergedData()
-                .onSuccess { state = state.copy(reviewers = it, isLoading = false) }
-                .onFailure { state = state.copy(isError = true, isLoading = false) }
+                .onSuccess {
+                    state = state.copy(
+                        data = Data.Loaded(reviewers = it),
+                        pullRequestNumber = initialValues.pullRequestNumber
+                    )
+                }
+                .onFailure { state = state.copy(data = Data.Error) }
         }
     }
 
@@ -160,24 +169,50 @@ class ReviewersViewModel @Inject constructor(
 
     private fun notifyUser(userLogin: String) {
         val (owner, repo, pullRequestNumber) = initialValues
+        val loadedData = state.data as? Data.Loaded ?: return
 
         viewModelScope.launch {
-            state = state.copy(reviewers = state.reviewers.updateLoadingState(userLogin, true))
+            setUserItemLoading(loadedData, userLogin)
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
-                .onSuccess {
-                    state = state.copy(
-                        snackbarTypeShown = SUCCESS,
-                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
-                    )
-                }
-                .onFailure {
-                    state = state.copy(
-                        snackbarTypeShown = FAILURE,
-                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
-                    )
-                }
+                .onSuccess { onNotifyUserSuccess(loadedData, userLogin) }
+                .onFailure { onNotifyUserFailure(loadedData, userLogin) }
         }
+    }
+
+    private fun setUserItemLoading(
+        loadedData: Data.Loaded,
+        userLogin: String
+    ) {
+        state = state.copy(
+            data = Data.Loaded(
+                reviewers = loadedData.reviewers.updateLoadingState(userLogin, true)
+            )
+        )
+    }
+
+    private fun onNotifyUserFailure(
+        loadedData: Data.Loaded,
+        userLogin: String
+    ) {
+        state = state.copy(
+            snackbarTypeShown = FAILURE,
+            data = Data.Loaded(
+                reviewers = loadedData.reviewers.updateLoadingState(userLogin, false),
+            )
+        )
+    }
+
+    private fun onNotifyUserSuccess(
+        loadedData: Data.Loaded,
+        userLogin: String
+    ) {
+        state = state.copy(
+            snackbarTypeShown = SUCCESS,
+            data = Data.Loaded(
+                loadedData.reviewers.updateLoadingState(userLogin, false),
+            )
+        )
     }
 
     private fun List<Reviewer>.updateLoadingState(

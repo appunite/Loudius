@@ -65,9 +65,7 @@ fun ReviewersScreen(
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
-        reviewers = state.reviewers,
-        isLoading = state.isLoading,
-        isError = state.isError,
+        data = state.data,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
@@ -108,9 +106,7 @@ private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
 @Composable
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
-    reviewers: List<Reviewer>,
-    isLoading: Boolean,
-    isError: Boolean,
+    data: Data,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onAction: (ReviewersAction) -> Unit,
@@ -124,18 +120,14 @@ private fun ReviewersScreenStateless(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { padding ->
-            when {
-                isError -> LoudiusFullScreenError(
+            when (data) {
+                is Data.Error -> LoudiusFullScreenError(
                     modifier = Modifier.padding(padding),
                     onButtonClick = { onAction(ReviewersAction.OnTryAgain) },
                 )
-                isLoading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                reviewers.isEmpty() -> EmptyListPlaceholder(padding)
-                else -> ReviewersScreenContent(
-                    reviewers = reviewers,
-                    modifier = Modifier.padding(padding),
-                    onNotifyClick = onAction,
-                )
+
+                is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
+                is Data.Loaded -> ReviewersScreenContent(data, padding, onAction)
             }
         },
     )
@@ -143,6 +135,23 @@ private fun ReviewersScreenStateless(
 
 @Composable
 private fun ReviewersScreenContent(
+    data: Data.Loaded,
+    padding: PaddingValues,
+    onAction: (ReviewersAction) -> Unit
+) {
+    if (data.reviewers.isNotEmpty()) {
+        ReviewersList(
+            reviewers = data.reviewers,
+            modifier = Modifier.padding(padding),
+            onNotifyClick = onAction,
+        )
+    } else {
+        EmptyListPlaceholder(padding)
+    }
+}
+
+@Composable
+private fun ReviewersList(
     reviewers: List<Reviewer>,
     modifier: Modifier,
     onNotifyClick: (ReviewersAction) -> Unit,
@@ -263,9 +272,7 @@ fun DetailsScreenPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            reviewers = reviewers,
-            isError = false,
-            isLoading = false,
+            data = Data.Loaded(reviewers),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
@@ -279,9 +286,7 @@ fun DetailsScreenNoReviewsPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            reviewers = emptyList(),
-            isError = false,
-            isLoading = false,
+            data = Data.Loaded(emptyList()),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
