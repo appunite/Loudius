@@ -98,7 +98,7 @@ private fun PullRequestsScreenStateless(
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Loaded -> PullRequestContent(state.data, padding, onAction)
+                is Data.Success -> PullRequestContent(state.data, padding, onAction)
             }
         },
     )
@@ -106,7 +106,7 @@ private fun PullRequestsScreenStateless(
 
 @Composable
 private fun PullRequestContent(
-    state: Data.Loaded,
+    state: Data.Success,
     padding: PaddingValues,
     onAction: (PulLRequestsAction) -> Unit,
 ) {
@@ -198,7 +198,7 @@ fun PullRequestsScreenPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
             state = PullRequestState(
-                Data.Loaded(
+                Data.Success(
                     listOf(
                         PullRequest(
                             id = 0,
@@ -245,7 +245,7 @@ fun PullRequestsScreenPreview() {
 fun PullRequestsScreenEmptyListPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
-            PullRequestState(Data.Loaded(emptyList())),
+            PullRequestState(Data.Success(emptyList())),
             onAction = {},
         )
     }

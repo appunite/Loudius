@@ -24,8 +24,8 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
@@ -36,7 +36,7 @@ sealed class PulLRequestsAction {
 sealed class Data {
     object Loading : Data()
     object Error : Data()
-    data class Loaded(val pullRequests: List<PullRequest>) : Data()
+    data class Success(val pullRequests: List<PullRequest>) : Data()
 }
 
 data class PullRequestState(
@@ -67,7 +67,7 @@ class PullRequestsViewModel @Inject constructor(
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
-                    state = state.copy(data = Data.Loaded(it.items))
+                    state = state.copy(data = Data.Success(it.items))
                 }.onFailure {
                     state = state.copy(data = Data.Error)
                 }
@@ -81,9 +81,9 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     private fun navigateToReviewers(itemClickedId: Int) {
-        val loadedData = state.data as? Data.Loaded ?: return
-        val index = loadedData.pullRequests.indexOfFirst { it.id == itemClickedId }
-        val itemClickedData = loadedData.pullRequests[index]
+        val successData = state.data as? Data.Success ?: return
+        val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
+        val itemClickedData = successData.pullRequests[index]
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,

@@ -53,8 +53,8 @@ class PullRequestsViewModelTest {
     fun `WHEN init THEN display pull requests list`() = runTest {
         val viewModel = createViewModel()
 
-        expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-            get(Data.Loaded::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        expectThat(viewModel.state.data).isA<Data.Success>().and {
+            get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
     }
 
@@ -82,8 +82,8 @@ class PullRequestsViewModelTest {
         clearMocks(pullRequestRepository)
         viewModel.onAction(PulLRequestsAction.RetryClick)
 
-        expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-            get(Data.Loaded::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        expectThat(viewModel.state.data).isA<Data.Success>().and {
+            get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
     }
 
