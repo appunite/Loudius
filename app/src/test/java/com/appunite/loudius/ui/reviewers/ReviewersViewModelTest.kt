@@ -137,8 +137,8 @@ class ReviewersViewModelTest {
 
             viewModel = createViewModel()
 
-            expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-                get(Data.Loaded::reviewers).isEmpty()
+            expectThat(viewModel.state.data).isA<Data.Success>().and {
+                get(Data.Success::reviewers).isEmpty()
             }
         }
 
@@ -147,8 +147,8 @@ class ReviewersViewModelTest {
             runTest {
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-                    get(Data.Loaded::reviewers).containsExactly(
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
                         Reviewer(3, "user3", false, 7, null),
@@ -164,8 +164,8 @@ class ReviewersViewModelTest {
                 )
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-                    get(Data.Loaded::reviewers)
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers)
                         .containsExactly(
                             Reviewer(2, "user2", false, 7, null),
                             Reviewer(3, "user3", false, 7, null),
@@ -185,8 +185,8 @@ class ReviewersViewModelTest {
                 } returns Result.success(RequestedReviewersResponse(emptyList()))
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-                    get(Data.Loaded::reviewers).containsExactly(
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                     )
                 }
@@ -265,15 +265,15 @@ class ReviewersViewModelTest {
 
             viewModel.onAction(ReviewersAction.Notify("user1"))
 
-            expectThat(viewModel.state.data).isA<Data.Loaded>().and {
+            expectThat(viewModel.state.data).isA<Data.Success>().and {
                 // Clicked item should have loading indicator
-                get(Data.Loaded::reviewers)
+                get(Data.Success::reviewers)
                     .first { it.login == "user1" }
                     .get(Reviewer::isLoading)
                     .isTrue()
 
                 // Other items should NOT have loading indicator
-                get(Data.Loaded::reviewers)
+                get(Data.Success::reviewers)
                     .filterNot { it.login == "user1" }
                     .all { get(Reviewer::isLoading).isFalse() }
             }
@@ -322,8 +322,8 @@ class ReviewersViewModelTest {
                 clearMocks(repository)
                 viewModel.onAction(ReviewersAction.OnTryAgain)
 
-                expectThat(viewModel.state.data).isA<Data.Loaded>().and {
-                    get(Data.Loaded::reviewers).containsExactly(
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
                         Reviewer(3, "user3", false, 7, null),

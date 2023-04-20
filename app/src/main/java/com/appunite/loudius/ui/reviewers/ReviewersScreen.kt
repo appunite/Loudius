@@ -127,7 +127,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Loaded -> ReviewersScreenContent(data, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(data, padding, onAction)
             }
         },
     )
@@ -135,7 +135,7 @@ private fun ReviewersScreenStateless(
 
 @Composable
 private fun ReviewersScreenContent(
-    data: Data.Loaded,
+    data: Data.Success,
     padding: PaddingValues,
     onAction: (ReviewersAction) -> Unit
 ) {
@@ -272,7 +272,7 @@ fun DetailsScreenPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            data = Data.Loaded(reviewers),
+            data = Data.Success(reviewers),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
@@ -286,7 +286,7 @@ fun DetailsScreenNoReviewsPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            data = Data.Loaded(emptyList()),
+            data = Data.Success(emptyList()),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},

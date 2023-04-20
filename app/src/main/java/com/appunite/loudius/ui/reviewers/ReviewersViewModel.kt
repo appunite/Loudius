@@ -52,7 +52,7 @@ data class ReviewersState(
 sealed class Data {
     object Loading : Data()
     object Error : Data()
-    data class Loaded(val reviewers: List<Reviewer> = emptyList()) : Data()
+    data class Success(val reviewers: List<Reviewer> = emptyList()) : Data()
 }
 
 enum class ReviewersSnackbarType {
@@ -81,7 +81,7 @@ class ReviewersViewModel @Inject constructor(
             getMergedData()
                 .onSuccess {
                     state = state.copy(
-                        data = Data.Loaded(reviewers = it),
+                        data = Data.Success(reviewers = it),
                         pullRequestNumber = initialValues.pullRequestNumber
                     )
                 }
@@ -169,48 +169,48 @@ class ReviewersViewModel @Inject constructor(
 
     private fun notifyUser(userLogin: String) {
         val (owner, repo, pullRequestNumber) = initialValues
-        val loadedData = state.data as? Data.Loaded ?: return
+        val successData = state.data as? Data.Success ?: return
 
         viewModelScope.launch {
-            setUserItemLoading(loadedData, userLogin)
+            setUserItemLoading(successData, userLogin)
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
-                .onSuccess { onNotifyUserSuccess(loadedData, userLogin) }
-                .onFailure { onNotifyUserFailure(loadedData, userLogin) }
+                .onSuccess { onNotifyUserSuccess(successData, userLogin) }
+                .onFailure { onNotifyUserFailure(successData, userLogin) }
         }
     }
 
     private fun setUserItemLoading(
-        loadedData: Data.Loaded,
+        successData: Data.Success,
         userLogin: String
     ) {
         state = state.copy(
-            data = Data.Loaded(
-                reviewers = loadedData.reviewers.updateLoadingState(userLogin, true)
+            data = Data.Success(
+                reviewers = successData.reviewers.updateLoadingState(userLogin, true)
             )
         )
     }
 
     private fun onNotifyUserFailure(
-        loadedData: Data.Loaded,
+        successData: Data.Success,
         userLogin: String
     ) {
         state = state.copy(
             snackbarTypeShown = FAILURE,
-            data = Data.Loaded(
-                reviewers = loadedData.reviewers.updateLoadingState(userLogin, false),
+            data = Data.Success(
+                reviewers = successData.reviewers.updateLoadingState(userLogin, false),
             )
         )
     }
 
     private fun onNotifyUserSuccess(
-        loadedData: Data.Loaded,
+        successData: Data.Success,
         userLogin: String
     ) {
         state = state.copy(
             snackbarTypeShown = SUCCESS,
-            data = Data.Loaded(
-                loadedData.reviewers.updateLoadingState(userLogin, false),
+            data = Data.Success(
+                successData.reviewers.updateLoadingState(userLogin, false),
             )
         )
     }
