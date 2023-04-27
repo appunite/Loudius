@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "Loudius"
 include ':app'
 include ':custom-ktlint-rules'
+include ':screenshots'
