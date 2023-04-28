@@ -33,6 +33,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
+import com.appunite.loudius.screenshots.components.LoudiusText
+import com.appunite.loudius.screenshots.components.LoudiusTextStyle
 import com.appunite.loudius.ui.components.utils.bottomBorder
 
 @Composable

@@ -22,9 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.LoudiusFullScreenError
+import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
+import com.appunite.loudius.screenshots.theme.LoudiusTheme
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun AuthenticatingScreen(

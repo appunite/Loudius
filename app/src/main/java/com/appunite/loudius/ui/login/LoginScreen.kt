@@ -35,12 +35,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
-import com.appunite.loudius.ui.components.LoudiusDialog
-import com.appunite.loudius.ui.components.LoudiusOutlinedButton
-import com.appunite.loudius.ui.components.LoudiusOutlinedButtonIcon
-import com.appunite.loudius.ui.components.LoudiusOutlinedButtonStyle
-import com.appunite.loudius.ui.components.LoudiusText
-import com.appunite.loudius.ui.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.components.LoudiusDialog
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonIcon
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonStyle
+import com.appunite.loudius.screenshots.components.LoudiusText
+import com.appunite.loudius.screenshots.components.LoudiusTextStyle
 
 @Composable
 fun LoginScreen(
@@ -56,9 +56,11 @@ fun LoginScreen(
                 )
                 viewModel.onAction(LoginAction.ClearNavigation)
             }
+
             LoginNavigateTo.OpenXiaomiPermissionManager -> {
                 context.startActivity(GithubHelper.xiaomiPermissionManagerForGithub())
             }
+
             null -> Unit
         }
     }
@@ -88,7 +90,7 @@ fun LoginScreenStateless(
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = com.appunite.loudius.screenshots.R.drawable.ic_github),
                     contentDescription = stringResource(R.string.github_icon),
                 )
             },

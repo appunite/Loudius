@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.theme
+package com.appunite.loudius.screenshots.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

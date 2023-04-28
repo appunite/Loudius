@@ -27,7 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.screenshots.components.LoudiusText
+import com.appunite.loudius.screenshots.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.theme.LoudiusTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

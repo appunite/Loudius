@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.screenshots.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,8 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.appunite.loudius.R
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.screenshots.R
+import com.appunite.loudius.screenshots.theme.LoudiusTheme
 
 @Composable
 fun LoudiusErrorDialog(

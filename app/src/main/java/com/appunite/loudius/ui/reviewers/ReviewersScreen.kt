@@ -42,18 +42,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.LoudiusFullScreenError
+import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
+import com.appunite.loudius.screenshots.components.LoudiusText
+import com.appunite.loudius.screenshots.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.theme.LoudiusTheme
 import com.appunite.loudius.ui.components.LoudiusListIcon
 import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.components.LoudiusOutlinedButton
 import com.appunite.loudius.ui.components.LoudiusPlaceholderText
-import com.appunite.loudius.ui.components.LoudiusText
-import com.appunite.loudius.ui.components.LoudiusTextStyle
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun ReviewersScreen(

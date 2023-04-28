@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.theme
+package com.appunite.loudius.screenshots.theme
 
 import android.app.Activity
 import android.os.Build
