@@ -61,6 +61,7 @@ object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
     ): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(TestInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -83,6 +84,7 @@ object NetworkModule {
     ): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
+            .addInterceptor(TestInterceptor)
             .addInterceptor(AuthFailureInterceptor(authFailureHandler))
             .addInterceptor(loggingInterceptor)
             .build()
