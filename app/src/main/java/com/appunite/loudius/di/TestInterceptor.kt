@@ -13,5 +13,4 @@ object TestInterceptor : Interceptor {
 
 private object DoNothingInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = chain.proceed(chain.request())
-
 }

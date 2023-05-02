@@ -43,7 +43,6 @@ class MockWebServerRule : TestRule {
                     TestInterceptor.testInterceptor = UrlOverrideInterceptor(server.url("/"))
                     Log.v(TAG, "TestInterceptor installed")
                     try {
-
                     } finally {
                         base.evaluate()
                         Log.v(TAG, "TestInterceptor uninstalled")
@@ -51,7 +50,6 @@ class MockWebServerRule : TestRule {
                     }
                 }
             }
-
         }
     }
 }
@@ -65,11 +63,11 @@ class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
             .port(baseUrl.port)
             .build()
         Log.w(TAG, "Overriding url, from: ${request.url} to: $newUrl")
-        return chain.proceed(request.newBuilder().url(newUrl)
-            .addHeader("X-Test-Original-Url", request.url.toString()).build()
+        return chain.proceed(
+            request.newBuilder().url(newUrl)
+                .addHeader("X-Test-Original-Url", request.url.toString()).build(),
         )
     }
-
 }
 
 fun jsonResponse(@Language("JSON") json: String): MockResponse = MockResponse()
@@ -90,5 +88,6 @@ inline fun <reified T : Any> MockKMatcherScope.matchArg(noinline block: Assertio
 @get:JvmName("recordedRequestPath")
 inline val Assertion.Builder<RecordedRequest>.path: Assertion.Builder<String> get() = get(RecordedRequest::path).isNotNull()
 inline val Assertion.Builder<RecordedRequest>.url: Assertion.Builder<HttpUrl> get() = get(RecordedRequest::requestUrl).isNotNull()
+
 @get:JvmName("httpUrlPath")
 inline val Assertion.Builder<HttpUrl>.path: Assertion.Builder<String> get() = get("path") { encodedPath }

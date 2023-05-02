@@ -16,19 +16,16 @@
 
 package com.appunite.loudius
 
-
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.jsonResponse
 import com.appunite.loudius.util.matchArg
 import com.appunite.loudius.util.path
-import com.appunite.loudius.util.url
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.every
@@ -49,7 +46,6 @@ class PullRequestsScreenTest {
     @get:Rule
     var mockWebServer: MockWebServerRule = MockWebServerRule()
 
-
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<TestActivity>()
 
@@ -58,13 +54,10 @@ class PullRequestsScreenTest {
         hiltRule.inject()
     }
 
-
-
     @Test
     fun whenTheLoginScreenIsVisibleThenTheLogInButtonIsVisible() {
-
         every { mockWebServer.dispatcher.dispatch(matchArg { path.isEqualTo("/user") }) } returns
-                jsonResponse("{\"id\": 1, \"login\": \"jacek\"}")
+            jsonResponse("{\"id\": 1, \"login\": \"jacek\"}")
 
         val jsonResponse = """
                 {
@@ -146,10 +139,10 @@ class PullRequestsScreenTest {
                         }
                     ]
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         every { mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") }) } returns
-                jsonResponse(jsonResponse)
+            jsonResponse(jsonResponse)
 
         composeTestRule.setContent {
             LoudiusTheme {
