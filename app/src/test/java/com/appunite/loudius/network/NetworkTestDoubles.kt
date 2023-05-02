@@ -22,11 +22,11 @@ import com.appunite.loudius.network.intercept.AuthFailureInterceptor
 import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import com.appunite.loudius.network.utils.AuthFailureHandlerImpl
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit
 
 fun testOkHttpClient(
     authRepository: AuthRepository = FakeAuthRepository(),
-    authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl(),
+    authFailureHandler: AuthFailureHandler = AuthFailureHandler(Dispatchers.Unconfined),
 ) = OkHttpClient.Builder()
     .connectTimeout(1, TimeUnit.SECONDS)
     .readTimeout(1, TimeUnit.SECONDS)

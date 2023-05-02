@@ -108,7 +108,7 @@ fun ScreenErrorWithoutSpacers(
         ScreenErrorContent(
             errorText = errorText,
             buttonText = buttonText,
-            onButtonClick = onButtonClick
+            onButtonClick = onButtonClick,
         )
     }
 }

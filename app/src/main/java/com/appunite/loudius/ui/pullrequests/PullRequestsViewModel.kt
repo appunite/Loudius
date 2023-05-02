@@ -33,11 +33,15 @@ sealed class PulLRequestsAction {
     object RetryClick : PulLRequestsAction()
 }
 
+sealed class Data {
+    object Loading : Data()
+    object Error : Data()
+    data class Success(val pullRequests: List<PullRequest>) : Data()
+}
+
 data class PullRequestState(
-    val pullRequests: List<PullRequest> = emptyList(),
+    val data: Data = Data.Loading,
     val navigateToReviewers: NavigationPayload? = null,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
 )
 
 data class NavigationPayload(
@@ -51,7 +55,7 @@ data class NavigationPayload(
 class PullRequestsViewModel @Inject constructor(
     private val pullRequestsRepository: PullRequestRepository,
 ) : ViewModel() {
-    var state by mutableStateOf(PullRequestState())
+    var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
 
     init {
@@ -60,12 +64,12 @@ class PullRequestsViewModel @Inject constructor(
 
     private fun fetchData() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true, isError = false)
+            state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
-                    state = state.copy(pullRequests = it.items, isLoading = false)
+                    state = state.copy(data = Data.Success(it.items))
                 }.onFailure {
-                    state = state.copy(isLoading = false, isError = true)
+                    state = state.copy(data = Data.Error)
                 }
         }
     }
@@ -77,8 +81,9 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     private fun navigateToReviewers(itemClickedId: Int) {
-        val index = state.pullRequests.indexOfFirst { it.id == itemClickedId }
-        val itemClickedData = state.pullRequests[index]
+        val successData = state.data as? Data.Success ?: return
+        val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
+        val itemClickedData = successData.pullRequests[index]
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,

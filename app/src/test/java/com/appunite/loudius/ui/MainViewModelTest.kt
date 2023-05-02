@@ -17,8 +17,8 @@
 package com.appunite.loudius.ui
 
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import com.appunite.loudius.network.utils.AuthFailureHandlerImpl
 import com.appunite.loudius.util.MainDispatcherExtension
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -30,7 +30,7 @@ import strikt.assertions.isNull
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class MainViewModelTest {
-    private val authFailureHandler: AuthFailureHandler = AuthFailureHandlerImpl()
+    private val authFailureHandler: AuthFailureHandler = AuthFailureHandler(Dispatchers.Unconfined)
     private lateinit var viewModel: MainViewModel
 
     @Test

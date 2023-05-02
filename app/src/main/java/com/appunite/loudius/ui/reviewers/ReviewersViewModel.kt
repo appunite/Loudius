@@ -44,12 +44,16 @@ sealed class ReviewersAction {
 }
 
 data class ReviewersState(
-    val reviewers: List<Reviewer> = emptyList(),
+    val data: Data = Data.Loading,
     val pullRequestNumber: String = "",
     val snackbarTypeShown: ReviewersSnackbarType? = null,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
 )
+
+sealed class Data {
+    object Loading : Data()
+    object Error : Data()
+    data class Success(val reviewers: List<Reviewer> = emptyList()) : Data()
+}
 
 enum class ReviewersSnackbarType {
     SUCCESS, FAILURE
@@ -62,7 +66,7 @@ class ReviewersViewModel @Inject constructor(
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
-    var state by mutableStateOf(ReviewersState())
+    var state: ReviewersState by mutableStateOf(ReviewersState())
         private set
 
     init {
@@ -72,11 +76,11 @@ class ReviewersViewModel @Inject constructor(
 
     private fun fetchData() {
         viewModelScope.launch {
-            state = state.copy(isLoading = true, isError = false)
+            state = state.copy(data = Data.Loading)
 
             getMergedData()
-                .onSuccess { state = state.copy(reviewers = it, isLoading = false) }
-                .onFailure { state = state.copy(isError = true, isLoading = false) }
+                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
+                .onFailure { state = state.copy(data = Data.Error) }
         }
     }
 
@@ -153,31 +157,57 @@ class ReviewersViewModel @Inject constructor(
         ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
 
     fun onAction(action: ReviewersAction) = when (action) {
-        is ReviewersAction.Notify -> notifyUser(action.userLogin)
+        is ReviewersAction.Notify -> notifyReviewer(action.userLogin)
         is ReviewersAction.OnSnackbarDismiss -> dismissSnackbar()
         is ReviewersAction.OnTryAgain -> fetchData()
     }
 
-    private fun notifyUser(userLogin: String) {
+    private fun notifyReviewer(userLogin: String) {
         val (owner, repo, pullRequestNumber) = initialValues
+        val successData = state.data as? Data.Success ?: return
 
         viewModelScope.launch {
-            state = state.copy(reviewers = state.reviewers.updateLoadingState(userLogin, true))
+            setReviewerToLoading(successData, userLogin)
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
-                .onSuccess {
-                    state = state.copy(
-                        snackbarTypeShown = SUCCESS,
-                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
-                    )
-                }
-                .onFailure {
-                    state = state.copy(
-                        snackbarTypeShown = FAILURE,
-                        reviewers = state.reviewers.updateLoadingState(userLogin, false),
-                    )
-                }
+                .onSuccess { onNotifyUserSuccess(successData, userLogin) }
+                .onFailure { onNotifyUserFailure(successData, userLogin) }
         }
+    }
+
+    private fun setReviewerToLoading(
+        successData: Data.Success,
+        userLogin: String,
+    ) {
+        state = state.copy(
+            data = Data.Success(
+                reviewers = successData.reviewers.updateLoadingState(userLogin, true),
+            ),
+        )
+    }
+
+    private fun onNotifyUserFailure(
+        successData: Data.Success,
+        userLogin: String,
+    ) {
+        state = state.copy(
+            snackbarTypeShown = FAILURE,
+            data = Data.Success(
+                reviewers = successData.reviewers.updateLoadingState(userLogin, false),
+            ),
+        )
+    }
+
+    private fun onNotifyUserSuccess(
+        successData: Data.Success,
+        userLogin: String,
+    ) {
+        state = state.copy(
+            snackbarTypeShown = SUCCESS,
+            data = Data.Success(
+                successData.reviewers.updateLoadingState(userLogin, false),
+            ),
+        )
     }
 
     private fun List<Reviewer>.updateLoadingState(

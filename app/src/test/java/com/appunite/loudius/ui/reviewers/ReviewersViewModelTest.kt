@@ -21,7 +21,7 @@ import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
-import com.appunite.loudius.utils.neverCompletingSuspension
+import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -41,6 +41,7 @@ import strikt.assertions.all
 import strikt.assertions.containsExactly
 import strikt.assertions.filterNot
 import strikt.assertions.first
+import strikt.assertions.isA
 import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
@@ -114,11 +115,7 @@ class ReviewersViewModelTest {
             } coAnswers { neverCompletingSuspension() }
             viewModel = createViewModel()
 
-            expectThat(viewModel.state) {
-                get(ReviewersState::isLoading).isTrue()
-                get(ReviewersState::isError).isFalse()
-                get(ReviewersState::reviewers).isEmpty()
-            }
+            expectThat(viewModel.state.data).isA<Data.Loading>()
         }
 
         @Test
@@ -140,10 +137,8 @@ class ReviewersViewModelTest {
 
             viewModel = createViewModel()
 
-            expectThat(viewModel.state) {
-                get(ReviewersState::isLoading).isFalse()
-                get(ReviewersState::isError).isFalse()
-                get(ReviewersState::reviewers).isEmpty()
+            expectThat(viewModel.state.data).isA<Data.Success>().and {
+                get(Data.Success::reviewers).isEmpty()
             }
         }
 
@@ -152,10 +147,8 @@ class ReviewersViewModelTest {
             runTest {
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state) {
-                    get(ReviewersState::isLoading).isFalse()
-                    get(ReviewersState::isError).isFalse()
-                    get(ReviewersState::reviewers).containsExactly(
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
                         Reviewer(3, "user3", false, 7, null),
@@ -171,12 +164,13 @@ class ReviewersViewModelTest {
                 )
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state)
-                    .get(ReviewersState::reviewers)
-                    .containsExactly(
-                        Reviewer(2, "user2", false, 7, null),
-                        Reviewer(3, "user3", false, 7, null),
-                    )
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers)
+                        .containsExactly(
+                            Reviewer(2, "user2", false, 7, null),
+                            Reviewer(3, "user3", false, 7, null),
+                        )
+                }
             }
 
         @Test
@@ -191,11 +185,11 @@ class ReviewersViewModelTest {
                 } returns Result.success(RequestedReviewersResponse(emptyList()))
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state)
-                    .get(ReviewersState::reviewers)
-                    .containsExactly(
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                     )
+                }
             }
 
         @Test
@@ -213,11 +207,7 @@ class ReviewersViewModelTest {
                 } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state) {
-                    get(ReviewersState::isLoading).isFalse()
-                    get(ReviewersState::isError).isTrue()
-                    get(ReviewersState::reviewers).isEmpty()
-                }
+                expectThat(viewModel.state.data).isA<Data.Error>()
             }
 
         @Test
@@ -232,11 +222,7 @@ class ReviewersViewModelTest {
                 } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state) {
-                    get(ReviewersState::isLoading).isFalse()
-                    get(ReviewersState::isError).isTrue()
-                    get(ReviewersState::reviewers).isEmpty()
-                }
+                expectThat(viewModel.state.data).isA<Data.Error>()
             }
 
         @Test
@@ -247,11 +233,7 @@ class ReviewersViewModelTest {
                 )
                 viewModel = createViewModel()
 
-                expectThat(viewModel.state) {
-                    get(ReviewersState::isLoading).isFalse()
-                    get(ReviewersState::isError).isTrue()
-                    get(ReviewersState::reviewers).isEmpty()
-                }
+                expectThat(viewModel.state.data).isA<Data.Error>()
             }
     }
 
@@ -283,15 +265,15 @@ class ReviewersViewModelTest {
 
             viewModel.onAction(ReviewersAction.Notify("user1"))
 
-            expectThat(viewModel.state) {
+            expectThat(viewModel.state.data).isA<Data.Success>().and {
                 // Clicked item should have loading indicator
-                get(ReviewersState::reviewers)
+                get(Data.Success::reviewers)
                     .first { it.login == "user1" }
                     .get(Reviewer::isLoading)
                     .isTrue()
 
                 // Other items should NOT have loading indicator
-                get(ReviewersState::reviewers)
+                get(Data.Success::reviewers)
                     .filterNot { it.login == "user1" }
                     .all { get(Reviewer::isLoading).isFalse() }
             }
@@ -340,10 +322,8 @@ class ReviewersViewModelTest {
                 clearMocks(repository)
                 viewModel.onAction(ReviewersAction.OnTryAgain)
 
-                expectThat(viewModel.state) {
-                    get(ReviewersState::isLoading).isFalse()
-                    get(ReviewersState::isError).isFalse()
-                    get(ReviewersState::reviewers).containsExactly(
+                expectThat(viewModel.state.data).isA<Data.Success>().and {
+                    get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
                         Reviewer(3, "user3", false, 7, null),
@@ -364,11 +344,7 @@ class ReviewersViewModelTest {
 
                 viewModel.onAction(ReviewersAction.OnTryAgain)
 
-                expectThat(viewModel.state) {
-                    get(ReviewersState::isLoading).isFalse()
-                    get(ReviewersState::isError).isTrue()
-                    get(ReviewersState::reviewers).isEmpty()
-                }
+                expectThat(viewModel.state.data).isA<Data.Error>()
             }
     }
 }

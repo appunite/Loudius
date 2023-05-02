@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package com.appunite.loudius.ui.pullrequests
 
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
 import com.appunite.loudius.util.MainDispatcherExtension
-import com.appunite.loudius.utils.neverCompletingSuspension
+import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.spyk
@@ -31,13 +29,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import strikt.api.expectThat
-import strikt.assertions.isEmpty
+import strikt.assertions.isA
 import strikt.assertions.isEqualTo
-import strikt.assertions.isFalse
 import strikt.assertions.isNull
-import strikt.assertions.isTrue
 import strikt.assertions.single
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
     private val pullRequestRepository = spyk(FakePullRequestRepository())
@@ -49,48 +46,44 @@ class PullRequestsViewModelTest {
 
         val viewModel = createViewModel()
 
-        expectThat(viewModel.state) {
-            get(PullRequestState::isLoading).isTrue()
-            get(PullRequestState::isError).isFalse()
-            get(PullRequestState::pullRequests).isEmpty()
-        }
+        expectThat(viewModel.state.data).isA<Data.Loading>()
     }
 
     @Test
     fun `WHEN init THEN display pull requests list`() = runTest {
         val viewModel = createViewModel()
 
-        expectThat(viewModel.state) {
-            get(PullRequestState::isLoading).isFalse()
-            get(PullRequestState::isError).isFalse()
-            get(PullRequestState::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        expectThat(viewModel.state.data).isA<Data.Success>().and {
+            get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
     }
 
     @Test
     fun `WHEN fetching data failed on init THEN display error`() = runTest {
-        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { Result.failure(WebException.NetworkError()) }
+        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
+            Result.failure(
+                WebException.NetworkError(),
+            )
+        }
         val viewModel = createViewModel()
 
-        expectThat(viewModel.state) {
-            get(PullRequestState::isLoading).isFalse()
-            get(PullRequestState::isError).isTrue()
-            get(PullRequestState::pullRequests).isEmpty()
-        }
+        expectThat(viewModel.state.data).isA<Data.Error>()
     }
 
     @Test
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
-        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { Result.failure(WebException.NetworkError()) }
+        coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
+            Result.failure(
+                WebException.NetworkError(),
+            )
+        }
         val viewModel = createViewModel()
 
         clearMocks(pullRequestRepository)
         viewModel.onAction(PulLRequestsAction.RetryClick)
 
-        expectThat(viewModel.state) {
-            get(PullRequestState::isLoading).isFalse()
-            get(PullRequestState::isError).isFalse()
-            get(PullRequestState::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        expectThat(viewModel.state.data).isA<Data.Success>().and {
+            get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
     }
 
