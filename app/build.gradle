@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.appunite.loudius"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -50,13 +50,23 @@ android {
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += '/META-INF/INDEX.LIST'
+            excludes += '/META-INF/groovy-release-info.properties'
+            excludes += '/META-INF/DEPENDENCIES'
+            excludes += '/mozilla/public-suffix-list.txt'
+        }
+    }
+    configurations {
+        // Exclude Hamcrest from all dependencies
+        all {
+            exclude group: 'org.hamcrest', module: 'hamcrest-library'
         }
     }
 }
 
 dependencies {
     //Desugaring for use of java.time in api lower then 26
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     //Base android deps
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -71,7 +81,6 @@ dependencies {
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation "androidx.navigation:navigation-compose:2.5.3"
-    debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
@@ -120,6 +129,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+
+    androidTestImplementation("io.rest-assured:kotlin-extensions:5.1.1")
+    androidTestImplementation("com.marcinziolo:kotlin-wiremock:2.0.2")
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
