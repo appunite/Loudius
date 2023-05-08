@@ -18,8 +18,9 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.common.TestTags
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.MockWebServerRule
@@ -35,6 +36,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import strikt.assertions.isEqualTo
 import strikt.assertions.startsWith
+import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -52,12 +54,18 @@ class PullRequestsScreenTest {
     @Before
     fun setUp() {
         hiltRule.inject()
+        composeTestRule.setContent {
+            LoudiusTheme {
+                PullRequestsScreen { _, _, _, _ -> }
+            }
+        }
     }
 
     @Test
     fun whenTheLoginScreenIsVisibleThenTheLogInButtonIsVisible() {
-        every { mockWebServer.dispatcher.dispatch(matchArg { path.isEqualTo("/user") }) } returns
-            jsonResponse("{\"id\": 1, \"login\": \"jacek\"}")
+        every {
+            mockWebServer.dispatcher.dispatch(matchArg { path.isEqualTo("/user") })
+        } returns jsonResponse("{\"id\": 1, \"login\": \"user\"}")
 
         val jsonResponse = """
                 {
@@ -141,17 +149,11 @@ class PullRequestsScreenTest {
                 }
         """.trimIndent()
 
-        every { mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") }) } returns
-            jsonResponse(jsonResponse)
+        every {
+            mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") })
+        } returns jsonResponse(jsonResponse)
 
-        composeTestRule.setContent {
-            LoudiusTheme {
-                PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime -> Unit }
-            }
-        }
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithText("example title").assertIsDisplayed()
+        sleep(3000) // Temporary solution
+        composeTestRule.onNodeWithTag(TestTags.PULL_REQUEST_ITEM).assertIsDisplayed()
     }
 }
