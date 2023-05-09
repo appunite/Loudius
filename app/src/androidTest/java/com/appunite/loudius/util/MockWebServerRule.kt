@@ -43,8 +43,8 @@ class MockWebServerRule : TestRule {
                     TestInterceptor.testInterceptor = UrlOverrideInterceptor(server.url("/"))
                     Log.v(TAG, "TestInterceptor installed")
                     try {
-                    } finally {
                         base.evaluate()
+                    } finally {
                         Log.v(TAG, "TestInterceptor uninstalled")
                         TestInterceptor.testInterceptor = null
                     }
