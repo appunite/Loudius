@@ -62,7 +62,7 @@ class PullRequestsScreenTest {
     }
 
     @Test
-    fun whenTheLoginScreenIsVisibleThenTheLogInButtonIsVisible() {
+    fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
         every {
             mockWebServer.dispatcher.dispatch(matchArg { path.isEqualTo("/user") })
         } returns jsonResponse("{\"id\": 1, \"login\": \"user\"}")

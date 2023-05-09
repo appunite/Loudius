@@ -31,7 +31,7 @@ class MockWebServerRule : TestRule {
         every { dispatch(any()) } answers {
             val request = it.invocation.args[0] as RecordedRequest
             Log.w(TAG, "Request is not mocked: ${request.method} ${request.path}")
-            MockResponse().setResponseCode(404)
+            MockResponse().setResponseCode(404).setBody("{'error': 'Page not found'}")
         }
     }
 
