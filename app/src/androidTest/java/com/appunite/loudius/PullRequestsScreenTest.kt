@@ -18,8 +18,10 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.common.TestTags
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.MockWebServerRule
@@ -35,7 +37,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import strikt.assertions.isEqualTo
 import strikt.assertions.startsWith
-import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -152,7 +153,12 @@ class PullRequestsScreenTest {
             mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") })
         } returns jsonResponse(jsonResponse)
 
-        sleep(3000) // Temporary solution
+        composeTestRule.waitUntil {
+            composeTestRule
+                .onAllNodesWithTag(TestTags.PULL_REQUEST_ITEM)
+                .fetchSemanticsNodes().size == 1
+        }
+
         composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
     }
 }

@@ -31,12 +31,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
+import com.appunite.loudius.common.TestTags
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusFullScreenError
 import com.appunite.loudius.ui.components.LoudiusListIcon
@@ -149,6 +151,7 @@ private fun PullRequestItem(
     LoudiusListItem(
         index = index,
         modifier = Modifier
+            .testTag(TestTags.PULL_REQUEST_ITEM)
             .clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
         icon = { modifier -> PullRequestIcon(modifier) },
         content = { modifier ->
