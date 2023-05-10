@@ -18,9 +18,8 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.common.TestTags
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.MockWebServerRule
@@ -82,7 +81,7 @@ class PullRequestsScreenTest {
                             "id":1,
                             "node_id":"example_node_id",
                             "number":1,
-                            "title":"example title",
+                            "title":"First Pull-Request title",
                             "user":{
                                 "login":"exampleUser",
                                 "id":1,
@@ -154,6 +153,6 @@ class PullRequestsScreenTest {
         } returns jsonResponse(jsonResponse)
 
         sleep(3000) // Temporary solution
-        composeTestRule.onNodeWithTag(TestTags.PULL_REQUEST_ITEM).assertIsDisplayed()
+        composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
     }
 }
