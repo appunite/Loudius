@@ -16,10 +16,14 @@
 
 package com.appunite.loudius
 
+import android.util.Log
+import androidx.compose.ui.test.IdlingResource
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.ui.components.CountingIdlingResource
+import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.MockWebServerRule
@@ -35,8 +39,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import strikt.assertions.isEqualTo
 import strikt.assertions.startsWith
-import java.lang.Thread.sleep
 
+//class MockWebServerRule : TestRule {
+//    override fun apply(base: Statement, description: Description): Statement {
+//        TODO("Not yet implemented")
+//    }
+//
+//}
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class PullRequestsScreenTest {
@@ -52,12 +61,8 @@ class PullRequestsScreenTest {
 
     @Before
     fun setUp() {
+        composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
         hiltRule.inject()
-        composeTestRule.setContent {
-            LoudiusTheme {
-                PullRequestsScreen { _, _, _, _ -> }
-            }
-        }
     }
 
     @Test
@@ -150,9 +155,25 @@ class PullRequestsScreenTest {
 
         every {
             mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") })
-        } returns jsonResponse(jsonResponse)
+        } answers {
+            Thread.sleep(7000)
+            jsonResponse(jsonResponse)
+        }
 
-        sleep(3000) // Temporary solution
+        composeTestRule.setContent {
+            LoudiusTheme {
+                PullRequestsScreen { _, _, _, _ -> }
+            }
+        }
+
         composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
     }
+}
+
+// move to some helpers class
+private fun CountingIdlingResource.toIdlingResource(): IdlingResource = object : IdlingResource {
+    override val isIdleNow: Boolean
+        get() = this@toIdlingResource.isIdleNow
+
+    override fun getDiagnosticMessageIfBusy(): String = this@toIdlingResource.getDiagnosticMessageIfBusy()
 }
