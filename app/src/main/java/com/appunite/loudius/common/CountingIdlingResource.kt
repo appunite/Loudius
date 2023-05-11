@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.model.error
+package com.appunite.loudius.common
 
-data class DefaultErrorResponse(
-    val message: String,
-    val documentationUrl: String,
-)
+import java.util.concurrent.atomic.AtomicInteger
+
+class CountingIdlingResource(val name: String) {
+    private var counter = AtomicInteger(0)
+    val isIdleNow: Boolean get() = counter.get() == 0
+    fun getDiagnosticMessageIfBusy(): String = "$name is busy"
+
+    fun increment() {
+        counter.incrementAndGet()
+    }
+
+    fun decrement() {
+        counter.decrementAndGet()
+    }
+}

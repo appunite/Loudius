@@ -16,16 +16,14 @@
 
 package com.appunite.loudius
 
-import android.util.Log
-import androidx.compose.ui.test.IdlingResource
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.components.CountingIdlingResource
 import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.jsonResponse
 import com.appunite.loudius.util.matchArg
@@ -40,12 +38,6 @@ import org.junit.runner.RunWith
 import strikt.assertions.isEqualTo
 import strikt.assertions.startsWith
 
-//class MockWebServerRule : TestRule {
-//    override fun apply(base: Statement, description: Description): Statement {
-//        TODO("Not yet implemented")
-//    }
-//
-//}
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class PullRequestsScreenTest {
@@ -168,12 +160,4 @@ class PullRequestsScreenTest {
 
         composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
     }
-}
-
-// move to some helpers class
-private fun CountingIdlingResource.toIdlingResource(): IdlingResource = object : IdlingResource {
-    override val isIdleNow: Boolean
-        get() = this@toIdlingResource.isIdleNow
-
-    override fun getDiagnosticMessageIfBusy(): String = this@toIdlingResource.getDiagnosticMessageIfBusy()
 }

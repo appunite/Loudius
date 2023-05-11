@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.model.error
+package com.appunite.loudius.util
 
-data class DefaultErrorResponse(
-    val message: String,
-    val documentationUrl: String,
-)
+import androidx.compose.ui.test.IdlingResource
+import com.appunite.loudius.common.CountingIdlingResource
+
+object IdlingResourceExtensions {
+
+    fun CountingIdlingResource.toIdlingResource(): IdlingResource = object :
+        IdlingResource {
+        override val isIdleNow: Boolean
+            get() = this@toIdlingResource.isIdleNow
+
+        override fun getDiagnosticMessageIfBusy(): String =
+            this@toIdlingResource.getDiagnosticMessageIfBusy()
+    }
+}

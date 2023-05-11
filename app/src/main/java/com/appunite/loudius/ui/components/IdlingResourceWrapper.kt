@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.model.error
+package com.appunite.loudius.ui.components
 
-data class DefaultErrorResponse(
-    val message: String,
-    val documentationUrl: String,
-)
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import com.appunite.loudius.common.CountingIdlingResource
+
+val countingResource = CountingIdlingResource("IdlingResourceWrapper")
+
+@Composable
+fun IdlingResourceWrapper(content: @Composable () -> Unit) {
+    DisposableEffect(Unit) {
+        countingResource.increment()
+        onDispose {
+            countingResource.decrement()
+        }
+    }
+    content()
+}
