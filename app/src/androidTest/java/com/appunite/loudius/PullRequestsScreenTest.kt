@@ -147,10 +147,7 @@ class PullRequestsScreenTest {
 
         every {
             mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") })
-        } answers {
-            Thread.sleep(7000)
-            jsonResponse(jsonResponse)
-        }
+        } answers { jsonResponse(jsonResponse) }
 
         composeTestRule.setContent {
             LoudiusTheme {
