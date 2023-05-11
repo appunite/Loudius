@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.utils.ReferenceDevices
+import com.appunite.loudius.ui.components.utils.MultiScreenPreviews
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
@@ -93,57 +93,9 @@ private fun ErrorText(text: String) {
     )
 }
 
-@Preview(showSystemUi = true)
+@MultiScreenPreviews
 @Composable
 fun LoudiusErrorScreenPreview() {
-    LoudiusTheme {
-        LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again),
-            onButtonClick = {},
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = ReferenceDevices.SmallPhone)
-@Composable
-fun LoudiusErrorScreenPreviewSmallPhone() {
-    LoudiusTheme {
-        LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again),
-            onButtonClick = {},
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = ReferenceDevices.SmallPhoneLandscape)
-@Composable
-fun LoudiusErrorScreenPreviewSmallPhoneLandscape() {
-    LoudiusTheme {
-        LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again),
-            onButtonClick = {},
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = ReferenceDevices.Tablet)
-@Composable
-fun LoudiusErrorScreenPreviewTablet() {
-    LoudiusTheme {
-        LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again),
-            onButtonClick = {},
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = ReferenceDevices.TabletPortrait)
-@Composable
-fun LoudiusErrorScreenPreviewTabletPortrait() {
     LoudiusTheme {
         LoudiusFullScreenError(
             errorText = stringResource(id = R.string.error_dialog_text),
