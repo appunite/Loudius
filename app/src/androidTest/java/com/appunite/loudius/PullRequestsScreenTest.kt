@@ -147,7 +147,7 @@ class PullRequestsScreenTest {
 
         every {
             mockWebServer.dispatcher.dispatch(matchArg { path.startsWith("/search/issues") })
-        } answers { jsonResponse(jsonResponse) }
+        } returns jsonResponse(jsonResponse)
 
         composeTestRule.setContent {
             LoudiusTheme {
