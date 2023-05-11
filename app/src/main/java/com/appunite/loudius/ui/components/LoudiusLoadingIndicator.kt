@@ -33,7 +33,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
-
 @Composable
 fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
     IdlingResourceWrapper {
