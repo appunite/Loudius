@@ -17,24 +17,21 @@
 package com.appunite.loudius.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.appunite.loudius.R
+import com.appunite.loudius.ui.components.utils.MultiScreenPreviews
 import com.appunite.loudius.ui.theme.LoudiusTheme
-
-private const val minHeightToFitSpacer = 1856
 
 @Composable
 fun LoudiusFullScreenError(
@@ -43,25 +40,12 @@ fun LoudiusFullScreenError(
     buttonText: String = stringResource(id = R.string.try_again),
     onButtonClick: () -> Unit,
 ) {
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val screenHeight = with(density) { configuration.screenHeightDp.dp.roundToPx() }
-
-    if (screenHeight >= minHeightToFitSpacer) {
-        ScreenErrorWithSpacers(
-            modifier = modifier,
-            errorText = errorText,
-            buttonText = buttonText,
-            onButtonClick = onButtonClick,
-        )
-    } else {
-        ScreenErrorWithoutSpacers(
-            modifier = modifier,
-            errorText = errorText,
-            buttonText = buttonText,
-            onButtonClick = onButtonClick,
-        )
-    }
+    ScreenErrorWithSpacers(
+        modifier = modifier,
+        errorText = errorText,
+        buttonText = buttonText,
+        onButtonClick = onButtonClick,
+    )
 }
 
 @Composable
@@ -72,64 +56,28 @@ fun ScreenErrorWithSpacers(
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.padding(32.dp).fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.15f))
-        Column(
-            modifier = modifier
-                .weight(weight = 0.6f)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            ErrorImage()
-            ErrorText(text = errorText)
-            LoudiusOutlinedButton(
-                onClick = onButtonClick,
-                text = buttonText,
-            )
-        }
+        ErrorImage(modifier = Modifier.weight(weight = .35f).sizeIn(maxWidth = 400.dp, maxHeight = 400.dp).fillMaxWidth())
+        Spacer(modifier = Modifier.weight(weight = 0.05f))
+        ErrorText(text = errorText)
+        LoudiusOutlinedButton(
+            modifier = Modifier.padding(vertical = 16.dp),
+            onClick = onButtonClick,
+            text = buttonText,
+        )
         Spacer(modifier = Modifier.weight(weight = 0.25f))
     }
 }
 
 @Composable
-fun ScreenErrorWithoutSpacers(
-    modifier: Modifier,
-    errorText: String,
-    buttonText: String,
-    onButtonClick: () -> Unit,
+private fun ErrorImage(
+    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        ScreenErrorContent(
-            errorText = errorText,
-            buttonText = buttonText,
-            onButtonClick = onButtonClick,
-        )
-    }
-}
-
-@Composable
-fun ScreenErrorContent(
-    errorText: String,
-    buttonText: String,
-    onButtonClick: () -> Unit,
-) {
-    ErrorImage()
-    ErrorText(text = errorText)
-    LoudiusOutlinedButton(
-        onClick = onButtonClick,
-        text = buttonText,
-    )
-}
-
-@Composable
-private fun ErrorImage() {
     Image(
+        modifier = modifier,
         painter = painterResource(id = R.drawable.error_image),
         contentDescription = stringResource(R.string.error_image_desc),
     )
@@ -139,12 +87,12 @@ private fun ErrorImage() {
 private fun ErrorText(text: String) {
     LoudiusText(
         text = text,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         style = LoudiusTextStyle.ScreenContent,
     )
 }
 
-@Preview(showSystemUi = true)
+@MultiScreenPreviews
 @Composable
 fun LoudiusErrorScreenPreview() {
     LoudiusTheme {
