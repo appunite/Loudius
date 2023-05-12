@@ -2,6 +2,7 @@ package com.appunite.loudius.util
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.di.TestInterceptor
+import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -177,13 +178,7 @@ class MockWebServerRuleTest {
 
     @Test
     fun testWhenRequestIsMade_passedUrlAndMethodAreCorrect() {
-        val slot = slot<Request>()
-        val mock = mockk<ResponseGenerator> {
-            every { this@mockk.invoke(capture(slot)) } returns MockResponse().setBody("Hello, World!")
-        }
-        mockWebServerRule.register(mock)
-
-        executeRequest("https://example.com/url") { it.addHeader("Accept", "application/json") }
+        val slot = executeRequestAndGetMockedArgumentRequest()
 
         expectThat(slot).captured.and {
             url.path.isEqualTo("/url")
@@ -194,26 +189,16 @@ class MockWebServerRuleTest {
 
     @Test
     fun testWhenRequestIsMadeWithHeader_passedRequestHasHeaderSet() {
-        val slot = slot<Request>()
-        val mock = mockk<ResponseGenerator> {
-            every { this@mockk.invoke(capture(slot)) } returns MockResponse().setBody("Hello, World!")
+        val slot = executeRequestAndGetMockedArgumentRequest {
+            it.addHeader("Accept", "application/json")
         }
-        mockWebServerRule.register(mock)
-
-        executeRequest("https://example.com/url") { it.addHeader("Accept", "application/json") }
 
         expectThat(slot).captured.headers.header("Accept").isEqualTo("application/json")
     }
 
     @Test
     fun testWhenGetRequestIsMade_bodyIsEmpty() {
-        val slot = slot<Request>()
-        val mock = mockk<ResponseGenerator> {
-            every { this@mockk.invoke(capture(slot)) } returns MockResponse().setBody("Hello, World!")
-        }
-        mockWebServerRule.register(mock)
-
-        executeRequest("https://example.com/url")
+        val slot = executeRequestAndGetMockedArgumentRequest()
 
         expectThat(slot).captured.and {
             body.utf8.isEmpty()
@@ -223,13 +208,7 @@ class MockWebServerRuleTest {
 
     @Test
     fun testWhenPostRequestIsMade_bodyIsSet() {
-        val slot = slot<Request>()
-        val mock = mockk<ResponseGenerator> {
-            every { this@mockk.invoke(capture(slot)) } returns MockResponse().setBody("Hello, World!")
-        }
-        mockWebServerRule.register(mock)
-
-        executeRequest("https://example.com/url") {
+        val slot = executeRequestAndGetMockedArgumentRequest {
             it.method(
                 "POST",
                 "Request body".toRequestBody()
@@ -264,6 +243,19 @@ class MockWebServerRuleTest {
         )
             .build()
         return client.newCall(request).execute()
+    }
+
+    private fun executeRequestAndGetMockedArgumentRequest(
+        requestBuilder: (okhttp3.Request.Builder) -> okhttp3.Request.Builder = { it }
+    ): CapturingSlot<Request> {
+        val slot = slot<Request>()
+        val mock = mockk<ResponseGenerator> {
+            every { this@mockk.invoke(capture(slot)) } returns MockResponse().setBody("Hello, World!")
+        }
+        mockWebServerRule.register(mock)
+
+        executeRequest("https://example.com/url", requestBuilder)
+        return slot
     }
 }
 
