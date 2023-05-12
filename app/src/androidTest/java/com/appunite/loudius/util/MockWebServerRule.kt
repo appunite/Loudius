@@ -39,7 +39,7 @@ class Request(
     val headers: Headers,
     val method: String,
     val url: HttpUrl,
-    val body: Buffer
+    val body: Buffer,
 ) {
     override fun toString(): String =
         "Request(method=$method, url=$url, headers=${headers.joinToString(separator = ",") { (key, value) -> "$key: $value" }})"
@@ -73,7 +73,7 @@ class MockWebServerRule : TestRule {
                                 buildList {
                                     add(e)
                                     addAll(dispatcher.errors)
-                                }
+                                },
                             )
                         }
                     } finally {
@@ -100,7 +100,7 @@ private class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor
             .build()
         return chain.proceed(
             request.newBuilder().url(newUrl)
-                .addHeader("X-Test-Original-Url", request.url.toString()).build()
+                .addHeader("X-Test-Original-Url", request.url.toString()).build(),
         )
     }
 }
@@ -130,7 +130,7 @@ private class MockDispatcher : Dispatcher() {
                         ).toHttpUrl(),
                     headers = request.headers.newBuilder().removeAll("X-Test-Original-Url").build(),
                     method = request.method ?: throw Exception("Nullable method in the request"),
-                    body = request.body
+                    body = request.body,
                 )
             } catch (e: Exception) {
                 throw Exception("Request: $request, is incorrect", e)
@@ -155,7 +155,7 @@ private class MockDispatcher : Dispatcher() {
         }
         throw MultipleFailuresError(
             "Request: ${mockRequest.method} ${mockRequest.url}, " + if (assertionErrors.isEmpty()) "there are no mocks" else "no mock is matching the request",
-            assertionErrors
+            assertionErrors,
         )
     }
 }
@@ -176,7 +176,7 @@ class MultipleFailuresError(val heading: String, val failures: List<Throwable>) 
                     0 -> "no failures"
                     1 -> "failure"
                     else -> "failures"
-                }
+                },
             )
             append(")")
             append("\n")

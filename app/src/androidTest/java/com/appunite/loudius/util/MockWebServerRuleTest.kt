@@ -95,7 +95,7 @@ class MockWebServerRuleTest {
                     .contains("An test exception occurred, but we also found some not mocked requests")
                 expectThat(it).isA<MultipleFailuresError>().get(MultipleFailuresError::failures)
                     .first().isA<CustomException>()
-            }
+            },
         )
 
         executeRequest("https://example.com/not_mocked")
@@ -120,7 +120,7 @@ class MockWebServerRuleTest {
                             .contains("Request: GET https://example.com/not_mocked, there are no mocks")
                         get(MultipleFailuresError::failures).isEmpty()
                     }
-            }
+            },
         )
 
         executeRequest("https://example.com/not_mocked")
@@ -158,7 +158,7 @@ class MockWebServerRuleTest {
                                 message.isNotNull().contains("found \"/not_mocked\"")
                             }
                     }
-            }
+            },
         )
 
         executeRequest("https://example.com/not_mocked")
@@ -214,7 +214,7 @@ class MockWebServerRuleTest {
         val slot = executeRequestAndGetMockedArgumentRequest {
             it.method(
                 "POST",
-                "Request body".toRequestBody()
+                "Request body".toRequestBody(),
             )
         }
 
@@ -229,7 +229,7 @@ class MockWebServerRuleTest {
         expectedException.expect(
             matcher<Any> {
                 expectThat(it).isA<CustomException>()
-            }
+            },
         )
 
         throw CustomException
@@ -237,21 +237,21 @@ class MockWebServerRuleTest {
 
     private fun executeRequest(
         url: String,
-        builder: (okhttp3.Request.Builder) -> okhttp3.Request.Builder = { it }
+        builder: (okhttp3.Request.Builder) -> okhttp3.Request.Builder = { it },
     ): Response {
         val client = OkHttpClient.Builder()
             .addInterceptor(TestInterceptor)
             .build()
         val request = builder(
             okhttp3.Request.Builder()
-                .url(url)
+                .url(url),
         )
             .build()
         return client.newCall(request).execute()
     }
 
     private fun executeRequestAndGetMockedArgumentRequest(
-        requestBuilder: (okhttp3.Request.Builder) -> okhttp3.Request.Builder = { it }
+        requestBuilder: (okhttp3.Request.Builder) -> okhttp3.Request.Builder = { it },
     ): CapturingSlot<Request> {
         val slot = slot<Request>()
         val mock = mockk<ResponseGenerator> {
