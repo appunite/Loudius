@@ -35,21 +35,23 @@ import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_indicator))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        iterations = LottieConstants.IterateForever,
-    )
-    Box(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        LottieAnimation(
+    IdlingResourceWrapper {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_indicator))
+        val progress by animateLottieCompositionAsState(
             composition = composition,
-            progress = { progress },
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(96.dp),
+            iterations = LottieConstants.IterateForever,
         )
+        Box(
+            modifier = modifier.fillMaxSize(),
+        ) {
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(96.dp),
+            )
+        }
     }
 }
 
