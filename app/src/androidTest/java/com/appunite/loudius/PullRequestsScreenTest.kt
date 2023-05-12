@@ -20,8 +20,10 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.jsonResponse
 import com.appunite.loudius.util.path
@@ -35,7 +37,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import java.lang.Thread.sleep
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -52,6 +53,7 @@ class PullRequestsScreenTest {
 
     @Before
     fun setUp() {
+        composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
         hiltRule.inject()
     }
 
@@ -164,7 +166,6 @@ class PullRequestsScreenTest {
             }
         }
 
-        sleep(3000) // Temporary solution
         composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
     }
 }
