@@ -18,38 +18,43 @@ package com.appunite.loudius.util
 
 import android.util.Log
 import com.appunite.loudius.di.TestInterceptor
-import io.mockk.MockKMatcherScope
-import io.mockk.every
-import io.mockk.mockk
+import okhttp3.Headers
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import okhttp3.mockwebserver.SocketPolicy
+import okio.Buffer
 import org.intellij.lang.annotations.Language
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import strikt.api.Assertion
-import strikt.api.expectThat
-import strikt.assertions.isNotNull
 
 private const val TAG = "MockWebServerRule"
 
+
+class Request(
+    val headers: Headers,
+    val method: String,
+    val url: HttpUrl,
+    val body: Buffer,
+) {
+    override fun toString(): String =
+        "Request(method=$method, url=$url, headers=${headers.joinToString(separator = ",") { (key, value) -> "$key: $value" }})"
+}
+
+typealias ResponseGenerator = (Request) -> MockResponse
+
 class MockWebServerRule : TestRule {
 
-    val dispatcher: Dispatcher = mockk {
-        every { shutdown() } returns Unit
-        every { peek() } returns MockResponse().apply { this.socketPolicy = SocketPolicy.KEEP_OPEN }
-        every { dispatch(any()) } answers {
-            val request = it.invocation.args[0] as RecordedRequest
-            Log.w(TAG, "Request is not mocked: ${request.method} ${request.path}")
-            MockResponse().setResponseCode(404).setBody("{'error': 'Page not found'}")
-        }
-    }
+    private val dispatcher: MockDispatcher = MockDispatcher()
+
+    fun register(response: ResponseGenerator) = dispatcher.register(response)
+
+    fun clear() = dispatcher.clear()
 
     override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
@@ -60,6 +65,17 @@ class MockWebServerRule : TestRule {
                     Log.v(TAG, "TestInterceptor installed")
                     try {
                         base.evaluate()
+                    } catch (e: Throwable) {
+                        if (dispatcher.errors.isEmpty()) {
+                            throw e
+                        } else {
+                            throw MultipleFailuresError(
+                                "An test exception occurred, but we also found some not mocked requests",
+                                buildList {
+                                    add(e)
+                                    addAll(dispatcher.errors)
+                                })
+                        }
                     } finally {
                         Log.v(TAG, "TestInterceptor uninstalled")
                         TestInterceptor.testInterceptor = null
@@ -70,7 +86,12 @@ class MockWebServerRule : TestRule {
     }
 }
 
-class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
+fun jsonResponse(@Language("JSON") json: String): MockResponse = MockResponse()
+    .addHeader("Content-Type", "application/json")
+    .setBody(json.trimIndent())
+
+
+private class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val newUrl = request.url.newBuilder()
@@ -78,7 +99,6 @@ class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
             .scheme(baseUrl.scheme)
             .port(baseUrl.port)
             .build()
-        Log.w(TAG, "Overriding url, from: ${request.url} to: $newUrl")
         return chain.proceed(
             request.newBuilder().url(newUrl)
                 .addHeader("X-Test-Original-Url", request.url.toString()).build(),
@@ -86,24 +106,87 @@ class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
     }
 }
 
-fun jsonResponse(@Language("JSON") json: String): MockResponse = MockResponse()
-    .addHeader("Content-Type", "application/json")
-    .setBody(json)
+private class MockDispatcher : Dispatcher() {
 
-inline fun <reified T : Any> MockKMatcherScope.matchArg(noinline block: Assertion.Builder<T>.() -> Unit): T {
-    return match {
+    data class Mock(val response: ResponseGenerator)
+
+    private val mocks: MutableList<Mock> = mutableListOf()
+    val errors: MutableList<Throwable> = mutableListOf()
+
+    fun register(response: ResponseGenerator) {
+        mocks.add(Mock(response))
+    }
+
+    fun clear() {
+        mocks.clear()
+    }
+
+    override fun dispatch(request: RecordedRequest): MockResponse {
         try {
-            expectThat(it, block)
-            true
-        } catch (e: AssertionError) {
-            false
+            val mockRequest = try {
+                Request(
+                    url = (request.getHeader("X-Test-Original-Url")
+                        ?: throw Exception("No X-Test-Original-Url header, problem with mocker")).toHttpUrl(),
+                    headers = request.headers.newBuilder().removeAll("X-Test-Original-Url").build(),
+                    method = request.method ?: throw Exception("Nullable method in the request"),
+                    body = request.body,
+                )
+            } catch (e: Exception) {
+                throw Exception("Request: $request, is incorrect", e)
+            }
+            return runMocks(mockRequest)
+        } catch (e: Throwable) {
+            errors.add(e)
+            Log.w(TAG, e.message!!)
+            return MockResponse().setResponseCode(404)
         }
+    }
+
+    private fun runMocks(mockRequest: Request): MockResponse {
+        val assertionErrors = buildList {
+            mocks.forEach {
+                try {
+                    return it.response(mockRequest)
+                } catch (e: AssertionError) {
+                    add(e)
+                }
+            }
+        }
+        throw MultipleFailuresError(
+            "Request: ${mockRequest.method} ${mockRequest.url}, " + if (assertionErrors.isEmpty()) "there are no mocks" else "no mock is matching the request",
+            assertionErrors
+        )
     }
 }
 
-@get:JvmName("recordedRequestPath")
-inline val Assertion.Builder<RecordedRequest>.path: Assertion.Builder<String> get() = get(RecordedRequest::path).isNotNull()
-inline val Assertion.Builder<RecordedRequest>.url: Assertion.Builder<HttpUrl> get() = get(RecordedRequest::requestUrl).isNotNull()
+class MultipleFailuresError(val heading: String, val failures: List<Throwable>) :
+    AssertionError(heading, failures.getOrNull(0)) {
+    init {
+        require(heading.isNotBlank()) { "Heading should not be blank" }
+    }
 
-@get:JvmName("httpUrlPath")
-inline val Assertion.Builder<HttpUrl>.path: Assertion.Builder<String> get() = get("path") { encodedPath }
+    override val message: String
+        get() = buildString {
+            append(heading)
+            append(" (")
+            append(failures.size).append(" ")
+            append(
+                when (failures.size) {
+                    0 -> "no failures"
+                    1 -> "failure"
+                    else -> "failures"
+                }
+            )
+            append(")")
+            append("\n")
+
+            failures.joinTo(this, separator = "\n") {
+                nullSafeMessage(it).lines().joinToString(separator = "\n") { "\t$it" }
+            }
+        }
+
+
+    private fun nullSafeMessage(failure: Throwable): String =
+        failure.javaClass.name + ": " + failure.message.orEmpty().ifBlank { "<no message>" }
+
+}
