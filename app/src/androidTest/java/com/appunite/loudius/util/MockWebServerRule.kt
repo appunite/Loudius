@@ -35,12 +35,11 @@ import org.junit.runners.model.Statement
 
 private const val TAG = "MockWebServerRule"
 
-
 class Request(
     val headers: Headers,
     val method: String,
     val url: HttpUrl,
-    val body: Buffer,
+    val body: Buffer
 ) {
     override fun toString(): String =
         "Request(method=$method, url=$url, headers=${headers.joinToString(separator = ",") { (key, value) -> "$key: $value" }})"
@@ -74,7 +73,8 @@ class MockWebServerRule : TestRule {
                                 buildList {
                                     add(e)
                                     addAll(dispatcher.errors)
-                                })
+                                }
+                            )
                         }
                     } finally {
                         Log.v(TAG, "TestInterceptor uninstalled")
@@ -90,7 +90,6 @@ fun jsonResponse(@Language("JSON") json: String): MockResponse = MockResponse()
     .addHeader("Content-Type", "application/json")
     .setBody(json.trimIndent())
 
-
 private class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -101,7 +100,7 @@ private class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor
             .build()
         return chain.proceed(
             request.newBuilder().url(newUrl)
-                .addHeader("X-Test-Original-Url", request.url.toString()).build(),
+                .addHeader("X-Test-Original-Url", request.url.toString()).build()
         )
     }
 }
@@ -125,11 +124,13 @@ private class MockDispatcher : Dispatcher() {
         try {
             val mockRequest = try {
                 Request(
-                    url = (request.getHeader("X-Test-Original-Url")
-                        ?: throw Exception("No X-Test-Original-Url header, problem with mocker")).toHttpUrl(),
+                    url = (
+                        request.getHeader("X-Test-Original-Url")
+                            ?: throw Exception("No X-Test-Original-Url header, problem with mocker")
+                        ).toHttpUrl(),
                     headers = request.headers.newBuilder().removeAll("X-Test-Original-Url").build(),
                     method = request.method ?: throw Exception("Nullable method in the request"),
-                    body = request.body,
+                    body = request.body
                 )
             } catch (e: Exception) {
                 throw Exception("Request: $request, is incorrect", e)
@@ -185,8 +186,6 @@ class MultipleFailuresError(val heading: String, val failures: List<Throwable>) 
             }
         }
 
-
     private fun nullSafeMessage(failure: Throwable): String =
         failure.javaClass.name + ": " + failure.message.orEmpty().ifBlank { "<no message>" }
-
 }

@@ -89,36 +89,39 @@ class MockWebServerRuleTest {
 
     @Test
     fun testTestFailsAndThereIsSomeMockingIssue_theRootOfTheFailureIsOnTheFirstPlace() {
-        expectedException.expect(matcher<Any> {
-            expectThat(it).isA<MultipleFailuresError>().message.isNotNull()
-                .contains("An test exception occurred, but we also found some not mocked requests")
-            expectThat(it).isA<MultipleFailuresError>().get(MultipleFailuresError::failures)
-                .first().isA<CustomException>()
-        })
+        expectedException.expect(
+            matcher<Any> {
+                expectThat(it).isA<MultipleFailuresError>().message.isNotNull()
+                    .contains("An test exception occurred, but we also found some not mocked requests")
+                expectThat(it).isA<MultipleFailuresError>().get(MultipleFailuresError::failures)
+                    .first().isA<CustomException>()
+            }
+        )
 
         executeRequest("https://example.com/not_mocked")
 
         throw CustomException
     }
 
-
     @Test
     fun testTestFailsAndThereIsSomeMockingIssue_returnInformationAboutExceptionAndNotMockedResponses() {
-        expectedException.expect(matcher<Any> {
-            expectThat(it).isA<Throwable>().message.isNotNull()
-                .contains("Request: GET https://example.com/not_mocked, there are no mocks")
+        expectedException.expect(
+            matcher<Any> {
+                expectThat(it).isA<Throwable>().message.isNotNull()
+                    .contains("Request: GET https://example.com/not_mocked, there are no mocks")
 
-            expectThat(it)
-                .isA<MultipleFailuresError>()
-                .get(MultipleFailuresError::failures)
-                .last()
-                .isA<MultipleFailuresError>()
-                .and {
-                    message.isNotNull()
-                        .contains("Request: GET https://example.com/not_mocked, there are no mocks")
-                    get(MultipleFailuresError::failures).isEmpty()
-                }
-        })
+                expectThat(it)
+                    .isA<MultipleFailuresError>()
+                    .get(MultipleFailuresError::failures)
+                    .last()
+                    .isA<MultipleFailuresError>()
+                    .and {
+                        message.isNotNull()
+                            .contains("Request: GET https://example.com/not_mocked, there are no mocks")
+                        get(MultipleFailuresError::failures).isEmpty()
+                    }
+            }
+        )
 
         executeRequest("https://example.com/not_mocked")
 
@@ -132,36 +135,36 @@ class MockWebServerRuleTest {
 
             MockResponse().setBody("Hello, World!")
         }
-        expectedException.expect(matcher<Any> {
-            expectThat(it).isA<Throwable>().message.isNotNull().and {
-                contains("Request: GET https://example.com/not_mocked, no mock is matching the request")
-                contains("✗ is equal to \"/different_url\"")
-                contains("found \"/not_mocked\"")
-            }
-
-            expectThat(it)
-                .isA<MultipleFailuresError>()
-                .get(MultipleFailuresError::failures)
-                .last()
-                .isA<MultipleFailuresError>()
-                .and {
-                    message.isNotNull()
-                        .contains("Request: GET https://example.com/not_mocked, no mock is matching the request")
-                    get(MultipleFailuresError::failures)
-                        .single()
-                        .isA<AssertionError>().and {
-                            message.isNotNull().contains("✗ is equal to \"/different_url\"")
-                            message.isNotNull().contains("found \"/not_mocked\"")
-
-                        }
+        expectedException.expect(
+            matcher<Any> {
+                expectThat(it).isA<Throwable>().message.isNotNull().and {
+                    contains("Request: GET https://example.com/not_mocked, no mock is matching the request")
+                    contains("✗ is equal to \"/different_url\"")
+                    contains("found \"/not_mocked\"")
                 }
-        })
+
+                expectThat(it)
+                    .isA<MultipleFailuresError>()
+                    .get(MultipleFailuresError::failures)
+                    .last()
+                    .isA<MultipleFailuresError>()
+                    .and {
+                        message.isNotNull()
+                            .contains("Request: GET https://example.com/not_mocked, no mock is matching the request")
+                        get(MultipleFailuresError::failures)
+                            .single()
+                            .isA<AssertionError>().and {
+                                message.isNotNull().contains("✗ is equal to \"/different_url\"")
+                                message.isNotNull().contains("found \"/not_mocked\"")
+                            }
+                    }
+            }
+        )
 
         executeRequest("https://example.com/not_mocked")
 
         throw CustomException
     }
-
 
     @Test
     fun testWhenRequestUrlIsDifferentThenMocked_throw404() {
@@ -223,9 +226,11 @@ class MockWebServerRuleTest {
 
     @Test
     fun whenExceptionIsThrown_passIt() {
-        expectedException.expect(matcher<Any> {
-            expectThat(it).isA<CustomException>()
-        })
+        expectedException.expect(
+            matcher<Any> {
+                expectThat(it).isA<CustomException>()
+            }
+        )
 
         throw CustomException
     }

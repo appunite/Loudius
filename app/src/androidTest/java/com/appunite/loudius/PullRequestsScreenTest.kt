@@ -59,7 +59,6 @@ class PullRequestsScreenTest {
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
-
         mockWebServer.register {
             expectThat(it).url.path.isEqualTo("/user")
 
