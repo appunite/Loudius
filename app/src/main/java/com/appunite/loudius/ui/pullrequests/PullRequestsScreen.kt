@@ -148,7 +148,8 @@ private fun PullRequestItem(
 ) {
     LoudiusListItem(
         index = index,
-        modifier = Modifier.clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
+        modifier = Modifier
+            .clickable { onClick(PulLRequestsAction.ItemClick(data.id)) },
         icon = { modifier -> PullRequestIcon(modifier) },
         content = { modifier ->
             RepoDetails(
