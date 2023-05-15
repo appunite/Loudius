@@ -16,18 +16,28 @@
 
 package com.appunite.loudius
 
-import androidx.compose.ui.test.assertIsDisplayed
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -46,12 +56,24 @@ class LoginScreenTest {
 
     @Test
     fun whenTheLoginScreenIsVisibleThenTheLogInButtonIsVisible() {
+        Intents.init()
+        intending(hasAction(Intent.ACTION_VIEW))
+            .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
+
         composeTestRule.setContent {
             LoudiusTheme {
                 LoginScreen()
             }
         }
 
-        composeTestRule.onNodeWithText("Log in").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Log in").performClick()
+
+        intended(
+            allOf(
+                hasAction(Intent.ACTION_VIEW),
+                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
+            )
+        )
+        Intents.release()
     }
 }
