@@ -17,17 +17,17 @@
 package com.appunite.loudius.screenshots
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.android.ide.common.rendering.api.SessionParams
-import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
-import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonIcon
-import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonStyle
-import com.appunite.loudius.screenshots.theme.LoudiusTheme
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonDisabledPreview
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonLargePreview
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonPreview
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonWithIconLargePreview
+import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonWithIconPreview
 import org.junit.Rule
 import org.junit.Test
 
@@ -43,20 +43,12 @@ class LoudiusButtonTests {
     @Test
     fun loudiusOutlinedButton() {
         paparazzi.snapshot {
-            Box(modifier = Modifier.background(Color.White)) {
-                LoudiusTheme(darkTheme = false) {
-                    LoudiusOutlinedButton(
-                        onClick = { },
-                        text = "Log In",
-                        style = LoudiusOutlinedButtonStyle.Large,
-                        icon = {
-                            LoudiusOutlinedButtonIcon(
-                                painter = painterResource(id = R.drawable.ic_github),
-                                "Github Icon",
-                            )
-                        },
-                    )
-                }
+            Column(Modifier.background(Color.White)) {
+                LoudiusOutlinedButtonWithIconLargePreview()
+                LoudiusOutlinedButtonDisabledPreview()
+                LoudiusOutlinedButtonWithIconPreview()
+                LoudiusOutlinedButtonLargePreview()
+                LoudiusOutlinedButtonPreview()
             }
         }
     }

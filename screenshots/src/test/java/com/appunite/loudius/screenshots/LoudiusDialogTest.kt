@@ -16,17 +16,12 @@
 
 package com.appunite.loudius.screenshots
 
-import androidx.compose.ui.res.stringResource
 import app.cash.paparazzi.DeviceConfig.Companion.PIXEL_5
 import app.cash.paparazzi.Paparazzi
 import com.android.ide.common.rendering.api.SessionParams
-import com.appunite.loudius.screenshots.components.LoudiusDialog
-import com.appunite.loudius.screenshots.components.LoudiusErrorDialog
-import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
-import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
-import com.appunite.loudius.screenshots.components.LoudiusText
-import com.appunite.loudius.screenshots.components.LoudiusTextStyle
-import com.appunite.loudius.screenshots.theme.LoudiusTheme
+import com.appunite.loudius.screenshots.components.LoudiusDialogAdvancedPreview
+import com.appunite.loudius.screenshots.components.LoudiusErrorDialogPreview
+import com.appunite.loudius.screenshots.components.LoudiusErrorScreenPreview
 import org.junit.Rule
 import org.junit.Test
 
@@ -41,46 +36,21 @@ class LoudiusDialogTest {
     @Test
     fun loudiusDialogTest() {
         paparazzi.snapshot {
-            LoudiusTheme {
-                LoudiusDialog(
-                    onDismissRequest = { },
-                    title = "Title",
-                    text = {
-                        LoudiusText(
-                            style = LoudiusTextStyle.ScreenContent,
-                            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus elit justo, at pharetra nulla mattis vel. Integer gravida tortor sed fringilla viverra. Duis scelerisque ante neque, a pretium eros.",
-                        )
-                    },
-                    confirmButton = {
-                        LoudiusOutlinedButton(text = "Confirm") {}
-                    },
-                    dismissButton = {
-                        LoudiusOutlinedButton(text = "Dismiss") {}
-                    },
-                )
-            }
+            LoudiusDialogAdvancedPreview()
         }
     }
 
     @Test
     fun loudiusErrorDialogTest() {
         paparazzi.snapshot {
-            LoudiusTheme {
-                LoudiusErrorDialog(onConfirmButtonClick = {})
-            }
+            LoudiusErrorDialogPreview()
         }
     }
 
     @Test
     fun loudiusFullScreenErrorTest() {
         paparazzi.snapshot {
-            LoudiusTheme(darkTheme = false) {
-                LoudiusFullScreenError(
-                    errorText = stringResource(id = R.string.error_dialog_text),
-                    buttonText = stringResource(R.string.try_again),
-                    onButtonClick = {},
-                )
-            }
+            LoudiusErrorScreenPreview()
         }
     }
 }
