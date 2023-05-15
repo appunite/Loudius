@@ -1,4 +1,4 @@
-package com.appunite.loudius.ui.components.utils
+package com.appunite.loudius.screenshots.components.utils
 
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview

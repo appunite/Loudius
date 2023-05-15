@@ -30,8 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.appunite.loudius.screenshots.R
+import com.appunite.loudius.screenshots.components.utils.MultiScreenPreviews
 import com.appunite.loudius.screenshots.theme.LoudiusTheme
-import com.appunite.loudius.ui.components.utils.MultiScreenPreviews
 
 
 @Composable
@@ -57,11 +57,16 @@ fun ScreenErrorWithSpacers(
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier.padding(32.dp).fillMaxSize(),
+        modifier = modifier
+            .padding(32.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.15f))
-        ErrorImage(modifier = Modifier.weight(weight = .35f).sizeIn(maxWidth = 400.dp, maxHeight = 400.dp).fillMaxWidth())
+        ErrorImage(modifier = Modifier
+            .weight(weight = .35f)
+            .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
+            .fillMaxWidth())
         Spacer(modifier = Modifier.weight(weight = 0.05f))
         ErrorText(text = errorText)
         LoudiusOutlinedButton(
