@@ -20,9 +20,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.screenshots.theme.LoudiusTheme
 import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
-import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.jsonResponse
