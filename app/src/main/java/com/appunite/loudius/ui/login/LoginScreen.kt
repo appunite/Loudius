@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
+import com.appunite.loudius.screenshots.R.drawable
 import com.appunite.loudius.screenshots.components.LoudiusDialog
 import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
 import com.appunite.loudius.screenshots.components.LoudiusOutlinedButtonIcon
@@ -90,7 +91,7 @@ fun LoginScreenStateless(
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = com.appunite.loudius.screenshots.R.drawable.ic_github),
+                    painter = painterResource(id = drawable.ic_github),
                     contentDescription = stringResource(R.string.github_icon),
                 )
             },
