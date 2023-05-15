@@ -16,10 +16,13 @@
 
 package com.appunite.loudius.screenshots
 
+import androidx.compose.ui.res.stringResource
 import app.cash.paparazzi.DeviceConfig.Companion.PIXEL_5
 import app.cash.paparazzi.Paparazzi
+import com.android.ide.common.rendering.api.SessionParams
 import com.appunite.loudius.screenshots.components.LoudiusDialog
 import com.appunite.loudius.screenshots.components.LoudiusErrorDialog
+import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
 import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
 import com.appunite.loudius.screenshots.components.LoudiusText
 import com.appunite.loudius.screenshots.components.LoudiusTextStyle
@@ -31,6 +34,8 @@ class LoudiusDialogTest {
     @get:Rule
     val paparazzi = Paparazzi(
         deviceConfig = PIXEL_5,
+        renderingMode = SessionParams.RenderingMode.V_SCROLL,
+        showSystemUi = false,
     )
 
     @Test
@@ -66,5 +71,16 @@ class LoudiusDialogTest {
         }
     }
 
-
+    @Test
+    fun loudiusFullScreenErrorTest() {
+        paparazzi.snapshot {
+            LoudiusTheme(darkTheme = false) {
+                LoudiusFullScreenError(
+                    errorText = stringResource(id = R.string.error_dialog_text),
+                    buttonText = stringResource(R.string.try_again),
+                    onButtonClick = {},
+                )
+            }
+        }
+    }
 }
