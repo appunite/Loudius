@@ -31,7 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.appunite.loudius.common.Screen
-import com.appunite.loudius.screenshots.theme.LoudiusTheme
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.MainViewModel
 import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
 import com.appunite.loudius.ui.login.LoginScreen

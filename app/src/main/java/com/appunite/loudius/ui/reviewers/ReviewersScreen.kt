@@ -42,19 +42,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
-import com.appunite.loudius.screenshots.components.LoudiusListIcon
-import com.appunite.loudius.screenshots.components.LoudiusListItem
-import com.appunite.loudius.screenshots.components.LoudiusLoadingIndicator
-import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
-import com.appunite.loudius.screenshots.components.LoudiusPlaceholderText
-import com.appunite.loudius.screenshots.components.LoudiusText
-import com.appunite.loudius.screenshots.components.LoudiusTextStyle
-import com.appunite.loudius.screenshots.components.LoudiusTopAppBar
-import com.appunite.loudius.screenshots.theme.LoudiusTheme
+import com.appunite.loudius.components.components.LoudiusFullScreenError
+import com.appunite.loudius.components.components.LoudiusListIcon
+import com.appunite.loudius.components.components.LoudiusListItem
+import com.appunite.loudius.components.components.LoudiusLoadingIndicator
+import com.appunite.loudius.components.components.LoudiusOutlinedButton
+import com.appunite.loudius.components.components.LoudiusPlaceholderText
+import com.appunite.loudius.components.components.LoudiusText
+import com.appunite.loudius.components.components.LoudiusTextStyle
+import com.appunite.loudius.components.components.LoudiusTopAppBar
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import com.appunite.loudius.screenshots.R as screenshotsR
+import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun ReviewersScreen(
@@ -211,7 +211,7 @@ private fun NotifyButtonOrLoadingIndicator(
 @Composable
 private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
-        painter = painterResource(id = screenshotsR.drawable.person_outline_24px),
+        painter = painterResource(id = componentsR.drawable.person_outline_24px),
         contentDescription = stringResource(
             R.string.details_screen_user_image_description,
         ),

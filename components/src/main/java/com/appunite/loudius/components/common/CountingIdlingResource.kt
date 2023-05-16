@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.util
+package com.appunite.loudius.components.common
 
-import androidx.compose.ui.test.IdlingResource
-import com.appunite.loudius.components.common.CountingIdlingResource
+import java.util.concurrent.atomic.AtomicInteger
 
-object IdlingResourceExtensions {
+class CountingIdlingResource(val name: String) {
+    private var counter = AtomicInteger(0)
+    val isIdleNow: Boolean get() = counter.get() == 0
+    fun getDiagnosticMessageIfBusy(): String = "$name is busy"
 
-    fun CountingIdlingResource.toIdlingResource(): IdlingResource = object :
-        IdlingResource {
-        override val isIdleNow: Boolean
-            get() = this@toIdlingResource.isIdleNow
+    fun increment() {
+        counter.incrementAndGet()
+    }
 
-        override fun getDiagnosticMessageIfBusy(): String =
-            this@toIdlingResource.getDiagnosticMessageIfBusy()
+    fun decrement() {
+        counter.decrementAndGet()
     }
 }

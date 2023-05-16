@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.util
+package com.appunite.loudius.components.components
 
-import androidx.compose.ui.test.IdlingResource
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import com.appunite.loudius.components.common.CountingIdlingResource
 
-object IdlingResourceExtensions {
+val countingResource = CountingIdlingResource("IdlingResourceWrapper")
 
-    fun CountingIdlingResource.toIdlingResource(): IdlingResource = object :
-        IdlingResource {
-        override val isIdleNow: Boolean
-            get() = this@toIdlingResource.isIdleNow
-
-        override fun getDiagnosticMessageIfBusy(): String =
-            this@toIdlingResource.getDiagnosticMessageIfBusy()
+@Composable
+fun IdlingResourceWrapper(content: @Composable () -> Unit) {
+    DisposableEffect(Unit) {
+        countingResource.increment()
+        onDispose {
+            countingResource.decrement()
+        }
     }
+    content()
 }
