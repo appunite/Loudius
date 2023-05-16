@@ -85,9 +85,6 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
-    //Lottie - Compose
-    implementation ("com.airbnb.android:lottie-compose:5.2.0")
-
     //DI - Hilt
     implementation "com.google.dagger:hilt-android:2.45"
     kapt "com.google.dagger:hilt-compiler:2.45"

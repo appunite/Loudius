@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.screenshots.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,11 +32,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.appunite.loudius.R
-import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
-import com.appunite.loudius.screenshots.components.LoudiusText
-import com.appunite.loudius.screenshots.components.LoudiusTextStyle
-import com.appunite.loudius.ui.components.utils.bottomBorder
+import com.appunite.loudius.screenshots.components.utils.bottomBorder
+import com.appunite.loudius.screenshots.R as screenshotsR
 
 @Composable
 fun resolveListItemBackgroundColor(index: Int): Color =
@@ -168,7 +165,7 @@ fun LoudiusListItemContentAndIconPreview() {
         index = 0,
         icon = { modifier ->
             LoudiusListIcon(
-                painter = painterResource(id = R.drawable.person_outline_24px),
+                painter = painterResource(id = screenshotsR.drawable.person_outline_24px),
                 contentDescription = "Test",
                 modifier = modifier,
             )
@@ -190,7 +187,7 @@ private fun LoudiusListItemExample(index: Int) {
         icon = { modifier ->
             LoudiusListIcon(
                 modifier = modifier,
-                painter = painterResource(id = R.drawable.person_outline_24px),
+                painter = painterResource(id = screenshotsR.drawable.person_outline_24px),
                 contentDescription = "Test",
             )
         },

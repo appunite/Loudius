@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.screenshots.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
@@ -26,9 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.appunite.loudius.R
-import com.appunite.loudius.screenshots.components.LoudiusText
-import com.appunite.loudius.screenshots.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.R
 import com.appunite.loudius.screenshots.theme.LoudiusTheme
 
 @Composable

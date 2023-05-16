@@ -39,15 +39,16 @@ import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
+import com.appunite.loudius.screenshots.components.LoudiusListIcon
+import com.appunite.loudius.screenshots.components.LoudiusListItem
+import com.appunite.loudius.screenshots.components.LoudiusLoadingIndicator
+import com.appunite.loudius.screenshots.components.LoudiusPlaceholderText
 import com.appunite.loudius.screenshots.components.LoudiusText
 import com.appunite.loudius.screenshots.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.components.LoudiusTopAppBar
 import com.appunite.loudius.screenshots.theme.LoudiusTheme
-import com.appunite.loudius.ui.components.LoudiusListIcon
-import com.appunite.loudius.ui.components.LoudiusListItem
-import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.components.LoudiusPlaceholderText
-import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import java.time.LocalDateTime
+import com.appunite.loudius.screenshots.R as screenshotsR
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
@@ -188,7 +189,7 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            textId = R.string.you_dont_have_any_pull_request,
+            textId = screenshotsR.string.you_dont_have_any_pull_request,
         )
     }
 }

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.screenshots.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import com.appunite.loudius.common.CountingIdlingResource
+import com.appunite.loudius.screenshots.common.CountingIdlingResource
 
 val countingResource = CountingIdlingResource("IdlingResourceWrapper")
 

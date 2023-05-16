@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.screenshots.components
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,9 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.appunite.loudius.R
-import com.appunite.loudius.screenshots.components.LoudiusText
-import com.appunite.loudius.screenshots.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.R
 import com.appunite.loudius.screenshots.theme.LoudiusTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

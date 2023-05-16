@@ -43,17 +43,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.screenshots.components.LoudiusFullScreenError
+import com.appunite.loudius.screenshots.components.LoudiusListIcon
+import com.appunite.loudius.screenshots.components.LoudiusListItem
+import com.appunite.loudius.screenshots.components.LoudiusLoadingIndicator
 import com.appunite.loudius.screenshots.components.LoudiusOutlinedButton
+import com.appunite.loudius.screenshots.components.LoudiusPlaceholderText
 import com.appunite.loudius.screenshots.components.LoudiusText
 import com.appunite.loudius.screenshots.components.LoudiusTextStyle
+import com.appunite.loudius.screenshots.components.LoudiusTopAppBar
 import com.appunite.loudius.screenshots.theme.LoudiusTheme
-import com.appunite.loudius.ui.components.LoudiusListIcon
-import com.appunite.loudius.ui.components.LoudiusListItem
-import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.components.LoudiusPlaceholderText
-import com.appunite.loudius.ui.components.LoudiusTopAppBar
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
+import com.appunite.loudius.screenshots.R as screenshotsR
 
 @Composable
 fun ReviewersScreen(
@@ -210,7 +211,7 @@ private fun NotifyButtonOrLoadingIndicator(
 @Composable
 private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
-        painter = painterResource(id = R.drawable.person_outline_24px),
+        painter = painterResource(id = screenshotsR.drawable.person_outline_24px),
         contentDescription = stringResource(
             R.string.details_screen_user_image_description,
         ),
