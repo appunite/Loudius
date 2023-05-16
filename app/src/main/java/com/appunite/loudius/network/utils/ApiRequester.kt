@@ -44,11 +44,11 @@ class ApiRequester @Inject constructor(private val gson: Gson) {
     }
 
     private fun getApiErrorMessageIfExist(throwable: HttpException) = try {
-        val errorResponse = gson.fromJson(
+        val errorResponse: DefaultErrorResponse? = gson.fromJson(
             throwable.response()?.errorBody()?.charStream(),
             DefaultErrorResponse::class.java,
         )
-        errorResponse.message
+        errorResponse?.message
     } catch (throwable: JSONException) {
         null
     }
