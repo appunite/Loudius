@@ -22,10 +22,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.domain.repository.PullRequestRepository
+import com.appunite.loudius.common.Screen
 import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
-import com.appunite.loudius.ui.reviewers.ReviewersViewModel
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import com.appunite.loudius.util.MockWebServerRule
@@ -34,13 +33,18 @@ import com.appunite.loudius.util.path
 import com.appunite.loudius.util.url
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.mockk.mockk
+import io.mockk.every
+import io.mockk.mockkStatic
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.time.Clock
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -65,25 +69,12 @@ class ReviewersScreenTest {
     //@Inject
     //lateinit var repository: PullRequestRepository
 
-    //    private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
-//    private val systemClockFixed =
-//        Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
+    private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
+    private val systemClockFixed =
+        Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
 //
 //    private val repository: PullRequestRepository = mockk(relaxed = true)
-//    private val savedStateHandle: SavedStateHandle = mockk {
-//        every { get<String>("owner") } returns "exampleOwner"
-//        every { get<String>("repo") } returns "repo"
-//        every { get<String>("submission_date") } returns "2022-01-29T08:00:00"
-//        every { get<String>("pull_request_number") } returns "correctPullRequestNumber"
-//    }
-    private var savedStateHandle: SavedStateHandle = SavedStateHandle(
-        mapOf(
-            "owner" to OWNER,
-            "repo" to REPO,
-            "submission_date" to DATE,
-            "pull_request_number" to PR_NUMBER
-        )
-    )
+
 //    private lateinit var viewModel: ReviewersViewModel
 //
 //    private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle)
@@ -92,16 +83,30 @@ class ReviewersScreenTest {
     fun setUp() {
         composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
         hiltRule.inject()
-        val repositoryMock = mockk<PullRequestRepository>()
-        val viewModel = ReviewersViewModel(repositoryMock, savedStateHandle)
-
-//        MockKAnnotations.init(this)
-//        mockkStatic(Clock::class)
-//        every { Clock.systemDefaultZone() } returns systemClockFixed
+        //MockKAnnotations.init(this)
+        mockkStatic(Clock::class)
+        every { Clock.systemDefaultZone() } returns systemClockFixed
     }
 
     @Test
     fun whenResponseIsCorrectThenReviewersAreVisible() {
+        val savedStateHandle = SavedStateHandle(
+            mapOf(
+                "owner" to OWNER,
+                "repo" to REPO,
+                "submission_date" to DATE,
+                "pull_request_number" to PR_NUMBER
+            )
+        )
+
+        every {
+            Screen.Reviewers.getInitialValues(savedStateHandle)
+        } returns Screen.Reviewers.ReviewersInitialValues(
+            owner = checkNotNull(savedStateHandle["owner"]),
+            repo = checkNotNull(savedStateHandle["repo"]),
+            pullRequestNumber = checkNotNull(savedStateHandle["pull_request_number"]),
+            submissionTime = checkNotNull(LocalDateTime.parse(savedStateHandle["submission_date"]))
+        )
 
         mockWebServer.register {
             expectThat(it).url.path.isEqualTo("/user")
