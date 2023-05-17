@@ -26,7 +26,6 @@ import com.android.ide.common.rendering.api.SessionParams
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonDisabledPreview
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonLargePreview
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonPreview
-import com.appunite.loudius.components.components.LoudiusOutlinedButtonWithIconLargePreview
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonWithIconPreview
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +43,6 @@ class LoudiusButtonTests {
     fun loudiusOutlinedButton() {
         paparazzi.snapshot {
             Column(Modifier.background(Color.White)) {
-                LoudiusOutlinedButtonWithIconLargePreview()
                 LoudiusOutlinedButtonDisabledPreview()
                 LoudiusOutlinedButtonWithIconPreview()
                 LoudiusOutlinedButtonLargePreview()
