@@ -131,7 +131,7 @@ dependencies {
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
     androidTestImplementation("io.mockk:mockk-android:1.13.3")
 
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
