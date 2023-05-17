@@ -22,11 +22,11 @@ import android.content.Intent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
+import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
@@ -48,6 +48,9 @@ class LoginScreenTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<TestActivity>()
 
+    @get:Rule(order = 2)
+    val intents = IntentsRule()
+
     @Before
     fun setUp() {
         hiltRule.inject()
@@ -55,7 +58,6 @@ class LoginScreenTest {
 
     @Test
     fun whenTheLoginScreenIsVisibleThenTheLogInButtonIsVisible() {
-        Intents.init()
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
@@ -73,6 +75,5 @@ class LoginScreenTest {
                 hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
             ),
         )
-        Intents.release()
     }
 }
