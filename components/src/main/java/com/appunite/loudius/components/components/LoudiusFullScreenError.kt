@@ -66,10 +66,12 @@ fun ScreenErrorWithSpacers(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.15f))
-        ErrorImage(modifier = Modifier
-            .weight(weight = .35f)
-            .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
-            .fillMaxWidth())
+        ErrorImage(
+            modifier = Modifier
+                .weight(weight = .35f)
+                .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
+                .fillMaxWidth()
+        )
         Spacer(modifier = Modifier.weight(weight = 0.05f))
         ErrorText(text = errorText)
         LoudiusOutlinedButton(

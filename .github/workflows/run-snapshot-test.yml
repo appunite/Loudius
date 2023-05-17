@@ -2,9 +2,9 @@ name: Snapshot verification
 
 on:
   issue_comment:
-    types: [ created, edited ]
+    types: [created, edited]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 permissions:
   checks: write
@@ -34,7 +34,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: snapshot-failure-deltas
-          path: out/failures/
+          path: /Users/runner/work/Loudius/Loudius/components/out/failures/
+
+      - name: Upload snapshot failure report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshot-failure-report
+          path: /Users/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
 
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -49,7 +56,7 @@ jobs:
         if: always()
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
-          comment-author: 'github-actions[bot]'
+          comment-author: "github-actions[bot]"
           body-includes: Snapshot testing result
 
       - name: Create or update comment on PR (Success)
