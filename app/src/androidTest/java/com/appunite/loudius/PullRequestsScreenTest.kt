@@ -17,19 +17,15 @@
 package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
-import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
-import com.appunite.loudius.util.MockWebServerRule
+import com.appunite.loudius.util.TestRules
 import com.appunite.loudius.util.jsonResponse
 import com.appunite.loudius.util.path
 import com.appunite.loudius.util.queryParameter
 import com.appunite.loudius.util.url
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
@@ -42,40 +38,33 @@ import strikt.assertions.isEqualTo
 @HiltAndroidTest
 class PullRequestsScreenTest {
 
-    @get:Rule(order = 1)
-    val hiltRule = HiltAndroidRule(this)
-
-    @get:Rule(order = 0)
-    var mockWebServer: MockWebServerRule = MockWebServerRule()
-
-    @get:Rule(order = 2)
-    val composeTestRule = createAndroidComposeRule<TestActivity>()
+    @get:Rule
+    val testRules = TestRules(this)
 
     @Before
     fun setUp() {
-        composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
-        hiltRule.inject()
+        testRules.setUp()
     }
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
-        mockWebServer.register {
-            expectThat(it).url.path.isEqualTo("/user")
-
-            jsonResponse("""{"id": 1, "login": "jacek"}""")
-        }
-
-        mockWebServer.register {
-            expectThat(it).url.and {
-                get("host") { host }.isEqualTo("api.github.com")
-                path.isEqualTo("/search/issues")
-                queryParameter("q").isEqualTo("author:jacek type:pr state:open")
-                queryParameter("page").isEqualTo("0")
-                queryParameter("per_page").isEqualTo("100")
+        with(testRules) {
+            mockWebServer.register {
+                expectThat(it).url.path.isEqualTo("/user")
+                jsonResponse("""{"id": 1, "login": "jacek"}""")
             }
 
-            jsonResponse(
-                """
+            mockWebServer.register {
+                expectThat(it).url.and {
+                    get("host") { host }.isEqualTo("api.github.com")
+                    path.isEqualTo("/search/issues")
+                    queryParameter("q").isEqualTo("author:jacek type:pr state:open")
+                    queryParameter("page").isEqualTo("0")
+                    queryParameter("per_page").isEqualTo("100")
+                }
+
+                jsonResponse(
+                    """
                         {
                             "total_count":1,
                             "incomplete_results":false,
@@ -156,15 +145,16 @@ class PullRequestsScreenTest {
                             ]
                         }
                     """,
-            )
-        }
-
-        composeTestRule.setContent {
-            LoudiusTheme {
-                PullRequestsScreen { _, _, _, _ -> }
+                )
             }
-        }
 
-        composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
+            composeTestRule.setContent {
+                LoudiusTheme {
+                    PullRequestsScreen { _, _, _, _ -> }
+                }
+            }
+
+            composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
+        }
     }
 }

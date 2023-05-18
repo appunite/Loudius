@@ -17,19 +17,15 @@
 package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
-import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
-import com.appunite.loudius.util.MockWebServerRule
+import com.appunite.loudius.util.TestRules
 import com.appunite.loudius.util.jsonResponse
 import com.appunite.loudius.util.path
 import com.appunite.loudius.util.url
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
@@ -42,41 +38,35 @@ import strikt.assertions.isEqualTo
 @HiltAndroidTest
 class ReviewersScreenTest {
 
-    @get:Rule(order = 1)
-    val hiltRule = HiltAndroidRule(this)
-
-    @get:Rule(order = 0)
-    var mockWebServer: MockWebServerRule = MockWebServerRule()
-
-    @get:Rule(order = 2)
-    val composeTestRule = createAndroidComposeRule<TestActivity>()
+    @get:Rule
+    val testRules = TestRules(this)
 
     @Before
     fun setUp() {
-        composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
-        hiltRule.inject()
+        testRules.setUp()
     }
 
     @Test
     fun whenResponseIsCorrectThenReviewersAreVisible() {
-        with(composeTestRule.activity.intent) {
-            putExtra("owner", "owner")
-            putExtra("repo", "repo")
-            putExtra("submission_date", "2022-01-29T08:00:00")
-            putExtra("pull_request_number", "1")
-        }
-
-        mockWebServer.register {
-            expectThat(it).url.path.isEqualTo("/user")
-            jsonResponse("""{"id": 1, "login": "user"}""")
-        }
-        mockWebServer.register {
-            expectThat(it).url.and {
-                get("host") { host }.isEqualTo("api.github.com")
-                path.isEqualTo("/repos/owner/repo/pulls/1/requested_reviewers")
+        with(testRules) {
+            with(composeTestRule.activity.intent) {
+                putExtra("owner", "owner")
+                putExtra("repo", "repo")
+                putExtra("submission_date", "2022-01-29T08:00:00")
+                putExtra("pull_request_number", "1")
             }
-            jsonResponse(
-                """
+
+            mockWebServer.register {
+                expectThat(it).url.path.isEqualTo("/user")
+                jsonResponse("""{"id": 1, "login": "user"}""")
+            }
+            mockWebServer.register {
+                expectThat(it).url.and {
+                    get("host") { host }.isEqualTo("api.github.com")
+                    path.isEqualTo("/repos/owner/repo/pulls/1/requested_reviewers")
+                }
+                jsonResponse(
+                    """
                         {
                             "users": [
                                 {
@@ -103,23 +93,24 @@ class ReviewersScreenTest {
                             "teams": []
                         }
                   """,
-            )
-        }
-        mockWebServer.register {
-            expectThat(it).url.and {
-                get("host") { host }.isEqualTo("api.github.com")
-                path.isEqualTo("/repos/owner/repo/pulls/1/reviews")
+                )
             }
-            jsonResponse("[]")
-        }
-
-        composeTestRule.setContent {
-            LoudiusTheme {
-                ReviewersScreen { }
+            mockWebServer.register {
+                expectThat(it).url.and {
+                    get("host") { host }.isEqualTo("api.github.com")
+                    path.isEqualTo("/repos/owner/repo/pulls/1/reviews")
+                }
+                jsonResponse("[]")
             }
-        }
 
-        composeTestRule.onRoot()
-        composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
+            composeTestRule.setContent {
+                LoudiusTheme {
+                    ReviewersScreen { }
+                }
+            }
+
+            composeTestRule.onRoot()
+            composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
+        }
     }
 }
