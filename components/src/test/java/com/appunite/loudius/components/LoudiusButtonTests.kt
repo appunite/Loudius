@@ -43,6 +43,7 @@ class LoudiusButtonTests {
     fun loudiusOutlinedButton() {
         paparazzi.snapshot {
             Column(Modifier.background(Color.White)) {
+                LoudiusOutlinedButtonWithIconLargePreview()
                 LoudiusOutlinedButtonDisabledPreview()
                 LoudiusOutlinedButtonWithIconPreview()
                 LoudiusOutlinedButtonLargePreview()
