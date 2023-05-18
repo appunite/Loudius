@@ -23,8 +23,16 @@ import androidx.compose.ui.test.onRoot
 import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.common.Screen
+import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
+import com.appunite.loudius.domain.repository.PullRequestRepository
+import com.appunite.loudius.network.model.RequestedReviewer
+import com.appunite.loudius.network.model.RequestedReviewersResponse
+import com.appunite.loudius.network.model.Review
+import com.appunite.loudius.network.model.ReviewState
+import com.appunite.loudius.network.model.User
 import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
+import com.appunite.loudius.ui.reviewers.ReviewersViewModel
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import com.appunite.loudius.util.MockWebServerRule
@@ -33,18 +41,17 @@ import com.appunite.loudius.util.path
 import com.appunite.loudius.util.url
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockkStatic
+import io.mockk.mockk
+import io.mockk.mockkObject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import java.time.Clock
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -69,9 +76,9 @@ class ReviewersScreenTest {
     //@Inject
     //lateinit var repository: PullRequestRepository
 
-    private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
-    private val systemClockFixed =
-        Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
+//    private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
+//    private val systemClockFixed =
+//        Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
 //
 //    private val repository: PullRequestRepository = mockk(relaxed = true)
 
@@ -84,8 +91,8 @@ class ReviewersScreenTest {
         composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
         hiltRule.inject()
         //MockKAnnotations.init(this)
-        mockkStatic(Clock::class)
-        every { Clock.systemDefaultZone() } returns systemClockFixed
+//        mockkStatic(Clock::class)
+//        every { Clock.systemDefaultZone() } returns systemClockFixed
     }
 
     @Test
@@ -99,14 +106,26 @@ class ReviewersScreenTest {
             )
         )
 
+        mockkObject(Screen.Reviewers)
         every {
-            Screen.Reviewers.getInitialValues(savedStateHandle)
+            getInitialValues(savedStateHandle)
         } returns Screen.Reviewers.ReviewersInitialValues(
             owner = checkNotNull(savedStateHandle["owner"]),
             repo = checkNotNull(savedStateHandle["repo"]),
             pullRequestNumber = checkNotNull(savedStateHandle["pull_request_number"]),
             submissionTime = checkNotNull(LocalDateTime.parse(savedStateHandle["submission_date"]))
         )
+
+        val repo: PullRequestRepository = mockk()
+        val exampleResponse = RequestedReviewersResponse(listOf(RequestedReviewer(1, "john")))
+        coEvery {
+            repo.getRequestedReviewers(any(), any(), any())
+        } returns Result.success(exampleResponse)
+        coEvery {
+            repo.getReviews(any(), any(), any())
+        } returns Result.success(listOf(Review("1", User(1, "example"), ReviewState.APPROVED, LocalDateTime.parse(DATE))))
+
+        val viewModel = ReviewersViewModel(repo, savedStateHandle)
 
         mockWebServer.register {
             expectThat(it).url.path.isEqualTo("/user")
