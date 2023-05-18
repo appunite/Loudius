@@ -46,8 +46,8 @@ fun LoudiusTopAppBar(
             if (onClickBackArrow != null) {
                 IconButton(onClick = onClickBackArrow) {
                     Icon(
-                        painter = painterResource(id = R.drawable.arrow_back),
-                        contentDescription = stringResource(R.string.back_button),
+                        painter = painterResource(id = R.drawable.components_arrow_back),
+                        contentDescription = stringResource(R.string.components_back_button),
                     )
                 }
             }

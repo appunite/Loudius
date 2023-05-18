@@ -189,7 +189,7 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            textId = componentsR.string.you_dont_have_any_pull_request,
+            textId = componentsR.string.components_you_dont_have_any_pull_request,
         )
     }
 }

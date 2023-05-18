@@ -109,7 +109,7 @@ fun LoudiusOutlinedButtonWithIconPreview() {
             text = "Log In",
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                     "Github Icon",
                 )
             },
@@ -127,7 +127,7 @@ fun LoudiusOutlinedButtonDisabledPreview() {
             enabled = false,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                     "Github Icon",
                 )
             },
@@ -145,7 +145,7 @@ fun LoudiusOutlinedButtonWithIconLargePreview() {
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                     "Github Icon",
                 )
             },

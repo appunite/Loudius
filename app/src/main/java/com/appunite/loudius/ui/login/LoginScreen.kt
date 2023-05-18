@@ -91,7 +91,7 @@ fun LoginScreenStateless(
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = componentsR.drawable.ic_github),
+                    painter = painterResource(id = componentsR.drawable.components_ic_github),
                     contentDescription = stringResource(R.string.github_icon),
                 )
             },

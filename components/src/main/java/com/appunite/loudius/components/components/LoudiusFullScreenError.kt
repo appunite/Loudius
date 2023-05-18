@@ -39,8 +39,8 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 @Composable
 fun LoudiusFullScreenError(
     modifier: Modifier = Modifier,
-    errorText: String = stringResource(id = R.string.error_dialog_text),
-    buttonText: String = stringResource(id = R.string.try_again),
+    errorText: String = stringResource(id = R.string.components_error_dialog_text),
+    buttonText: String = stringResource(id = R.string.components_try_again),
     onButtonClick: () -> Unit,
 ) {
     ScreenErrorWithSpacers(
@@ -87,8 +87,8 @@ private fun ErrorImage(
 ) {
     Image(
         modifier = modifier,
-        painter = painterResource(id = R.drawable.error_image),
-        contentDescription = stringResource(R.string.error_image_desc),
+        painter = painterResource(id = R.drawable.components_error_image),
+        contentDescription = stringResource(R.string.components_error_image_desc),
     )
 }
 
@@ -106,8 +106,8 @@ private fun ErrorText(text: String) {
 fun LoudiusErrorScreenPreview() {
     LoudiusTheme {
         LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again),
+            errorText = stringResource(id = R.string.components_error_dialog_text),
+            buttonText = stringResource(R.string.components_try_again),
             onButtonClick = {},
         )
     }

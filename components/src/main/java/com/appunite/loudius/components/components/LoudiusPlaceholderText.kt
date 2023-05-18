@@ -48,6 +48,6 @@ fun LoudiusPlaceholderText(@StringRes textId: Int) {
 @Composable
 fun PreviewLoudiusPlaceholderText() {
     LoudiusTheme {
-        LoudiusPlaceholderText(R.string.you_dont_have_any_pull_request)
+        LoudiusPlaceholderText(R.string.components_you_dont_have_any_pull_request)
     }
 }

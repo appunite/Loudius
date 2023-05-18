@@ -165,7 +165,7 @@ fun LoudiusListItemContentAndIconPreview() {
         index = 0,
         icon = { modifier ->
             LoudiusListIcon(
-                painter = painterResource(id = componentsR.drawable.person_outline_24px),
+                painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
                 contentDescription = "Test",
                 modifier = modifier,
             )
@@ -187,7 +187,7 @@ private fun LoudiusListItemExample(index: Int) {
         icon = { modifier ->
             LoudiusListIcon(
                 modifier = modifier,
-                painter = painterResource(id = componentsR.drawable.person_outline_24px),
+                painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
                 contentDescription = "Test",
             )
         },

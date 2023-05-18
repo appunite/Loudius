@@ -29,9 +29,9 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 @Composable
 fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
-    dialogTitle: String = stringResource(id = R.string.error_dialog_title),
-    dialogText: String = stringResource(id = R.string.error_dialog_text),
-    confirmText: String = stringResource(R.string.ok),
+    dialogTitle: String = stringResource(id = R.string.components_error_dialog_title),
+    dialogText: String = stringResource(id = R.string.components_error_dialog_text),
+    confirmText: String = stringResource(R.string.components_ok),
 ) {
     var openDialog by remember { mutableStateOf(true) }
     if (openDialog) {

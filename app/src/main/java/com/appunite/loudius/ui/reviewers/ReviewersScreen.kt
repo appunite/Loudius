@@ -211,7 +211,7 @@ private fun NotifyButtonOrLoadingIndicator(
 @Composable
 private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
-        painter = painterResource(id = componentsR.drawable.person_outline_24px),
+        painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
         contentDescription = stringResource(
             R.string.details_screen_user_image_description,
         ),
