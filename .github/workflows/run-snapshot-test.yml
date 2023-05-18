@@ -17,7 +17,7 @@ jobs:
   test:
     if: github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && contains(github.event.comment.html_url, '/pull/') && github.event.comment.body == '!snapshot')
     name: Verify snapshots
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,14 +35,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: snapshot-failure-deltas
-          path: /Users/runner/work/Loudius/Loudius/components/out/failures/
+          path: /home/runner/work/Loudius/Loudius/components/out/failures/
 
       - name: Upload snapshot failure report
         if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: snapshot-failure-report
-          path: /Users/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
+          path: /home/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
 
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
