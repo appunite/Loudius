@@ -37,17 +37,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
+import com.appunite.loudius.components.components.LoudiusFullScreenError
+import com.appunite.loudius.components.components.LoudiusListIcon
+import com.appunite.loudius.components.components.LoudiusListItem
+import com.appunite.loudius.components.components.LoudiusLoadingIndicator
+import com.appunite.loudius.components.components.LoudiusPlaceholderText
+import com.appunite.loudius.components.components.LoudiusText
+import com.appunite.loudius.components.components.LoudiusTextStyle
+import com.appunite.loudius.components.components.LoudiusTopAppBar
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.network.model.PullRequest
-import com.appunite.loudius.ui.components.LoudiusFullScreenError
-import com.appunite.loudius.ui.components.LoudiusListIcon
-import com.appunite.loudius.ui.components.LoudiusListItem
-import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.components.LoudiusPlaceholderText
-import com.appunite.loudius.ui.components.LoudiusText
-import com.appunite.loudius.ui.components.LoudiusTextStyle
-import com.appunite.loudius.ui.components.LoudiusTopAppBar
-import com.appunite.loudius.ui.theme.LoudiusTheme
 import java.time.LocalDateTime
+import com.appunite.loudius.components.R as componentsR
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
@@ -188,7 +189,7 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            textId = R.string.you_dont_have_any_pull_request,
+            textId = componentsR.string.components_you_dont_have_any_pull_request,
         )
     }
 }

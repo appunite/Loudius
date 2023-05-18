@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.common
+package com.appunite.loudius.components.common
 
 import java.util.concurrent.atomic.AtomicInteger
 

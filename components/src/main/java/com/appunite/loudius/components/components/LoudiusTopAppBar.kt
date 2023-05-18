@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.components.components
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,8 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.appunite.loudius.R
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.R
+import com.appunite.loudius.components.theme.LoudiusTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,8 +46,8 @@ fun LoudiusTopAppBar(
             if (onClickBackArrow != null) {
                 IconButton(onClick = onClickBackArrow) {
                     Icon(
-                        painter = painterResource(id = R.drawable.arrow_back),
-                        contentDescription = stringResource(R.string.back_button),
+                        painter = painterResource(id = R.drawable.components_arrow_back),
+                        contentDescription = stringResource(R.string.components_back_button),
                     )
                 }
             }

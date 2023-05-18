@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.components.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.theme.LoudiusTheme
 
 @Composable
 fun LoudiusDialog(
@@ -30,7 +30,7 @@ fun LoudiusDialog(
     title: String,
     dismissButton: @Composable (() -> Unit)? = null,
     /**
-     * For text [com.appunite.loudius.ui.components.LoudiusTextStyle.ScreenContent] should be used
+     * For text [LoudiusTextStyle.ScreenContent] should be used
      */
     text: @Composable (() -> Unit)? = null,
 

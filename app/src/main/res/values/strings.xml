@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Loudius</string>
-    <string name="back_button">Back button</string>
     <string name="pull_requests_screen_pull_request_content_description">Pull request</string>
     <string name="details_screen_user_image_description">User image</string>
     <string name="details_notify">Notify</string>
@@ -8,17 +7,10 @@
     <string name="details_not_reviewed">Not reviewed for %d h.</string>
     <string name="details_title">Pull request # %s</string>
     <string name="github_icon">Github icon</string>
-    <string name="error_dialog_title">Error</string>
-    <string name="error_dialog_text">Something went wrong…</string>
-    <string name="ok">OK</string>
-    <string name="error_image_desc">error image</string>
-    <string name="try_again">Try again</string>
-    <string name="error_login_text">Something went wrong…\nYou need to log in again.</string>
     <string name="go_to_login">Take me to login</string>
     <string name="reviewers_snackbar_success">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
     <string name="reviewers_snackbar_failure">Uh-oh, it seems that Loudius has taken a vacation. Don\'t worry, we\'re sending a postcard to bring it back ASAP!</string>
     <string name="user_unauthorized_message">Unauthorized collaborator detected! Please login again.</string>
-    <string name="you_dont_have_any_pull_request">Sorry! Your list of pull requests is empty.\nGet back to work! 🧑‍💻</string>
     <string name="you_dont_have_any_reviewers">Sorry! Your list of reviewers is empty.\n Go to pull request and mark your colleagues as the reviewers! 🤞</string>
 
     <!-- LoginScreen -->

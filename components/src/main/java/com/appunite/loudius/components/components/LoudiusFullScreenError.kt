@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.components.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,18 +27,20 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.utils.MultiScreenPreviews
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.R
+import com.appunite.loudius.components.components.utils.MultiScreenPreviews
+import com.appunite.loudius.components.theme.LoudiusTheme
+
 
 @Composable
 fun LoudiusFullScreenError(
     modifier: Modifier = Modifier,
-    errorText: String = stringResource(id = R.string.error_dialog_text),
-    buttonText: String = stringResource(id = R.string.try_again),
+    errorText: String = stringResource(id = R.string.components_error_dialog_text),
+    buttonText: String = stringResource(id = R.string.components_try_again),
     onButtonClick: () -> Unit,
 ) {
     ScreenErrorWithSpacers(
@@ -56,11 +59,17 @@ fun ScreenErrorWithSpacers(
     onButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier.padding(32.dp).fillMaxSize(),
+        modifier = modifier
+            .background(color = Color.White)
+            .padding(32.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.15f))
-        ErrorImage(modifier = Modifier.weight(weight = .35f).sizeIn(maxWidth = 400.dp, maxHeight = 400.dp).fillMaxWidth())
+        ErrorImage(modifier = Modifier
+            .weight(weight = .35f)
+            .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
+            .fillMaxWidth())
         Spacer(modifier = Modifier.weight(weight = 0.05f))
         ErrorText(text = errorText)
         LoudiusOutlinedButton(
@@ -78,8 +87,8 @@ private fun ErrorImage(
 ) {
     Image(
         modifier = modifier,
-        painter = painterResource(id = R.drawable.error_image),
-        contentDescription = stringResource(R.string.error_image_desc),
+        painter = painterResource(id = R.drawable.components_error_image),
+        contentDescription = stringResource(R.string.components_error_image_desc),
     )
 }
 
@@ -97,8 +106,8 @@ private fun ErrorText(text: String) {
 fun LoudiusErrorScreenPreview() {
     LoudiusTheme {
         LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.error_dialog_text),
-            buttonText = stringResource(R.string.try_again),
+            errorText = stringResource(id = R.string.components_error_dialog_text),
+            buttonText = stringResource(R.string.components_try_again),
             onButtonClick = {},
         )
     }

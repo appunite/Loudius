@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.components.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,8 +30,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.appunite.loudius.R
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.R
+import com.appunite.loudius.components.theme.LoudiusTheme
 
 @Composable
 fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {

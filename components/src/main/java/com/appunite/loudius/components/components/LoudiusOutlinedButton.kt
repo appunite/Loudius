@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components
+package com.appunite.loudius.components.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.appunite.loudius.R
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.R
+import com.appunite.loudius.components.theme.LoudiusTheme
 
 enum class LoudiusOutlinedButtonStyle {
     Large,
@@ -109,7 +109,7 @@ fun LoudiusOutlinedButtonWithIconPreview() {
             text = "Log In",
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                     "Github Icon",
                 )
             },
@@ -127,7 +127,7 @@ fun LoudiusOutlinedButtonDisabledPreview() {
             enabled = false,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                     "Github Icon",
                 )
             },
@@ -145,7 +145,7 @@ fun LoudiusOutlinedButtonWithIconLargePreview() {
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
-                    painter = painterResource(id = R.drawable.ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                     "Github Icon",
                 )
             },

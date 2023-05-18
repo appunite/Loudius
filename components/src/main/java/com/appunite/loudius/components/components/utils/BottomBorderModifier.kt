@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.ui.components.utils
+package com.appunite.loudius.components.components.utils
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed

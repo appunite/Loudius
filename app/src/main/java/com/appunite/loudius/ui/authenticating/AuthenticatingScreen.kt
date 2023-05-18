@@ -22,9 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.LoudiusFullScreenError
-import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.components.LoudiusFullScreenError
+import com.appunite.loudius.components.components.LoudiusLoadingIndicator
+import com.appunite.loudius.components.theme.LoudiusTheme
+import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun AuthenticatingScreen(
@@ -68,7 +69,7 @@ private fun ShowLoudiusLoginErrorScreen(
     navigateToLogin: () -> Unit,
 ) {
     LoudiusFullScreenError(
-        errorText = stringResource(id = R.string.error_login_text),
+        errorText = stringResource(id = componentsR.string.components_error_login_text),
         buttonText = stringResource(id = R.string.go_to_login),
         onButtonClick = navigateToLogin,
     )
