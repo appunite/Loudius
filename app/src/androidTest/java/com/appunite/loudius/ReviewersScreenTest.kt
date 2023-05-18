@@ -22,17 +22,13 @@ import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.TestRules
-import com.appunite.loudius.util.jsonResponse
-import com.appunite.loudius.util.path
-import com.appunite.loudius.util.url
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -56,51 +52,10 @@ class ReviewersScreenTest {
                 putExtra("pull_request_number", "1")
             }
 
-            mockWebServer.register {
-                expectThat(it).url.path.isEqualTo("/user")
-                jsonResponse("""{"id": 1, "login": "user"}""")
-            }
-            mockWebServer.register {
-                expectThat(it).url.and {
-                    get("host") { host }.isEqualTo("api.github.com")
-                    path.isEqualTo("/repos/owner/repo/pulls/1/requested_reviewers")
-                }
-                jsonResponse(
-                    """
-                        {
-                            "users": [
-                                {
-                                    "login": "userLogin",
-                                    "id": 1,
-                                    "node_id": "1",
-                                    "avatar_url": "https://avatars.githubusercontent.com/u/18102775?v=4",
-                                    "gravatar_id": "",
-                                    "url": "https://api.github.com/users/user",
-                                    "html_url": "https://github.com/user",
-                                    "followers_url": "https://api.github.com/users/user/followers",
-                                    "following_url": "https://api.github.com/users/user/following{/other_user}",
-                                    "gists_url": "https://api.github.com/users/user/gists{/gist_id}",
-                                    "starred_url": "https://api.github.com/users/user/starred{/owner}{/repo}",
-                                    "subscriptions_url": "https://api.github.com/users/user/subscriptions",
-                                    "organizations_url": "https://api.github.com/users/user/orgs",
-                                    "repos_url": "https://api.github.com/users/user/repos",
-                                    "events_url": "https://api.github.com/users/user/events{/privacy}",
-                                    "received_events_url": "https://api.github.com/users/user/received_events",
-                                    "type": "User",
-                                    "site_admin": false
-                                }
-                            ],
-                            "teams": []
-                        }
-                  """,
-                )
-            }
-            mockWebServer.register {
-                expectThat(it).url.and {
-                    get("host") { host }.isEqualTo("api.github.com")
-                    path.isEqualTo("/repos/owner/repo/pulls/1/reviews")
-                }
-                jsonResponse("[]")
+            with(Register) {
+                user(mockWebServer)
+                requestedReviewers(mockWebServer)
+                reviews(mockWebServer)
             }
 
             composeTestRule.setContent {
