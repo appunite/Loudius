@@ -20,8 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 
 /**
  * Github app currently have a bug on Xiaomi devices where
@@ -40,7 +38,7 @@ import javax.inject.Inject
  * We've checked 1.107.0 version of Github from 2023-04-06.
  * If you won't be able to reproduce the issue without the fix, it can be removed.
  */
-class GithubHelper @Inject constructor(@ApplicationContext private val context: Context) {
+class GithubHelper(private val context: Context) {
     companion object {
         private const val GITHUB_APP_PACKAGE_NAME = "com.github.android"
 
