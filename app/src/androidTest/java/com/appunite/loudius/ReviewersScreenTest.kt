@@ -18,12 +18,11 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import com.appunite.loudius.util.TestRules
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
@@ -35,16 +34,16 @@ import org.junit.runner.RunWith
 class ReviewersScreenTest {
 
     @get:Rule
-    val testRules = TestRules(this)
+    val integrationTestRule = IntegrationTestRule(this)
 
     @Before
     fun setUp() {
-        testRules.setUp()
+        integrationTestRule.setUp()
     }
 
     @Test
     fun whenResponseIsCorrectThenReviewersAreVisible() {
-        with(testRules) {
+        with(integrationTestRule) {
             with(composeTestRule.activity.intent) {
                 putExtra("owner", "owner")
                 putExtra("repo", "repo")
@@ -52,11 +51,9 @@ class ReviewersScreenTest {
                 putExtra("pull_request_number", "1")
             }
 
-            with(Register) {
-                user(mockWebServer)
-                requestedReviewers(mockWebServer)
-                reviews(mockWebServer)
-            }
+            Register.user(mockWebServer)
+            Register.requestedReviewers(mockWebServer)
+            Register.reviews(mockWebServer)
 
             composeTestRule.setContent {
                 LoudiusTheme {
@@ -64,7 +61,6 @@ class ReviewersScreenTest {
                 }
             }
 
-            composeTestRule.onRoot()
             composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
         }
     }

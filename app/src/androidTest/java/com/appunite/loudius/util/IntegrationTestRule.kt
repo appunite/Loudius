@@ -21,18 +21,17 @@ import com.appunite.loudius.TestActivity
 import com.appunite.loudius.ui.components.countingResource
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Before
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-@HiltAndroidTest
-class TestRules(testClass: Any) : TestRule {
+class IntegrationTestRule(testClass: Any) : TestRule {
 
     val mockWebServer = MockWebServerRule()
-    val composeTestRule = createAndroidComposeRule<TestActivity>()
+    val composeTestRule = createAndroidComposeRule<TestActivity>().apply{
+        registerIdlingResource(countingResource.toIdlingResource())
+    }
     private val hiltRule = HiltAndroidRule(testClass)
 
     override fun apply(base: Statement, description: Description): Statement {
@@ -42,9 +41,7 @@ class TestRules(testClass: Any) : TestRule {
             .apply(base, description)
     }
 
-    @Before
     fun setUp() {
-        composeTestRule.registerIdlingResource(countingResource.toIdlingResource())
         hiltRule.inject()
     }
 }
