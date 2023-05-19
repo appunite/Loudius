@@ -28,11 +28,24 @@ object Register {
         }
     }
 
+    fun accessToken(mockWebServer: MockWebServerRule) {
+        mockWebServer.register {
+            expectThat(it).url.path.isEqualTo("/login/oauth/access_token")
+            jsonResponse("""
+                {
+                  "access_token": "example_access_token",
+                  "token_type": "bearer",
+                  "scope": "repo"
+                }
+            """.trimIndent())
+        }
+    }
+
     fun reviews(mockWebServer: MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
-                path.isEqualTo("/repos/owner/repo/pulls/1/reviews")
+                path.isEqualTo("/repos/exampleOwner/exampleRepo/pulls/1/reviews")
             }
             jsonResponse("[]")
         }
@@ -42,7 +55,7 @@ object Register {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
-                path.isEqualTo("/repos/owner/repo/issues/1/comments")
+                path.isEqualTo("/repos/exampleOwner/exampleRepo/issues/1/comments")
             }
             jsonResponse(
                 """
@@ -86,7 +99,7 @@ object Register {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
-                path.isEqualTo("/repos/owner/repo/pulls/1/requested_reviewers")
+                path.isEqualTo("/repos/exampleOwner/exampleRepo/pulls/1/requested_reviewers")
             }
             jsonResponse(
                 """
