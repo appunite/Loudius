@@ -1,8 +1,6 @@
 name: Snapshot verification
 
 on:
-  issue_comment:
-    types: [ created, edited ]
   pull_request:
     branches: [ main, develop, feature/LD-91/golden-tests ]
 
@@ -15,7 +13,6 @@ permissions:
 
 jobs:
   test:
-    if: github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && contains(github.event.comment.html_url, '/pull/') && github.event.comment.body == '!snapshot')
     name: Verify snapshots
     runs-on: ubuntu-latest
     steps:
@@ -52,7 +49,7 @@ jobs:
           state: open
 
       - name: Find Comment on PR
-        uses: peter-evans/find-comment@v1
+        uses: peter-evans/find-comment@v2
         id: fc
         if: always()
         with:
@@ -61,7 +58,7 @@ jobs:
           body-includes: Snapshot testing result
 
       - name: Create or update comment on PR (Success)
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v3
         if: always() && steps.testStep.outcome == 'success'
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -72,7 +69,7 @@ jobs:
           edit-mode: replace
 
       - name: Create or update comment on PR (Failure)
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v3
         if: always() && steps.testStep.outcome == 'failure'
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
