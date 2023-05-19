@@ -29,7 +29,7 @@ import org.junit.runners.model.Statement
 class IntegrationTestRule(testClass: Any) : TestRule {
 
     val mockWebServer = MockWebServerRule()
-    val composeTestRule = createAndroidComposeRule<TestActivity>().apply{
+    val composeTestRule = createAndroidComposeRule<TestActivity>().apply {
         registerIdlingResource(countingResource.toIdlingResource())
     }
     private val hiltRule = HiltAndroidRule(testClass)
