@@ -67,6 +67,11 @@ jobs:
             Snapshot testing result: :heavy_check_mark:
             Everything looks good!
           edit-mode: replace
+          reactions: |
+            heart
+            hooray
+          reactions-edit-mode: replace
+
 
       - name: Create or update comment on PR (Failure)
         uses: peter-evans/create-or-update-comment@v3
@@ -82,3 +87,6 @@ jobs:
             - Unzip and you can find one or more images that show the expected and the actual test results.
             - If these changes are fixing an issue or are part of a new feature then please speak to the maintainer. If they are not intended then please fix them and repush again.
           edit-mode: replace
+          reactions: |
+            confused
+          reactions-edit-mode: replace
