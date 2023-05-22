@@ -43,9 +43,9 @@ object Register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
                 path.isEqualTo("/repos/owner/repo/issues/1/comments")
-
             }
-            jsonResponse("""
+            jsonResponse(
+                """
                     {
                       "id": 1,
                       "node_id": "1",
@@ -77,7 +77,8 @@ object Register {
                       "issue_url": "https://api.github.com/repos/owner/repo/issues/1",
                       "author_association": "COLLABORATOR"
                     }
-                """.trimIndent())
+                """.trimIndent(),
+            )
         }
     }
 
