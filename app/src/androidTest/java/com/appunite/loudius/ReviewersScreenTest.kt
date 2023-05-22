@@ -18,6 +18,7 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
@@ -62,6 +63,60 @@ class ReviewersScreenTest {
             }
 
             composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun givenInternetConnectionWhenClickOnNotifyThenNotifyReviewer() {
+        with(integrationTestRule) {
+            with(composeTestRule.activity.intent) {
+                putExtra("owner", "owner")
+                putExtra("repo", "repo")
+                putExtra("submission_date", "2022-01-29T08:00:00")
+                putExtra("pull_request_number", "1")
+            }
+
+            Register.user(mockWebServer)
+            Register.requestedReviewers(mockWebServer)
+            Register.reviews(mockWebServer)
+            Register.comment(mockWebServer)
+
+            composeTestRule.setContent {
+                LoudiusTheme {
+                    ReviewersScreen { }
+                }
+            }
+            composeTestRule.onNodeWithText("Notify").performClick()
+            composeTestRule
+                .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
+                .assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun givenNoInternetConnectionWhenClickOnNotifyThenNotifyReviewer() {
+        with(integrationTestRule) {
+            with(composeTestRule.activity.intent) {
+                putExtra("owner", "owner")
+                putExtra("repo", "repo")
+                putExtra("submission_date", "2022-01-29T08:00:00")
+                putExtra("pull_request_number", "1")
+            }
+
+            Register.user(mockWebServer)
+            Register.requestedReviewers(mockWebServer)
+            Register.reviews(mockWebServer)
+
+            composeTestRule.setContent {
+                LoudiusTheme {
+                    ReviewersScreen { }
+                }
+            }
+
+            composeTestRule.onNodeWithText("Notify").performClick()
+            composeTestRule
+                .onNodeWithText("Uh-oh, it seems that Loudius has taken a vacation. Don't worry, we're sending a postcard to bring it back ASAP!")
+                .assertIsDisplayed()
         }
     }
 }
