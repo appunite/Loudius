@@ -43,17 +43,17 @@ jobs:
 
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+        id: findPRId
         if: always()
         with:
           state: open
 
       - name: Find Comment on PR
         uses: peter-evans/find-comment@v2
-        id: fc
+        id: findCommentId
         if: always()
         with:
-          issue-number: ${{ steps.findPr.outputs.pr }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
           comment-author: "github-actions[bot]"
           body-includes: Snapshot testing result
 
@@ -61,8 +61,8 @@ jobs:
         uses: peter-evans/create-or-update-comment@v3
         if: always() && steps.testStep.outcome == 'success'
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ steps.findPr.outputs.pr }}
+          comment-id: ${{ steps.findCommentId.outputs.comment-id }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
           body: |
             Snapshot testing result: :heavy_check_mark:
             Everything looks good!
@@ -77,8 +77,8 @@ jobs:
         uses: peter-evans/create-or-update-comment@v3
         if: always() && steps.testStep.outcome == 'failure'
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ steps.findPr.outputs.pr }}
+          comment-id: ${{ steps.findCommentId.outputs.comment-id }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
           body: |
             Snapshot testing result: :x:
             Some of the snapshot tests seem to have failed. Please:
