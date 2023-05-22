@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 AppUnite S.A.
+ * Copyright 2023 owner S.A.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
+import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
@@ -31,7 +31,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class PullRequestsScreenTest {
+class ReviewersScreenTest {
 
     @get:Rule
     val integrationTestRule = IntegrationTestRule(this)
@@ -42,18 +42,26 @@ class PullRequestsScreenTest {
     }
 
     @Test
-    fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
+    fun whenResponseIsCorrectThenReviewersAreVisible() {
         with(integrationTestRule) {
+            with(composeTestRule.activity.intent) {
+                putExtra("owner", "owner")
+                putExtra("repo", "repo")
+                putExtra("submission_date", "2022-01-29T08:00:00")
+                putExtra("pull_request_number", "1")
+            }
+
             Register.user(mockWebServer)
-            Register.issues(mockWebServer)
+            Register.requestedReviewers(mockWebServer)
+            Register.reviews(mockWebServer)
 
             composeTestRule.setContent {
                 LoudiusTheme {
-                    PullRequestsScreen { _, _, _, _ -> }
+                    ReviewersScreen { }
                 }
             }
 
-            composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
+            composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
         }
     }
 }
