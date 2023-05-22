@@ -40,45 +40,24 @@ class ReviewersScreenTest {
     @Before
     fun setUp() {
         integrationTestRule.setUp()
+        integrationTestRule.initTests()
     }
 
     @Test
     fun whenResponseIsCorrectThenReviewersAreVisible() {
         with(integrationTestRule) {
-            with(composeTestRule.activity.intent) {
-                putExtra("owner", "owner")
-                putExtra("repo", "repo")
-                putExtra("submission_date", "2022-01-29T08:00:00")
-                putExtra("pull_request_number", "1")
-            }
-
-            Register.user(mockWebServer)
-            Register.requestedReviewers(mockWebServer)
-            Register.reviews(mockWebServer)
-
             composeTestRule.setContent {
                 LoudiusTheme {
                     ReviewersScreen { }
                 }
             }
-
             composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
         }
     }
 
     @Test
-    fun givenInternetConnectionWhenClickOnNotifyThenNotifyReviewer() {
+    fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
-            with(composeTestRule.activity.intent) {
-                putExtra("owner", "owner")
-                putExtra("repo", "repo")
-                putExtra("submission_date", "2022-01-29T08:00:00")
-                putExtra("pull_request_number", "1")
-            }
-
-            Register.user(mockWebServer)
-            Register.requestedReviewers(mockWebServer)
-            Register.reviews(mockWebServer)
             Register.comment(mockWebServer)
 
             composeTestRule.setContent {
@@ -94,29 +73,29 @@ class ReviewersScreenTest {
     }
 
     @Test
-    fun givenNoInternetConnectionWhenClickOnNotifyThenNotifyReviewer() {
+    fun whenClickOnNotifyAndDoNotCommentThenShowError() {
         with(integrationTestRule) {
-            with(composeTestRule.activity.intent) {
-                putExtra("owner", "owner")
-                putExtra("repo", "repo")
-                putExtra("submission_date", "2022-01-29T08:00:00")
-                putExtra("pull_request_number", "1")
-            }
-
-            Register.user(mockWebServer)
-            Register.requestedReviewers(mockWebServer)
-            Register.reviews(mockWebServer)
-
             composeTestRule.setContent {
                 LoudiusTheme {
                     ReviewersScreen { }
                 }
             }
-
             composeTestRule.onNodeWithText("Notify").performClick()
             composeTestRule
                 .onNodeWithText("Uh-oh, it seems that Loudius has taken a vacation. Don't worry, we're sending a postcard to bring it back ASAP!")
                 .assertIsDisplayed()
         }
+    }
+
+    private fun IntegrationTestRule.initTests() {
+        composeTestRule.activity.intent.apply {
+            putExtra("owner", "owner")
+            putExtra("repo", "repo")
+            putExtra("submission_date", "2022-01-29T08:00:00")
+            putExtra("pull_request_number", "1")
+        }
+        Register.user(mockWebServer)
+        Register.requestedReviewers(mockWebServer)
+        Register.reviews(mockWebServer)
     }
 }
