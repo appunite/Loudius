@@ -38,6 +38,50 @@ object Register {
         }
     }
 
+    fun comment(mockWebServer: MockWebServerRule) {
+        mockWebServer.register {
+            expectThat(it).url.and {
+                get("host") { host }.isEqualTo("api.github.com")
+                path.isEqualTo("/repos/owner/repo/issues/1/comments")
+            }
+            jsonResponse(
+                """
+                    {
+                      "id": 1,
+                      "node_id": "1",
+                      "url": "https://api.github.com/repos/owner/repo/issues/comments/1",
+                      "html_url": "https://github.com/owner/repo/issues/1347#issuecomment-1",
+                      "body": "example body",
+                      "user": {
+                        "login": "userLogin",
+                        "id": 1,
+                        "node_id": "1",
+                        "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+                        "gravatar_id": "",
+                        "url": "https://api.github.com/users/owner",
+                        "html_url": "https://github.com/owner",
+                        "followers_url": "https://api.github.com/users/owner/followers",
+                        "following_url": "https://api.github.com/users/owner/following{/other_user}",
+                        "gists_url": "https://api.github.com/users/owner/gists{/gist_id}",
+                        "starred_url": "https://api.github.com/users/owner/starred{/owner}{/repo}",
+                        "subscriptions_url": "https://api.github.com/users/owner/subscriptions",
+                        "organizations_url": "https://api.github.com/users/owner/orgs",
+                        "repos_url": "https://api.github.com/users/owner/repos",
+                        "events_url": "https://api.github.com/users/owner/events{/privacy}",
+                        "received_events_url": "https://api.github.com/users/owner/received_events",
+                        "type": "User",
+                        "site_admin": false
+                      },
+                      "created_at": "2011-04-14T16:00:49Z",
+                      "updated_at": "2011-04-14T16:00:49Z",
+                      "issue_url": "https://api.github.com/repos/owner/repo/issues/1",
+                      "author_association": "COLLABORATOR"
+                    }
+                """.trimIndent(),
+            )
+        }
+    }
+
     fun requestedReviewers(mockWebServer: MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.and {
