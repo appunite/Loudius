@@ -62,7 +62,7 @@ class PullRequestsViewModel @Inject constructor(
         fetchData()
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         viewModelScope.launch {
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
