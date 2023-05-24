@@ -61,7 +61,7 @@ fun PullRequestsScreen(
     val state = viewModel.state
     val swipeRefreshState = rememberPullRefreshState(
         refreshing = state.data == Data.Loading,
-        onRefresh = { viewModel.fetchData() }
+        onRefresh = { viewModel.fetchData() },
     )
     PullRequestsScreenStateless(
         state = state,
@@ -127,7 +127,7 @@ private fun PullRequestContent(
             modifier = Modifier.padding(padding),
             onItemClick = onAction,
             pullRefreshState = pullRefreshState,
-            isLoading = state == Data.Loading
+            isLoading = state == Data.Loading,
         )
     }
 }
@@ -138,7 +138,7 @@ private fun PullRequestsList(
     modifier: Modifier,
     onItemClick: (PulLRequestsAction) -> Unit,
     pullRefreshState: PullRefreshState,
-    isLoading: Boolean
+    isLoading: Boolean,
 ) {
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         LazyColumn(
@@ -209,9 +209,9 @@ private fun EmptyListPlaceholder(padding: PaddingValues) {
     }
 }
 
-//@Preview("Pull requests - filled list")
-//@Composable
-//fun PullRequestsScreenPreview() {
+// @Preview("Pull requests - filled list")
+// @Composable
+// fun PullRequestsScreenPreview() {
 //    LoudiusTheme {
 //        PullRequestsScreenStateless(
 //            state = PullRequestState(
@@ -255,37 +255,37 @@ private fun EmptyListPlaceholder(padding: PaddingValues) {
 //            onAction = {},
 //        )
 //    }
-//}
+// }
 //
-//@Preview("Pull requests - empty list")
-//@Composable
-//fun PullRequestsScreenEmptyListPreview() {
+// @Preview("Pull requests - empty list")
+// @Composable
+// fun PullRequestsScreenEmptyListPreview() {
 //    LoudiusTheme {
 //        PullRequestsScreenStateless(
 //            PullRequestState(Data.Success(emptyList())),
 //            onAction = {},
 //        )
 //    }
-//}
+// }
 //
-//@Preview("Pull requests - Loading")
-//@Composable
-//fun PullRequestsScreenLoadingPreview() {
+// @Preview("Pull requests - Loading")
+// @Composable
+// fun PullRequestsScreenLoadingPreview() {
 //    LoudiusTheme {
 //        PullRequestsScreenStateless(
 //            PullRequestState(Data.Loading),
 //            onAction = {},
 //        )
 //    }
-//}
+// }
 //
-//@Preview("Pull requests - Error")
-//@Composable
-//fun PullRequestsScreenErrorPreview() {
+// @Preview("Pull requests - Error")
+// @Composable
+// fun PullRequestsScreenErrorPreview() {
 //    LoudiusTheme {
 //        PullRequestsScreenStateless(
 //            PullRequestState(Data.Error),
 //            onAction = {},
 //        )
 //    }
-//}
+// }
