@@ -23,6 +23,9 @@ jobs:
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
+      - name: LFS-warning
+        uses: ppremk/lfs-warning@v3.2
+
       - name: Gradle - Verify snapshots with Paparazzi
         id: testStep
         run: ./gradlew clean components:verifyPaparazziDebug
