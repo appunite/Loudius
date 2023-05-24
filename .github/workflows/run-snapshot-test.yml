@@ -2,7 +2,7 @@ name: Snapshot verification
 
 on:
   pull_request:
-    branches: [ main, develop, feature/LD-91/golden-tests ]
+    branches: [ master, main, develop, feature/LD-91/golden-tests ]
 
 permissions:
   checks: write
@@ -25,7 +25,7 @@ jobs:
       - name: Process failed screenshot tests
         if: failure()
         id: failed-screenshots
-        run: "./.github/workflows/scripts/process_failed_screenshots.sh"
+        run: "./.github/actions/process_failed_screenshots.sh"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
