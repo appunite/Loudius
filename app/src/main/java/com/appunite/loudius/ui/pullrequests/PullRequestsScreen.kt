@@ -39,8 +39,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
+import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.model.PullRequest
 import com.appunite.loudius.ui.components.LoudiusFullScreenError
 import com.appunite.loudius.ui.components.LoudiusListIcon
@@ -50,6 +52,8 @@ import com.appunite.loudius.ui.components.LoudiusPlaceholderText
 import com.appunite.loudius.ui.components.LoudiusText
 import com.appunite.loudius.ui.components.LoudiusTextStyle
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
+import com.appunite.loudius.ui.theme.LoudiusTheme
+import java.time.LocalDateTime
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
@@ -209,83 +213,99 @@ private fun EmptyListPlaceholder(padding: PaddingValues) {
     }
 }
 
-// @Preview("Pull requests - filled list")
-// @Composable
-// fun PullRequestsScreenPreview() {
-//    LoudiusTheme {
-//        PullRequestsScreenStateless(
-//            state = PullRequestState(
-//                Data.Success(
-//                    listOf(
-//                        PullRequest(
-//                            id = 0,
-//                            draft = false,
-//                            number = 0,
-//                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
-//                            title = "[SIL-67] Details screen - network layer",
-//                            createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
-//                        ),
-//                        PullRequest(
-//                            id = 1,
-//                            draft = true,
-//                            number = 1,
-//                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
-//                            title = "[SIL-66] Add client secret to build config",
-//                            createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
-//                        ),
-//                        PullRequest(
-//                            id = 2,
-//                            draft = false,
-//                            number = 2,
-//                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
-//                            title = "[SIL-73] Storing access token",
-//                            createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
-//                        ),
-//                        PullRequest(
-//                            id = 3,
-//                            draft = false,
-//                            number = 3,
-//                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
-//                            title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-//                            createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
-//                        ),
-//                    ),
-//                ),
-//            ),
-//            onAction = {},
-//        )
-//    }
-// }
-//
-// @Preview("Pull requests - empty list")
-// @Composable
-// fun PullRequestsScreenEmptyListPreview() {
-//    LoudiusTheme {
-//        PullRequestsScreenStateless(
-//            PullRequestState(Data.Success(emptyList())),
-//            onAction = {},
-//        )
-//    }
-// }
-//
-// @Preview("Pull requests - Loading")
-// @Composable
-// fun PullRequestsScreenLoadingPreview() {
-//    LoudiusTheme {
-//        PullRequestsScreenStateless(
-//            PullRequestState(Data.Loading),
-//            onAction = {},
-//        )
-//    }
-// }
-//
-// @Preview("Pull requests - Error")
-// @Composable
-// fun PullRequestsScreenErrorPreview() {
-//    LoudiusTheme {
-//        PullRequestsScreenStateless(
-//            PullRequestState(Data.Error),
-//            onAction = {},
-//        )
-//    }
-// }
+@Preview("Pull requests - filled list")
+@Composable
+fun PullRequestsScreenPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            state = PullRequestState(
+                Data.Success(
+                    listOf(
+                        PullRequest(
+                            id = 0,
+                            draft = false,
+                            number = 0,
+                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
+                            title = "[SIL-67] Details screen - network layer",
+                            createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
+                        ),
+                        PullRequest(
+                            id = 1,
+                            draft = true,
+                            number = 1,
+                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
+                            title = "[SIL-66] Add client secret to build config",
+                            createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
+                        ),
+                        PullRequest(
+                            id = 2,
+                            draft = false,
+                            number = 2,
+                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
+                            title = "[SIL-73] Storing access token",
+                            createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
+                        ),
+                        PullRequest(
+                            id = 3,
+                            draft = false,
+                            number = 3,
+                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
+                            title = "[SIL-62/SIL-75] Provide new annotation for API instances",
+                            createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
+                        ),
+                    ),
+                ),
+            ),
+            onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = false,
+                onRefresh = {}
+            )
+        )
+    }
+}
+
+@Preview("Pull requests - empty list")
+@Composable
+fun PullRequestsScreenEmptyListPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            PullRequestState(Data.Success(emptyList())),
+            onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = false,
+                onRefresh = {}
+            )
+        )
+    }
+}
+
+@Preview("Pull requests - Loading")
+@Composable
+fun PullRequestsScreenLoadingPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            PullRequestState(Data.Loading),
+            onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = false,
+                onRefresh = {}
+            )
+        )
+    }
+}
+
+@Preview("Pull requests - Error")
+@Composable
+fun PullRequestsScreenErrorPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            PullRequestState(Data.Error),
+            onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = false,
+                onRefresh = {}
+            )
+        )
+    }
+}

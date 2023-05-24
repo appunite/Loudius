@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -33,6 +40,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -62,10 +70,15 @@ fun ReviewersScreen(
 ) {
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
+    val swipeRefreshState = rememberPullRefreshState(
+        refreshing = state.data == Data.Loading,
+        onRefresh = { viewModel.fetchData() }
+    )
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         data = state.data,
+        pullRefreshState = swipeRefreshState,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
@@ -107,6 +120,7 @@ private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     data: Data,
+    pullRefreshState: PullRefreshState,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onAction: (ReviewersAction) -> Unit,
@@ -127,7 +141,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(data, pullRefreshState, padding, onAction)
             }
         },
     )
@@ -135,15 +149,18 @@ private fun ReviewersScreenStateless(
 
 @Composable
 private fun ReviewersScreenContent(
-    data: Data.Success,
+    data: Data,
+    pullRefreshState: PullRefreshState,
     padding: PaddingValues,
     onAction: (ReviewersAction) -> Unit,
 ) {
-    if (data.reviewers.isNotEmpty()) {
+    if ((data as Data.Success).reviewers.isNotEmpty()) {
         ReviewersList(
-            reviewers = data.reviewers,
+            data = data,
+            pullRefreshState = pullRefreshState,
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
+            isLoading = data == Data.Loading
         )
     } else {
         EmptyListPlaceholder(padding)
@@ -152,20 +169,25 @@ private fun ReviewersScreenContent(
 
 @Composable
 private fun ReviewersList(
-    reviewers: List<Reviewer>,
+    data: Data,
+    pullRefreshState: PullRefreshState,
     modifier: Modifier,
     onNotifyClick: (ReviewersAction) -> Unit,
+    isLoading: Boolean
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        itemsIndexed(reviewers) { index, reviewer ->
-            ReviewerItem(
-                reviewer = reviewer,
-                index = index,
-                onNotifyClick = onNotifyClick,
-            )
+    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+        LazyColumn(
+            modifier = modifier.fillMaxWidth(),
+        ) {
+            itemsIndexed((data as Data.Success).reviewers) { index, reviewer ->
+                ReviewerItem(
+                    reviewer = reviewer,
+                    index = index,
+                    onNotifyClick = onNotifyClick,
+                )
+            }
         }
+        PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
 }
 
@@ -276,6 +298,10 @@ fun DetailsScreenPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = false,
+                onRefresh = {}
+            )
         )
     }
 }
@@ -290,6 +316,10 @@ fun DetailsScreenNoReviewsPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = false,
+                onRefresh = {}
+            )
         )
     }
 }

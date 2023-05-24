@@ -74,7 +74,7 @@ class ReviewersViewModel @Inject constructor(
         fetchData()
     }
 
-    private fun fetchData() {
+    fun fetchData() {
         viewModelScope.launch {
             state = state.copy(data = Data.Loading)
 
