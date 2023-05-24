@@ -259,8 +259,8 @@ fun PullRequestsScreenPreview() {
             onAction = {},
             pullRefreshState = rememberPullRefreshState(
                 refreshing = false,
-                onRefresh = {}
-            )
+                onRefresh = {},
+            ),
         )
     }
 }
@@ -274,8 +274,8 @@ fun PullRequestsScreenEmptyListPreview() {
             onAction = {},
             pullRefreshState = rememberPullRefreshState(
                 refreshing = false,
-                onRefresh = {}
-            )
+                onRefresh = {},
+            ),
         )
     }
 }
@@ -289,8 +289,8 @@ fun PullRequestsScreenLoadingPreview() {
             onAction = {},
             pullRefreshState = rememberPullRefreshState(
                 refreshing = false,
-                onRefresh = {}
-            )
+                onRefresh = {},
+            ),
         )
     }
 }
@@ -304,8 +304,8 @@ fun PullRequestsScreenErrorPreview() {
             onAction = {},
             pullRefreshState = rememberPullRefreshState(
                 refreshing = false,
-                onRefresh = {}
-            )
+                onRefresh = {},
+            ),
         )
     }
 }

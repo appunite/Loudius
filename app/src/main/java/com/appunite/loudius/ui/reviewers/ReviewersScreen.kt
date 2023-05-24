@@ -72,7 +72,7 @@ fun ReviewersScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val swipeRefreshState = rememberPullRefreshState(
         refreshing = state.data == Data.Loading,
-        onRefresh = { viewModel.fetchData() }
+        onRefresh = { viewModel.fetchData() },
     )
 
     ReviewersScreenStateless(
@@ -160,7 +160,7 @@ private fun ReviewersScreenContent(
             pullRefreshState = pullRefreshState,
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
-            isLoading = data == Data.Loading
+            isLoading = data == Data.Loading,
         )
     } else {
         EmptyListPlaceholder(padding)
@@ -173,7 +173,7 @@ private fun ReviewersList(
     pullRefreshState: PullRefreshState,
     modifier: Modifier,
     onNotifyClick: (ReviewersAction) -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean,
 ) {
     Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
         LazyColumn(
@@ -300,8 +300,8 @@ fun DetailsScreenPreview() {
             onAction = {},
             pullRefreshState = rememberPullRefreshState(
                 refreshing = false,
-                onRefresh = {}
-            )
+                onRefresh = {},
+            ),
         )
     }
 }
@@ -318,8 +318,8 @@ fun DetailsScreenNoReviewsPreview() {
             onAction = {},
             pullRefreshState = rememberPullRefreshState(
                 refreshing = false,
-                onRefresh = {}
-            )
+                onRefresh = {},
+            ),
         )
     }
 }
