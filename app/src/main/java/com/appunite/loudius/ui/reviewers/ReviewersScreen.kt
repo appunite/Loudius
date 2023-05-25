@@ -224,7 +224,7 @@ private fun NotifyButtonOrLoadingIndicator(
             modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f),
         )
         if (reviewer.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            LoudiusLoadingIndicator(modifier = Modifier.size(24.dp))
         }
     }
 }
@@ -279,6 +279,17 @@ private fun ReviewerViewPreview() {
         ReviewerItem(
             index = 0,
             reviewer = Reviewer(1, "Kezc", true, 12, 12),
+        ) {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ReviewerViewLoadingPreview() {
+    LoudiusTheme {
+        ReviewerItem(
+            index = 0,
+            reviewer = Reviewer(1, "Kezc", true, 12, 12, isLoading = true),
         ) {}
     }
 }
