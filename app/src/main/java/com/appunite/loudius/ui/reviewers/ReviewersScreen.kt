@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -202,7 +201,7 @@ private fun NotifyButtonOrLoadingIndicator(
             modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f),
         )
         if (reviewer.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            LoudiusLoadingIndicator(modifier = Modifier.size(24.dp))
         }
     }
 }
@@ -257,6 +256,17 @@ private fun ReviewerViewPreview() {
         ReviewerItem(
             index = 0,
             reviewer = Reviewer(1, "Kezc", true, 12, 12),
+        ) {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ReviewerViewLoadingPreview() {
+    LoudiusTheme {
+        ReviewerItem(
+            index = 0,
+            reviewer = Reviewer(1, "Kezc", true, 12, 12, isLoading = true),
         ) {}
     }
 }
