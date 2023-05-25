@@ -45,7 +45,7 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-          install_components: 'gsutil'
+          install_components: "gsutil"
 
       - id: generate-dir
         name: Generate random directory
@@ -67,10 +67,3 @@ jobs:
           else
             python "build-tools/upload-junit-to-cloud.py"
           fi
-          
-          
-
-
-
-
-    
