@@ -98,8 +98,8 @@ private fun SnackbarLaunchedEffect(
 @Composable
 private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
     when (snackbarTypeShown) {
-        SUCCESS -> stringResource(id = R.string.reviewers_snackbar_success)
-        FAILURE -> stringResource(id = R.string.reviewers_snackbar_failure)
+        SUCCESS -> stringResource(id = R.string.reviewers_screen_snackbar_success_message)
+        FAILURE -> stringResource(id = R.string.reviewers_screen_snackbar_failure_message)
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +115,7 @@ private fun ReviewersScreenStateless(
         topBar = {
             LoudiusTopAppBar(
                 onClickBackArrow = onClickBackArrow,
-                title = stringResource(id = R.string.details_title, pullRequestNumber),
+                title = stringResource(id = R.string.reviewers_screen_title, pullRequestNumber),
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -197,7 +197,7 @@ private fun NotifyButtonOrLoadingIndicator(
 ) {
     Box(contentAlignment = Center) {
         LoudiusOutlinedButton(
-            text = stringResource(R.string.details_notify),
+            text = stringResource(R.string.reviewers_screen_notify_button),
             onClick = { onNotifyClick(ReviewersAction.Notify(reviewer.login)) },
             modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f),
         )
@@ -212,7 +212,7 @@ private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
         painter = painterResource(id = R.drawable.person_outline_24px),
         contentDescription = stringResource(
-            R.string.details_screen_user_image_description,
+            R.string.reviewers_screen_user_image_content_description,
         ),
         modifier = modifier,
     )
@@ -228,9 +228,9 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
 
 @Composable
 private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
-    stringResource(id = R.string.details_reviewed, reviewer.hoursFromReviewDone ?: 0)
+    stringResource(id = R.string.reviewers_screen_reviewed_message, reviewer.hoursFromReviewDone ?: 0)
 } else {
-    stringResource(id = R.string.details_not_reviewed, reviewer.hoursFromPRStart)
+    stringResource(id = R.string.reviewers_screen_not_reviewed_message, reviewer.hoursFromPRStart)
 }
 
 @Composable
@@ -245,7 +245,7 @@ private fun ReviewerName(reviewer: Reviewer) {
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            textId = R.string.you_dont_have_any_reviewers,
+            text = stringResource(R.string.reviewers_screen_you_dont_have_any_reviewers_message),
         )
     }
 }

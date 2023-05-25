@@ -16,21 +16,18 @@
 
 package com.appunite.loudius.ui.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.appunite.loudius.R
 import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
-fun LoudiusPlaceholderText(@StringRes textId: Int) {
+fun LoudiusPlaceholderText(text: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +35,7 @@ fun LoudiusPlaceholderText(@StringRes textId: Int) {
         contentAlignment = Alignment.Center,
     ) {
         LoudiusText(
-            text = stringResource(id = textId),
+            text = text,
             style = LoudiusTextStyle.ScreenContent,
         )
     }
@@ -48,6 +45,6 @@ fun LoudiusPlaceholderText(@StringRes textId: Int) {
 @Composable
 fun PreviewLoudiusPlaceholderText() {
     LoudiusTheme {
-        LoudiusPlaceholderText(R.string.you_dont_have_any_pull_request)
+        LoudiusPlaceholderText("Sorry! Your list of pull requests is empty.\\nGet back to work! \uD83E\uDDD1\u200D")
     }
 }

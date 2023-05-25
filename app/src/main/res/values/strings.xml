@@ -1,32 +1,44 @@
 <resources>
-    <string name="app_name">Loudius</string>
-    <string name="back_button">Back button</string>
-    <string name="pull_requests_screen_pull_request_content_description">Pull request</string>
-    <string name="details_screen_user_image_description">User image</string>
-    <string name="details_notify">Notify</string>
-    <string name="details_reviewed">Reviewed %d h ago.</string>
-    <string name="details_not_reviewed">Not reviewed for %d h.</string>
-    <string name="details_title">Pull request # %s</string>
-    <string name="github_icon">Github icon</string>
+    <!-- Common string resources -->
+    <string name="common_app_name">Loudius</string>
+    <string name="common_back_button_icon_content_description">Back button</string>
+    <string name="common_user_unauthorized_error_message">Unauthorized collaborator detected! Please login again.</string>
+
+    <!-- LoudiusErrorDialog -->
     <string name="error_dialog_title">Error</string>
-    <string name="error_dialog_text">Something went wrong…</string>
-    <string name="ok">OK</string>
-    <string name="error_image_desc">error image</string>
-    <string name="try_again">Try again</string>
-    <string name="error_login_text">Something went wrong…\nYou need to log in again.</string>
-    <string name="go_to_login">Take me to login</string>
-    <string name="reviewers_snackbar_success">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
-    <string name="reviewers_snackbar_failure">Uh-oh, it seems that Loudius has taken a vacation. Don\'t worry, we\'re sending a postcard to bring it back ASAP!</string>
-    <string name="user_unauthorized_message">Unauthorized collaborator detected! Please login again.</string>
-    <string name="you_dont_have_any_pull_request">Sorry! Your list of pull requests is empty.\nGet back to work! 🧑‍💻</string>
-    <string name="you_dont_have_any_reviewers">Sorry! Your list of reviewers is empty.\n Go to pull request and mark your colleagues as the reviewers! 🤞</string>
+    <string name="error_dialog_description">Something went wrong…</string>
+    <string name="error_dialog_confirm_button">OK</string>
+    <string name="error_dialog_image_content_description">error image</string>
+    <string name="error_dialog_try_again_button">Try again</string>
+
+    <!-- AuthenticatingScreen -->
+    <!-- AuthenticatingScreen -> error screen -->
+    <string name="authenticating_screen_error_screen_error_message">Something went wrong…\nYou need to log in again.</string>
+    <string name="authenticating_screen_error_screen_login_button">Take me to login</string>
 
     <!-- LoginScreen -->
-    <string name="login_screen_login">Log in</string>
+    <string name="login_screen_login_button">Log in</string>
+    <string name="login_screen_github_icon_content_description">Github icon</string>
     <string name="login_screen_loudius_logo_content_description">Loudius logo</string>
+
+    <!-- LoginScreen -> XiaomiPermissionDialog -->
     <string name="login_screen_xiaomi_dialog_grant_permission">Grant permission</string>
     <string name="login_screen_xiaomi_dialog_text">You\'re using a Xiaomi device and you have Github App installed, please note that there\'s a known bug that requires you to grant the \"Display pup-up windows while running in the background\" permission. This will allow you to continue using the app without any interruptions.</string>
     <string name="login_screen_xiaomi_dialog_title">Necessary permissions</string>
     <string name="login_screen_xiaomi_dialog_already_granted">I\'ve already granted</string>
+
+    <!-- PullRequestsScreen -->
+    <string name="ull_requests_screen_you_dont_have_any_pull_request_message">Sorry! Your list of pull requests is empty.\nGet back to work! 🧑‍💻</string>
+    <string name="pull_requests_screen_pull_request_content_description">Pull request</string>
+
+    <!-- ReviewersScreen -->
+    <string name="reviewers_screen_snackbar_success_message">Awesome! Your collaborator have been pinged for some serious code review action! 🎉</string>
+    <string name="reviewers_screen_snackbar_failure_message">Uh-oh, it seems that Loudius has taken a vacation. Don\'t worry, we\'re sending a postcard to bring it back ASAP!</string>
+    <string name="reviewers_screen_user_image_content_description">User image</string>
+    <string name="reviewers_screen_notify_button">Notify</string>
+    <string name="reviewers_screen_reviewed_message">Reviewed %d h ago.</string>
+    <string name="reviewers_screen_not_reviewed_message">Not reviewed for %d h.</string>
+    <string name="reviewers_screen_title">Pull request # %s</string>
+    <string name="reviewers_screen_you_dont_have_any_reviewers_message">Sorry! Your list of reviewers is empty.\n Go to pull request and mark your colleagues as the reviewers! 🤞</string>
 
 </resources>
