@@ -2,7 +2,6 @@ name: Snapshot verification
 
 on:
   pull_request:
-    branches: [ main, develop, feature/LD-91/golden-tests ]
 
 permissions:
   checks: write
