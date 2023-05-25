@@ -50,7 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.IdlingResourceWrapper
 import com.appunite.loudius.ui.components.LoudiusFullScreenError
 import com.appunite.loudius.ui.components.LoudiusListIcon
 import com.appunite.loudius.ui.components.LoudiusListItem
@@ -225,9 +224,7 @@ private fun NotifyButtonOrLoadingIndicator(
             modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f),
         )
         if (reviewer.isLoading) {
-            IdlingResourceWrapper {
-                CircularProgressIndicator(modifier = Modifier.size(24.dp))
-            }
+            CircularProgressIndicator(modifier = Modifier.size(24.dp))
         }
     }
 }
