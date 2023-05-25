@@ -1,0 +1,94 @@
+name: Snapshot verification
+
+on:
+  pull_request:
+
+permissions:
+  checks: write
+  contents: write
+  statuses: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  test:
+    name: Verify snapshots
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
+      - name: LFS-warning
+        uses: ppremk/lfs-warning@v3.2
+
+      - name: Gradle - Verify snapshots with Paparazzi
+        id: testStep
+        run: ./gradlew clean components:verifyPaparazziDebug
+
+      - name: Upload snapshot failure deltas
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshot-failure-deltas
+          path: /home/runner/work/Loudius/Loudius/components/out/failures/
+
+      - name: Upload snapshot failure report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshot-failure-report
+          path: /home/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPRId
+        if: always()
+        with:
+          state: open
+
+      - name: Find Comment on PR
+        uses: peter-evans/find-comment@v2
+        id: findCommentId
+        if: always()
+        with:
+          issue-number: ${{ steps.findPRId.outputs.pr }}
+          comment-author: "github-actions[bot]"
+          body-includes: Snapshot testing result
+
+      - name: Create or update comment on PR (Success)
+        uses: peter-evans/create-or-update-comment@v3
+        if: always() && steps.testStep.outcome == 'success'
+        with:
+          comment-id: ${{ steps.findCommentId.outputs.comment-id }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
+          body: |
+            Snapshot testing result: :heavy_check_mark:
+            Everything looks good!
+          edit-mode: replace
+          reactions: |
+            heart
+            hooray
+          reactions-edit-mode: replace
+
+
+      - name: Create or update comment on PR (Failure)
+        uses: peter-evans/create-or-update-comment@v3
+        if: always() && steps.testStep.outcome == 'failure'
+        with:
+          comment-id: ${{ steps.findCommentId.outputs.comment-id }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
+          body: |
+            Snapshot testing result: :x:
+            Some of the snapshot tests seem to have failed. Please:
+            - Head over to the artifacts section of the [CI Run](https://github.com/appunite/Loudius/actions/runs/${{ github.run_id }}).
+            - Download the zip.
+            - Unzip and you can find one or more images that show the expected and the actual test results.
+            - If these changes are fixing an issue or are part of a new feature then please speak to the maintainer. If they are not intended then please fix them and repush again.
+          edit-mode: replace
+          reactions: |
+            confused
+          reactions-edit-mode: replace
