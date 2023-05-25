@@ -68,12 +68,16 @@ Here's an example of an experiment that meets our rules:
 
 In order to properly start the application and use it, the CLIENT_SECRET environment variable must be set on your computer. CLIENT_SECRET is a GitHub client secret key provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
+If you're AppUniter, you can find this secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
+
+If you're not, don't worry, here's a [video](https://github.com/appunite/Loudius/assets/72873966/c366e56d-03cd-412e-914c-0a9777477d65) to help you create a new one.
+
 ### How to set environmental variable on mac?
 
 1. Launch zsh (command `zsh`)
 2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
-3. `$ echo $CLIENT_SECRET`
-4. Restart your computer.
+3. Restart Android studio and Terminal.
+4. `$ echo $CLIENT_SECRET`
 
 ## 🧑🏻‍🎓 Contributing
 
@@ -96,4 +100,3 @@ from each other.
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
-
