@@ -1,0 +1,46 @@
+name: Snapshot recording
+
+on:
+  pull_request:
+    types: [ opened, edited , synchronize ]
+
+permissions:
+  checks: write
+  contents: write
+  statuses: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  generate_snapshots:
+    if: ${{contains(github.event.pull_request.title, '[New snapshots]')}}
+    name: Generate snapshots
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: Set up Git LFS
+        run: |
+          git lfs install
+
+      - name: Gradle - Record snapshots with Paparazzi
+        id: testStep
+        run: ./gradlew clean components:recordPaparazziDebug
+
+      - name: Commit and push recorded screenshots
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "[Paparazzi] Record new snapshots"
+
+      - name: Upload snapshot record report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapshot-failure-deltas
+          path: /home/runner/work/Loudius/Loudius/components/build/reports/paparazzi/
+
+      - name: LFS-warning
+        uses: ppremk/lfs-warning@v3.2
