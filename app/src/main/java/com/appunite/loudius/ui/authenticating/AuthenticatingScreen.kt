@@ -68,8 +68,8 @@ private fun ShowLoudiusLoginErrorScreen(
     navigateToLogin: () -> Unit,
 ) {
     LoudiusFullScreenError(
-        errorText = stringResource(id = R.string.error_login_text),
-        buttonText = stringResource(id = R.string.go_to_login),
+        errorText = stringResource(id = R.string.authenticating_screen_error_screen_error_message),
+        buttonText = stringResource(id = R.string.authenticating_screen_error_screen_login_button),
         onButtonClick = navigateToLogin,
     )
 }

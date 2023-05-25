@@ -89,7 +89,7 @@ private fun PullRequestsScreenStateless(
 ) {
     Scaffold(
         topBar = {
-            LoudiusTopAppBar(title = stringResource(R.string.app_name))
+            LoudiusTopAppBar(title = stringResource(R.string.common_app_name))
         },
         content = { padding ->
             when (state.data) {
@@ -188,7 +188,7 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            textId = R.string.you_dont_have_any_pull_request,
+            text = stringResource(id = R.string.ull_requests_screen_you_dont_have_any_pull_request_message),
         )
     }
 }
