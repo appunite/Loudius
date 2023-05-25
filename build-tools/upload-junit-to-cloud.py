@@ -2,21 +2,17 @@ from google.cloud import bigquery
 import xml.etree.ElementTree as ET
 import argparse
 
+# Uploading JUnit test results to BigQuery
 def upload(final: bool):
-
-    # set up BigQuery client and dataset/table info
     client = bigquery.Client()
 
-    # You need to create this data set in the UI https://console.cloud.google.com/bigquery
     dataset_id = 'test_results'
     table_id = 'my_table'
 
-    # parse the JUnit test results XML file
     tree = ET.parse('build/test-results/results.xml')
     root = tree.getroot()
     timestamp = root.attrib['timestamp']
 
-    # create list of dictionaries for BigQuery upload
     rows = []
     for testcase in root.iter('testcase'):
         success = len(testcase.findall('failure')) == 0
@@ -30,7 +26,6 @@ def upload(final: bool):
         }
         rows.append(row)
 
-    # create BigQuery table if it doesn't already exist
     dataset_ref = client.dataset(dataset_id)
     dataset = bigquery.Dataset(dataset_ref)
     table_ref = dataset.table(table_id)
@@ -56,7 +51,6 @@ def upload(final: bool):
     if not table_exists(table_ref):
         client.create_table(table)
 
-    # upload data to BigQuery
     errors = client.insert_rows(table, rows)
     if errors:
         raise Exception(f'Encountered errors while uploading to BigQuery: {errors}')
@@ -68,5 +62,4 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--final', action='store_true', help='Enable final mode')
 args = parser.parse_args()
 
-# Access the value of --final
 upload(args.final)
