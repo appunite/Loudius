@@ -4,7 +4,7 @@
   "aliveStatusCodes": [ 200, 203 ],
   "ignorePatterns": [
     {
-      "pattern": "^http://www.notion.so/appunite"
+      "pattern": "^https://www.notion.so/appunite"
     }
   ]
 }
