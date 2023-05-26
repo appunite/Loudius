@@ -70,7 +70,9 @@ In order to properly start the application and use it, the CLIENT_SECRET environ
 
 If you're AppUniter, you can find this secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
 
-If you're not, don't worry, here's a [video](https://github.com/appunite/Loudius/assets/72873966/c366e56d-03cd-412e-914c-0a9777477d65) to help you create a new one.
+If you're not, don't worry, here's a video to help you create a new one:
+
+https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd
 
 ### How to set environmental variable on mac?
 
