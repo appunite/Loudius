@@ -1,3 +1,4 @@
+---
 name: Snapshot recording
 
 on:
@@ -39,8 +40,64 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: snapshot-failure-deltas
-          path: /home/runner/work/Loudius/Loudius/components/build/reports/paparazzi/
+          name: snapshot-recording-failure-report
+          path: /home/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
 
       - name: LFS-warning
         uses: ppremk/lfs-warning@v3.2
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPRId
+        if: always()
+        with:
+          state: open
+
+      - name: Find Comment on PR
+        uses: peter-evans/find-comment@v2
+        id: findCommentId
+        if: always()
+        with:
+          issue-number: ${{ steps.findPRId.outputs.pr }}
+          comment-author: "github-actions[bot]"
+          body-regex: 'Snapshot (testing|recording) result:'
+
+      - name: Create or update comment on PR (Success)
+        uses: peter-evans/create-or-update-comment@v3
+        if: always() && steps.testStep.outcome == 'success'
+        with:
+          comment-id: ${{ steps.findCommentId.outputs.comment-id }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
+          body: |
+            Snapshot recording result: :heavy_check_mark:
+            New snapshots recorded! Everything looks good!
+
+            If there were changes in the user interface, a new commit has been created. You can review the new snapshots in the diff. If you find them acceptable, please proceed to merge this pull request.
+
+            However, if you did not intend to record new snapshots, please remove the '[New snapshots]' part from your title (and discard the commit that includes the new snapshots). It will cause to run snapshot verification instead of recording.
+          edit-mode: replace
+          reactions: |
+            heart
+            hooray
+          reactions-edit-mode: replace
+
+
+      - name: Create or update comment on PR (Failure)
+        uses: peter-evans/create-or-update-comment@v3
+        if: always() && steps.testStep.outcome == 'failure'
+        with:
+          comment-id: ${{ steps.findCommentId.outputs.comment-id }}
+          issue-number: ${{ steps.findPRId.outputs.pr }}
+          body: |
+            Snapshot recording result: :x:
+            Something went wrong during snapshot recording. 
+            If you need further investigation: 
+            - Head over to the artifacts section of the [CI Run](https://github.com/appunite/Loudius/actions/runs/${{ github.run_id }}).
+            - Download the zip.
+            - Unzip and you can find report showing the problem
+            
+            If you not intended to record new snapshots please remove '[New snapshots]' part from your pull request title. It will cause to run snapshot verification instead of recording.
+          edit-mode: replace
+          reactions: |
+            confused
+          reactions-edit-mode: replace

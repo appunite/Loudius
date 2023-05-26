@@ -1,3 +1,4 @@
+---
 name: Snapshot verification
 
 on:
@@ -58,7 +59,7 @@ jobs:
         with:
           issue-number: ${{ steps.findPRId.outputs.pr }}
           comment-author: "github-actions[bot]"
-          body-includes: Snapshot testing result
+          body-regex: 'Snapshot (testing|recording) result:'
 
       - name: Create or update comment on PR (Success)
         uses: peter-evans/create-or-update-comment@v3
