@@ -72,7 +72,7 @@ If you're AppUniter, you can find this secrets [here](https://www.notion.so/appu
 
 If you're not, don't worry, here's a video to help you create a new one:
 
-https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd
+<https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd>
 
 ### How to set environmental variable on mac?
 
