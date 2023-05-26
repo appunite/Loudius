@@ -7,7 +7,10 @@ on:
       - "develop"
       - "main"
   schedule:
-    - cron: "0 0 * * *"
+    # Run twice a day the sanity check, at 9:13 and 21:13.
+    # You ask why 13? because probably less people schedule their tasks at exactly this time, so I
+    # guess CI is less occupied. And 13 is a lucky number ;)
+    - cron: "13 9,21 * * *"
 
 permissions: read-all
 
