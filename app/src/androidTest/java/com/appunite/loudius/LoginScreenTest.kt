@@ -105,7 +105,7 @@ class LoginScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
+        composeTestRule.onNodeWithText("La-la la lalallaa").performClick() /// https://www.youtube.com/watch?v=_fbeTrNIiSc
         composeTestRule.onNodeWithText("I've already granted").performClick()
 
         intended(
