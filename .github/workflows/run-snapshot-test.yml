@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   test:
+    if: ${{!contains(github.event.pull_request.title, '[New snapshots]')}}
     name: Verify snapshots
     runs-on: ubuntu-latest
     steps:
