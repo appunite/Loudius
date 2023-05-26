@@ -53,7 +53,7 @@ jobs:
       - id: generate-dir
         name: Generate random directory
         run: |-
-          echo "results_dir=$(date +%F_%T)" >> "$GITHUB_OUTPUT"
+          echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
       - name: Run tests on Firebase Test Lab
