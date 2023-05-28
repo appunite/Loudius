@@ -27,9 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -37,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,6 +48,7 @@ import com.appunite.loudius.ui.components.LoudiusListIcon
 import com.appunite.loudius.ui.components.LoudiusListItem
 import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
 import com.appunite.loudius.ui.components.LoudiusPlaceholderText
+import com.appunite.loudius.ui.components.LoudiusPullToRefreshBox
 import com.appunite.loudius.ui.components.LoudiusText
 import com.appunite.loudius.ui.components.LoudiusTextStyle
 import com.appunite.loudius.ui.components.LoudiusTopAppBar
@@ -150,20 +148,24 @@ private fun PullRequestsList(
     pullRefreshState: PullRefreshState,
     refreshing: Boolean,
 ) {
-    Box(modifier = modifier.pullRefresh(pullRefreshState)) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            itemsIndexed(pullRequests) { index, item ->
-                PullRequestItem(
-                    index = index,
-                    data = item,
-                    onClick = onItemClick,
-                )
+    LoudiusPullToRefreshBox(
+        content = {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                itemsIndexed(pullRequests) { index, item ->
+                    PullRequestItem(
+                        index = index,
+                        data = item,
+                        onClick = onItemClick,
+                    )
+                }
             }
-        }
-        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
-    }
+        },
+        pullRefreshState = pullRefreshState,
+        refreshing = refreshing,
+        modifier = modifier
+    )
 }
 
 @Composable
