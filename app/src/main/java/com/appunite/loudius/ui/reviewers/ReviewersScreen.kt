@@ -21,7 +21,7 @@ package com.appunite.loudius.ui.reviewers
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,6 +38,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
@@ -69,15 +71,17 @@ fun ReviewersScreen(
 ) {
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
-    val swipeRefreshState = rememberPullRefreshState(
-        refreshing = state.data == Data.Loading,
-        onRefresh = { viewModel.fetchData() },
+    val refreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = refreshing,
+        onRefresh = viewModel::refreshData,
     )
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         data = state.data,
-        pullRefreshState = swipeRefreshState,
+        pullRefreshState = pullRefreshState,
+        refreshing = refreshing,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
@@ -120,6 +124,7 @@ private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     data: Data,
     pullRefreshState: PullRefreshState,
+    refreshing: Boolean,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onAction: (ReviewersAction) -> Unit,
@@ -140,7 +145,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, pullRefreshState, padding, onAction)
+                is Data.Success-> ReviewersScreenContent(data, pullRefreshState, refreshing, padding, onAction)
             }
         },
     )
@@ -148,18 +153,19 @@ private fun ReviewersScreenStateless(
 
 @Composable
 private fun ReviewersScreenContent(
-    data: Data,
+    data: Data.Success,
     pullRefreshState: PullRefreshState,
+    refreshing: Boolean,
     padding: PaddingValues,
     onAction: (ReviewersAction) -> Unit,
 ) {
-    if ((data as Data.Success).reviewers.isNotEmpty()) {
+    if (data.reviewers.isNotEmpty()) {
         ReviewersList(
             data = data,
             pullRefreshState = pullRefreshState,
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
-            isLoading = data == Data.Loading,
+            refreshing = refreshing,
         )
     } else {
         EmptyListPlaceholder(padding)
@@ -172,11 +178,11 @@ private fun ReviewersList(
     pullRefreshState: PullRefreshState,
     modifier: Modifier,
     onNotifyClick: (ReviewersAction) -> Unit,
-    isLoading: Boolean,
+    refreshing: Boolean,
 ) {
-    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+    Box(modifier = modifier.pullRefresh(pullRefreshState)) {
         LazyColumn(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             itemsIndexed((data as Data.Success).reviewers) { index, reviewer ->
                 ReviewerItem(
@@ -186,7 +192,7 @@ private fun ReviewersList(
                 )
             }
         }
-        PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
 }
 
@@ -312,6 +318,7 @@ fun DetailsScreenPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
+            refreshing = false
         )
     }
 }
@@ -330,6 +337,7 @@ fun DetailsScreenNoReviewsPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
+            refreshing = false
         )
     }
 }

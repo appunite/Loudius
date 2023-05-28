@@ -35,6 +35,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -63,13 +65,15 @@ fun PullRequestsScreen(
     navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state
-    val swipeRefreshState = rememberPullRefreshState(
-        refreshing = state.data == Data.Loading,
-        onRefresh = { viewModel.fetchData() },
+    val refreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = refreshing,
+        onRefresh = viewModel::refreshData,
     )
     PullRequestsScreenStateless(
         state = state,
-        pullRefreshState = swipeRefreshState,
+        pullRefreshState = pullRefreshState,
+        refreshing = refreshing,
         onAction = viewModel::onAction,
     )
     LaunchedEffect(state.navigateToReviewers) {
@@ -97,6 +101,7 @@ private fun navigateToReviewers(
 private fun PullRequestsScreenStateless(
     state: PullRequestState,
     pullRefreshState: PullRefreshState,
+    refreshing: Boolean,
     onAction: (PulLRequestsAction) -> Unit,
 ) {
     Scaffold(
@@ -110,7 +115,7 @@ private fun PullRequestsScreenStateless(
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> PullRequestContent(state.data, pullRefreshState, padding, onAction)
+                is Data.Success -> PullRequestContent(state.data, pullRefreshState, refreshing, padding, onAction)
             }
         },
     )
@@ -118,12 +123,13 @@ private fun PullRequestsScreenStateless(
 
 @Composable
 private fun PullRequestContent(
-    state: Data,
+    state: Data.Success,
     pullRefreshState: PullRefreshState,
+    refreshing: Boolean,
     padding: PaddingValues,
     onAction: (PulLRequestsAction) -> Unit,
 ) {
-    if ((state as Data.Success).pullRequests.isEmpty()) {
+    if (state.pullRequests.isEmpty()) {
         EmptyListPlaceholder(padding)
     } else {
         PullRequestsList(
@@ -131,7 +137,7 @@ private fun PullRequestContent(
             modifier = Modifier.padding(padding),
             onItemClick = onAction,
             pullRefreshState = pullRefreshState,
-            isLoading = state == Data.Loading,
+            refreshing = refreshing,
         )
     }
 }
@@ -142,11 +148,11 @@ private fun PullRequestsList(
     modifier: Modifier,
     onItemClick: (PulLRequestsAction) -> Unit,
     pullRefreshState: PullRefreshState,
-    isLoading: Boolean,
+    refreshing: Boolean,
 ) {
-    Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
+    Box(modifier = modifier.pullRefresh(pullRefreshState)) {
         LazyColumn(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             itemsIndexed(pullRequests) { index, item ->
                 PullRequestItem(
@@ -156,7 +162,7 @@ private fun PullRequestsList(
                 )
             }
         }
-        PullRefreshIndicator(isLoading, pullRefreshState, Modifier.align(Alignment.TopCenter))
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
 }
 
@@ -261,6 +267,7 @@ fun PullRequestsScreenPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
+            refreshing = false
         )
     }
 }
@@ -276,6 +283,7 @@ fun PullRequestsScreenEmptyListPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
+            refreshing = false
         )
     }
 }
@@ -291,6 +299,7 @@ fun PullRequestsScreenLoadingPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
+            refreshing = false
         )
     }
 }
@@ -306,6 +315,7 @@ fun PullRequestsScreenErrorPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
+            refreshing = false
         )
     }
 }
