@@ -79,6 +79,21 @@ class ReviewersViewModelTest {
     @Nested
     inner class InitTest {
         @Test
+        fun `WHEN refresh data THEN refresh data and display reviewers`() = runTest {
+            viewModel = createViewModel()
+
+            viewModel.refreshData()
+
+            expectThat(viewModel.state.data).isA<Data.Success>().and {
+                get(Data.Success::reviewers).containsExactly(
+                    Reviewer(1, "user1", true, 7, 5),
+                    Reviewer(2, "user2", false, 7, null),
+                    Reviewer(3, "user3", false, 7, null),
+                )
+            }
+        }
+
+        @Test
         fun `GIVEN no values in saved state WHEN init THEN throw IllegalStateException`() {
             every { savedStateHandle.get<String>(any()) } returns null
 

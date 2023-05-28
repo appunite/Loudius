@@ -41,6 +41,17 @@ class PullRequestsViewModelTest {
     private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
 
     @Test
+    fun `WHEN refresh data THEN refresh data and display pull requests`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.refreshData()
+
+        expectThat(viewModel.state.data).isA<Data.Success>().and {
+            get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
+    }
+
+    @Test
     fun `WHEN init THEN display loading`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers { neverCompletingSuspension() }
 

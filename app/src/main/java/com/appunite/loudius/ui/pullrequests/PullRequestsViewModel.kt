@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.ui.pullrequests
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -84,7 +83,6 @@ class PullRequestsViewModel @Inject constructor(
     private fun fetchData() {
         viewModelScope.launch {
             state = PullRequestState()
-            Log.i("#fetch is refrieshing value", isRefreshing.value.toString())
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
