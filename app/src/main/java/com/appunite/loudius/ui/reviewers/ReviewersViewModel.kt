@@ -33,7 +33,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -73,8 +72,7 @@ class ReviewersViewModel @Inject constructor(
         private set
 
     private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean>
-        get() = _isRefreshing.asStateFlow()
+    val isRefreshing = _isRefreshing.asStateFlow()
 
     init {
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
@@ -83,10 +81,11 @@ class ReviewersViewModel @Inject constructor(
 
     fun refreshData() {
         viewModelScope.launch {
+            _isRefreshing.value = true
             getMergedData()
                 .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
                 .onFailure { state = state.copy(data = Data.Error) }
-            _isRefreshing.emit(false)
+            _isRefreshing.value = false
         }
     }
 

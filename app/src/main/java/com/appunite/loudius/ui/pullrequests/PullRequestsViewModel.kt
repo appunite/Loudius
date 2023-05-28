@@ -16,6 +16,7 @@
 
 package com.appunite.loudius.ui.pullrequests
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,7 +26,6 @@ import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,8 +62,7 @@ class PullRequestsViewModel @Inject constructor(
         private set
 
     private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean>
-        get() = _isRefreshing.asStateFlow()
+    val isRefreshing = _isRefreshing.asStateFlow()
 
     init {
         fetchData()
@@ -71,19 +70,21 @@ class PullRequestsViewModel @Inject constructor(
 
     fun refreshData() {
         viewModelScope.launch {
+            _isRefreshing.value = true
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
                 }.onFailure {
                     state = state.copy(data = Data.Error)
                 }
-            _isRefreshing.emit(false)
+            _isRefreshing.value = false
         }
     }
 
     private fun fetchData() {
         viewModelScope.launch {
             state = PullRequestState()
+            Log.i("#fetch is refrieshing value", isRefreshing.value.toString())
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
