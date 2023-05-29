@@ -35,7 +35,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class WalkThroughAppTest {
@@ -65,12 +64,14 @@ class WalkThroughAppTest {
         composeTestRule.onNodeWithText("Log in").performClick()
 
         // simulate opening a deeplink
-        ActivityScenario.launch<MainActivity>(Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("loudius://callback?code=example_code")
-        ).apply {
-            setPackage(composeTestRule.activity.packageName)
-        })
+        ActivityScenario.launch<MainActivity>(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("loudius://callback?code=example_code"),
+            ).apply {
+                setPackage(composeTestRule.activity.packageName)
+            },
+        )
 
         composeTestRule.onNodeWithText("First Pull-Request title").performClick()
 
@@ -78,6 +79,5 @@ class WalkThroughAppTest {
         composeTestRule
             .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
             .assertIsDisplayed()
-
     }
 }

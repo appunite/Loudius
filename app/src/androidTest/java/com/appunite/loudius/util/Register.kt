@@ -31,13 +31,15 @@ object Register {
     fun accessToken(mockWebServer: MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.path.isEqualTo("/login/oauth/access_token")
-            jsonResponse("""
+            jsonResponse(
+                """
                 {
                   "access_token": "example_access_token",
                   "token_type": "bearer",
                   "scope": "repo"
                 }
-            """.trimIndent())
+                """.trimIndent(),
+            )
         }
     }
 
