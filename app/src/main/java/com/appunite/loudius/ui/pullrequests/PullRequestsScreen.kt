@@ -321,3 +321,40 @@ fun PullRequestsScreenErrorPreview() {
         )
     }
 }
+
+@Preview("Pull requests - refreshing")
+@Composable
+fun PullRequestsScreenRefreshingPreview() {
+    LoudiusTheme {
+        PullRequestsScreenStateless(
+            state = PullRequestState(
+                Data.Success(
+                    listOf(
+                        PullRequest(
+                            id = 0,
+                            draft = false,
+                            number = 0,
+                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
+                            title = "[SIL-67] Details screen - network layer",
+                            createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
+                        ),
+                        PullRequest(
+                            id = 1,
+                            draft = true,
+                            number = 1,
+                            repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
+                            title = "[SIL-66] Add client secret to build config",
+                            createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
+                        ),
+                    ),
+                ),
+            ),
+            onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = true,
+                onRefresh = {},
+            ),
+            refreshing = true
+        )
+    }
+}

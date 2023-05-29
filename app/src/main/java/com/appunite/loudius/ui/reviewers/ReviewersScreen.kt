@@ -343,3 +343,27 @@ fun DetailsScreenNoReviewsPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+fun DetailsScreenRefreshingPreview() {
+    val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
+    val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
+    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0)
+    val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
+    val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
+    LoudiusTheme {
+        ReviewersScreenStateless(
+            pullRequestNumber = "1",
+            data = Data.Success(reviewers),
+            onClickBackArrow = {},
+            snackbarHostState = SnackbarHostState(),
+            onAction = {},
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = true,
+                onRefresh = {},
+            ),
+            refreshing = true
+        )
+    }
+}
