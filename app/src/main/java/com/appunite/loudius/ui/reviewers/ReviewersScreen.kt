@@ -305,7 +305,7 @@ private val successData = listOf(
     Reviewer(1, "Kezc", true, 24, 12),
     Reviewer(2, "Krzysiudan", false, 24, 0),
     Reviewer(3, "Weronika", false, 24, 0, true),
-    Reviewer(4, "Jacek", false, 24, 0)
+    Reviewer(4, "Jacek", false, 24, 0),
 )
 
 @Preview
