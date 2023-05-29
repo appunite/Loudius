@@ -84,12 +84,12 @@ fun LoginScreenStateless(
             onClick = {
                 onAction(LoginAction.ClickLogIn)
             },
-            text = stringResource(id = R.string.login_screen_login),
+            text = stringResource(id = R.string.login_screen_login_button),
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.ic_github),
-                    contentDescription = stringResource(R.string.github_icon),
+                    contentDescription = stringResource(R.string.login_screen_github_icon_content_description),
                 )
             },
         )
