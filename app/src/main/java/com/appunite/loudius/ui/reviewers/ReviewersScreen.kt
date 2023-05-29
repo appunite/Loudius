@@ -301,18 +301,20 @@ private fun ReviewerViewLoadingPreview() {
     }
 }
 
+private val successData = listOf(
+    Reviewer(1, "Kezc", true, 24, 12),
+    Reviewer(2, "Krzysiudan", false, 24, 0),
+    Reviewer(3, "Weronika", false, 24, 0, true),
+    Reviewer(4, "Jacek", false, 24, 0)
+)
+
 @Preview
 @Composable
 fun DetailsScreenPreview() {
-    val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
-    val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
-    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0, true)
-    val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
-    val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            data = Data.Success(reviewers),
+            data = Data.Success(successData),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
@@ -347,15 +349,10 @@ fun DetailsScreenNoReviewsPreview() {
 @Preview
 @Composable
 fun DetailsScreenRefreshingPreview() {
-    val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
-    val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
-    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0)
-    val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
-    val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            data = Data.Success(reviewers),
+            data = Data.Success(successData),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
