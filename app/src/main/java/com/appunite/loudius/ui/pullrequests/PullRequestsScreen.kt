@@ -164,7 +164,7 @@ private fun PullRequestsList(
         },
         pullRefreshState = pullRefreshState,
         refreshing = refreshing,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -269,7 +269,7 @@ fun PullRequestsScreenPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
-            refreshing = false
+            refreshing = false,
         )
     }
 }
@@ -285,7 +285,7 @@ fun PullRequestsScreenEmptyListPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
-            refreshing = false
+            refreshing = false,
         )
     }
 }
@@ -301,7 +301,7 @@ fun PullRequestsScreenLoadingPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
-            refreshing = false
+            refreshing = false,
         )
     }
 }
@@ -317,7 +317,7 @@ fun PullRequestsScreenErrorPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
-            refreshing = false
+            refreshing = false,
         )
     }
 }
@@ -333,7 +333,7 @@ fun PullRequestsScreenRefreshingPreview() {
                 refreshing = true,
                 onRefresh = {},
             ),
-            refreshing = true
+            refreshing = true,
         )
     }
 }

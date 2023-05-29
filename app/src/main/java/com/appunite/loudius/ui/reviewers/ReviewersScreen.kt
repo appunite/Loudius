@@ -143,7 +143,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success-> ReviewersScreenContent(data, pullRefreshState, refreshing, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(data, pullRefreshState, refreshing, padding, onAction)
             }
         },
     )
@@ -194,7 +194,7 @@ private fun ReviewersList(
         },
         pullRefreshState = pullRefreshState,
         refreshing = refreshing,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -305,7 +305,7 @@ private val successData = listOf(
     Reviewer(1, "Kezc", true, 24, 12),
     Reviewer(2, "Krzysiudan", false, 24, 0),
     Reviewer(3, "Weronika", false, 24, 0, true),
-    Reviewer(4, "Jacek", false, 24, 0)
+    Reviewer(4, "Jacek", false, 24, 0),
 )
 
 @Preview
@@ -322,7 +322,7 @@ fun DetailsScreenPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
-            refreshing = false
+            refreshing = false,
         )
     }
 }
@@ -341,7 +341,7 @@ fun DetailsScreenNoReviewsPreview() {
                 refreshing = false,
                 onRefresh = {},
             ),
-            refreshing = false
+            refreshing = false,
         )
     }
 }
@@ -360,7 +360,7 @@ fun DetailsScreenRefreshingPreview() {
                 refreshing = true,
                 onRefresh = {},
             ),
-            refreshing = true
+            refreshing = true,
         )
     }
 }
