@@ -53,7 +53,7 @@ class PullRequestsScreenTest {
                 }
             }
 
-            composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
+            composeTestRule.onNodeWithText("Ffirst Pull-Request title").assertIsDisplayed()
         }
     }
 }
