@@ -179,23 +179,22 @@ private fun ReviewersList(
     refreshing: Boolean,
 ) {
     LoudiusPullToRefreshBox(
-        content = {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                itemsIndexed((data as Data.Success).reviewers) { index, reviewer ->
-                    ReviewerItem(
-                        reviewer = reviewer,
-                        index = index,
-                        onNotifyClick = onNotifyClick,
-                    )
-                }
-            }
-        },
         pullRefreshState = pullRefreshState,
         refreshing = refreshing,
         modifier = modifier,
-    )
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            itemsIndexed((data as Data.Success).reviewers) { index, reviewer ->
+                ReviewerItem(
+                    reviewer = reviewer,
+                    index = index,
+                    onNotifyClick = onNotifyClick,
+                )
+            }
+        }
+    }
 }
 
 @Composable

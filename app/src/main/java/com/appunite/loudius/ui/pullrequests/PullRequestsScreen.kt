@@ -149,23 +149,22 @@ private fun PullRequestsList(
     refreshing: Boolean,
 ) {
     LoudiusPullToRefreshBox(
-        content = {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                itemsIndexed(pullRequests) { index, item ->
-                    PullRequestItem(
-                        index = index,
-                        data = item,
-                        onClick = onItemClick,
-                    )
-                }
-            }
-        },
         pullRefreshState = pullRefreshState,
         refreshing = refreshing,
         modifier = modifier,
-    )
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            itemsIndexed(pullRequests) { index, item ->
+                PullRequestItem(
+                    index = index,
+                    data = item,
+                    onClick = onItemClick,
+                )
+            }
+        }
+    }
 }
 
 @Composable

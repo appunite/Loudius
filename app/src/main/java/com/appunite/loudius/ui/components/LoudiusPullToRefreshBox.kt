@@ -29,10 +29,10 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun LoudiusPullToRefreshBox(
-    content: @Composable () -> Unit,
     pullRefreshState: PullRefreshState,
     refreshing: Boolean,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     Box(modifier = modifier.pullRefresh(pullRefreshState)) {
         content()
