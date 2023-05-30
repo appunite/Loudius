@@ -90,8 +90,8 @@ jobs:
           issue-number: ${{ steps.findPRId.outputs.pr }}
           body: |
             Snapshot recording result: :x:
-            Something went wrong during snapshot recording. 
-            If you need further investigation: 
+            Something went wrong during snapshot recording.
+            If you need further investigation:
             - Head over to the artifacts section of the [CI Run](https://github.com/appunite/Loudius/actions/runs/${{ github.run_id }}).
             - Download the zip.
             - Unzip and you can find report showing the problem
