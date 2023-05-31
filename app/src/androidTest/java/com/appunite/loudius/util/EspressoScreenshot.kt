@@ -82,7 +82,7 @@ object EspressoScreenshot {
     // Checks if a volume containing external storage is available to at least read.
     fun isExternalStorageReadable(): Boolean {
         return Environment.getExternalStorageState() in
-                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+            setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
     }
 
     fun takeScreenshot(description: Description) {
