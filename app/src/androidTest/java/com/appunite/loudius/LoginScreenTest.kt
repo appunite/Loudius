@@ -93,7 +93,7 @@ class LoginScreenTest {
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
-                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
+                hasData("wrong data"),
             ),
         )
     }
