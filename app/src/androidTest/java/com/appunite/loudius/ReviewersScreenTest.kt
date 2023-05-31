@@ -89,8 +89,8 @@ class ReviewersScreenTest {
 
     private fun IntegrationTestRule.initTests() {
         composeTestRule.activity.intent.apply {
-            putExtra("owner", "owner")
-            putExtra("repo", "repo")
+            putExtra("owner", "exampleOwner")
+            putExtra("repo", "exampleRepo")
             putExtra("submission_date", "2022-01-29T08:00:00")
             putExtra("pull_request_number", "1")
         }
