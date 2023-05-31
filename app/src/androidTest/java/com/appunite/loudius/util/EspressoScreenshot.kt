@@ -17,7 +17,6 @@
 package com.appunite.loudius.util
 
 import android.os.Environment
-import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
 import androidx.test.runner.screenshot.Screenshot
 import org.junit.runner.Description
@@ -37,7 +36,8 @@ object EspressoScreenshot {
 
     // Firebase Test Lab requires screenshots to be saved to /sdcard/screenshots
     // https://github.com/firebase/firebase-testlab-instr-lib/blob/f0a21a526499f051ac5074dc382cf79e237d2f4e/firebase-testlab-instr-lib/testlab-instr-lib/src/main/java/com/google/firebase/testlab/screenshot/FirebaseScreenCaptureProcessor.java#L36
-    private val screenshotFolder = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+    //private val screenshotFolder = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+    private val screenshotFolder = File("/sdcard/screenshots")
     private val TAG = EspressoScreenshot::class.java.simpleName
 
     private fun getScreenshotName(description: Description): String {
