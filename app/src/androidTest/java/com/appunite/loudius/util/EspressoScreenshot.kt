@@ -16,6 +16,8 @@
 
 package com.appunite.loudius.util
 
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
 import androidx.test.runner.screenshot.Screenshot
 import org.junit.runner.Description
@@ -35,7 +37,7 @@ object EspressoScreenshot {
 
     // Firebase Test Lab requires screenshots to be saved to /sdcard/screenshots
     // https://github.com/firebase/firebase-testlab-instr-lib/blob/f0a21a526499f051ac5074dc382cf79e237d2f4e/firebase-testlab-instr-lib/testlab-instr-lib/src/main/java/com/google/firebase/testlab/screenshot/FirebaseScreenCaptureProcessor.java#L36
-    private val screenshotFolder = File("/sdcard/screenshots")
+    private val screenshotFolder = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
     private val TAG = EspressoScreenshot::class.java.simpleName
 
     private fun getScreenshotName(description: Description): String {
@@ -71,6 +73,18 @@ object EspressoScreenshot {
         }
     }
 
+    // Checks if a volume containing external storage is available
+// for read and write.
+    fun isExternalStorageWritable(): Boolean {
+        return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+    }
+
+    // Checks if a volume containing external storage is available to at least read.
+    fun isExternalStorageReadable(): Boolean {
+        return Environment.getExternalStorageState() in
+                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+    }
+
     fun takeScreenshot(description: Description) {
         prepareScreenshotPath()
 
@@ -80,6 +94,10 @@ object EspressoScreenshot {
         // based on BasicScreenCaptureProcessor#process
         val imageFile = File(screenshotFolder, screenshotName)
         var out: BufferedOutputStream? = null
+
+        Log.i(TAG, "isExternalStorageWritable " + isExternalStorageWritable())
+        Log.i(TAG, "isExternalStorageReadable " + isExternalStorageReadable())
+
         try {
             Log.i(TAG, "Saving screenshot to " + imageFile.absolutePath)
             out = BufferedOutputStream(FileOutputStream(imageFile))

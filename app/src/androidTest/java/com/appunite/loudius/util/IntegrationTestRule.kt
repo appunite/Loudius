@@ -37,9 +37,9 @@ class IntegrationTestRule(testClass: Any) : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement {
         return RuleChain.outerRule(mockWebServer)
-            .around(screenshotTestRule)
             .around(hiltRule)
             .around(composeTestRule)
+            .around(screenshotTestRule)
             .apply(base, description)
     }
 

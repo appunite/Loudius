@@ -32,10 +32,11 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.di.GithubHelperModule
+import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.util.ScreenshotTestRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -61,6 +62,10 @@ class LoginScreenTest {
 
     @get:Rule(order = 2)
     val intents = IntentsRule()
+
+    @Rule
+    @JvmField
+    val screenshotTestRule = ScreenshotTestRule()
 
     @Before
     fun setUp() {
