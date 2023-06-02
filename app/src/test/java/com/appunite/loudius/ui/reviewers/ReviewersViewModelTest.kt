@@ -94,6 +94,40 @@ class ReviewersViewModelTest {
         }
 
         @Test
+        fun `WHEN refresh data THEN start refreshing data and set isRefreshing to true`() = runTest {
+            viewModel = createViewModel()
+
+            coEvery {
+                repository.getRequestedReviewers(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } coAnswers { neverCompletingSuspension() }
+
+            coEvery {
+                repository.getReviews(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } coAnswers { neverCompletingSuspension() }
+
+            viewModel.refreshData()
+
+            expectThat(viewModel.isRefreshing.value).isTrue()
+        }
+
+        @Test
+        fun `WHEN refresh data THEN refresh data and set isRefreshing to false`() = runTest {
+            viewModel = createViewModel()
+
+            viewModel.refreshData()
+
+            expectThat(viewModel.isRefreshing.value).isFalse()
+        }
+
+        @Test
         fun `GIVEN no values in saved state WHEN init THEN throw IllegalStateException`() {
             every { savedStateHandle.get<String>(any()) } returns null
 
