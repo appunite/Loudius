@@ -1,4 +1,7 @@
 ---
+# Golden tests recording with Paparazzi configuration file
+# Add [New snapshots] to the title of your PR to record new snapshots.
+# Remove it to verify snapshots instead.
 name: Snapshot recording
 
 on:
