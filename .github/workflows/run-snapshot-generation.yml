@@ -22,10 +22,6 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up Git LFS
-        run: |
-          git lfs install
-
       - name: Gradle - Record snapshots with Paparazzi
         id: testStep
         run: ./gradlew clean components:recordPaparazziDebug
@@ -42,9 +38,6 @@ jobs:
         with:
           name: snapshot-recording-failure-report
           path: /home/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
-
-      - name: LFS-warning
-        uses: ppremk/lfs-warning@v3.2
 
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
