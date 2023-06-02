@@ -14,38 +14,42 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.appunite.loudius.components.components
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.appunite.loudius.components.R
 import com.appunite.loudius.components.theme.LoudiusTheme
 
 @Composable
-fun LoudiusPlaceholderText(text: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        LoudiusText(
-            text = text,
-            style = LoudiusTextStyle.ScreenContent,
-        )
+fun LoudiusPullToRefreshBox(
+    pullRefreshState: PullRefreshState,
+    refreshing: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(modifier = modifier.pullRefresh(pullRefreshState)) {
+        content()
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
-fun PreviewLoudiusPlaceholderText() {
+fun LoudiusPullToRefreshBoxPreview() {
     LoudiusTheme {
-        LoudiusPlaceholderText("Sorry! Your list of pull requests is empty.\\nGet back to work! \uD83E\uDDD1\u200D")
+        LoudiusPullToRefreshBox(
+            pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),
+            refreshing = true,
+        ) {}
     }
 }

@@ -25,7 +25,6 @@ import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator
 import com.appunite.loudius.components.theme.LoudiusTheme
-import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun AuthenticatingScreen(
@@ -69,8 +68,8 @@ private fun ShowLoudiusLoginErrorScreen(
     navigateToLogin: () -> Unit,
 ) {
     LoudiusFullScreenError(
-        errorText = stringResource(id = componentsR.string.components_error_login_text),
-        buttonText = stringResource(id = R.string.go_to_login),
+        errorText = stringResource(id = R.string.authenticating_screen_error_screen_error_message),
+        buttonText = stringResource(id = R.string.authenticating_screen_error_screen_login_button),
         onButtonClick = navigateToLogin,
     )
 }

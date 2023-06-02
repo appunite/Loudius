@@ -30,8 +30,8 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
     dialogTitle: String = stringResource(id = R.string.components_error_dialog_title),
-    dialogText: String = stringResource(id = R.string.components_error_dialog_text),
-    confirmText: String = stringResource(R.string.components_ok),
+    dialogText: String = stringResource(id = R.string.components_error_dialog_description),
+    confirmText: String = stringResource(R.string.components_error_dialog_confirm_button),
 ) {
     var openDialog by remember { mutableStateOf(true) }
     if (openDialog) {

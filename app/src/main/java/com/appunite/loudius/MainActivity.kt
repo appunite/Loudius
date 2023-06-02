@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
     private fun showAuthFailureToast() {
         Toast.makeText(
             this@MainActivity,
-            getString(R.string.user_unauthorized_message),
+            getString(R.string.common_user_unauthorized_error_message),
             Toast.LENGTH_LONG,
         ).show()
     }

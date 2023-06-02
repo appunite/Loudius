@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.model.error
+package com.appunite.loudius.di
 
-data class DefaultErrorResponse(
-    val message: String?,
-    val documentationUrl: String?,
-)
+import android.content.Context
+import com.appunite.loudius.ui.login.GithubHelper
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@InstallIn(SingletonComponent::class)
+@Module
+object GithubHelperModule {
+    @Provides
+    @Singleton
+    fun providePullRequestNetworkDataSource(@ApplicationContext context: Context): GithubHelper =
+        GithubHelper(context)
+}

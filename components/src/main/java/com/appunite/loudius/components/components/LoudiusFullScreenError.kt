@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.appunite.loudius.components.R
 import com.appunite.loudius.components.components.utils.MultiScreenPreviews
@@ -39,8 +40,8 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 @Composable
 fun LoudiusFullScreenError(
     modifier: Modifier = Modifier,
-    errorText: String = stringResource(id = R.string.components_error_dialog_text),
-    buttonText: String = stringResource(id = R.string.components_try_again),
+    errorText: String = stringResource(id = R.string.components_error_dialog_description),
+    buttonText: String = stringResource(id = R.string.components_error_dialog_try_again_button),
     onButtonClick: () -> Unit,
 ) {
     ScreenErrorWithSpacers(
@@ -70,7 +71,7 @@ fun ScreenErrorWithSpacers(
             modifier = Modifier
                 .weight(weight = .35f)
                 .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
         Spacer(modifier = Modifier.weight(weight = 0.05f))
         ErrorText(text = errorText)
@@ -90,7 +91,7 @@ private fun ErrorImage(
     Image(
         modifier = modifier,
         painter = painterResource(id = R.drawable.components_error_image),
-        contentDescription = stringResource(R.string.components_error_image_desc),
+        contentDescription = stringResource(R.string.components_error_dialog_image_content_description),
     )
 }
 
@@ -107,10 +108,17 @@ private fun ErrorText(text: String) {
 @Composable
 fun LoudiusErrorScreenPreview() {
     LoudiusTheme {
+        LoudiusFullScreenError {}
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun LoudiusErrorScreenCustomTextsPreview() {
+    LoudiusTheme {
         LoudiusFullScreenError(
-            errorText = stringResource(id = R.string.components_error_dialog_text),
-            buttonText = stringResource(R.string.components_try_again),
-            onButtonClick = {},
-        )
+            errorText = "Custom title",
+            buttonText = "My Button Text",
+        ) {}
     }
 }

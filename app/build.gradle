@@ -78,6 +78,7 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
     implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material:1.4.0'
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation "androidx.navigation:navigation-compose:2.5.3"
@@ -116,6 +117,7 @@ dependencies {
     testImplementation 'io.strikt:strikt-core:0.33.0'
     testImplementation 'io.strikt:strikt-mockk:0.33.0'
     androidTestImplementation 'io.strikt:strikt-core:0.33.0'
+    androidTestImplementation 'io.strikt:strikt-mockk:0.33.0'
 
     //testing
     testImplementation "io.mockk:mockk:1.13.3"
@@ -127,6 +129,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
     androidTestImplementation("io.mockk:mockk-android:1.13.3")
+
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")

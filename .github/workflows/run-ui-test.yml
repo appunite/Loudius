@@ -6,6 +6,11 @@ on:
     branches:
       - "develop"
       - "main"
+  schedule:
+    # Run twice a day the sanity check, at 9:13 and 21:13.
+    # You ask why 13? because probably less people schedule their tasks at exactly this time, so I
+    # guess CI is less occupied. And 13 is a lucky number ;)
+    - cron: "13 9,21 * * *"
 
 permissions: read-all
 
@@ -18,15 +23,50 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "build-tools/requirements.txt"
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
+
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
       - name: Assemble App Debug APK and Android Instrumentation Tests
         run: ./gradlew assembleDebug assembleDebugAndroidTest
 
-      - name: Run tests on Firebase Test Lab
-        uses: asadmansr/Firebase-Test-Lab-Action@v1.0
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
         with:
-          arg-spec: ".github/tests.yml:android-pixel-2"
-        env:
-          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+          install_components: "gsutil"
+
+      - id: generate-dir
+        name: Generate random directory
+        run: |-
+          echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
+          echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
+
+      - name: Run tests on Firebase Test Lab
+        run: |-
+          gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}"
+
+      - name: Upload to Big Query
+        if: always()
+        run: |-
+          mkdir "build/test-results"
+          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2-30-en-portrait/test_result_1.xml" "build/test-results/results.xml"
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            python "build-tools/upload-junit-to-cloud.py" --final
+          else
+            python "build-tools/upload-junit-to-cloud.py"
+          fi

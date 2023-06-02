@@ -57,11 +57,9 @@ fun LoginScreen(
                 )
                 viewModel.onAction(LoginAction.ClearNavigation)
             }
-
             LoginNavigateTo.OpenXiaomiPermissionManager -> {
                 context.startActivity(GithubHelper.xiaomiPermissionManagerForGithub())
             }
-
             null -> Unit
         }
     }
@@ -87,12 +85,12 @@ fun LoginScreenStateless(
             onClick = {
                 onAction(LoginAction.ClickLogIn)
             },
-            text = stringResource(id = R.string.login_screen_login),
+            text = stringResource(id = R.string.login_screen_login_button),
             style = LoudiusOutlinedButtonStyle.Large,
             icon = {
                 LoudiusOutlinedButtonIcon(
+                    contentDescription = stringResource(R.string.login_screen_github_icon_content_description),
                     painter = painterResource(id = componentsR.drawable.components_ic_github),
-                    contentDescription = stringResource(R.string.github_icon),
                 )
             },
         )

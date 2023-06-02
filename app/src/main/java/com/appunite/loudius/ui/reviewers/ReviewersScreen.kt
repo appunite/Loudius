@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -32,6 +36,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -48,6 +54,7 @@ import com.appunite.loudius.components.components.LoudiusListItem
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator
 import com.appunite.loudius.components.components.LoudiusOutlinedButton
 import com.appunite.loudius.components.components.LoudiusPlaceholderText
+import com.appunite.loudius.components.components.LoudiusPullToRefreshBox
 import com.appunite.loudius.components.components.LoudiusText
 import com.appunite.loudius.components.components.LoudiusTextStyle
 import com.appunite.loudius.components.components.LoudiusTopAppBar
@@ -63,10 +70,13 @@ fun ReviewersScreen(
 ) {
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
+    val refreshing by viewModel.isRefreshing.collectAsState()
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         data = state.data,
+        refreshing = refreshing,
+        onRefresh = viewModel::refreshData,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
@@ -99,8 +109,8 @@ private fun SnackbarLaunchedEffect(
 @Composable
 private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
     when (snackbarTypeShown) {
-        SUCCESS -> stringResource(id = R.string.reviewers_snackbar_success)
-        FAILURE -> stringResource(id = R.string.reviewers_snackbar_failure)
+        SUCCESS -> stringResource(id = R.string.reviewers_screen_snackbar_success_message)
+        FAILURE -> stringResource(id = R.string.reviewers_screen_snackbar_failure_message)
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,6 +118,8 @@ private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     data: Data,
+    refreshing: Boolean,
+    onRefresh: () -> Unit,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onAction: (ReviewersAction) -> Unit,
@@ -116,7 +128,7 @@ private fun ReviewersScreenStateless(
         topBar = {
             LoudiusTopAppBar(
                 onClickBackArrow = onClickBackArrow,
-                title = stringResource(id = R.string.details_title, pullRequestNumber),
+                title = stringResource(id = R.string.reviewers_screen_title, pullRequestNumber),
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -128,7 +140,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(data, refreshing, onRefresh, padding, onAction)
             }
         },
     )
@@ -137,14 +149,21 @@ private fun ReviewersScreenStateless(
 @Composable
 private fun ReviewersScreenContent(
     data: Data.Success,
+    refreshing: Boolean,
+    onRefreshing: () -> Unit,
     padding: PaddingValues,
     onAction: (ReviewersAction) -> Unit,
 ) {
     if (data.reviewers.isNotEmpty()) {
         ReviewersList(
-            reviewers = data.reviewers,
+            data = data,
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = refreshing,
+                onRefresh = onRefreshing,
+            ),
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
+            refreshing = refreshing,
         )
     } else {
         EmptyListPlaceholder(padding)
@@ -153,19 +172,27 @@ private fun ReviewersScreenContent(
 
 @Composable
 private fun ReviewersList(
-    reviewers: List<Reviewer>,
+    data: Data,
+    pullRefreshState: PullRefreshState,
     modifier: Modifier,
     onNotifyClick: (ReviewersAction) -> Unit,
+    refreshing: Boolean,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
+    LoudiusPullToRefreshBox(
+        pullRefreshState = pullRefreshState,
+        refreshing = refreshing,
+        modifier = modifier,
     ) {
-        itemsIndexed(reviewers) { index, reviewer ->
-            ReviewerItem(
-                reviewer = reviewer,
-                index = index,
-                onNotifyClick = onNotifyClick,
-            )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            itemsIndexed((data as Data.Success).reviewers) { index, reviewer ->
+                ReviewerItem(
+                    reviewer = reviewer,
+                    index = index,
+                    onNotifyClick = onNotifyClick,
+                )
+            }
         }
     }
 }
@@ -198,12 +225,12 @@ private fun NotifyButtonOrLoadingIndicator(
 ) {
     Box(contentAlignment = Center) {
         LoudiusOutlinedButton(
-            text = stringResource(R.string.details_notify),
+            text = stringResource(R.string.reviewers_screen_notify_button),
             onClick = { onNotifyClick(ReviewersAction.Notify(reviewer.login)) },
             modifier = Modifier.alpha(if (reviewer.isLoading) 0f else 1f),
         )
         if (reviewer.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            LoudiusLoadingIndicator(modifier = Modifier.size(24.dp))
         }
     }
 }
@@ -213,7 +240,7 @@ private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
         painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
         contentDescription = stringResource(
-            R.string.details_screen_user_image_description,
+            R.string.reviewers_screen_user_image_content_description,
         ),
         modifier = modifier,
     )
@@ -229,9 +256,9 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
 
 @Composable
 private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
-    stringResource(id = R.string.details_reviewed, reviewer.hoursFromReviewDone ?: 0)
+    stringResource(id = R.string.reviewers_screen_reviewed_message, reviewer.hoursFromReviewDone ?: 0)
 } else {
-    stringResource(id = R.string.details_not_reviewed, reviewer.hoursFromPRStart)
+    stringResource(id = R.string.reviewers_screen_not_reviewed_message, reviewer.hoursFromPRStart)
 }
 
 @Composable
@@ -246,7 +273,7 @@ private fun ReviewerName(reviewer: Reviewer) {
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            textId = R.string.you_dont_have_any_reviewers,
+            text = stringResource(R.string.reviewers_screen_you_dont_have_any_reviewers_message),
         )
     }
 }
@@ -262,21 +289,36 @@ private fun ReviewerViewPreview() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun ReviewerViewLoadingPreview() {
+    LoudiusTheme {
+        ReviewerItem(
+            index = 0,
+            reviewer = Reviewer(1, "Kezc", true, 12, 12, isLoading = true),
+        ) {}
+    }
+}
+
+private val successData = listOf(
+    Reviewer(1, "Kezc", true, 24, 12),
+    Reviewer(2, "Krzysiudan", false, 24, 0),
+    Reviewer(3, "Weronika", false, 24, 0, true),
+    Reviewer(4, "Jacek", false, 24, 0),
+)
+
 @Preview
 @Composable
 fun DetailsScreenPreview() {
-    val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
-    val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
-    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0, true)
-    val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
-    val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            data = Data.Success(reviewers),
+            data = Data.Success(successData),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
+            refreshing = false,
+            onRefresh = {},
         )
     }
 }
@@ -291,6 +333,24 @@ fun DetailsScreenNoReviewsPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
+            refreshing = false,
+            onRefresh = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DetailsScreenRefreshingPreview() {
+    LoudiusTheme {
+        ReviewersScreenStateless(
+            pullRequestNumber = "1",
+            data = Data.Success(successData),
+            onClickBackArrow = {},
+            snackbarHostState = SnackbarHostState(),
+            onAction = {},
+            refreshing = true,
+            onRefresh = {},
         )
     }
 }
