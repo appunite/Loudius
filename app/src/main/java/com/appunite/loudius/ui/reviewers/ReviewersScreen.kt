@@ -158,7 +158,7 @@ private fun ReviewersScreenContent(
             data = data,
             pullRefreshState = rememberPullRefreshState(
                 refreshing = refreshing,
-                onRefresh = onRefreshing
+                onRefresh = onRefreshing,
             ),
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
@@ -317,7 +317,7 @@ fun DetailsScreenPreview() {
             snackbarHostState = SnackbarHostState(),
             onAction = {},
             refreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
@@ -333,7 +333,7 @@ fun DetailsScreenNoReviewsPreview() {
             snackbarHostState = SnackbarHostState(),
             onAction = {},
             refreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
@@ -349,7 +349,7 @@ fun DetailsScreenRefreshingPreview() {
             snackbarHostState = SnackbarHostState(),
             onAction = {},
             refreshing = true,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }

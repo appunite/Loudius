@@ -49,7 +49,7 @@ fun LoudiusPullToRefreshBoxPreview() {
     LoudiusTheme {
         LoudiusPullToRefreshBox(
             pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),
-            refreshing = true
+            refreshing = true,
         ) {}
     }
 }

@@ -133,7 +133,7 @@ private fun PullRequestContent(
             onItemClick = onAction,
             pullRefreshState = rememberPullRefreshState(
                 refreshing = refreshing,
-                onRefresh = onRefresh
+                onRefresh = onRefresh,
             ),
             refreshing = refreshing,
         )
@@ -265,7 +265,7 @@ fun PullRequestsScreenPreview() {
             state = PullRequestState(successData),
             onAction = {},
             refreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
@@ -278,7 +278,7 @@ fun PullRequestsScreenEmptyListPreview() {
             PullRequestState(Data.Success(emptyList())),
             onAction = {},
             refreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
@@ -291,7 +291,7 @@ fun PullRequestsScreenLoadingPreview() {
             PullRequestState(Data.Loading),
             onAction = {},
             refreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
@@ -304,7 +304,7 @@ fun PullRequestsScreenErrorPreview() {
             PullRequestState(Data.Error),
             onAction = {},
             refreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
@@ -317,7 +317,7 @@ fun PullRequestsScreenRefreshingPreview() {
             state = PullRequestState(successData),
             onAction = {},
             refreshing = true,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
