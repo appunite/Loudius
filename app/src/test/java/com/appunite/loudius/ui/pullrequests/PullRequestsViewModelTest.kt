@@ -31,7 +31,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
+import strikt.assertions.isFalse
 import strikt.assertions.isNull
+import strikt.assertions.isTrue
 import strikt.assertions.single
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,6 +41,39 @@ import strikt.assertions.single
 class PullRequestsViewModelTest {
     private val pullRequestRepository = spyk(FakePullRequestRepository())
     private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
+
+    @Test
+    fun `WHEN refresh data THEN start refreshing data and set isRefreshing to true`() = runTest {
+        val viewModel = createViewModel()
+
+        coEvery {
+            pullRequestRepository.getCurrentUserPullRequests()
+        } coAnswers { neverCompletingSuspension() }
+
+        viewModel.refreshData()
+
+        expectThat(viewModel.isRefreshing.value).isTrue()
+    }
+
+    @Test
+    fun `WHEN refresh data THEN refresh data and set isRefreshing to false`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.refreshData()
+
+        expectThat(viewModel.isRefreshing.value).isFalse()
+    }
+
+    @Test
+    fun `WHEN refresh data THEN refresh data and display pull requests`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.refreshData()
+
+        expectThat(viewModel.state.data).isA<Data.Success>().and {
+            get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
+    }
 
     @Test
     fun `WHEN init THEN display loading`() = runTest {
