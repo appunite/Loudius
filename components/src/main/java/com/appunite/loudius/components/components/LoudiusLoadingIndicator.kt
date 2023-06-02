@@ -55,9 +55,9 @@ fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview()
 @Composable
-fun LoudiusLoadingIndicatorPreview() {
+private fun LoudiusLoadingIndicatorPreview() {
     LoudiusTheme {
         LoudiusLoadingIndicator()
     }
