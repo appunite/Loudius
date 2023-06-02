@@ -1,8 +1,12 @@
 ---
-name: Snapshot verification
+# Golden tests recording with Paparazzi configuration file
+# Add [New snapshots] to the title of your PR to record new snapshots.
+# Remove it to verify snapshots instead.
+name: Snapshot recording
 
 on:
   pull_request:
+    types: [ opened, edited , synchronize ]
 
 permissions:
   checks: write
@@ -12,37 +16,30 @@ permissions:
   actions: write
 
 jobs:
-  test:
-    if: ${{!contains(github.event.pull_request.title, '[New snapshots]')}}
-    name: Verify snapshots
+  generate_snapshots:
+    if: ${{contains(github.event.pull_request.title, '[New snapshots]')}}
+    name: Generate snapshots
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           lfs: true
 
-      - name: Prepare Android Environment
-        uses: ./.github/actions/prepare-android-env
-
-      - name: LFS-warning
-        uses: ppremk/lfs-warning@v3.2
-
-      - name: Gradle - Verify snapshots with Paparazzi
+      - name: Gradle - Record snapshots with Paparazzi
         id: testStep
-        run: ./gradlew clean components:verifyPaparazziDebug
+        run: ./gradlew clean components:recordPaparazziDebug
 
-      - name: Upload snapshot failure deltas
+      - name: Commit and push recorded screenshots
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "[Paparazzi] Record new snapshots"
+
+      - name: Upload snapshot record report
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: snapshot-failure-deltas
-          path: /home/runner/work/Loudius/Loudius/components/out/failures/
-
-      - name: Upload snapshot failure report
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: snapshot-failure-report
+          name: snapshot-recording-failure-report
           path: /home/runner/work/Loudius/Loudius/components/build/reports/tests/testDebugUnitTest/
 
       - name: Find PR number
@@ -68,8 +65,12 @@ jobs:
           comment-id: ${{ steps.findCommentId.outputs.comment-id }}
           issue-number: ${{ steps.findPRId.outputs.pr }}
           body: |
-            Snapshot testing result: :heavy_check_mark:
-            Everything looks good!
+            Snapshot recording result: :heavy_check_mark:
+            New snapshots recorded! Everything looks good!
+
+            If there were changes in the user interface, a new commit has been created. You can review the new snapshots in the diff. If you find them acceptable, please proceed to merge this pull request.
+
+            However, if you did not intend to record new snapshots, please remove the '[New snapshots]' part from your title (and discard the commit that includes the new snapshots). It will cause to run snapshot verification instead of recording.
           edit-mode: replace
           reactions: |
             heart
@@ -84,12 +85,14 @@ jobs:
           comment-id: ${{ steps.findCommentId.outputs.comment-id }}
           issue-number: ${{ steps.findPRId.outputs.pr }}
           body: |
-            Snapshot testing result: :x:
-            Some of the snapshot tests seem to have failed. Please:
+            Snapshot recording result: :x:
+            Something went wrong during snapshot recording.
+            If you need further investigation:
             - Head over to the artifacts section of the [CI Run](https://github.com/appunite/Loudius/actions/runs/${{ github.run_id }}).
             - Download the zip.
-            - Unzip and you can find one or more images that show the expected and the actual test results.
-            - If these changes are fixing an issue or are part of a new feature then please speak to the maintainer. If they are not intended then please fix them and repush again.
+            - Unzip and you can find report showing the problem
+            
+            If you not intended to record new snapshots please remove '[New snapshots]' part from your pull request title. It will cause to run snapshot verification instead of recording.
           edit-mode: replace
           reactions: |
             confused

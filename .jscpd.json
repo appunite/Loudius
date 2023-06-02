@@ -1,7 +1,17 @@
 {
   "threshold": 0,
-  "reporters": ["html", "console", "xml"],
-  "ignore": ["**/__snapshots__/**", "**/src/test/java/**"],
-  "ignorePattern": ["import .*"],
+  "reporters": [
+    "html",
+    "console",
+    "xml"
+  ],
+  "ignore": [
+    "**/__snapshots__/**",
+    "**/src/test/java/**",
+    "**/workflows/**"
+  ],
+  "ignorePattern": [
+    "import .*"
+  ],
   "absolute": true
 }
