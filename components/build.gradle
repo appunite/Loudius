@@ -28,6 +28,12 @@ android {
         kotlinCompilerExtensionVersion '1.4.2'
     }
     resourcePrefix "components_"
+
+    kapt {
+        arguments {
+            arg("skipPrivatePreviews", "true")
+        }
+    }
 }
 
 dependencies {
@@ -37,6 +43,12 @@ dependencies {
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    //Showkase
+    implementation "com.airbnb.android:showkase:1.0.0-beta18"
+    kapt "com.airbnb.android:showkase-processor:1.0.0-beta18"
+    testImplementation "com.google.testparameterinjector:test-parameter-injector:1.8"
+    kaptTest "com.airbnb.android:showkase-processor:1.0.0-beta18"
 
     //Lottie - Compose
     implementation("com.airbnb.android:lottie-compose:5.2.0")
