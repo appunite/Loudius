@@ -23,9 +23,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.appunite.loudius.ui.theme.LoudiusTheme
 
 @Composable
 fun LoudiusPullToRefreshBox(
@@ -37,5 +40,16 @@ fun LoudiusPullToRefreshBox(
     Box(modifier = modifier.pullRefresh(pullRefreshState)) {
         content()
         PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
+    }
+}
+
+@Preview
+@Composable
+fun LoudiusPullToRefreshBoxPreview() {
+    LoudiusTheme {
+        LoudiusPullToRefreshBox(
+            pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),
+            refreshing = true
+        ) {}
     }
 }

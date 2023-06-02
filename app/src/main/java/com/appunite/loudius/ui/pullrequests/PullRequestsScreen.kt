@@ -64,14 +64,11 @@ fun PullRequestsScreen(
 ) {
     val state = viewModel.state
     val refreshing by viewModel.isRefreshing.collectAsState()
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing,
-        onRefresh = viewModel::refreshData,
-    )
+
     PullRequestsScreenStateless(
         state = state,
-        pullRefreshState = pullRefreshState,
         refreshing = refreshing,
+        onRefresh = viewModel::refreshData,
         onAction = viewModel::onAction,
     )
     LaunchedEffect(state.navigateToReviewers) {
@@ -98,8 +95,8 @@ private fun navigateToReviewers(
 @Composable
 private fun PullRequestsScreenStateless(
     state: PullRequestState,
-    pullRefreshState: PullRefreshState,
     refreshing: Boolean,
+    onRefresh: () -> Unit,
     onAction: (PulLRequestsAction) -> Unit,
 ) {
     Scaffold(
@@ -113,7 +110,7 @@ private fun PullRequestsScreenStateless(
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
                 )
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> PullRequestContent(state.data, pullRefreshState, refreshing, padding, onAction)
+                is Data.Success -> PullRequestContent(state.data, refreshing, onRefresh, padding, onAction)
             }
         },
     )
@@ -122,8 +119,8 @@ private fun PullRequestsScreenStateless(
 @Composable
 private fun PullRequestContent(
     state: Data.Success,
-    pullRefreshState: PullRefreshState,
     refreshing: Boolean,
+    onRefresh: () -> Unit,
     padding: PaddingValues,
     onAction: (PulLRequestsAction) -> Unit,
 ) {
@@ -134,7 +131,10 @@ private fun PullRequestContent(
             pullRequests = state.pullRequests,
             modifier = Modifier.padding(padding),
             onItemClick = onAction,
-            pullRefreshState = pullRefreshState,
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = refreshing,
+                onRefresh = onRefresh
+            ),
             refreshing = refreshing,
         )
     }
@@ -264,11 +264,8 @@ fun PullRequestsScreenPreview() {
         PullRequestsScreenStateless(
             state = PullRequestState(successData),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = false,
-                onRefresh = {},
-            ),
             refreshing = false,
+            onRefresh = {}
         )
     }
 }
@@ -280,11 +277,8 @@ fun PullRequestsScreenEmptyListPreview() {
         PullRequestsScreenStateless(
             PullRequestState(Data.Success(emptyList())),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = false,
-                onRefresh = {},
-            ),
             refreshing = false,
+            onRefresh = {}
         )
     }
 }
@@ -296,11 +290,8 @@ fun PullRequestsScreenLoadingPreview() {
         PullRequestsScreenStateless(
             PullRequestState(Data.Loading),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = false,
-                onRefresh = {},
-            ),
             refreshing = false,
+            onRefresh = {}
         )
     }
 }
@@ -312,11 +303,8 @@ fun PullRequestsScreenErrorPreview() {
         PullRequestsScreenStateless(
             PullRequestState(Data.Error),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = false,
-                onRefresh = {},
-            ),
             refreshing = false,
+            onRefresh = {}
         )
     }
 }
@@ -328,11 +316,8 @@ fun PullRequestsScreenRefreshingPreview() {
         PullRequestsScreenStateless(
             state = PullRequestState(successData),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = true,
-                onRefresh = {},
-            ),
             refreshing = true,
+            onRefresh = {}
         )
     }
 }

@@ -70,16 +70,12 @@ fun ReviewersScreen(
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
     val refreshing by viewModel.isRefreshing.collectAsState()
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing,
-        onRefresh = viewModel::refreshData,
-    )
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         data = state.data,
-        pullRefreshState = pullRefreshState,
         refreshing = refreshing,
+        onRefresh = viewModel::refreshData,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
@@ -121,8 +117,8 @@ private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     data: Data,
-    pullRefreshState: PullRefreshState,
     refreshing: Boolean,
+    onRefresh: () -> Unit,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onAction: (ReviewersAction) -> Unit,
@@ -143,7 +139,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, pullRefreshState, refreshing, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(data, refreshing, onRefresh, padding, onAction)
             }
         },
     )
@@ -152,15 +148,18 @@ private fun ReviewersScreenStateless(
 @Composable
 private fun ReviewersScreenContent(
     data: Data.Success,
-    pullRefreshState: PullRefreshState,
     refreshing: Boolean,
+    onRefreshing: () -> Unit,
     padding: PaddingValues,
     onAction: (ReviewersAction) -> Unit,
 ) {
     if (data.reviewers.isNotEmpty()) {
         ReviewersList(
             data = data,
-            pullRefreshState = pullRefreshState,
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = refreshing,
+                onRefresh = onRefreshing
+            ),
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
             refreshing = refreshing,
@@ -317,11 +316,8 @@ fun DetailsScreenPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = false,
-                onRefresh = {},
-            ),
             refreshing = false,
+            onRefresh = {}
         )
     }
 }
@@ -336,11 +332,8 @@ fun DetailsScreenNoReviewsPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = false,
-                onRefresh = {},
-            ),
             refreshing = false,
+            onRefresh = {}
         )
     }
 }
@@ -355,11 +348,8 @@ fun DetailsScreenRefreshingPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
-            pullRefreshState = rememberPullRefreshState(
-                refreshing = true,
-                onRefresh = {},
-            ),
             refreshing = true,
+            onRefresh = {}
         )
     }
 }
