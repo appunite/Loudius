@@ -66,7 +66,9 @@ Here's an example of an experiment that meets our rules:
 
 ## 🚀 Project setup
 
-In order to properly start the application and use it, the CLIENT_SECRET environment variable must be set on your computer. CLIENT_SECRET is a GitHub client secret key provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
+In order to properly start the application and use it, the CLIENT_SECRET environment variable must
+be set on your computer. CLIENT_SECRET is a GitHub client secret key provided
+from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
 If you're AppUniter, you can find this secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
 
@@ -80,6 +82,11 @@ If you're not, don't worry, here's a video to help you create a new one:
 2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
 3. Restart Android studio and Terminal.
 4. `$ echo $CLIENT_SECRET`
+
+### Screenshots tests
+
+We are using screenshot tests to check if the UI is not broken. We are recording screenshots on CI.
+To do that - add `[New snapshots]` to the pull request title. Otherwise the snapshots are tested.
 
 ## 🧑🏻‍🎓 Contributing
 

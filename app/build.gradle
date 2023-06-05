@@ -1,6 +1,6 @@
 plugins {
-    id 'kotlin-kapt'
     id 'com.android.application'
+    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace 'com.appunite.loudius'
-    compileSdk 33
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.appunite.loudius"
@@ -64,6 +64,7 @@ android {
 }
 
 dependencies {
+    implementation project(':components')
     //Desugaring for use of java.time in api lower then 26
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
@@ -77,15 +78,12 @@ dependencies {
     implementation composeBom
     androidTestImplementation composeBom
     implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material:1.4.0'
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation "androidx.navigation:navigation-compose:2.5.3"
     debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-
-    //Lottie - Compose
-    implementation ("com.airbnb.android:lottie-compose:5.2.0")
 
     //DI - Hilt
     implementation "com.google.dagger:hilt-android:2.45"

@@ -1,15 +1,7 @@
 <resources>
     <!-- Common string resources -->
     <string name="common_app_name">Loudius</string>
-    <string name="common_back_button_icon_content_description">Back button</string>
     <string name="common_user_unauthorized_error_message">Unauthorized collaborator detected! Please login again.</string>
-
-    <!-- LoudiusErrorDialog -->
-    <string name="error_dialog_title">Error</string>
-    <string name="error_dialog_description">Something went wrong…</string>
-    <string name="error_dialog_confirm_button">OK</string>
-    <string name="error_dialog_image_content_description">error image</string>
-    <string name="error_dialog_try_again_button">Try again</string>
 
     <!-- AuthenticatingScreen -->
     <!-- AuthenticatingScreen -> error screen -->

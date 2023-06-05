@@ -19,8 +19,8 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
-import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import dagger.hilt.android.testing.HiltAndroidTest

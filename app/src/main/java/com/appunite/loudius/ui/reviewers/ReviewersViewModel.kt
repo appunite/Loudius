@@ -32,6 +32,8 @@ import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -69,9 +71,22 @@ class ReviewersViewModel @Inject constructor(
     var state: ReviewersState by mutableStateOf(ReviewersState())
         private set
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     init {
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
         fetchData()
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            getMergedData()
+                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
+                .onFailure { state = state.copy(data = Data.Error) }
+            _isRefreshing.value = false
+        }
     }
 
     private fun fetchData() {

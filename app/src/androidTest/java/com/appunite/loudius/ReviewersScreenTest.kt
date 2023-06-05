@@ -20,8 +20,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
-import com.appunite.loudius.ui.theme.LoudiusTheme
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -89,8 +89,8 @@ class ReviewersScreenTest {
 
     private fun IntegrationTestRule.initTests() {
         composeTestRule.activity.intent.apply {
-            putExtra("owner", "owner")
-            putExtra("repo", "repo")
+            putExtra("owner", "exampleOwner")
+            putExtra("repo", "exampleRepo")
             putExtra("submission_date", "2022-01-29T08:00:00")
             putExtra("pull_request_number", "1")
         }

@@ -17,7 +17,7 @@
 package com.appunite.loudius.util
 
 import androidx.compose.ui.test.IdlingResource
-import com.appunite.loudius.common.CountingIdlingResource
+import com.appunite.loudius.components.common.CountingIdlingResource
 
 object IdlingResourceExtensions {
 

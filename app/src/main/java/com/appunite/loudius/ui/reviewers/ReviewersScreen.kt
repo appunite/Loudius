@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.appunite.loudius.ui.reviewers
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -31,6 +36,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -41,18 +48,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
-import com.appunite.loudius.ui.components.LoudiusFullScreenError
-import com.appunite.loudius.ui.components.LoudiusListIcon
-import com.appunite.loudius.ui.components.LoudiusListItem
-import com.appunite.loudius.ui.components.LoudiusLoadingIndicator
-import com.appunite.loudius.ui.components.LoudiusOutlinedButton
-import com.appunite.loudius.ui.components.LoudiusPlaceholderText
-import com.appunite.loudius.ui.components.LoudiusText
-import com.appunite.loudius.ui.components.LoudiusTextStyle
-import com.appunite.loudius.ui.components.LoudiusTopAppBar
+import com.appunite.loudius.components.components.LoudiusFullScreenError
+import com.appunite.loudius.components.components.LoudiusListIcon
+import com.appunite.loudius.components.components.LoudiusListItem
+import com.appunite.loudius.components.components.LoudiusLoadingIndicator
+import com.appunite.loudius.components.components.LoudiusOutlinedButton
+import com.appunite.loudius.components.components.LoudiusPlaceholderText
+import com.appunite.loudius.components.components.LoudiusPullToRefreshBox
+import com.appunite.loudius.components.components.LoudiusText
+import com.appunite.loudius.components.components.LoudiusTextStyle
+import com.appunite.loudius.components.components.LoudiusTopAppBar
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import com.appunite.loudius.ui.theme.LoudiusTheme
+import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun ReviewersScreen(
@@ -61,10 +70,13 @@ fun ReviewersScreen(
 ) {
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
+    val refreshing by viewModel.isRefreshing.collectAsState()
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,
         data = state.data,
+        refreshing = refreshing,
+        onRefresh = viewModel::refreshData,
         onClickBackArrow = navigateBack,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
@@ -106,6 +118,8 @@ private fun resolveSnackbarMessage(snackbarTypeShown: ReviewersSnackbarType) =
 private fun ReviewersScreenStateless(
     pullRequestNumber: String,
     data: Data,
+    refreshing: Boolean,
+    onRefresh: () -> Unit,
     onClickBackArrow: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onAction: (ReviewersAction) -> Unit,
@@ -126,7 +140,7 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(data, refreshing, onRefresh, padding, onAction)
             }
         },
     )
@@ -135,14 +149,21 @@ private fun ReviewersScreenStateless(
 @Composable
 private fun ReviewersScreenContent(
     data: Data.Success,
+    refreshing: Boolean,
+    onRefreshing: () -> Unit,
     padding: PaddingValues,
     onAction: (ReviewersAction) -> Unit,
 ) {
     if (data.reviewers.isNotEmpty()) {
         ReviewersList(
-            reviewers = data.reviewers,
+            data = data,
+            pullRefreshState = rememberPullRefreshState(
+                refreshing = refreshing,
+                onRefresh = onRefreshing,
+            ),
             modifier = Modifier.padding(padding),
             onNotifyClick = onAction,
+            refreshing = refreshing,
         )
     } else {
         EmptyListPlaceholder(padding)
@@ -151,19 +172,27 @@ private fun ReviewersScreenContent(
 
 @Composable
 private fun ReviewersList(
-    reviewers: List<Reviewer>,
+    data: Data,
+    pullRefreshState: PullRefreshState,
     modifier: Modifier,
     onNotifyClick: (ReviewersAction) -> Unit,
+    refreshing: Boolean,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
+    LoudiusPullToRefreshBox(
+        pullRefreshState = pullRefreshState,
+        refreshing = refreshing,
+        modifier = modifier,
     ) {
-        itemsIndexed(reviewers) { index, reviewer ->
-            ReviewerItem(
-                reviewer = reviewer,
-                index = index,
-                onNotifyClick = onNotifyClick,
-            )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            itemsIndexed((data as Data.Success).reviewers) { index, reviewer ->
+                ReviewerItem(
+                    reviewer = reviewer,
+                    index = index,
+                    onNotifyClick = onNotifyClick,
+                )
+            }
         }
     }
 }
@@ -209,7 +238,7 @@ private fun NotifyButtonOrLoadingIndicator(
 @Composable
 private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
-        painter = painterResource(id = R.drawable.person_outline_24px),
+        painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
         contentDescription = stringResource(
             R.string.reviewers_screen_user_image_content_description,
         ),
@@ -271,21 +300,25 @@ private fun ReviewerViewLoadingPreview() {
     }
 }
 
+private val successData = listOf(
+    Reviewer(1, "Kezc", true, 24, 12),
+    Reviewer(2, "Krzysiudan", false, 24, 0),
+    Reviewer(3, "Weronika", false, 24, 0, true),
+    Reviewer(4, "Jacek", false, 24, 0),
+)
+
 @Preview
 @Composable
 fun DetailsScreenPreview() {
-    val reviewer1 = Reviewer(1, "Kezc", true, 24, 12)
-    val reviewer2 = Reviewer(2, "Krzysiudan", false, 24, 0)
-    val reviewer3 = Reviewer(3, "Weronika", false, 24, 0, true)
-    val reviewer4 = Reviewer(4, "Jacek", false, 24, 0)
-    val reviewers = listOf(reviewer1, reviewer2, reviewer3, reviewer4)
     LoudiusTheme {
         ReviewersScreenStateless(
             pullRequestNumber = "1",
-            data = Data.Success(reviewers),
+            data = Data.Success(successData),
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
+            refreshing = false,
+            onRefresh = {},
         )
     }
 }
@@ -300,6 +333,24 @@ fun DetailsScreenNoReviewsPreview() {
             onClickBackArrow = {},
             snackbarHostState = SnackbarHostState(),
             onAction = {},
+            refreshing = false,
+            onRefresh = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun DetailsScreenRefreshingPreview() {
+    LoudiusTheme {
+        ReviewersScreenStateless(
+            pullRequestNumber = "1",
+            data = Data.Success(successData),
+            onClickBackArrow = {},
+            snackbarHostState = SnackbarHostState(),
+            onAction = {},
+            refreshing = true,
+            onRefresh = {},
         )
     }
 }

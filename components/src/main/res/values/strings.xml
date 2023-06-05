@@ -1,0 +1,12 @@
+<resources>
+    <!-- Common string resources -->
+    <string name="components_common_back_button_icon_content_description">Back button</string>
+
+    <!-- LoudiusErrorDialog -->
+    <string name="components_error_dialog_title">Error</string>
+    <string name="components_error_dialog_description">Something went wrong…</string>
+    <string name="components_error_dialog_confirm_button">OK</string>
+    <string name="components_error_dialog_image_content_description">error image</string>
+    <string name="components_error_dialog_try_again_button">Try again</string>
+
+</resources>
