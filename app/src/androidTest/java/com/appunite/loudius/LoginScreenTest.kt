@@ -32,10 +32,10 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.ui.login.GithubHelper
+import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.di.GithubHelperModule
+import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
-import com.appunite.loudius.ui.theme.LoudiusTheme
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -88,8 +88,8 @@ class LoginScreenTest {
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
-                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
-            )
+                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
+            ),
         )
     }
 
@@ -111,11 +111,10 @@ class LoginScreenTest {
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
-                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
-            )
+                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
+            ),
         )
     }
-
 
     @Test
     fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() {
@@ -139,10 +138,10 @@ class LoginScreenTest {
                 hasComponent(
                     allOf(
                         hasPackageName("com.miui.securitycenter"),
-                        hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity")
-                    )
-                )
-            )
+                        hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity"),
+                    ),
+                ),
+            ),
         )
     }
 }
