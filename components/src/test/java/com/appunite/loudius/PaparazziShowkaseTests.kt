@@ -37,7 +37,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 class ComponentPreview(
-    private val showkaseBrowserComponent: ShowkaseBrowserComponent
+    private val showkaseBrowserComponent: ShowkaseBrowserComponent,
 ) {
     val content: @Composable () -> Unit = showkaseBrowserComponent.component
     override fun toString(): String =
@@ -68,8 +68,8 @@ class PaparazziShowkaseTests {
                 LocalInspectionMode provides true,
                 LocalDensity provides Density(
                     density = LocalDensity.current.density,
-                    fontScale = fontScale
-                )
+                    fontScale = fontScale,
+                ),
             ) {
                 LoudiusTheme(darkTheme = (theme == "dark")) {
                     Box(modifier = Modifier.background(Color.White)) {
