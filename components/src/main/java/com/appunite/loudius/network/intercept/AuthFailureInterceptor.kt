@@ -16,18 +16,22 @@
 
 package com.appunite.loudius.network.intercept
 
-import com.appunite.loudius.domain.repository.AuthRepository
+import com.appunite.loudius.network.utils.AuthFailureHandler
+import javax.inject.Inject
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
 
-class AuthInterceptor @Inject constructor(
-    private val authRepository: AuthRepository,
+class AuthFailureInterceptor @Inject constructor(
+    private val authFailureHandler: AuthFailureHandler,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val authenticatedRequest = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer ${authRepository.getAccessToken()}")
-            .build()
-        return chain.proceed(authenticatedRequest)
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        if (response.code == 401) {
+            authFailureHandler.emitAuthFailure()
+        }
+
+        return response
     }
 }

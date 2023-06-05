@@ -12,9 +12,18 @@ android {
         minSdk 24
         targetSdk 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary true
+        }
+        if (System.env.CLIENT_SECRET == null || System.env.CLIENT_SECRET.isEmpty()) {
+            logger.warn("You need to set CLIENT_SECRET in your environment variables")
+        }
+        buildConfigField "String", "CLIENT_SECRET", "\"${System.env.CLIENT_SECRET}\""
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -37,6 +46,9 @@ android {
 }
 
 dependencies {
+    //Desugaring for use of java.time in api lower then 26
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+
     implementation platform('androidx.compose:compose-bom:2023.01.00')
     implementation 'androidx.compose.material3:material3'
     implementation 'androidx.compose.material:material:1.4.0'
@@ -52,6 +64,20 @@ dependencies {
 
     //Lottie - Compose
     implementation("com.airbnb.android:lottie-compose:5.2.0")
+
+    //retrofit & okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    //DI - Hilt
+    implementation "com.google.dagger:hilt-android:2.45"
+    kapt "com.google.dagger:hilt-compiler:2.45"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

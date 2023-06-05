@@ -31,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.appunite.loudius.common.Screen
+import com.appunite.loudius.components.R
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.MainViewModel
 import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
@@ -38,6 +39,7 @@ import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

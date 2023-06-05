@@ -47,7 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.appunite.loudius.R
+import com.appunite.loudius.components.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusListIcon
 import com.appunite.loudius.components.components.LoudiusListItem
@@ -61,7 +61,6 @@ import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun ReviewersScreen(
@@ -140,7 +139,13 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, refreshing, onRefresh, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(
+                    data,
+                    refreshing,
+                    onRefresh,
+                    padding,
+                    onAction
+                )
             }
         },
     )
@@ -238,7 +243,7 @@ private fun NotifyButtonOrLoadingIndicator(
 @Composable
 private fun ReviewerAvatarView(modifier: Modifier = Modifier) {
     LoudiusListIcon(
-        painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
+        painter = painterResource(id = R.drawable.components_person_outline_24px),
         contentDescription = stringResource(
             R.string.reviewers_screen_user_image_content_description,
         ),
@@ -256,7 +261,10 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
 
 @Composable
 private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
-    stringResource(id = R.string.reviewers_screen_reviewed_message, reviewer.hoursFromReviewDone ?: 0)
+    stringResource(
+        id = R.string.reviewers_screen_reviewed_message,
+        reviewer.hoursFromReviewDone ?: 0
+    )
 } else {
     stringResource(id = R.string.reviewers_screen_not_reviewed_message, reviewer.hoursFromPRStart)
 }

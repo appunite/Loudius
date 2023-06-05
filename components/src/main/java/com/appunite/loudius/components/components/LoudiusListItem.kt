@@ -32,8 +32,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.appunite.loudius.components.R
 import com.appunite.loudius.components.components.utils.bottomBorder
-import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun resolveListItemBackgroundColor(index: Int): Color =
@@ -165,7 +165,7 @@ fun LoudiusListItemContentAndIconPreview() {
         index = 0,
         icon = { modifier ->
             LoudiusListIcon(
-                painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
+                painter = painterResource(id = R.drawable.components_person_outline_24px),
                 contentDescription = "Test",
                 modifier = modifier,
             )
@@ -187,7 +187,7 @@ private fun LoudiusListItemExample(index: Int) {
         icon = { modifier ->
             LoudiusListIcon(
                 modifier = modifier,
-                painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
+                painter = painterResource(id = R.drawable.components_person_outline_24px),
                 contentDescription = "Test",
             )
         },

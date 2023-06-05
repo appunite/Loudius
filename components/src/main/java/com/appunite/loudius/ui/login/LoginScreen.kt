@@ -33,15 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
+import com.appunite.loudius.components.R
 import com.appunite.loudius.components.components.LoudiusDialog
 import com.appunite.loudius.components.components.LoudiusOutlinedButton
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonIcon
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonStyle
 import com.appunite.loudius.components.components.LoudiusText
 import com.appunite.loudius.components.components.LoudiusTextStyle
-import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun LoginScreen(
@@ -90,7 +89,7 @@ fun LoginScreenStateless(
             icon = {
                 LoudiusOutlinedButtonIcon(
                     contentDescription = stringResource(R.string.login_screen_github_icon_content_description),
-                    painter = painterResource(id = componentsR.drawable.components_ic_github),
+                    painter = painterResource(id = R.drawable.components_ic_github),
                 )
             },
         )

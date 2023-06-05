@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.intercept
+package com.appunite.loudius.network.utils
 
-import com.appunite.loudius.network.utils.AuthFailureHandler
-import okhttp3.Interceptor
-import okhttp3.Response
 import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
-class AuthFailureInterceptor @Inject constructor(
-    private val authFailureHandler: AuthFailureHandler,
-) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val response = chain.proceed(request)
+@Singleton
+class AuthFailureHandler @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
+) {
+    private val _authFailureFlow = MutableSharedFlow<Unit>()
+    val authFailureFlow: SharedFlow<Unit> = _authFailureFlow
 
-        if (response.code == 401) {
-            authFailureHandler.emitAuthFailure()
+    fun emitAuthFailure() {
+        CoroutineScope(dispatcher).launch {
+            _authFailureFlow.emit(Unit)
         }
-
-        return response
     }
 }
