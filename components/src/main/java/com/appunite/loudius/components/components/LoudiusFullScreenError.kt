@@ -36,7 +36,6 @@ import com.appunite.loudius.components.R
 import com.appunite.loudius.components.components.utils.MultiScreenPreviews
 import com.appunite.loudius.components.theme.LoudiusTheme
 
-
 @Composable
 fun LoudiusFullScreenError(
     modifier: Modifier = Modifier,

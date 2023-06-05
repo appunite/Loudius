@@ -6,7 +6,7 @@ name: Snapshot recording
 
 on:
   pull_request:
-    types: [ opened, edited , synchronize ]
+    types: [opened, edited, synchronize]
 
 permissions:
   checks: write
@@ -56,7 +56,7 @@ jobs:
         with:
           issue-number: ${{ steps.findPRId.outputs.pr }}
           comment-author: "github-actions[bot]"
-          body-regex: 'Snapshot (testing|recording) result:'
+          body-regex: "Snapshot (testing|recording) result:"
 
       - name: Create or update comment on PR (Success)
         uses: peter-evans/create-or-update-comment@v3
@@ -77,7 +77,6 @@ jobs:
             hooray
           reactions-edit-mode: replace
 
-
       - name: Create or update comment on PR (Failure)
         uses: peter-evans/create-or-update-comment@v3
         if: always() && steps.testStep.outcome == 'failure'
@@ -91,7 +90,7 @@ jobs:
             - Head over to the artifacts section of the [CI Run](https://github.com/appunite/Loudius/actions/runs/${{ github.run_id }}).
             - Download the zip.
             - Unzip and you can find report showing the problem
-            
+
             If you not intended to record new snapshots please remove '[New snapshots]' part from your pull request title. It will cause to run snapshot verification instead of recording.
           edit-mode: replace
           reactions: |

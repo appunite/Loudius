@@ -59,7 +59,7 @@ jobs:
         with:
           issue-number: ${{ steps.findPRId.outputs.pr }}
           comment-author: "github-actions[bot]"
-          body-regex: 'Snapshot (testing|recording) result:'
+          body-regex: "Snapshot (testing|recording) result:"
 
       - name: Create or update comment on PR (Success)
         uses: peter-evans/create-or-update-comment@v3
@@ -75,7 +75,6 @@ jobs:
             heart
             hooray
           reactions-edit-mode: replace
-
 
       - name: Create or update comment on PR (Failure)
         uses: peter-evans/create-or-update-comment@v3
