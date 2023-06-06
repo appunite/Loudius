@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-
     <application android:networkSecurityConfig="@xml/debug_network_security_config">
         <activity
             android:name=".TestActivity">
         </activity>
-        <uses-library android:name="android.test.runner"/>
     </application>
-
-    <instrumentation
-        android:name=".util.HiltTestRunner"
-        android:targetPackage="com.appunite.loudius">
-        <meta-data
-            android:name="screenCaptureProcessors"
-            android:value="com.google.firebase.testlab.screenshot.FirebaseScreenCaptureProcessor" />
-    </instrumentation>
 </manifest>

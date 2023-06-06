@@ -19,6 +19,7 @@ package com.appunite.loudius.util
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.base.DefaultFailureHandler
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.runner.screenshot.Screenshot
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -49,7 +50,7 @@ open class ScreenshotTestRule : TestRule {
                 // Only espresso failures trigger the espresso failure handlers. For JUnit assert errors,
                 // those must be captured in `try { base.evaluate() } catch ()`
                 Espresso.setFailureHandler { throwable, matcher ->
-                    EspressoScreenshot.takeScreenshot(description)
+                    Screenshot.capture().process()
                     errorHandled.set(true)
                     val targetContext = getInstrumentation().targetContext
                     DefaultFailureHandler(targetContext).handle(throwable, matcher)
@@ -62,7 +63,7 @@ open class ScreenshotTestRule : TestRule {
                         return
                     } catch (t: Throwable) {
                         if (!errorHandled.get()) {
-                            EspressoScreenshot.takeScreenshot(description)
+                            Screenshot.capture().process()
                         }
                         error = t
                     }
