@@ -32,6 +32,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.runner.screenshot.Screenshot
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.di.GithubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
@@ -88,8 +89,10 @@ class LoginScreenTest {
                 LoginScreen()
             }
         }
+        Screenshot.capture().process()
 
         composeTestRule.onNodeWithText("Log in").performClick()
+        Screenshot.capture().process()
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),

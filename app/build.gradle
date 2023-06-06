@@ -132,6 +132,9 @@ dependencies {
 
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
 
+    // Firebase instrumentation lib
+    androidTestImplementation 'com.google.firebase:testlab-instr-lib:0.2'
+
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
 }
