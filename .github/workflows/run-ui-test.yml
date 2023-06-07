@@ -44,61 +44,10 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Get previous workflow run details
-        id: get_previous_run
-        run: |
-          import os
-          import requests
-
-          github_token = os.getenv('GITHUB_TOKEN')
-          owner = os.getenv('GITHUB_REPOSITORY_OWNER')
-          repo = os.getenv('GITHUB_REPOSITORY')
-          workflow_name = 'Android Release'  # Replace with your workflow name
-          per_page = 1  # Number of workflow runs to fetch
-
-          headers = {
-              'Authorization': f'Bearer {github_token}',
-              'Accept': 'application/vnd.github.v3+json'
-          }
-
-          # Get the previous workflow run details
-          response = requests.get(
-              f'https://api.github.com/repos/{owner}/{repo}/actions/workflows',
-              headers=headers,
-              params={'per_page': per_page}
-          )
-          response.raise_for_status()
-          data = response.json()
-
-          if data['total_count'] > 0:
-              previous_run = data['workflows'][0]
-              print(f"Previous workflow run ID: {previous_run['id']}")
-              print(f"Previous workflow run status: {previous_run['status']}")
-
-              # Get the workflow job runs for the previous run
-              job_runs_response = requests.get(
-                  f'https://api.github.com/repos/{owner}/{repo}/actions/runs/{previous_run["id"]}/jobs',
-                  headers=headers
-              )
-              job_runs_response.raise_for_status()
-              job_runs_data = job_runs_response.json()
-
-              # Extract the testMatrixId from the workflow job runs
-              test_matrix_id = next(
-                  (step['outputs']['testMatrixId'] for job in job_runs_data['jobs'] for step in job['steps'] if step['name'] == 'Run tests on Firebase Test Lab'),
-                  None
-              )
-              print(f"Previous testMatrixId: {test_matrix_id}")
-
-              # Set the output variable
-              print(f"::set-output name=testMatrixId::{test_matrix_id}")
-          else:
-              print("No previous workflow runs found.")
-
       - name: Cancel previous test run on Firebase Test Lab
         if: steps.get_previous_run.outputs.testMatrixId != ''
         run: |
-          gcloud firebase test android matrices cancel ${{ steps.get_previous_run.outputs.testMatrixId }}
+          gcloud firebase test android matrices cancel ${{ steps.test_lab_testing.outputs.testMatrixId }}
 
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
@@ -118,8 +67,12 @@ jobs:
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
       - name: Run tests on Firebase Test Lab
+        id: test_lab_testing
         run: |-
-          gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}"
+          output=$(gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}" --format=json)
+          testMatrixId=$(echo "$output" | jq -r '.testMatrixId')
+          echo "testMatrixId: $testMatrixId"
+          echo "::set-output name=testMatrixId::$testMatrixId"
 
       - name: Upload to Big Query
         if: always()
