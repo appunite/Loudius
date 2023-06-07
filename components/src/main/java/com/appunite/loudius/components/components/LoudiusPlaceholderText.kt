@@ -45,6 +45,6 @@ fun LoudiusPlaceholderText(text: String) {
 @Composable
 fun PreviewLoudiusPlaceholderText() {
     LoudiusTheme {
-        LoudiusPlaceholderText("Sorry! Your list of pull requests is empty.\\nGet back to work! \uD83E\uDDD1\u200D")
+        LoudiusPlaceholderText("Sorry! Your list of pull requests is empty.\nGet back to work! \uD83E\uDDD1\u200D")
     }
 }

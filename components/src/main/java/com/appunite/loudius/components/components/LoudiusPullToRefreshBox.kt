@@ -45,7 +45,7 @@ fun LoudiusPullToRefreshBox(
 
 @Preview
 @Composable
-fun LoudiusPullToRefreshBoxPreview() {
+private fun LoudiusPullToRefreshBoxPreview() {
     LoudiusTheme {
         LoudiusPullToRefreshBox(
             pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),

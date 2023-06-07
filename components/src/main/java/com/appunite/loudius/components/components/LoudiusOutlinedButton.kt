@@ -46,8 +46,7 @@ fun LoudiusOutlinedButton(
     OutlinedButton(
         enabled = enabled,
         onClick = onClick,
-        modifier = modifier
-            .applyIf(style == LoudiusOutlinedButtonStyle.Large) { padding(horizontal = 46.dp) },
+        modifier = modifier,
     ) {
         icon?.invoke()
 
