@@ -45,9 +45,9 @@ jobs:
           python-version: 3.x
 
       - name: Cancel previous test run on Firebase Test Lab
-        if: steps.get_previous_run.outputs.testMatrixId != ''
+        if: steps.run_tests.outputs.testMatrixId != ''
         run: |
-          gcloud firebase test android matrices cancel ${{ steps.test_lab_testing.outputs.testMatrixId }}
+          gcloud firebase test android matrices cancel ${{ steps.run_tests.outputs.testMatrixId }}
 
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
@@ -67,12 +67,13 @@ jobs:
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
       - name: Run tests on Firebase Test Lab
-        id: test_lab_testing
+        id: run_tests
         run: |-
           output=$(gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}" --format=json)
-          testMatrixId=$(echo "$output" | jq -r '.testMatrixId')
+          testMatrixId=$(echo "$output" | python -c "import sys, json; data=json.load(sys.stdin); print(data['testMatrixId'][0])")
           echo "testMatrixId: $testMatrixId"
           echo "::set-output name=testMatrixId::$testMatrixId"
+
 
       - name: Upload to Big Query
         if: always()
