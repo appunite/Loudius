@@ -66,15 +66,11 @@ jobs:
           echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
-      - name: Print help
-        if: always()
+      - name: Run tests on Firebase Test Lab
         run: |-
-          gcloud help firebase test android run
-
-      - name: Pring help x2
-        if: always()
-        run: |-
-          gcloud firebase test android run --help
+          output=$(gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}")
+          testMatrixId=$(echo "$output" | grep -oP "Test \[matrix-\K[^]]+")
+          echo "::set-output name=testMatrixId::$testMatrixId"
 
       - name: Upload to Big Query
         if: always()
