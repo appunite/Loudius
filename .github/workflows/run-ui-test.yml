@@ -12,6 +12,10 @@ on:
     # guess CI is less occupied. And 13 is a lucky number ;)
     - cron: "13 9,21 * * *"
 
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
 permissions: read-all
 
 jobs:
