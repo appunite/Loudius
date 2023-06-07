@@ -39,6 +39,45 @@ jobs:
         with:
           credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
 
+      - name: Get previous workflow run details
+        id: get_previous_run
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { Octokit } = require("@octokit/rest");
+            const octokit = new Octokit();
+
+            const { owner, repo } = context.repo;
+            const workflowName = 'Android Release'; // Replace with your workflow name
+            const perPage = 1; // Number of workflow runs to fetch
+
+            // Get the previous workflow run
+            const response = await octokit.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_name: workflowName,
+              per_page: perPage
+            });
+
+            if (response.data.total_count > 0) {
+              const previousRun = response.data.workflow_runs[0];
+              console.log(`Previous workflow run ID: ${previousRun.id}`);
+              console.log(`Previous workflow run status: ${previousRun.status}`);
+
+              // Extract testMatrixId from the workflow run details
+              const testMatrixId = previousRun.workflow_job_runs[0].outputs.testMatrixId;
+              console.log(`Previous testMatrixId: ${testMatrixId}`);
+              core.setOutput('testMatrixId', testMatrixId);
+            } else {
+              console.log('No previous workflow runs found.');
+            }
+
+      - name: Cancel previous test run on Firebase Test Lab
+        if: steps.get_previous_run.outputs.testMatrixId != ''
+        run: |
+          gcloud firebase test android matrices cancel ${{ steps.get_previous_run.outputs.testMatrixId }}
+
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
