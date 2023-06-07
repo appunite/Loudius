@@ -67,6 +67,7 @@ jobs:
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
       - name: Run tests on Firebase Test Lab
+        id: run_tests
         run: |-
           output=$(gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}")
           testMatrixId=$(echo "$output" | grep -oP "Test \[matrix-\K[^]]+")
