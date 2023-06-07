@@ -39,39 +39,61 @@ jobs:
         with:
           credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
       - name: Get previous workflow run details
         id: get_previous_run
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { Octokit } = require("@octokit/rest");
-            const octokit = new Octokit();
+        run: |
+          import os
+          import requests
 
-            const { owner, repo } = context.repo;
-            const workflowName = 'Android Release'; // Replace with your workflow name
-            const perPage = 1; // Number of workflow runs to fetch
+          github_token = os.getenv('GITHUB_TOKEN')
+          owner = os.getenv('GITHUB_REPOSITORY_OWNER')
+          repo = os.getenv('GITHUB_REPOSITORY')
+          workflow_name = 'Android Release'  # Replace with your workflow name
+          per_page = 1  # Number of workflow runs to fetch
 
-            // Get the previous workflow run
-            const response = await octokit.rest.actions.listWorkflowRuns({
-              owner,
-              repo,
-              workflow_name: workflowName,
-              per_page: perPage
-            });
+          headers = {
+              'Authorization': f'Bearer {github_token}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
 
-            if (response.data.total_count > 0) {
-              const previousRun = response.data.workflow_runs[0];
-              console.log(`Previous workflow run ID: ${previousRun.id}`);
-              console.log(`Previous workflow run status: ${previousRun.status}`);
+          # Get the previous workflow run details
+          response = requests.get(
+              f'https://api.github.com/repos/{owner}/{repo}/actions/workflows',
+              headers=headers,
+              params={'per_page': per_page}
+          )
+          response.raise_for_status()
+          data = response.json()
 
-              // Extract testMatrixId from the workflow run details
-              const testMatrixId = previousRun.workflow_job_runs[0].outputs.testMatrixId;
-              console.log(`Previous testMatrixId: ${testMatrixId}`);
-              core.setOutput('testMatrixId', testMatrixId);
-            } else {
-              console.log('No previous workflow runs found.');
-            }
+          if data['total_count'] > 0:
+              previous_run = data['workflows'][0]
+              print(f"Previous workflow run ID: {previous_run['id']}")
+              print(f"Previous workflow run status: {previous_run['status']}")
+
+              # Get the workflow job runs for the previous run
+              job_runs_response = requests.get(
+                  f'https://api.github.com/repos/{owner}/{repo}/actions/runs/{previous_run["id"]}/jobs',
+                  headers=headers
+              )
+              job_runs_response.raise_for_status()
+              job_runs_data = job_runs_response.json()
+
+              # Extract the testMatrixId from the workflow job runs
+              test_matrix_id = next(
+                  (step['outputs']['testMatrixId'] for job in job_runs_data['jobs'] for step in job['steps'] if step['name'] == 'Run tests on Firebase Test Lab'),
+                  None
+              )
+              print(f"Previous testMatrixId: {test_matrix_id}")
+
+              # Set the output variable
+              print(f"::set-output name=testMatrixId::{test_matrix_id}")
+          else:
+              print("No previous workflow runs found.")
 
       - name: Cancel previous test run on Firebase Test Lab
         if: steps.get_previous_run.outputs.testMatrixId != ''
