@@ -92,8 +92,8 @@ jobs:
           "androidDeviceList": {
           "androidDevices": [
           {
-            "model": "Pixel2",
-            "version": "30",
+            "androidModelId": "Pixel2",
+            "androidVersionId": "30",
             "locale": "en",
             "orientation": "portrait"
           }
@@ -102,22 +102,27 @@ jobs:
           },
           "testSpecification": {
           "androidInstrumentationTest": {
-          "appApk": "app/build/outputs/apk/debug/app-debug.apk",
-          "testApk": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+            "testApk":{
+              "gcsPath": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+              }
+           "appApk":{
+              "gcsPath": "app/build/outputs/apk/debug/app-debug.apk"
+              }
           }
           },
           "resultsStorage": {
-          "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
-          }
-          }'
+            "googleCloudStorage": {
+                "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
+            }
+            }'
           
-          matrixId=$(curl -X POST \
+          responseBody=$(curl -X POST \
           -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
           -H "Content-Type: application/json" \
           -d "$requestBody" \
           "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices")
 
-          echo "Test Matrix ID: $matrixId"
+          echo "Test Matrix response body: $responseBody"
           echo "::set-output name=testMatrixId::$matrixId"
 
 
