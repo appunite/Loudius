@@ -110,6 +110,10 @@ jobs:
           "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
           }
           }'
+          
+          echo "$requestBody" > requestBody.json
+          echo "Service account: ${{secrets.SERVICE_ACCOUNT}} "
+          echo "Firebase project id: ${{secrets.FIREBASE_PROJECT_ID}}" 
 
           matrixId=$(curl -X POST \
           -H "Authorization: Bearer ${{ secrets.SERVICE_ACCOUNT }}" \
