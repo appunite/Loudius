@@ -25,6 +25,8 @@ jobs:
 
     steps:
       - name: Checkout
+        with:
+          token: ${{secrets.FIREBASE_PROJECT_ID }}
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -81,15 +83,46 @@ jobs:
           echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
-      - name: Run tests on Firebase Test Lab
-        id: run_tests
-        run: |-
-          output=$(gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}")
-          echo "Running tests on Firebase Test Lab... -Output: $output.
-          Now I am trying to extract testMatrixId. "
-          testMatrixId=$(echo "$output" | grep -oP "matrix-(\w+)")
-          echo "::set-output name=testMatrixId::$testMatrixId"
-          echo "::set-output name=testMatrixId::$testMatrixId" >> test_matrix_id.txt
+
+      - name: Create Firebase Test Lab Matrix
+        run: |
+          # Define the necessary variables
+          projectId=${{ secrets.FIREBASE_PROJECT_ID }}
+          accessToken=${{ secrets.SERVICE_ACCOUNT }}
+          
+          # Define the request body for creating the test matrix
+          requestBody='{
+            "environmentMatrix": {
+              "androidDeviceList": {
+                "androidDevices": [
+                    {
+                      "model": "Pixel2",
+                      "version": "30",
+                      "locale": "en",
+                      "orientation": "portrait"
+                    }
+                ]
+              },
+            "testSpecification": {
+              "androidInstrumentationTest": {
+                "appApk": "app/build/outputs/apk/debug/app-debug.apk",
+                "testApk": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+              }
+            },
+          "resultsStorage": {
+                "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
+            }
+          }'
+          
+          # Make the request to create the test matrix
+          matrixId=$(curl -X POST \
+            -H "Authorization: Bearer $accessToken" \
+            -H "Content-Type: application/json" \
+            -d "$requestBody" \
+            "https://testing.googleapis.com/v1/projects/$projectId/testMatrices" | jq -r '.testMatrixId')
+          
+          echo "Test Matrix ID: $matrixId"
+          echo "::set-output name=testMatrixId::$matrixId"
 
       - name: Upload test matrix ID artifact
         uses: actions/upload-artifact@v3
