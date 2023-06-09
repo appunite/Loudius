@@ -88,7 +88,6 @@ jobs:
       - name: Create Firebase Test Lab Matrix
         run: |
           # Define the necessary variables
-          accessToken=${{ secrets.SERVICE_ACCOUNT }}
           echo "Hello"
                  
         
