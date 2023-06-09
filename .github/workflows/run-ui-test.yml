@@ -87,9 +87,6 @@ jobs:
 
       - name: Create Firebase Test Lab Matrix
         run: |
-          projectId=${{ secrets.FIREBASE_PROJECT_ID }}
-          accessToken=${{ secrets.SERVICE_ACCOUNT }}
-
           requestBody='{
           "environmentMatrix": {
           "androidDeviceList": {
@@ -115,10 +112,10 @@ jobs:
           }'
 
           matrixId=$(curl -X POST \
-          -H "Authorization: Bearer $accessToken" \
+          -H "Authorization: Bearer ${{ secrets.SERVICE_ACCOUNT }}" \
           -H "Content-Type: application/json" \
           -d "$requestBody" \
-          "https://testing.googleapis.com/v1/projects/$projectId/testMatrices" | jq -r '.testMatrixId')
+          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices" | jq -r '.testMatrixId')
 
           echo "Test Matrix ID: $matrixId"
           echo "::set-output name=testMatrixId::$matrixId"
