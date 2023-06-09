@@ -117,12 +117,8 @@ jobs:
           }'
 
           # Make the request to create the test matrix
-          matrixId=$(curl -X POST \
-            -H "Authorization: Bearer $accessToken" \
-            -H "Content-Type: application/json" \
-            -d "$requestBody" \
-            "https://testing.googleapis.com/v1/projects/$projectId/testMatrices" | jq -r '.testMatrixId')
-
+                  
+        
         # echo "Test Matrix ID: $matrixId"
         #echo "::set-output name=testMatrixId::$matrixId"
       
