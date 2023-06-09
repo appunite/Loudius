@@ -116,7 +116,6 @@ jobs:
           echo "Firebase project id: ${{secrets.FIREBASE_PROJECT_ID}}" 
 
           matrixId=$(curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.SERVICE_ACCOUNT }}" \
           -H "Content-Type: application/json" \
           -d "$requestBody" \
           "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices" | jq -r '.testMatrixId')
