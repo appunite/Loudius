@@ -67,11 +67,11 @@ jobs:
         run: |
           gcloud firebase test android matrices cancel ${{ steps.previous_test_matrix.outputs.testMatrixId }}
 
-      - name: Prepare Android Environment
-        uses: ./.github/actions/prepare-android-env
+      # - name: Prepare Android Environment
+      #   uses: ./.github/actions/prepare-android-env
 
-      - name: Assemble App Debug APK and Android Instrumentation Tests
-        run: ./gradlew assembleDebug assembleDebugAndroidTest
+      #- name: Assemble App Debug APK and Android Instrumentation Tests
+      # run: ./gradlew assembleDebug assembleDebugAndroidTest
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -123,8 +123,8 @@ jobs:
             -d "$requestBody" \
             "https://testing.googleapis.com/v1/projects/$projectId/testMatrices" | jq -r '.testMatrixId')
 
-          echo "Test Matrix ID: $matrixId"
-          echo "::set-output name=testMatrixId::$matrixId"
+        # echo "Test Matrix ID: $matrixId"
+        #echo "::set-output name=testMatrixId::$matrixId"
       
 
       - name: Upload test matrix ID artifact
