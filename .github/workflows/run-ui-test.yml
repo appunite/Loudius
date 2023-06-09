@@ -25,8 +25,6 @@ jobs:
 
     steps:
       - name: Checkout
-        with:
-          token: ${{secrets.FIREBASE_PROJECT_ID }}
         uses: actions/checkout@v3
 
       - name: Set up Python
