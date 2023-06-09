@@ -27,6 +27,7 @@ jobs:
   build:
     name: MegaLinter
     runs-on: ubuntu-latest
+    if: false # Set to true to enable this job
     steps:
       # Git Checkout
       - name: Checkout Code

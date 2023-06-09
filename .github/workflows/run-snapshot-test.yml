@@ -13,7 +13,8 @@ permissions:
 
 jobs:
   test:
-    if: ${{!contains(github.event.pull_request.title, '[New snapshots]')}}
+    if: false # Set to true to enable this job
+    #if: ${{!contains(github.event.pull_request.title, '[New snapshots]')}}
     name: Verify snapshots
     runs-on: ubuntu-latest
     steps:

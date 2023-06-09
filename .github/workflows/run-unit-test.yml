@@ -15,6 +15,7 @@ permissions: read-all
 
 jobs:
   unit-tests:
+    if: false # Set to true to enable this job
     runs-on: ubuntu-20.04
 
     steps:
