@@ -115,7 +115,7 @@ jobs:
           -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
           -H "Content-Type: application/json" \
           -d "$requestBody" \
-          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices" | jq -r '.testMatrixId')
+          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices")
 
           echo "Test Matrix ID: $matrixId"
           echo "::set-output name=testMatrixId::$matrixId"
