@@ -124,8 +124,11 @@ jobs:
           "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices")
 
           echo "Test Matrix response body: $responseBody"
+          test_matrix_id=$(echo "$response" | jq -r '.testMatrixId')
+          
+          echo "Test Matrix ID: $test_matrix_id"
+          echo $test_matrix_id > test_matrix_id.txt
           echo "::set-output name=testMatrixId::$matrixId"
-
 
       - name: Upload test matrix ID artifact
         uses: actions/upload-artifact@v3
