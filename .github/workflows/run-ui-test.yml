@@ -63,15 +63,15 @@ jobs:
         run: echo "::set-output name=testMatrixId::$(cat test_matrix_id.txt)"
 
       - name: Cancel previous test run on Firebase Test Lab
-        if: steps.run_tests.outputs.testMatrixId != ''
+        if: steps.previous_test_matrix.outputs.testMatrixId != ''
         run: |
           gcloud firebase test android matrices cancel ${{ steps.previous_test_matrix.outputs.testMatrixId }}
 
-      # - name: Prepare Android Environment
-      #   uses: ./.github/actions/prepare-android-env
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
 
-      #- name: Assemble App Debug APK and Android Instrumentation Tests
-      # run: ./gradlew assembleDebug assembleDebugAndroidTest
+      - name: Assemble App Debug APK and Android Instrumentation Tests
+        run: ./gradlew assembleDebug assembleDebugAndroidTest
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
