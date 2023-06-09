@@ -87,15 +87,7 @@ jobs:
 
       - name: Create Firebase Test Lab Matrix
         run: |
-          # Define the necessary variables
           echo "Hello"
-                 
-        
-        
-        
-        # echo "Test Matrix ID: $matrixId"
-        #echo "::set-output name=testMatrixId::$matrixId"
-      
 
       - name: Upload test matrix ID artifact
         uses: actions/upload-artifact@v3
