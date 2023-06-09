@@ -110,7 +110,7 @@ jobs:
                 }
               }
             },
-            "resultsStorage": {
+            "resultStorage": {
               "googleCloudStorage": {
                 "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
               }
