@@ -48,10 +48,21 @@ jobs:
         with:
           python-version: 3.x
 
+      - name: Download test matrix ID artifact
+        if: github.ref == 'refs/heads/your-branch-name'
+        uses: actions/download-artifact@v2
+        with:
+          name: test-matrix-id
+
+      - name: Set testMatrixId output
+        id: previous_test_matrix
+        if: github.ref == ${{ github.ref}} && steps.download.outputs.artifacts_downloaded == 'true'
+        run: echo "::set-output name=testMatrixId::$(cat test_matrix_id.txt)"
+
       - name: Cancel previous test run on Firebase Test Lab
         if: steps.run_tests.outputs.testMatrixId != ''
         run: |
-          gcloud firebase test android matrices cancel ${{ steps.run_tests.outputs.testMatrixId }}
+          gcloud firebase test android matrices cancel ${{ steps.previous_test_matrix.outputs.testMatrixId }}
 
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
@@ -74,8 +85,14 @@ jobs:
         id: run_tests
         run: |-
           output=$(gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}")
-          testMatrixId=$(echo "$output" | grep -oP "Test \[matrix-\K[^]]+")
+          testMatrixId=$(echo "$output" | grep -oP "matrix-(\w+)")
           echo "::set-output name=testMatrixId::$testMatrixId"
+
+      - name: Upload test matrix ID artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-matrix-id
+          path: test_matrix_id.txt
 
       - name: Upload to Big Query
         if: always()
