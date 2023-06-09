@@ -87,7 +87,42 @@ jobs:
 
       - name: Create Firebase Test Lab Matrix
         run: |
-          echo "Hello"
+          projectId=${{ secrets.FIREBASE_PROJECT_ID }}
+          accessToken=${{ secrets.SERVICE_ACCOUNT }}
+
+          requestBody='{
+          "environmentMatrix": {
+          "androidDeviceList": {
+          "androidDevices": [
+          {
+            "model": "Pixel2",
+            "version": "30",
+            "locale": "en",
+            "orientation": "portrait"
+          }
+          ]
+          }
+          },
+          "testSpecification": {
+          "androidInstrumentationTest": {
+          "appApk": "app/build/outputs/apk/debug/app-debug.apk",
+          "testApk": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+          }
+          },
+          "resultsStorage": {
+          "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
+          }
+          }'
+
+          matrixId=$(curl -X POST \
+          -H "Authorization: Bearer $accessToken" \
+          -H "Content-Type: application/json" \
+          -d "$requestBody" \
+          "https://testing.googleapis.com/v1/projects/$projectId/testMatrices" | jq -r '.testMatrixId')
+
+          echo "Test Matrix ID: $matrixId"
+          echo "::set-output name=testMatrixId::$matrixId"
+
 
       - name: Upload test matrix ID artifact
         uses: actions/upload-artifact@v3
