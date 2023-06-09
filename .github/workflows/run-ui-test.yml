@@ -89,6 +89,7 @@ jobs:
           Now I am trying to extract testMatrixId. "
           testMatrixId=$(echo "$output" | grep -oP "matrix-(\w+)")
           echo "::set-output name=testMatrixId::$testMatrixId"
+          echo "::set-output name=testMatrixId::$testMatrixId" >> test_matrix_id.txt
 
       - name: Upload test matrix ID artifact
         uses: actions/upload-artifact@v3
