@@ -88,33 +88,34 @@ jobs:
       - name: Create Firebase Test Lab Matrix
         run: |
           requestBody='{
-          "environmentMatrix": {
-          "androidDeviceList": {
-          "androidDevices": [
-          {
-            "androidModelId": "Pixel2",
-            "androidVersionId": "30",
-            "locale": "en",
-            "orientation": "portrait"
-          }
-          ]
-          }
-          },
-          "testSpecification": {
-          "androidInstrumentationTest": {
-            "testApk":{
-              "gcsPath": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+            "environmentMatrix": {
+              "androidDeviceList": {
+                "androidDevices": [
+                  {
+                    "androidModelId": "Pixel2",
+                    "androidVersionId": "30",
+                    "locale": "en",
+                    "orientation": "portrait"
+                  }
+                ]
               }
-           "appApk":{
-              "gcsPath": "app/build/outputs/apk/debug/app-debug.apk"
+            },
+            "testSpecification": {
+              "androidInstrumentationTest": {
+                "testApk": {
+                  "gcsPath": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+                },
+                "appApk": {
+                  "gcsPath": "app/build/outputs/apk/debug/app-debug.apk"
+                }
               }
-          }
-          },
-          "resultsStorage": {
-            "googleCloudStorage": {
+            },
+            "resultsStorage": {
+              "googleCloudStorage": {
                 "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
+              }
             }
-            }'
+          }'
           
           responseBody=$(curl -X POST \
           -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
