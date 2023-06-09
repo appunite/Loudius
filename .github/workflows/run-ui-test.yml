@@ -115,10 +115,10 @@ jobs:
           echo "Service account: ${{secrets.SERVICE_ACCOUNT}} "
           echo "Firebase project id: ${{secrets.FIREBASE_PROJECT_ID}}" 
 
-          matrixId=$(curl -X POST \
+          matrixId=`(curl -X POST \
           -H "Content-Type: application/json" \
           -d "$requestBody" \
-          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices" | jq -r '.testMatrixId')
+          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices" | jq -r '.testMatrixId')`
 
           echo "Test Matrix ID: $matrixId"
           echo "::set-output name=testMatrixId::$matrixId"
