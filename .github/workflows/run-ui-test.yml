@@ -157,3 +157,14 @@ jobs:
           else
             python "build-tools/upload-junit-to-cloud.py"
           fi
+
+      - name: Check for the test status x2
+        run: |
+          sleep 100
+          
+          responseBody=$(curl -X GET \
+          -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+          -H "Content-Type: application/json" \
+          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices/${{steps.tests.outputs.testMatrixId}}"/)
+          
+          echo "Test Matrix response body from get: $responseBody"
