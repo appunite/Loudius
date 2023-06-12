@@ -91,6 +91,11 @@ jobs:
             exit 1
           fi
 
+      - name: Upload APK to GCS
+        run: |
+          gsutil cp app/build/outputs/apk/debug/app-debug.apk gs://${{ steps.generate-dir.outputs.bucket }}/app-debug.apk
+          gsutil cp app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk gs://${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest.apk
+
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -123,11 +128,11 @@ jobs:
             "testSpecification": {
               "androidInstrumentationTest": {
                 "testApk": {
-                  "gcsPath": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+                  "gcsPath": gs://${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest.apk
                 },
                 "appPackageId": "com.appunite.loudius",
                 "appApk": {
-                  "gcsPath": "app/build/outputs/apk/debug/app-debug.apk"
+                  "gcsPath": gs://${{ steps.generate-dir.outputs.bucket }}/app-debug.apk
                 }
               }
             },
