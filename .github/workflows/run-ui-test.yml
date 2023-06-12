@@ -73,6 +73,25 @@ jobs:
       - name: Assemble App Debug APK and Android Instrumentation Tests
         run: ./gradlew assembleDebug assembleDebugAndroidTest
 
+      - name: Check APK file existence
+        run: |
+          if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "APK file exists."
+          else
+            echo "APK file does not exist."
+            exit 1
+          fi
+
+      - name: Check APK file permissions
+        run: |
+          if [ -r app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "APK file has read permissions."
+          else
+            echo "APK file does not have read permissions."
+            exit 1
+          fi
+
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
@@ -106,6 +125,7 @@ jobs:
                 "testApk": {
                   "gcsPath": "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
                 },
+                "appPackageId": "com.appunite.loudius",
                 "appApk": {
                   "gcsPath": "app/build/outputs/apk/debug/app-debug.apk"
                 }
