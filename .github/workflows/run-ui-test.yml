@@ -142,7 +142,8 @@ jobs:
                 "gcsPath": "gs://$${{ steps.generate-dir.outputs.bucket }}/$${{ steps.generate-dir.outputs.results_dir }}"
               }
             }
-          
+          }
+          '
           
           responseBody=$(curl -X POST \
           -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
