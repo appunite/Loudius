@@ -142,7 +142,7 @@ jobs:
           responseBody=$(curl -X GET \
           -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
           -H "Content-Type: application/json" \
-          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices/${{steps.tests.testMatrixId}}"/)
+          "https://testing.googleapis.com/v1/projects/${{ secrets.FIREBASE_PROJECT_ID }}/testMatrices/${{steps.tests.outputs.testMatrixId}}"/)
           
           echo "Test Matrix response body from get: $responseBody"
 
