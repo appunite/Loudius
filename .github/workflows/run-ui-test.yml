@@ -159,6 +159,7 @@ jobs:
           fi
 
       - name: Check for the test status x2
+        if: always()
         run: |
           sleep 100
           
