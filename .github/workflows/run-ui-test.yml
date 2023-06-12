@@ -129,17 +129,17 @@ jobs:
             "testSpecification": {
               "androidInstrumentationTest": {
                 "testApk": {
-                  "gcsPath": gs://${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest.apk
+                  "gcsPath": gs:/${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest.apk
                 },
                 "appPackageId": "com.appunite.loudius",
                 "appApk": {
-                  "gcsPath": gs://${{ steps.generate-dir.outputs.bucket }}/app-debug.apk
+                  "gcsPath": gs:/${{ steps.generate-dir.outputs.bucket }}/app-debug.apk
                 }
               }
             },
             "resultStorage": {
               "googleCloudStorage": {
-                "gcsPath": "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
+                "gcsPath": "gs:/${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}"
               }
             }
           }'
