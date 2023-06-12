@@ -103,10 +103,9 @@ jobs:
           echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
 
-      - name: Create directories on GCS
+      - name: Create directory on GCS
         run: |
-          gsutil mb gs://${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest
-          gsutil mb gs://${{ steps.generate-dir.outputs.bucket }}/app-debug
+          gsutil mb gs://${{ steps.generate-dir.outputs.bucket }}
 
       - name: Upload APK to GCS
         run: |
