@@ -102,12 +102,18 @@ jobs:
         run: |-
           echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
           echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
+          
+          gsutil mb gs://app-debug.apk
 
+      - name: Create directories on GCS
+        run: |
+          gsutil mb gs://${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest
+          gsutil mb gs://${{ steps.generate-dir.outputs.bucket }}/app-debug
 
       - name: Upload APK to GCS
         run: |
-          gsutil cp app/build/outputs/apk/debug/app-debug.apk gs:/${{ steps.generate-dir.outputs.bucket }}/app-debug.apk
-          gsutil cp app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk gs:/${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest.apk
+          gsutil cp app/build/outputs/apk/debug/app-debug.apk gs:/${{ steps.generate-dir.outputs.bucket }}/app-debug
+          gsutil cp app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk gs:/${{ steps.generate-dir.outputs.bucket }}/app-debug-androidTest
 
 
 
