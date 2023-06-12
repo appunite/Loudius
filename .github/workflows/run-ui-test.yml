@@ -129,7 +129,7 @@ jobs:
           
           echo "Test Matrix ID: $test_matrix_id"
           echo $test_matrix_id > test_matrix_id.txt
-          echo "::set-output name=testMatrixId::$matrixId"
+          echo "::set-output name=testMatrixId::$test_matrix_id"
 
       - name: Upload test matrix ID artifact
         uses: actions/upload-artifact@v3
