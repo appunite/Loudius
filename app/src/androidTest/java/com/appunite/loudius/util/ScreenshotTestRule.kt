@@ -50,7 +50,7 @@ open class ScreenshotTestRule : TestRule {
                     return
                 } catch (t: Throwable) {
                     if (!errorHandled.get()) {
-                        Screenshot.capture().process()
+                        captureScreenshot(description)
                     }
                     error = t
                 }
@@ -58,5 +58,11 @@ open class ScreenshotTestRule : TestRule {
                 if (error != null) throw error
             }
         }
+    }
+
+    private fun captureScreenshot(description: Description) {
+        val screenshot = Screenshot.capture()
+        screenshot.name = "${description.testClass.simpleName}_${description.methodName}-failure"
+        screenshot.process()
     }
 }
