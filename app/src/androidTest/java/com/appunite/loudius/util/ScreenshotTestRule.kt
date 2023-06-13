@@ -38,7 +38,7 @@ open class ScreenshotTestRule : TestRule {
                 val errorHandled = AtomicBoolean(false)
 
                 Espresso.setFailureHandler { throwable, matcher ->
-                    Screenshot.capture().process()
+                    captureScreenshot(description)
                     errorHandled.set(true)
                     val targetContext = getInstrumentation().targetContext
                     DefaultFailureHandler(targetContext).handle(throwable, matcher)
