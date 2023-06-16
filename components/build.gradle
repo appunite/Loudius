@@ -43,6 +43,14 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
+
+    testOptions {
+        unitTests {
+            all {
+                it.maxHeapSize = "2g"
+            }
+        }
+    }
 }
 
 dependencies {
