@@ -3,11 +3,6 @@ description: "Cancels previous runs, set ups jdk, validates gradle wrapper and u
 runs:
   using: "composite"
   steps:
-    - name: Cancel previous runs for the same branch
-      uses: styfle/cancel-workflow-action@0.9.1
-      with:
-        access_token: ${{ github.token }}
-
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
