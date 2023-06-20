@@ -1,8 +1,15 @@
 name: Check for master or prod failure
 on:
   workflow_run:
-    workflows: [ "MegaLinter", "Snapshot recording", "Snapshot verification", "Android Release", "Run unit tests" ]
-    types: [ completed ]
+    workflows:
+      [
+        "MegaLinter",
+        "Snapshot recording",
+        "Snapshot verification",
+        "Android Release",
+        "Run unit tests",
+      ]
+    types: [completed]
 
 permissions: read-all
 
