@@ -19,10 +19,10 @@ package com.appunite.loudius.network.utils
 import com.appunite.loudius.network.model.error.DefaultErrorResponse
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
-import java.io.IOException
-import javax.inject.Inject
 import org.json.JSONException
 import retrofit2.HttpException
+import java.io.IOException
+import javax.inject.Inject
 
 class ApiRequester @Inject constructor(private val gson: Gson) {
 

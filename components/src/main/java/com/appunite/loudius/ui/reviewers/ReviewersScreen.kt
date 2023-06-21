@@ -144,7 +144,7 @@ private fun ReviewersScreenStateless(
                     refreshing,
                     onRefresh,
                     padding,
-                    onAction
+                    onAction,
                 )
             }
         },
@@ -263,7 +263,7 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
 private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
     stringResource(
         id = R.string.reviewers_screen_reviewed_message,
-        reviewer.hoursFromReviewDone ?: 0
+        reviewer.hoursFromReviewDone ?: 0,
     )
 } else {
     stringResource(id = R.string.reviewers_screen_not_reviewed_message, reviewer.hoursFromPRStart)
