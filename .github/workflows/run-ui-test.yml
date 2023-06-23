@@ -74,3 +74,13 @@ jobs:
           else
             python "build-tools/upload-junit-to-cloud.py"
           fi
+
+
+      - name: Include Slack Notification
+        if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
+        uses: ./.github/actions/slack-notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_GIT_REF: ${{ github.ref }}
+          SLACK_WORKFLOW: ${{ github.workflow }}
+

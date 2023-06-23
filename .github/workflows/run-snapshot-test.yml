@@ -98,13 +98,10 @@ jobs:
             confused
           reactions-edit-mode: replace
 
-      - name: Notify Slack on failure
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2.1.0
+      - name: Include Slack Notification
+        if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
+        uses: ./.github/actions/slack-notification
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: loudius-internal
-          SLACK_COLOR: "#C73E1D"
-          SLACK_MESSAGE: "Failure on ${{ github.ref.name }} branch for ${{ github.workflow.name }} workflow :cry:"
-          SLACK_TITLE: Workflow failure
-          SLACK_USERNAME: Failure bot
+          SLACK_GIT_REF: ${{ github.ref }}
+          SLACK_WORKFLOW: ${{ github.workflow }}

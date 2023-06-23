@@ -1,0 +1,14 @@
+name: "Send notification to Slack"
+description: "Sending notification to Slack on loudius-internal channel with workflow failure message. "
+runs:
+  using: "composite"
+  steps:
+    - name: Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ env.SLACK_WEBHOOK }}
+        SLACK_CHANNEL: loudius-internal
+        SLACK_COLOR: "#C73E1D"
+        SLACK_MESSAGE: "Uh-oh! The code monkeys are having a party on *${{ env.SLACK_GIT_REF }}* 🐒🎉 But it seems like they broke something in the *'${{ env.SLACK_WORKFLOW}}' workflow!* Can someone please bring some bananas to fix it? 🍌🔧"
+        SLACK_TITLE: ⚠️ Workflow Failure Alert ⚠️
+        SLACK_USERNAME: Code Monkey Bot 🐵
