@@ -30,6 +30,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: loudius-internal
           SLACK_COLOR: "#C73E1D"
-          SLACK_MESSAGE: "Failure on ${{ github.event.workflow_run.head_branch }} branch for ${{ github.event.workflow_run.workflow }}:cry:"
+          SLACK_MESSAGE: "Failure on ${{ github.event.workflow_run.head_branch }} branch for ${{ github.event.workflow_run.workflow }}:cry: Will it change when I update it not on the main branch?"
           SLACK_TITLE: Workflow failure
           SLACK_USERNAME: Failure bot
