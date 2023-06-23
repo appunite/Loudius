@@ -1,0 +1,33 @@
+name: Check for master or prod failure
+on:
+  workflow_run:
+    workflows:
+      [
+        "MegaLinter",
+        "Snapshot recording",
+        "Snapshot verification",
+        "Android Release",
+        "Run unit tests",
+      ]
+    types: [completed]
+
+permissions: read-all
+
+jobs:
+  on-failure:
+    name: Notify Slack on failure
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'timed_out'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: loudius-internal
+          SLACK_COLOR: "#C73E1D"
+          SLACK_MESSAGE: "Failure on ${{ github.event.workflow_run.branch.name }} branch for ${{ github.event.workflow_run.workflow }}:cry:"
+          SLACK_TITLE: Workflow failure
+          SLACK_USERNAME: Failure bot
