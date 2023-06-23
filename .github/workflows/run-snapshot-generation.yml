@@ -6,7 +6,7 @@ name: Snapshot recording
 
 on:
   pull_request:
-    types: [ opened, edited, synchronize ]
+    types: [opened, edited, synchronize]
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
