@@ -72,7 +72,7 @@ class PaparazziShowkaseTests {
                 ),
             ) {
                 LoudiusTheme(darkTheme = (theme == "dark")) {
-                    Box(modifier = Modifier.background(Color.Black)) {
+                    Box(modifier = Modifier.background(Color.White)) {
                         componentPreview.content()
                     }
                 }
