@@ -8,6 +8,10 @@ on:
   pull_request:
     types: [opened, edited, synchronize]
 
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
 permissions:
   checks: write
   contents: write
@@ -96,3 +100,11 @@ jobs:
           reactions: |
             confused
           reactions-edit-mode: replace
+
+      - name: Include Slack Notification
+        if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
+        uses: ./.github/actions/slack-notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_GIT_REF: ${{ github.ref }}
+          SLACK_WORKFLOW: ${{ github.workflow }}
