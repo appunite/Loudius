@@ -12,6 +12,7 @@
     <string name="login_screen_login_button">Log in</string>
     <string name="login_screen_github_icon_content_description">Github icon</string>
     <string name="login_screen_loudius_logo_content_description">Loudius logo</string>
+    <string name="login_screen_loudius_browser_components_icon_description">Browse app components</string>
 
     <!-- LoginScreen -> XiaomiPermissionDialog -->
     <string name="login_screen_xiaomi_dialog_grant_permission">Grant permission</string>
