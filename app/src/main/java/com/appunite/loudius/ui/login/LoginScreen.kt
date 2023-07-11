@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.android.showkase.models.Showkase
+import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
 import com.appunite.loudius.components.components.LoudiusDialog
@@ -88,8 +89,10 @@ fun LoginScreenStateless(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
 ) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-        BrowseComponentIcon(onAction)
+    if (BuildConfig.DEBUG) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            BrowseComponentIcon(onAction)
+        }
     }
     Column(
         modifier = Modifier.fillMaxSize(),
