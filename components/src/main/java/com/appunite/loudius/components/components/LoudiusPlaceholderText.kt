@@ -41,7 +41,7 @@ fun LoudiusPlaceholderText(text: String) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
 fun PreviewLoudiusPlaceholderText() {
     LoudiusTheme {
