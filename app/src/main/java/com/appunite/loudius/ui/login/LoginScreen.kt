@@ -121,7 +121,6 @@ fun LoginScreenStateless(
             XiaomiPermissionDialog(onAction)
         }
     }
-
 }
 
 @Composable
@@ -129,12 +128,12 @@ private fun BrowseComponentIcon(onClick: (LoginAction) -> Unit) {
     Image(
         painter = painterResource(id = R.drawable.ic_components_browser),
         contentDescription = stringResource(
-            id = R.string.login_screen_loudius_browser_components_icon_description
+            id = R.string.login_screen_loudius_browser_components_icon_description,
         ),
         modifier = Modifier
             .padding(16.dp)
             .size(24.dp)
-            .clickable { onClick(LoginAction.ClickBrowseComponents) }
+            .clickable { onClick(LoginAction.ClickBrowseComponents) },
     )
 }
 
