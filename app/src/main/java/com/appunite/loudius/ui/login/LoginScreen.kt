@@ -136,7 +136,7 @@ private fun BrowseComponentIcon(onClick: (LoginAction) -> Unit) {
             .clip(CircleShape)
             .clickable { onClick(LoginAction.ClickBrowseComponents) }
             .padding(16.dp)
-            .size(24.dp)
+            .size(24.dp),
     )
 }
 
