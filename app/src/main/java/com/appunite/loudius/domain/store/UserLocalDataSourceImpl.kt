@@ -27,7 +27,7 @@ interface UserLocalDataSource {
 
 @Singleton
 class UserLocalDataSourceImpl @Inject constructor(
-    private val encryptedPrefs: EncryptedPrefs
+    private val encryptedPrefs: EncryptedPrefs,
 ) :
     UserLocalDataSource {
 
