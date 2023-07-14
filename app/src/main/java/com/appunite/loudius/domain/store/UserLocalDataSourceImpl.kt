@@ -16,11 +16,7 @@
 
 package com.appunite.loudius.domain.store
 
-import android.content.Context
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.appunite.loudius.network.model.AccessToken
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,34 +26,15 @@ interface UserLocalDataSource {
 }
 
 @Singleton
-class UserLocalDataSourceImpl @Inject constructor(@ApplicationContext context: Context) :
+class UserLocalDataSourceImpl @Inject constructor(
+    private val encryptedPrefs: EncryptedPrefs
+) :
     UserLocalDataSource {
 
-    companion object {
-        private const val FILE_NAME = "com.appunite.loudius.sharedPreferences"
-        private const val KEY_ACCESS_TOKEN = "access_token"
-    }
-
-    private val masterKey: MasterKey by lazy {
-        MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-    }
-
-    private val sharedPreferences by lazy {
-        EncryptedSharedPreferences.create(
-            context,
-            FILE_NAME,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
-
     override fun saveAccessToken(accessToken: AccessToken) {
-        sharedPreferences.edit().putString(KEY_ACCESS_TOKEN, accessToken).apply()
+        encryptedPrefs.saveAccessToken(accessToken)
     }
 
     override fun getAccessToken(): AccessToken =
-        sharedPreferences.getString(KEY_ACCESS_TOKEN, null) ?: ""
+        encryptedPrefs.getAccessToken()
 }

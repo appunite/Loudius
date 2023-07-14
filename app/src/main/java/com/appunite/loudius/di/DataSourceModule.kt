@@ -17,6 +17,8 @@
 package com.appunite.loudius.di
 
 import android.content.Context
+import com.appunite.loudius.domain.store.EncryptedPrefs
+import com.appunite.loudius.domain.store.EncryptedPrefsImpl
 import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
@@ -56,8 +58,13 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideUserLocalDataSource(@ApplicationContext context: Context): UserLocalDataSource =
-        UserLocalDataSourceImpl(context)
+    fun provideUserLocalDataSource(encryptedPrefs: EncryptedPrefs): UserLocalDataSource =
+        UserLocalDataSourceImpl(encryptedPrefs)
+
+    @Singleton
+    @Provides
+    fun provideEncryptedPrefs(@ApplicationContext context: Context): EncryptedPrefs =
+        EncryptedPrefsImpl(context)
 
     @Singleton
     @Provides
