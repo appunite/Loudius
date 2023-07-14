@@ -111,6 +111,9 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    //security
+    implementation "androidx.security:security-crypto:1.1.0-alpha06"
+
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
