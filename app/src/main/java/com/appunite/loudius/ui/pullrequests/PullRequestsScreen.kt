@@ -287,8 +287,8 @@ fun PullRequestsScreenEmptyListPreview() {
 }
 
 @Preview("Pull requests - Loading")
-@ShowkaseComposable(skip = true)
 @Composable
+@ShowkaseComposable(skip = true)
 fun PullRequestsScreenLoadingPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
