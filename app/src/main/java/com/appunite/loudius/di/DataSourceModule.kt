@@ -61,7 +61,7 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideKtorAuthNetworkDataSource(
+    fun provideAuthDataSource(
         service: AuthService
     ): AuthDataSource = AuthDataSourceImpl(service)
 }
