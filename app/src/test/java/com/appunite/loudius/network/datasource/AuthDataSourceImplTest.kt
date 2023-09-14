@@ -22,7 +22,6 @@ import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.retrofitTestDouble
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.testOkHttpClient
-import com.appunite.loudius.network.testRequester
 import com.appunite.loudius.network.utils.WebException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -35,8 +34,7 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class AuthNetworkDataSourceTest {
+class AuthDataSourceImplTest {
     private val fakeUserRepository = FakeAuthRepository()
     private val testOkHttpClient = testOkHttpClient(fakeUserRepository)
     private val mockWebServer: MockWebServer = MockWebServer()
@@ -50,7 +48,7 @@ class AuthNetworkDataSourceTest {
         mockWebServer.shutdown()
     }
 
-    private val authNetworkDataSource = AuthNetworkDataSource(authService, testRequester())
+    private val authDataSourceImpl = AuthDataSourceImpl(authService)
 
     @Test
     fun `GIVEN correct data WHEN accessing token THEN return success with new valid token`() =
@@ -65,7 +63,7 @@ class AuthNetworkDataSourceTest {
             )
 
             val result =
-                authNetworkDataSource.getAccessToken("clientId", "clientSecret", "correctCode")
+                authDataSourceImpl.getAccessToken("clientId", "clientSecret", "correctCode")
 
             expectThat(result)
                 .isSuccess()
@@ -85,7 +83,7 @@ class AuthNetworkDataSourceTest {
             )
 
             val result =
-                authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
+                authDataSourceImpl.getAccessToken("clientId", "clientSecret", "incorrectCode")
 
             expectThat(result)
                 .isFailure()
@@ -104,7 +102,7 @@ class AuthNetworkDataSourceTest {
                 MockResponse().setResponseCode(200).setBody(jsonResponse),
             )
 
-            val result = authNetworkDataSource.getAccessToken("", "", "")
+            val result = authDataSourceImpl.getAccessToken("", "", "")
 
             expectThat(result)
                 .isFailure()

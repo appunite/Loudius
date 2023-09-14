@@ -28,6 +28,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.http.ContentType
+import io.ktor.serialization.gson.GsonConverter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -55,21 +61,21 @@ object NetworkModule {
     @Provides
     @Singleton
     @AuthAPI
-    fun provideAuthRetrofit(
+    fun provideAuthKtor(
         gson: Gson,
         @AuthAPI baseUrl: String,
         loggingInterceptor: HttpLoggingInterceptor,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            register(ContentType.Application.Json, GsonConverter(gson))
+        }
     }
 
     @Provides
