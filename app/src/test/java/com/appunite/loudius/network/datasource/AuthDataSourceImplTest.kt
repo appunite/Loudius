@@ -18,16 +18,18 @@
 
 package com.appunite.loudius.network.datasource
 
-import com.appunite.loudius.fakes.FakeAuthRepository
-import com.appunite.loudius.network.retrofitTestDouble
+import com.appunite.loudius.network.httpClientTestDouble
 import com.appunite.loudius.network.services.AuthService
-import com.appunite.loudius.network.testOkHttpClient
+import com.appunite.loudius.network.services.AuthServiceImpl
 import com.appunite.loudius.network.utils.WebException
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
+import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -35,20 +37,9 @@ import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
 class AuthDataSourceImplTest {
-    private val fakeUserRepository = FakeAuthRepository()
-    private val testOkHttpClient = testOkHttpClient(fakeUserRepository)
-    private val mockWebServer: MockWebServer = MockWebServer()
-    private val authService = retrofitTestDouble(
-        mockWebServer = mockWebServer,
-        client = testOkHttpClient,
-    ).create(AuthService::class.java)
 
-    @AfterEach
-    fun tearDown() {
-        mockWebServer.shutdown()
-    }
-
-    private val authDataSourceImpl = AuthDataSourceImpl(authService)
+    private lateinit var authService: AuthService
+    private lateinit var authDataSourceImpl: AuthDataSourceImpl
 
     @Test
     fun `GIVEN correct data WHEN accessing token THEN return success with new valid token`() =
@@ -58,9 +49,7 @@ class AuthDataSourceImplTest {
             { "access_token": "validAccessToken" }
             """.trimIndent()
 
-            mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
-            )
+            initAuthService(jsonResponse)
 
             val result =
                 authDataSourceImpl.getAccessToken("clientId", "clientSecret", "correctCode")
@@ -78,9 +67,7 @@ class AuthDataSourceImplTest {
             { "error": "bad_verification_code" }
             """.trimIndent()
 
-            mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
-            )
+            initAuthService(jsonResponse)
 
             val result =
                 authDataSourceImpl.getAccessToken("clientId", "clientSecret", "incorrectCode")
@@ -98,9 +85,7 @@ class AuthDataSourceImplTest {
             { "error": "error" }
             """.trimIndent()
 
-            mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
-            )
+            initAuthService(jsonResponse)
 
             val result = authDataSourceImpl.getAccessToken("", "", "")
 
@@ -108,4 +93,19 @@ class AuthDataSourceImplTest {
                 .isFailure()
                 .isEqualTo(WebException.UnknownError(null, "error"))
         }
+
+
+    private fun initAuthService(response: String) {
+        authService = AuthServiceImpl(
+            httpClientTestDouble(
+                engine = MockEngine {
+                    respond(
+                        content = ByteReadChannel(response),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json")
+                    )
+                })
+        )
+        authDataSourceImpl = AuthDataSourceImpl(authService)
+    }
 }

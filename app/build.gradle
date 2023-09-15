@@ -107,6 +107,7 @@ dependencies {
     implementation "io.ktor:ktor-client-okhttp:2.3.4"
     implementation "io.ktor:ktor-client-content-negotiation:2.3.4"
     implementation "io.ktor:ktor-serialization-gson:2.3.4"
+    testImplementation("io.ktor:ktor-client-mock:2.3.4")
 
     //retrofit & okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
