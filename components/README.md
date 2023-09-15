@@ -34,7 +34,7 @@ Component replacing the whole screen when indicating the error, with a custom ac
 
 
 
-![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorScreenCustomTextsPreview,1,light].png)
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorScreenCustomTextsPreview,1,light].png" />
 
 # List item
 
@@ -48,7 +48,7 @@ Component allows to display the "action" on the right of the component.
 
 
 
-![com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light]](src\test\snapshots\images\com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light].png)
+<img src="src\test\snapshots\images\com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light].png" alt="com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light]" />
 
 
 
@@ -58,7 +58,7 @@ Component also takes a icon which is displayed on the left of the "content".
 
 
 
-![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndIconPreview,1,light].png)
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndIconPreview,1,light].png" />
 
 
 
@@ -68,7 +68,7 @@ Component taking only the "content".
 
 
 
-![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemJustContentPreview,1,light].png)
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemJustContentPreview,1,light].png" />
 
 # Buttons
 
@@ -76,12 +76,12 @@ Component taking only the "content".
 
 
 
-![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonWithIconPreview,1,light].png)
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonWithIconPreview,1,light].png" />
 
 #### Outlined button no icon
 
 
 
-![](../components/src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonPreview,1,light].png)
+<img src="../components/src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonPreview,1,light].png" />
 
 </details>
