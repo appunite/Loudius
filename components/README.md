@@ -1,18 +1,13 @@
-<details>
-    <summary>Text</summary>
-    <br>
-    <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTextStyles,1,light].png" alt="alt text" style="zoom: 80%;" />
-</details>
-
-<details open>
-<summary>Components</summary>
-<br>
 
 # Dialogs
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
+<details>
+    <summary>Code snippet</summary>
+    <br>
 https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L25-L48
+</details>
 
 ### Standard
 
@@ -32,6 +27,12 @@ This component gives  the user the choice out of two options, usually dismiss or
 
 #### Error
 
+<details>
+    <summary>Code snippet</summary>
+    <br>
+https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusErrorDialog.kt#L29-L47
+</details>
+
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorDialogPreview,1,light].png" style="zoom:80%;" />
 
 # Screens
@@ -41,6 +42,12 @@ Components replacing the whole screen, for example when indicating a error.
 #### Error
 
 Component replacing the whole screen when indicating the error, with a custom action button and title.
+
+<details>
+    <summary>Code snippet</summary>
+    <br>
+https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L39-L84
+</details>
 
 
 
@@ -55,6 +62,12 @@ Component being displayed inside a list.
 #### Content with action
 
 Component allows to display the "action" on the right of the component.
+
+<details>
+    <summary>Code snippet</summary>
+    <br>
+https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusOutlinedButton.kt#L37-L61
+</details>
 
 
 
