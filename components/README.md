@@ -1,3 +1,6 @@
+[TOC]
+
+
 
 # Dialogs
 
@@ -115,7 +118,7 @@ https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2
 
 <img src="../components/src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonPreview,1,light].png" />
 
-#### Topbar
+# Topbar
 
 Topbar is a component on the top of the screen.
 
