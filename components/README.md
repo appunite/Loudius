@@ -1,3 +1,9 @@
+<details>
+    <summary>Text</summary>
+    <br>
+    <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTextStyles,1,light].png" alt="alt text" style="zoom: 80%;" />
+</details>
+
 <details open>
 <summary>Components</summary>
 <br>
@@ -12,11 +18,13 @@ This component gives the user option to confirm the information.
 
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" />
 
+
+
 #### Advanced
 
 This component gives  the user the choice out of two options, usually dismiss or confirmation.
 
-<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" />
+<img align ="rightsrc="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" />
 
 ## Variants 
 
