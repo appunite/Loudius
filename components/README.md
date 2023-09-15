@@ -12,6 +12,8 @@
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
+https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L25-L48
+
 ### Standard
 
 This component gives the user option to confirm the information.
