@@ -18,7 +18,7 @@ This component gives  the user the choice out of two options, usually dismiss or
 
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" />
 
-## Variants 
+## Variants
 
 #### Error
 
