@@ -21,7 +21,9 @@ This component gives the user option to confirm the information.
 
 This component gives  the user the choice out of two options, usually dismiss or confirmation.
 
-<img align ="rightsrc="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" />
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" />
+
+
 
 ## Variants
 
@@ -95,6 +97,12 @@ Component taking only the "content".
 
 # Buttons
 
+<details>
+    <summary>Code snippet</summary>
+    <br>
+https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusOutlinedButton.kt#L37-L61
+</details>
+
 #### Outlined button with icon
 
 
@@ -106,5 +114,23 @@ Component taking only the "content".
 
 
 <img src="../components/src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonPreview,1,light].png" />
+
+#### Topbar
+
+Topbar is a component on the top of the screen.
+
+<details>
+    <summary>Code snippet</summary>
+    <br>
+https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusTopAppBar.kt#L33-L59
+</details>
+
+#### Topbar with back navigation
+
+![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png)
+
+#### Topbar with no navigation
+
+![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBarWithoutBackButton,1,light].png)
 
 </details>
