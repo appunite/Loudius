@@ -127,10 +127,12 @@ https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2
 
 #### Topbar with back navigation
 
-![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png)
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png" />
+
+
 
 #### Topbar with no navigation
 
-![](src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBarWithoutBackButton,1,light].png)
+<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBarWithoutBackButton,1,light].png" />
 
 </details>
