@@ -61,13 +61,14 @@ object NetworkModule {
     @Provides
     @Singleton
     @AuthAPI
-    fun provideAuthKtor(
+    fun provideAuthHttpClient(
         gson: Gson,
         @AuthAPI baseUrl: String,
         loggingInterceptor: HttpLoggingInterceptor,
     ): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
         engine {
+            addInterceptor(TestInterceptor)
             addInterceptor(loggingInterceptor)
         }
         defaultRequest {
