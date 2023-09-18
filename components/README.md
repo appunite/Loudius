@@ -11,22 +11,10 @@ Dialogs are a standard way to inform the user about some result, giving the user
     <br>
 https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L25-L48
 </details>
-
-### Standard
-
-This component gives the user option to confirm the information.
-
-<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" />
-
-
-
-#### Advanced
-
-This component gives  the user the choice out of two options, usually dismiss or confirmation.
-
-<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" />
-
-
+| Variant                                                      | Snapshot                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **Standard** <br />This component gives the user option to confirm the information. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
+| **Advanced**<br />This component gives  the user the choice out of two options, usually dismiss or confirmation. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
 
 ## Variants
 
@@ -37,7 +25,6 @@ This component gives  the user the choice out of two options, usually dismiss or
     <br>
 https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusErrorDialog.kt#L29-L47
 </details>
-
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorDialogPreview,1,light].png" style="zoom:80%;" />
 
 # Screens
@@ -53,7 +40,6 @@ Component replacing the whole screen when indicating the error, with a custom ac
     <br>
 https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L39-L84
 </details>
-
 
 
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorScreenCustomTextsPreview,1,light].png" />
