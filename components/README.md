@@ -2,26 +2,11 @@
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
-<details>
-    <summary>Code snippets</summary>
-  <br>
-  ### Standard
-https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L63
-</details>
+````
+```kotlin:./com/appunite/loudius/components/components/LoudiusDialog.kt
 
-
-
-https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt
-
-
-
-```kotlin
-https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24
 ```
-
-
-
-https://github.com/appunite/Loudius/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24
+````
 
 | Variant                                                      | Snapshot                                                     |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -32,11 +17,7 @@ https://github.com/appunite/Loudius/develop/components/src/main/java/com/appunit
 
 #### Error
 
-<details>
-    <summary>Code snippet</summary>
-    <br>
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusErrorDialog.kt#L29-L47
-</details>
+
 
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorDialogPreview,1,light].png" style="zoom:80%;" />
 
@@ -48,25 +29,13 @@ Components replacing the whole screen, for example when indicating a error.
 
 Component replacing the whole screen when indicating the error, with a custom action button and title.
 
-<details>
-    <summary>Code snippet</summary>
-    <br>
-https://github.com/appunite/Loudius/main/components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L39-L84
-</details>
-
 
 
 <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorScreenCustomTextsPreview,1,light].png" />
 
 # List item
 
-Component being displayed inside a list.
-
-<details>
-    <summary>Code snippet</summary>
-    <br>
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusOutlinedButton.kt#L37-L61
-</details>
+Component being displayed inside a list.x
 
 ## Variants
 
