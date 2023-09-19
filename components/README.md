@@ -2,17 +2,13 @@
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
-
-
-```markdown
-<details>
-<summary>How do I dropdown?</summary>
+```
+<details open>
+<summary>Want to ruin the surprise?</summary>
 <br>
-This is how you dropdown.
+Well, you asked for it!
 </details>
 ```
-
-
 
 [Source Code](../components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24)
 
@@ -22,7 +18,7 @@ This is how you dropdown.
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | **Standard** <br />This component gives the user option to confirm the information. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
 | **Advanced**<br />This component gives the user the choice out of two options, usually dismiss or confirmation. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
-| **Error**<br />Component indicating error.                   | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorDialogPreview,1,light].png" style="zoom:80%;" /> |
+| **Error**<br /><br />Component indicating error.             | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorDialogPreview,1,light].png" style="zoom:80%;" /> |
 
 #### 
 
@@ -79,5 +75,3 @@ Topbar is a component on the top of the screen.
 | ------------------------------- | ------------------------------------------------------------ |
 | **Topbar with back navigation** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png" /> |
 | **Topbar with no navigation**   | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBarWithoutBackButton,1,light].png" /> |
-
-</details>
