@@ -2,7 +2,7 @@
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
-```html
+```
 <details>
 <summary>How do I dropdown?</summary>
 <br>
