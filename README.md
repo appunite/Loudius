@@ -92,7 +92,6 @@ To do that - add `[New snapshots]` to the pull request title. Otherwise the snap
 
 We also are having [design system documentation](components/README.md).
 
-
 ## 🧑🏻‍🎓 Contributing
 
 We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
