@@ -21,7 +21,7 @@ https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/ap
 
 
 
-https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24
+https://github.com/appunite/Loudius/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24
 
 | Variant                                                      | Snapshot                                                     |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
