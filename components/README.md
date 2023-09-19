@@ -3,10 +3,14 @@
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
 <details>
-    <summary>Code snippet</summary>
-    <br>
-
+    <summary>Code snippets</summary>
+   <details>
+   <summary> Standard </summary>
+https://github.com/appunite/Loudius/blob/main/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L63
+  </details>
 </details>
+
+
 
 | Variant                                                      | Snapshot                                                     |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
