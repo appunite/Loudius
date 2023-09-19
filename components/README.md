@@ -11,11 +11,11 @@ https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/ap
 
 
 
-https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L62
+<https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L62>
 
-| Variant                                                      | Snapshot                                                     |
-| :----------------------------------------------------------- | ------------------------------------------------------------ |
-| **Standard** <br />This component gives the user option to confirm the information. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
+| Variant                                                                                                         | Snapshot                                                                                                                                                                                    |
+|:----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Standard** <br />This component gives the user option to confirm the information.                             | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" />   |
 | **Advanced**<br />This component gives the user the choice out of two options, usually dismiss or confirmation. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogAdvancedPreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
 
 ## Variants
@@ -66,19 +66,19 @@ Component allows to display the "action" on the right of the component.
 
 
 
-| Variant                                                      | Snapshot                                                     |
-| ------------------------------------------------------------ | :----------------------------------------------------------- |
-| **Content with action**<br />Component allows to display the "action" on the right of the component. | <img src="src\test\snapshots\images\com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light].png" alt="com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light]" /> |
-| **Content with icon**<br />Component also takes a icon which is displayed on the left of the "content". | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndIconPreview,1,light].png" /> |
-| **Content only**<br /><br />Component taking only the "content". | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemJustContentPreview,1,light].png" /> |
+| Variant                                                                                                 | Snapshot                                                                                                                                                                                                                                                                                          |
+|---------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Content with action**<br />Component allows to display the "action" on the right of the component.    | <img src="src\test\snapshots\images\com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light].png" alt="com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndActionPreview,1,light]" /> |
+| **Content with icon**<br />Component also takes a icon which is displayed on the left of the "content". | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemContentAndIconPreview,1,light].png" />                                                                                                                                 |
+| **Content only**<br /><br />Component taking only the "content".                                        | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusListItemJustContentPreview,1,light].png" />                                                                                                                                    |
 
 
 
 # Buttons
 
-| Variant                       | Snapshot                                                     |
-| ----------------------------- | ------------------------------------------------------------ |
-| **Outlined button with icon** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonWithIconPreview,1,light].png" /> |
+| Variant                       | Snapshot                                                                                                                                                                |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Outlined button with icon** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonWithIconPreview,1,light].png" />       |
 | **Outlined button no icon**   | <img src="../components/src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonPreview,1,light].png" /> |
 
 
@@ -87,9 +87,9 @@ Component allows to display the "action" on the right of the component.
 
 Topbar is a component on the top of the screen.
 
-| Variant                         | Snapshot                                                     |
-| ------------------------------- | ------------------------------------------------------------ |
-| **Topbar with back navigation** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png" /> |
+| Variant                         | Snapshot                                                                                                                                                       |
+|---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Topbar with back navigation** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png" />                  |
 | **Topbar with no navigation**   | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBarWithoutBackButton,1,light].png" /> |
 
 </details>
