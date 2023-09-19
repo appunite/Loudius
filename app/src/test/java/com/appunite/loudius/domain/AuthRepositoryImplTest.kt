@@ -23,7 +23,6 @@ import com.appunite.loudius.network.datasource.AuthDataSource
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
@@ -31,7 +30,6 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 import strikt.assertions.isSuccess
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AuthRepositoryImplTest {
     private val networkDataSource: AuthDataSource = mockk {
         coEvery {

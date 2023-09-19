@@ -18,39 +18,41 @@
 
 package com.appunite.loudius.network.datasource
 
-import com.appunite.loudius.fakes.FakeAuthRepository
-import com.appunite.loudius.network.retrofitTestDouble
-import com.appunite.loudius.network.services.AuthService
-import com.appunite.loudius.network.testOkHttpClient
-import com.appunite.loudius.network.testRequester
+import com.appunite.loudius.network.httpClientTestDouble
+import com.appunite.loudius.network.services.AuthServiceImpl
 import com.appunite.loudius.network.utils.WebException
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class AuthNetworkDataSourceTest {
-    private val fakeUserRepository = FakeAuthRepository()
-    private val testOkHttpClient = testOkHttpClient(fakeUserRepository)
-    private val mockWebServer: MockWebServer = MockWebServer()
-    private val authService = retrofitTestDouble(
-        mockWebServer = mockWebServer,
-        client = testOkHttpClient,
-    ).create(AuthService::class.java)
+class AuthDataSourceImplTest {
 
-    @AfterEach
-    fun tearDown() {
-        mockWebServer.shutdown()
+    private lateinit var client: HttpClient
+    private lateinit var authService: AuthServiceImpl
+    private lateinit var authDataSourceImpl: AuthDataSourceImpl
+    private val mockWebServer = MockWebServer()
+
+    @BeforeEach
+    fun setUp() {
+        mockWebServer.start()
+        client = httpClientTestDouble(mockWebServer)
+        authService = AuthServiceImpl(client)
+        authDataSourceImpl = AuthDataSourceImpl(authService)
     }
 
-    private val authNetworkDataSource = AuthNetworkDataSource(authService, testRequester())
+    @AfterEach
+    fun teardown() {
+        mockWebServer.shutdown()
+    }
 
     @Test
     fun `GIVEN correct data WHEN accessing token THEN return success with new valid token`() =
@@ -61,11 +63,14 @@ class AuthNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(jsonResponse)
+                    .addHeader("Content-type", "application/json")
             )
 
             val result =
-                authNetworkDataSource.getAccessToken("clientId", "clientSecret", "correctCode")
+                authDataSourceImpl.getAccessToken("clientId", "clientSecret", "correctCode")
 
             expectThat(result)
                 .isSuccess()
@@ -81,11 +86,14 @@ class AuthNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(jsonResponse)
+                    .addHeader("Content-type", "application/json")
             )
 
             val result =
-                authNetworkDataSource.getAccessToken("clientId", "clientSecret", "incorrectCode")
+                authDataSourceImpl.getAccessToken("clientId", "clientSecret", "incorrectCode")
 
             expectThat(result)
                 .isFailure()
@@ -101,10 +109,13 @@ class AuthNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(jsonResponse)
+                    .addHeader("Content-type", "application/json")
             )
 
-            val result = authNetworkDataSource.getAccessToken("", "", "")
+            val result = authDataSourceImpl.getAccessToken("", "", "")
 
             expectThat(result)
                 .isFailure()

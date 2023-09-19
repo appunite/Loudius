@@ -20,7 +20,7 @@ import android.content.Context
 import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
-import com.appunite.loudius.network.datasource.AuthNetworkDataSource
+import com.appunite.loudius.network.datasource.AuthDataSourceImpl
 import com.appunite.loudius.network.datasource.PullRequestDataSource
 import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
 import com.appunite.loudius.network.datasource.UserDataSource
@@ -61,8 +61,7 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideAuthNetworkDataSource(
-        service: AuthService,
-        apiRequester: ApiRequester,
-    ): AuthDataSource = AuthNetworkDataSource(service, apiRequester)
+    fun provideAuthDataSource(
+        service: AuthService
+    ): AuthDataSource = AuthDataSourceImpl(service)
 }

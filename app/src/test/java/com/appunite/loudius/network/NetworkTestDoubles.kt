@@ -26,6 +26,12 @@ import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.http.ContentType
+import io.ktor.serialization.gson.GsonConverter
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
@@ -61,3 +67,20 @@ fun retrofitTestDouble(
     .addConverterFactory(GsonConverterFactory.create(gson))
     .baseUrl(mockWebServer.url("/"))
     .build()
+
+fun httpClientTestDouble(
+    mockWebServer: MockWebServer
+): HttpClient = HttpClient(OkHttp) {
+    expectSuccess = true
+    defaultRequest {
+        url(
+            mockWebServer.url("/").toString()
+        )
+    }
+    install(ContentNegotiation) {
+        register(
+            ContentType.Application.Json,
+            GsonConverter(testGson())
+        )
+    }
+}
