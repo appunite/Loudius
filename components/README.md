@@ -2,7 +2,7 @@
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
-[Source Code](components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24)
+[Source Code](../components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24)
 
 | Variant                                                      | Snapshot                                                     |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
