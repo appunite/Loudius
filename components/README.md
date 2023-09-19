@@ -5,7 +5,7 @@ Dialogs are a standard way to inform the user about some result, giving the user
 <details>
     <summary>Code snippet</summary>
     <br>
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L25-L48
+
 </details>
 
 | Variant                                                      | Snapshot                                                     |
@@ -36,7 +36,8 @@ Component replacing the whole screen when indicating the error, with a custom ac
 <details>
     <summary>Code snippet</summary>
     <br>
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L39-L84
+  ./components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt
+
 </details>
 
 
@@ -71,14 +72,6 @@ Component allows to display the "action" on the right of the component.
 
 # Buttons
 
-<details>
-    <summary>Code snippet</summary>
-    <br>
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusOutlinedButton.kt#L37-L61
-</details>
-
-
-
 | Variant                       | Snapshot                                                     |
 | ----------------------------- | ------------------------------------------------------------ |
 | **Outlined button with icon** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusOutlinedButtonWithIconPreview,1,light].png" /> |
@@ -90,14 +83,6 @@ https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2
 
 Topbar is a component on the top of the screen.
 
-<details>
-    <summary>Code snippet</summary>
-    <br>
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusTopAppBar.kt#L33-L59
-</details>
-
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusTopAppBar.kt#L33-L59
-</details>
 | Variant                         | Snapshot                                                     |
 | ------------------------------- | ------------------------------------------------------------ |
 | **Topbar with back navigation** | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusTopAppBar,1,light].png" /> |
