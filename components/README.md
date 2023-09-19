@@ -18,19 +18,15 @@ Dialogs are a standard way to inform the user about some result, giving the user
 
 Components replacing the whole screen, for example when indicating an error.
 
-#### Error
+# Variants
 
-[Source Code](../components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L106-L112)
-
-Component replacing the whole screen when indicating the error, with a custom action button and title.
-
-
-
-<img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorScreenCustomTextsPreview,1,light].png" />
+| Variant                                                      | Snapshot                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **Error**<br />[Source Code](../components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L106-L112)<br /><br />Component replacing the whole screen when indicating the error, with a custom action button and title.<br /> | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusErrorScreenCustomTextsPreview,1,light].png" /> |
 
 # List item
 
-Component being displayed inside a list.x
+Component being displayed inside a list.
 
 ## Variants
 
