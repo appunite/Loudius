@@ -6,7 +6,7 @@ Dialogs are a standard way to inform the user about some result, giving the user
     <summary>Code snippets</summary>
    <details>
    <summary> Standard </summary>
-https://github.com/appunite/Loudius/blob/main/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L63
+https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L63
   </details>
 </details>
 
