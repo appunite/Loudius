@@ -17,11 +17,34 @@
 package com.appunite.loudius.network.services
 
 import com.appunite.loudius.network.model.User
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import javax.inject.Inject
 
 interface UserService {
     @Headers("Accept: application/json")
     @GET("user")
     suspend fun getUser(): User
+}
+
+interface UserServiceKtor {
+
+    suspend fun getUser(): Result<User>
+}
+
+class UserServiceImplKtor @Inject constructor(private val client: HttpClient) : UserServiceKtor {
+
+    override suspend fun getUser(): Result<User> = runCatching {
+        client.get("user") {
+            headers {
+                append(HttpHeaders.Accept, ContentType.Application.Json.toString())
+            }
+        }.body()
+    }
 }
