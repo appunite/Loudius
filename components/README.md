@@ -2,13 +2,17 @@
 
 Dialogs are a standard way to inform the user about some result, giving the user option to react to it.
 
-```
+
+
+```markdown
 <details>
 <summary>How do I dropdown?</summary>
 <br>
 This is how you dropdown.
 </details>
 ```
+
+
 
 [Source Code](../components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24)
 
