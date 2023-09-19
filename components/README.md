@@ -4,6 +4,11 @@ Dialogs are a standard way to inform the user about some result, giving the user
 
 [Source Code](../components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L21-L24)
 
+```
+<!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./relative/path/to/code.js) -->
+<!-- MARKDOWN-AUTO-DOCS:END -->
+```
+
 | Variant                                                      | Snapshot                                                     |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | **Standard** <br />This component gives the user option to confirm the information. | <img src="src/test/snapshots/images/com.appunite.loudius_PaparazziShowkaseTests_preview_tests[Default Group-LoudiusDialogSimplePreview,1,light].png" alt="alt text" style="zoom: 80%;" /> |
