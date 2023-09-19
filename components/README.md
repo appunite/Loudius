@@ -36,8 +36,7 @@ Component replacing the whole screen when indicating the error, with a custom ac
 <details>
     <summary>Code snippet</summary>
     <br>
-  ./components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt
-
+https://github.com/appunite/Loudius/main/components/src/main/java/com/appunite/loudius/components/components/LoudiusFullScreenError.kt#L39-L84
 </details>
 
 
