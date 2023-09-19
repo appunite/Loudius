@@ -11,7 +11,7 @@ https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/ap
 
 
 
-https://github.com/appunite/Loudius/blob/8e616a9a05e668d11425a40c9f452eb3091dcc2a/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L62
+https://github.com/appunite/Loudius/blob/develop/components/src/main/java/com/appunite/loudius/components/components/LoudiusDialog.kt#L50-L62
 
 | Variant                                                      | Snapshot                                                     |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
