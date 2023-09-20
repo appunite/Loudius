@@ -47,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusListIcon
@@ -309,6 +310,7 @@ private val successData = listOf(
 
 @Preview
 @Composable
+@ShowkaseComposable(skip = true)
 fun DetailsScreenPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(
@@ -325,6 +327,7 @@ fun DetailsScreenPreview() {
 
 @Preview
 @Composable
+@ShowkaseComposable(skip = true)
 fun DetailsScreenNoReviewsPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(
@@ -341,6 +344,7 @@ fun DetailsScreenNoReviewsPreview() {
 
 @Preview
 @Composable
+@ShowkaseComposable(skip = true)
 fun DetailsScreenRefreshingPreview() {
     LoudiusTheme {
         ReviewersScreenStateless(

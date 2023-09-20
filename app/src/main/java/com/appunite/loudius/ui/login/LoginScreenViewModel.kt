@@ -26,6 +26,7 @@ import javax.inject.Inject
 sealed class LoginAction {
     object ClearNavigation : LoginAction()
     object ClickLogIn : LoginAction()
+    object ClickBrowseComponents : LoginAction()
     object XiaomiPermissionDialogDismiss : LoginAction()
     object XiaomiPermissionDialogGrantPermission : LoginAction()
     object XiaomiPermissionDialogAlreadyGrantedPermission : LoginAction()
@@ -34,6 +35,7 @@ sealed class LoginAction {
 sealed class LoginNavigateTo {
     object OpenXiaomiPermissionManager : LoginNavigateTo()
     object OpenGithubAuth : LoginNavigateTo()
+    object OpenComponentsBrowser : LoginNavigateTo()
 }
 
 data class LoginState(
@@ -78,6 +80,10 @@ class LoginScreenViewModel @Inject constructor(
                     showXiaomiPermissionDialog = false,
                     navigateTo = LoginNavigateTo.OpenGithubAuth,
                 )
+            }
+
+            LoginAction.ClickBrowseComponents -> {
+                state = state.copy(navigateTo = LoginNavigateTo.OpenComponentsBrowser)
             }
         }
     }

@@ -77,7 +77,7 @@ fun LoudiusOutlinedButtonIcon(
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "Buttons")
 fun LoudiusOutlinedButtonPreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
@@ -88,7 +88,7 @@ fun LoudiusOutlinedButtonPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "Buttons")
 fun LoudiusOutlinedButtonLargePreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
@@ -100,7 +100,7 @@ fun LoudiusOutlinedButtonLargePreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "Buttons")
 fun LoudiusOutlinedButtonWithIconPreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
@@ -117,7 +117,7 @@ fun LoudiusOutlinedButtonWithIconPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "Buttons")
 fun LoudiusOutlinedButtonDisabledPreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
@@ -135,7 +135,7 @@ fun LoudiusOutlinedButtonDisabledPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "Buttons")
 fun LoudiusOutlinedButtonWithIconLargePreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
