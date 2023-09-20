@@ -88,6 +88,10 @@ If you're not, don't worry, here's a video to help you create a new one:
 We are using screenshot tests to check if the UI is not broken. We are recording screenshots on CI.
 To do that - add `[New snapshots]` to the pull request title. Otherwise the snapshots are tested.
 
+### Design system documentation
+
+We also are having [design system documentation](components/README.md).
+
 ## 🧑🏻‍🎓 Contributing
 
 We believe that there is no ideal code and that every code can be improved. Therefore, we welcome
