@@ -23,22 +23,14 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import retrofit2.http.GET
-import retrofit2.http.Headers
 import javax.inject.Inject
 
 interface UserService {
-    @Headers("Accept: application/json")
-    @GET("user")
-    suspend fun getUser(): User
-}
-
-interface UserServiceKtor {
 
     suspend fun getUser(): Result<User>
 }
 
-class UserServiceImplKtor @Inject constructor(private val client: HttpClient) : UserServiceKtor {
+class UserServiceImpl @Inject constructor(private val client: HttpClient) : UserService {
 
     override suspend fun getUser(): Result<User> = runCatching {
         client.get("user") {

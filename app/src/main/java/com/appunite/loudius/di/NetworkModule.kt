@@ -82,6 +82,31 @@ object NetworkModule {
     @Provides
     @Singleton
     @BaseAPI
+    fun provideBaseHttpClient(
+        gson: Gson,
+        @BaseAPI baseUrl: String,
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
+        authFailureHandler: AuthFailureHandler,
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(authInterceptor)
+            addInterceptor(TestInterceptor)
+            addInterceptor(AuthFailureInterceptor(authFailureHandler))
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            register(ContentType.Application.Json, GsonConverter(gson))
+        }
+    }
+
+    @Provides
+    @Singleton
+    @BaseAPI
     fun provideBaseRetrofit(
         gson: Gson,
         @BaseAPI baseAPIUrl: String,
