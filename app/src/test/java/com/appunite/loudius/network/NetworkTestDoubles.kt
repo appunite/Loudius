@@ -27,8 +27,9 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
 import kotlinx.coroutines.Dispatchers
@@ -68,10 +69,18 @@ fun retrofitTestDouble(
     .build()
 
 fun httpClientTestDouble(
-    gson: Gson = testGson(),
-    engine: HttpClientEngine
-): HttpClient = HttpClient(engine) {
+    mockWebServer: MockWebServer
+): HttpClient = HttpClient(OkHttp) {
+    expectSuccess = true
+    defaultRequest {
+        url(
+            mockWebServer.url("/").toString()
+        )
+    }
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, GsonConverter(gson))
+        register(
+            ContentType.Application.Json,
+            GsonConverter(testGson())
+        )
     }
 }
