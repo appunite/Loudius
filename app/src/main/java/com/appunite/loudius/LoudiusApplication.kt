@@ -18,6 +18,17 @@ package com.appunite.loudius
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import org.koin.core.context.GlobalContext.startKoin
 
 @HiltAndroidApp
-class LoudiusApplication : Application()
+class LoudiusApplication : Application(){
+    override fun onCreate() {
+        super.onCreate()
+
+        startKoin{
+
+        }
+    }
+
+
+}

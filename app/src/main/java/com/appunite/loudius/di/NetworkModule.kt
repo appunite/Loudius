@@ -36,48 +36,56 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import javax.inject.Singleton
 
+val networkModule = module {
+    single<HttpLoggingInterceptor> {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
+    }
+
+    single<HttpClient>(named("auth")) {
+        HttpClient(OkHttp) {
+            expectSuccess = true
+            engine {
+                addInterceptor(TestInterceptor)
+                addInterceptor(get<HttpLoggingInterceptor>())
+            }
+            defaultRequest {
+                url(Constants.AUTH_API_URL)
+            }
+            install(ContentNegotiation) {
+                register(ContentType.Application.Json, GsonConverter(get()))
+            }
+        }
+    }
+
+    single<HttpClient>(named("base")) {
+        HttpClient(OkHttp) {
+            expectSuccess = true
+            engine {
+                addInterceptor(TestInterceptor)
+                addInterceptor(get())
+            }
+            defaultRequest {
+                url(Constants.BASE_API_URL)
+            }
+            install(ContentNegotiation) {
+                register(ContentType.Application.Json, GsonConverter(get()))
+            }
+        }
+    }
+}
+
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
-    }
-
-    @Provides
-    @AuthAPI
-    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
-
-    @Provides
-    @BaseAPI
-    fun provideBaseAPIUrl() = Constants.BASE_API_URL
-
-    @Provides
-    @Singleton
-    @AuthAPI
-    fun provideAuthHttpClient(
-        gson: Gson,
-        @AuthAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-    ): HttpClient = HttpClient(OkHttp) {
-        expectSuccess = true
-        engine {
-            addInterceptor(TestInterceptor)
-            addInterceptor(loggingInterceptor)
-        }
-        defaultRequest {
-            url(baseUrl)
-        }
-        install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
-        }
-    }
 
     @Provides
     @Singleton
