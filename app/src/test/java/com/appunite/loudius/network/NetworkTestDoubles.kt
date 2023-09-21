@@ -69,18 +69,18 @@ fun retrofitTestDouble(
     .build()
 
 fun httpClientTestDouble(
-    mockWebServer: MockWebServer
+    mockWebServer: MockWebServer,
 ): HttpClient = HttpClient(OkHttp) {
     expectSuccess = true
     defaultRequest {
         url(
-            mockWebServer.url("/").toString()
+            mockWebServer.url("/").toString(),
         )
     }
     install(ContentNegotiation) {
         register(
             ContentType.Application.Json,
-            GsonConverter(testGson())
+            GsonConverter(testGson()),
         )
     }
 }

@@ -27,7 +27,7 @@ interface UserDataSource {
 
 @Singleton
 class UserDataSourceImpl @Inject constructor(
-    private val userService: UserService
+    private val userService: UserService,
 ) : UserDataSource {
     override suspend fun getUser(): Result<User> = userService.getUser()
 }
