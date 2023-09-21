@@ -118,6 +118,9 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    // koin
+    implementation "io.insert-koin:koin-android:3.4.3"
+
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
