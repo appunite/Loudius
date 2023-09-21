@@ -76,7 +76,7 @@ class PullRequestsServiceImpl @Inject constructor(private val client: HttpClient
         repo: String,
         pullRequestNumber: String
     ): Result<RequestedReviewersResponse> = runCatching {
-        client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/reviews").body()
+        client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/requested_reviewers").body()
     }
 
     override suspend fun getReviews(
@@ -84,7 +84,7 @@ class PullRequestsServiceImpl @Inject constructor(private val client: HttpClient
         repo: String,
         pullRequestNumber: String
     ): Result<List<Review>> = runCatching {
-        client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/requested_reviewers").body()
+        client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/reviews").body()
     }
 
     override suspend fun notify(
