@@ -86,6 +86,40 @@ val networkModule = module {
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BASIC
+    }
+
+    @Provides
+    @AuthAPI
+    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
+
+    @Provides
+    @BaseAPI
+    fun provideBaseAPIUrl() = Constants.BASE_API_URL
+
+    @Provides
+    @Singleton
+    @AuthAPI
+    fun provideAuthHttpClient(
+        gson: Gson,
+        @AuthAPI baseUrl: String,
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(TestInterceptor)
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            register(ContentType.Application.Json, GsonConverter(gson))
+        }
+    }
 
     @Provides
     @Singleton
