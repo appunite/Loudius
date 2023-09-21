@@ -20,6 +20,7 @@ import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.services.AuthServiceImpl
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.services.UserService
+import com.appunite.loudius.network.services.UserServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,8 +40,8 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideUserService(@BaseAPI retrofit: Retrofit): UserService =
-        retrofit.create(UserService::class.java)
+    fun provideUserService(@BaseAPI httpClient: HttpClient): UserService =
+        UserServiceImpl(httpClient)
 
     @Singleton
     @Provides

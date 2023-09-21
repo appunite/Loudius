@@ -50,9 +50,8 @@ object DataSourceModule {
     @Provides
     @Singleton
     fun provideUserDataSource(
-        userService: UserService,
-        apiRequester: ApiRequester,
-    ): UserDataSource = UserDataSourceImpl(userService, apiRequester)
+        userService: UserService
+    ): UserDataSource = UserDataSourceImpl(userService)
 
     @Singleton
     @Provides

@@ -16,17 +16,19 @@
 
 package com.appunite.loudius.network.datasource
 
+import com.appunite.loudius.network.httpClientTestDouble
 import com.appunite.loudius.network.model.User
-import com.appunite.loudius.network.retrofitTestDouble
-import com.appunite.loudius.network.services.UserService
-import com.appunite.loudius.network.testRequester
-import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.network.services.UserServiceImpl
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isA
@@ -37,10 +39,18 @@ import strikt.assertions.isSuccess
 @ExperimentalCoroutinesApi
 class UserDataSourceTest {
 
-    private val mockWebServer: MockWebServer = MockWebServer()
-    private val userService =
-        retrofitTestDouble(mockWebServer = mockWebServer).create(UserService::class.java)
-    private val userDataSource = UserDataSourceImpl(userService, testRequester())
+    private lateinit var client: HttpClient
+    private lateinit var userService: UserServiceImpl
+    private lateinit var userDataSource: UserDataSourceImpl
+    private val mockWebServer = MockWebServer()
+
+    @BeforeEach
+    fun setUp() {
+        mockWebServer.start()
+        client = httpClientTestDouble(mockWebServer)
+        userService = UserServiceImpl(client)
+        userDataSource = UserDataSourceImpl(userService)
+    }
 
     @AfterEach
     fun tearDown() {
@@ -51,14 +61,16 @@ class UserDataSourceTest {
     fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
         runTest {
             mockWebServer.enqueue(
-                MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
+                MockResponse()
+                    .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                    .addHeader("Content-type", "application/json"),
             )
 
             val response = userDataSource.getUser()
 
             expectThat(response)
                 .isFailure()
-                .isA<WebException.NetworkError>()
+                .isA<ContentConvertException>()
         }
 
     @Test
@@ -102,7 +114,10 @@ class UserDataSourceTest {
         """.trimIndent()
 
         mockWebServer.enqueue(
-            MockResponse().setResponseCode(200).setBody(jsonResponse),
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(jsonResponse)
+                .addHeader("Content-type", "application/json"),
         )
 
         val response = userDataSource.getUser()
@@ -124,13 +139,16 @@ class UserDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(401).setBody(jsonResponse),
+                MockResponse()
+                    .setResponseCode(401)
+                    .setBody(jsonResponse)
+                    .addHeader("Content-type", "application/json"),
             )
 
             val response = userDataSource.getUser()
 
             expectThat(response)
                 .isFailure()
-                .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
+                .isA<ClientRequestException>()
         }
 }
