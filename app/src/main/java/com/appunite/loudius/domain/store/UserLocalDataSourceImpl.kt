@@ -28,9 +28,7 @@ interface UserLocalDataSource {
     fun getAccessToken(): AccessToken
 }
 
-@Singleton
-class UserLocalDataSourceImpl @Inject constructor(@ApplicationContext context: Context) :
-    UserLocalDataSource {
+class UserLocalDataSourceImpl(context: Context) : UserLocalDataSource {
 
     companion object {
         private const val FILE_NAME = "com.appunite.loudius.sharedPreferences"

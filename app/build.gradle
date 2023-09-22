@@ -122,6 +122,8 @@ dependencies {
     def koinVersion = "3.4.3"
     implementation "io.insert-koin:koin-androidx-compose:$koinVersion"
     implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation "io.insert-koin:koin-core:$koinVersion"
+    testImplementation "io.insert-koin:koin-test:$koinVersion"
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug

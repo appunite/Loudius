@@ -20,7 +20,6 @@ import com.appunite.loudius.ui.login.GithubHelper
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-
 val githubHelperModule = module {
     singleOf(::GithubHelper)
 }

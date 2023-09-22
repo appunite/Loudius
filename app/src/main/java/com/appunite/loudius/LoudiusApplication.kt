@@ -27,6 +27,7 @@ import com.appunite.loudius.di.viewModelModule
 import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.dsl.module
 
 @HiltAndroidApp
 class LoudiusApplication : Application() {
@@ -35,7 +36,7 @@ class LoudiusApplication : Application() {
 
         startKoin {
             androidContext(this@LoudiusApplication)
-            // Load modules
+
             modules(
                 dataSourceModule,
                 dispatcherModule,
@@ -47,6 +48,4 @@ class LoudiusApplication : Application() {
             )
         }
     }
-
-
 }
