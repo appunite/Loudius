@@ -42,7 +42,7 @@ object DataSourceModule {
     @Provides
     @Singleton
     fun providePullRequestNetworkDataSource(
-        service: PullRequestsService
+        service: PullRequestsService,
     ): PullRequestDataSource = PullRequestsDataSourceImpl(service)
 
     @Provides
