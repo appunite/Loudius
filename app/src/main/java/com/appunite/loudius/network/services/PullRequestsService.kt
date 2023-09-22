@@ -26,6 +26,8 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.http.encodeURLParameter
 import javax.inject.Inject
 
@@ -95,6 +97,7 @@ class PullRequestsServiceImpl @Inject constructor(private val client: HttpClient
     ): Result<Unit> = runCatching {
         client.post("/repos/$owner/$repo/issues/$issueNumber/comments") {
             setBody(body)
-        }
+            contentType(ContentType.Application.Json)
+        }.body()
     }
 }
