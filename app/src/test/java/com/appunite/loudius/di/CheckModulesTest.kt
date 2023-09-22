@@ -20,6 +20,11 @@ class CheckModulesTest : KoinTest {
 
     @Test
     fun verifyKoinApp() {
+        val mockContext = mockkClass(Context::class)
+        val mockSharedPref = mockkClass(SharedPreferences::class)
+
+        every { mockContext.getSharedPreferences(any(), any()) } returns mockSharedPref
+
         MockProvider.register { mockkClass(it) }
 
         koinApplication {
@@ -33,6 +38,7 @@ class CheckModulesTest : KoinTest {
             )
 
             checkModules() {
+                withInstance(mockContext)
             }
         }
     }
