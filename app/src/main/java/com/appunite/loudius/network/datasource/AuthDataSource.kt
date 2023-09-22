@@ -35,7 +35,7 @@ interface AuthDataSource {
 
 @Singleton
 class AuthDataSourceImpl @Inject constructor(
-    private val authService: AuthService
+    private val authService: AuthService,
 ) : AuthDataSource {
 
     companion object {
@@ -45,7 +45,7 @@ class AuthDataSourceImpl @Inject constructor(
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String
+        code: String,
     ): Result<AccessToken> =
         authService.getAccessToken(clientId, clientSecret, code).flatMap { response ->
             if (response.accessToken != null) {
