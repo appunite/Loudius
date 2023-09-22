@@ -53,8 +53,7 @@ data class NavigationPayload(
     val submissionTime: String,
 )
 
-@HiltViewModel
-class PullRequestsViewModel @Inject constructor(
+class PullRequestsViewModel(
     private val pullRequestsRepository: PullRequestRepository,
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())

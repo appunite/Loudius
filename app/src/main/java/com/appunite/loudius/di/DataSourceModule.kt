@@ -40,7 +40,6 @@ import javax.inject.Singleton
 
 val dataSourceModule = module {
     singleOf(::UserDataSourceImpl) { bind<UserDataSource>()}
-
     singleOf(::AuthDataSourceImpl){ bind<AuthDataSource>()}
 }
 

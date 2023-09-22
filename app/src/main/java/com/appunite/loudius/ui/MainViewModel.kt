@@ -30,9 +30,7 @@ data class MainState(
     val authFailureEvent: Unit? = null,
 )
 
-@HiltViewModel
-class MainViewModel @Inject constructor(private val authFailureHandler: AuthFailureHandler) :
-    ViewModel() {
+class MainViewModel(private val authFailureHandler: AuthFailureHandler) : ViewModel() {
 
     var state by mutableStateOf(MainState())
         private set

@@ -22,6 +22,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import org.koin.dsl.module
+
+val dispatcherModule = module {
+    factory<CoroutineDispatcher> { Dispatchers.Default }
+}
 
 @InstallIn(SingletonComponent::class)
 @Module

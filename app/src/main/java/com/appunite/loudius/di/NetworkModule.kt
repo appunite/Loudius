@@ -82,6 +82,8 @@ val networkModule = module {
             }
         }
     }
+
+    singleOf(::AuthFailureHandler)
 }
 
 @InstallIn(SingletonComponent::class)

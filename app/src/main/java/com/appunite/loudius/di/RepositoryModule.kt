@@ -35,7 +35,6 @@ import javax.inject.Singleton
 
 val repositoryModule = module {
     singleOf(::PullRequestRepositoryImpl) { bind<PullRequestRepository>() }
-
     singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
 }
 

@@ -61,8 +61,7 @@ enum class ReviewersSnackbarType {
     SUCCESS, FAILURE
 }
 
-@HiltViewModel
-class ReviewersViewModel @Inject constructor(
+class ReviewersViewModel(
     private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

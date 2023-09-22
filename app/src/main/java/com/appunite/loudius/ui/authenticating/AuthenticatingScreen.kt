@@ -25,10 +25,11 @@ import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator
 import com.appunite.loudius.components.theme.LoudiusTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AuthenticatingScreen(
-    viewModel: AuthenticatingViewModel = hiltViewModel(),
+    viewModel: AuthenticatingViewModel = koinViewModel(),
     onNavigateToPullRequest: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {

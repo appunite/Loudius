@@ -61,11 +61,12 @@ import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
+import org.koin.androidx.compose.koinViewModel
 import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun ReviewersScreen(
-    viewModel: ReviewersViewModel = hiltViewModel(),
+    viewModel: ReviewersViewModel = koinViewModel(),
     navigateBack: () -> Unit,
 ) {
     val state = viewModel.state
