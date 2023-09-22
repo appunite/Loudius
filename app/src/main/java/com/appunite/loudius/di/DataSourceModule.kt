@@ -33,13 +33,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import javax.inject.Singleton
 
 val dataSourceModule = module {
-    single<UserDataSource> { UserDataSourceImpl(get()) }
+    singleOf(::UserDataSourceImpl) { bind<UserDataSource>()}
 
-    single<AuthDataSource> { AuthDataSourceImpl(get()) }
+    singleOf(::AuthDataSourceImpl){ bind<AuthDataSource>()}
 }
 
 @InstallIn(SingletonComponent::class)

@@ -28,7 +28,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 import javax.inject.Singleton
+
+val repositoryModule = module {
+    singleOf(::PullRequestRepositoryImpl) { bind<PullRequestRepository>() }
+
+    singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
+}
 
 @InstallIn(SingletonComponent::class)
 @Module

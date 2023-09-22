@@ -53,8 +53,8 @@ sealed class AuthenticatingScreenNavigation {
     object NavigateToLogin : AuthenticatingScreenNavigation()
 }
 
-@HiltViewModel
-class AuthenticatingViewModel @Inject constructor(
+
+class AuthenticatingViewModel(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

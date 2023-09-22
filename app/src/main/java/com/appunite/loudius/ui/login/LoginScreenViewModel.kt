@@ -41,8 +41,7 @@ data class LoginState(
     val navigateTo: LoginNavigateTo? = null,
 )
 
-@HiltViewModel
-class LoginScreenViewModel @Inject constructor(
+class LoginScreenViewModel(
     private val githubHelper: GithubHelper,
 ) : ViewModel() {
 

@@ -30,7 +30,7 @@ interface UserService {
     suspend fun getUser(): Result<User>
 }
 
-class UserServiceImpl @Inject constructor(private val client: HttpClient) : UserService {
+class UserServiceImpl(private val client: HttpClient) : UserService {
 
     override suspend fun getUser(): Result<User> = runCatching {
         client.get("user") {

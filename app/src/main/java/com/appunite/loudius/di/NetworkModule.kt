@@ -36,6 +36,7 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -87,7 +88,7 @@ val networkModule = module {
 @Module
 object NetworkModule {
 
-   // // subject for deletion
+    // // subject for deletion
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
@@ -104,7 +105,7 @@ object NetworkModule {
     @BaseAPI
     fun provideBaseAPIUrl() = Constants.BASE_API_URL
 
-   // // subject for deletion
+    // // subject for deletion
     @Provides
     @Singleton
     @AuthAPI

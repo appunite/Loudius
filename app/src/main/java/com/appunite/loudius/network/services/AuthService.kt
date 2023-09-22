@@ -35,7 +35,7 @@ interface AuthService {
     ): Result<AccessTokenResponse>
 }
 
-class AuthServiceImpl @Inject constructor(private val client: HttpClient) : AuthService {
+class AuthServiceImpl(private val client: HttpClient) : AuthService {
 
     override suspend fun getAccessToken(
         clientId: String,
