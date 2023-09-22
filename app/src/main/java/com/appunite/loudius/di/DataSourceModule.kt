@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.di
 
-import android.content.Context
 import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
@@ -25,19 +24,9 @@ import com.appunite.loudius.network.datasource.PullRequestDataSource
 import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.datasource.UserDataSourceImpl
-import com.appunite.loudius.network.services.AuthService
-import com.appunite.loudius.network.services.PullRequestsService
-import com.appunite.loudius.network.services.UserService
-import com.appunite.loudius.network.utils.ApiRequester
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import javax.inject.Singleton
 
 val dataSourceModule = module {
     singleOf(::UserDataSourceImpl) { bind<UserDataSource>() }
