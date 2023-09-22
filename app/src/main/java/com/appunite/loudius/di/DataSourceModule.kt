@@ -22,13 +22,12 @@ import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.AuthDataSourceImpl
 import com.appunite.loudius.network.datasource.PullRequestDataSource
-import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.PullRequestsDataSourceImpl
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.datasource.UserDataSourceImpl
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.services.UserService
-import com.appunite.loudius.network.utils.ApiRequester
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,9 +42,8 @@ object DataSourceModule {
     @Provides
     @Singleton
     fun providePullRequestNetworkDataSource(
-        service: PullRequestsService,
-        apiRequester: ApiRequester,
-    ): PullRequestDataSource = PullRequestsNetworkDataSource(service, apiRequester)
+        service: PullRequestsService
+    ): PullRequestDataSource = PullRequestsDataSourceImpl(service)
 
     @Provides
     @Singleton

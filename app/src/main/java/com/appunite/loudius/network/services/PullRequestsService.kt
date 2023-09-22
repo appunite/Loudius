@@ -20,39 +20,84 @@ import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.request.NotifyRequestBody
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.http.encodeURLParameter
+import javax.inject.Inject
 
 interface PullRequestsService {
-    @GET("/search/issues")
+
     suspend fun getPullRequestsForUser(
-        @Query("q", encoded = true) query: String,
-        @Query("page") page: Int = 0,
-        @Query("per_page") perPage: Int = 100,
-    ): PullRequestsResponse
+        query: String,
+        page: Int = 0,
+        perPage: Int = 100,
+    ): Result<PullRequestsResponse>
 
-    @GET("/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers")
     suspend fun getReviewers(
-        @Path("owner") owner: String,
-        @Path("repo") repo: String,
-        @Path("pull_number") pullRequestNumber: String,
-    ): RequestedReviewersResponse
+        owner: String,
+        repo: String,
+        pullRequestNumber: String,
+    ): Result<RequestedReviewersResponse>
 
-    @GET("/repos/{owner}/{repo}/pulls/{pull_number}/reviews")
     suspend fun getReviews(
-        @Path("owner") owner: String,
-        @Path("repo") repo: String,
-        @Path("pull_number") pullRequestNumber: String,
-    ): List<Review>
+        owner: String,
+        repo: String,
+        pullRequestNumber: String,
+    ): Result<List<Review>>
 
-    @POST("/repos/{owner}/{repo}/issues/{issue_number}/comments")
     suspend fun notify(
-        @Path("owner") owner: String,
-        @Path("repo") repo: String,
-        @Path("issue_number") issueNumber: String,
-        @Body body: NotifyRequestBody,
-    )
+        owner: String,
+        repo: String,
+        issueNumber: String,
+        body: NotifyRequestBody,
+    ): Result<Unit>
+}
+
+class PullRequestsServiceImpl @Inject constructor(private val client: HttpClient) :
+    PullRequestsService {
+    override suspend fun getPullRequestsForUser(
+        query: String,
+        page: Int,
+        perPage: Int
+    ): Result<PullRequestsResponse> = runCatching {
+        client.get("/search/issues") {
+            parameter("q".encodeURLParameter(), query)
+            parameter("page", page)
+            parameter("per_page", perPage)
+        }.body()
+    }
+
+    override suspend fun getReviewers(
+        owner: String,
+        repo: String,
+        pullRequestNumber: String
+    ): Result<RequestedReviewersResponse> = runCatching {
+        client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/requested_reviewers").body()
+    }
+
+    override suspend fun getReviews(
+        owner: String,
+        repo: String,
+        pullRequestNumber: String
+    ): Result<List<Review>> = runCatching {
+        client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/reviews").body()
+    }
+
+    override suspend fun notify(
+        owner: String,
+        repo: String,
+        issueNumber: String,
+        body: NotifyRequestBody
+    ): Result<Unit> = runCatching {
+        client.post("/repos/$owner/$repo/issues/$issueNumber/comments") {
+            setBody(body)
+            contentType(ContentType.Application.Json)
+        }.body()
+    }
 }
