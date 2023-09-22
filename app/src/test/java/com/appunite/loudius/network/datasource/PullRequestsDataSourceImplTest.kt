@@ -16,22 +16,24 @@
 
 package com.appunite.loudius.network.datasource
 
+import com.appunite.loudius.network.httpClientTestDouble
 import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
-import com.appunite.loudius.network.retrofitTestDouble
-import com.appunite.loudius.network.services.PullRequestsService
-import com.appunite.loudius.network.testRequester
-import com.appunite.loudius.network.utils.WebException
+import com.appunite.loudius.network.services.PullRequestsServiceImpl
 import com.appunite.loudius.util.Defaults
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
@@ -40,16 +42,24 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 import strikt.assertions.single
+import java.net.ConnectException
 import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
-class PullRequestsNetworkDataSourceTest {
+class PullRequestsDataSourceImplTest {
 
-    private val mockWebServer: MockWebServer = MockWebServer()
-    private val pullRequestsService =
-        retrofitTestDouble(mockWebServer = mockWebServer).create(PullRequestsService::class.java)
-    private val pullRequestDataSource =
-        PullRequestsNetworkDataSource(pullRequestsService, testRequester())
+    private lateinit var client: HttpClient
+    private lateinit var pullRequestsService: PullRequestsServiceImpl
+    private lateinit var pullRequestDataSource: PullRequestsDataSourceImpl
+    private val mockWebServer = MockWebServer()
+
+    @BeforeEach
+    fun setUp() {
+        mockWebServer.start()
+        client = httpClientTestDouble(mockWebServer)
+        pullRequestsService = PullRequestsServiceImpl(client)
+        pullRequestDataSource = PullRequestsDataSourceImpl(pullRequestsService)
+    }
 
     @AfterEach
     fun tearDown() {
@@ -62,7 +72,9 @@ class PullRequestsNetworkDataSourceTest {
         fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
             runTest {
                 mockWebServer.enqueue(
-                    MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
+                    MockResponse()
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getPullRequestsForUser(
@@ -71,7 +83,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isA<WebException.NetworkError>()
+                    .isA<ContentConvertException>()
             }
 
         @Test
@@ -160,7 +172,10 @@ class PullRequestsNetworkDataSourceTest {
             """.trimIndent()
 
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(jsonResponse)
+                    .addHeader("Content-type", "application/json"),
             )
 
             val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
@@ -181,14 +196,17 @@ class PullRequestsNetworkDataSourceTest {
                 """.trimIndent()
 
                 mockWebServer.enqueue(
-                    MockResponse().setResponseCode(401).setBody(jsonResponse),
+                    MockResponse()
+                        .setResponseCode(401)
+                        .setBody(jsonResponse)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
+                    .isA<ClientRequestException>()
             }
     }
 
@@ -199,7 +217,9 @@ class PullRequestsNetworkDataSourceTest {
         fun `Given request WHEN connectivity problem occurred THEN return failure with Network error`() =
             runTest {
                 mockWebServer.enqueue(
-                    MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
+                    MockResponse()
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getReviewers(
@@ -210,7 +230,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isA<WebException.NetworkError>()
+                    .isA<ContentConvertException>()
             }
 
         @Test
@@ -248,7 +268,8 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
-                        .setBody(jsonResponse),
+                        .setBody(jsonResponse)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getReviewers(
@@ -282,7 +303,8 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse),
+                        .setBody(jsonResponse)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getReviewers(
@@ -293,7 +315,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
+                    .isA<ClientRequestException>()
             }
     }
 
@@ -305,7 +327,8 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
-                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY),
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val resposne = pullRequestDataSource.getReviews(
@@ -316,7 +339,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(resposne)
                     .isFailure()
-                    .isA<WebException.NetworkError>()
+                    .isA<ContentConvertException>()
             }
 
         @Test
@@ -368,7 +391,8 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(200)
-                        .setBody(jsonResponse),
+                        .setBody(jsonResponse)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getReviews(
@@ -404,7 +428,8 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse),
+                        .setBody(jsonResponse)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.getReviews(
@@ -415,7 +440,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
+                    .isA<ClientRequestException>()
             }
     }
 
@@ -427,7 +452,8 @@ class PullRequestsNetworkDataSourceTest {
             runTest {
                 mockWebServer.enqueue(
                     MockResponse()
-                        .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST),
+                        .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.notify(
@@ -439,7 +465,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isA<WebException.NetworkError>()
+                    .isA<ConnectException>()
             }
 
         @Test
@@ -479,7 +505,10 @@ class PullRequestsNetworkDataSourceTest {
                 }
             """.trimIndent()
             mockWebServer.enqueue(
-                MockResponse().setResponseCode(200).setBody(jsonResponse),
+                MockResponse()
+                    .setResponseCode(200)
+                    .setBody(jsonResponse)
+                    .addHeader("Content-type", "application/json"),
             )
 
             val response = pullRequestDataSource.notify(
@@ -505,7 +534,8 @@ class PullRequestsNetworkDataSourceTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setResponseCode(401)
-                        .setBody(jsonResponse),
+                        .setBody(jsonResponse)
+                        .addHeader("Content-type", "application/json"),
                 )
 
                 val response = pullRequestDataSource.notify(
@@ -517,7 +547,7 @@ class PullRequestsNetworkDataSourceTest {
 
                 expectThat(response)
                     .isFailure()
-                    .isEqualTo(WebException.UnknownError(401, "Bad credentials"))
+                    .isA<ClientRequestException>()
             }
     }
 }

@@ -22,7 +22,7 @@ import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.AuthDataSourceImpl
 import com.appunite.loudius.network.datasource.PullRequestDataSource
-import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.PullRequestsDataSourceImpl
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.datasource.UserDataSourceImpl
 import com.appunite.loudius.network.services.AuthService
@@ -43,7 +43,7 @@ object DataSourceModule {
     @Singleton
     fun providePullRequestNetworkDataSource(
         service: PullRequestsService
-    ): PullRequestDataSource = PullRequestsNetworkDataSource(service)
+    ): PullRequestDataSource = PullRequestsDataSourceImpl(service)
 
     @Provides
     @Singleton

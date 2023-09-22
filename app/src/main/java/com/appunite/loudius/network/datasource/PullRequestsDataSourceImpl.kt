@@ -48,7 +48,7 @@ interface PullRequestDataSource {
 }
 
 @Singleton
-class PullRequestsNetworkDataSource @Inject constructor(
+class PullRequestsDataSourceImpl @Inject constructor(
     private val service: PullRequestsService,
 ) : PullRequestDataSource {
 
