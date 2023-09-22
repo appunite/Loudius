@@ -25,21 +25,20 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.HttpClient
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
 val serviceModule = module {
-    singleOf(::AuthServiceImpl) { bind<AuthService>() }
-    singleOf(::UserServiceImpl) { bind<UserService>() }
+    single<AuthService> {  AuthServiceImpl(get(named("auth"))) }
+    single<UserService> {  UserServiceImpl(get(named("base"))) }
 }
 
 @InstallIn(SingletonComponent::class)
 @Module
 object ServiceModule {
+
     @Singleton
     @Provides
     fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =

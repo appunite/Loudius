@@ -73,7 +73,7 @@ val networkModule = module {
             expectSuccess = true
             engine {
                 addInterceptor(TestInterceptor)
-                addInterceptor(get())
+                addInterceptor(get<HttpLoggingInterceptor>())
             }
             defaultRequest {
                 url(Constants.BASE_API_URL)
