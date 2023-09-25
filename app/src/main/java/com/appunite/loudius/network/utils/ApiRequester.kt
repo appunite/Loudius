@@ -22,7 +22,6 @@ import com.google.gson.JsonParseException
 import org.json.JSONException
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 class ApiRequester(private val gson: Gson) {
     suspend fun <T> safeApiCall(

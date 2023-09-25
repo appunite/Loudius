@@ -29,7 +29,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodeURLParameter
-import javax.inject.Inject
 
 interface PullRequestsService {
 

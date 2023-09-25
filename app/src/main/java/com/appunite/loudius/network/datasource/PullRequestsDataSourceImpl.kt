@@ -21,8 +21,6 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.request.NotifyRequestBody
 import com.appunite.loudius.network.services.PullRequestsService
-import javax.inject.Inject
-import javax.inject.Singleton
 
 interface PullRequestDataSource {
     suspend fun getReviewers(

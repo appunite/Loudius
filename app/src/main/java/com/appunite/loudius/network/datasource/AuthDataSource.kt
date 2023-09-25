@@ -21,8 +21,6 @@ import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.utils.WebException
-import javax.inject.Inject
-import javax.inject.Singleton
 
 interface AuthDataSource {
 

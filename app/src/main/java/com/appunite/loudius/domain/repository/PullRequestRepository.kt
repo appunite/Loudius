@@ -25,7 +25,6 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import javax.inject.Inject
 
 interface PullRequestRepository {
     suspend fun getReviews(

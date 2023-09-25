@@ -19,9 +19,9 @@ package com.appunite.loudius.network.intercept
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
 
-class AuthFailureInterceptor @Inject constructor(
+class AuthFailureInterceptor
+    (
     private val authFailureHandler: AuthFailureHandler,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
