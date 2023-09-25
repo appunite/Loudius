@@ -86,20 +86,25 @@ val networkModule = module {
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
+
+   // // subject for deletion
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BASIC
     }
 
+    // subject for deletion
     @Provides
     @AuthAPI
     fun provideBaseAuthUrl() = Constants.AUTH_API_URL
 
+    // // subject for deletion
     @Provides
     @BaseAPI
     fun provideBaseAPIUrl() = Constants.BASE_API_URL
 
+   // // subject for deletion
     @Provides
     @Singleton
     @AuthAPI
@@ -121,6 +126,7 @@ object NetworkModule {
         }
     }
 
+    // // subject for deletion
     @Provides
     @Singleton
     @BaseAPI

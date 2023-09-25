@@ -19,7 +19,6 @@ package com.appunite.loudius.di
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.services.AuthServiceImpl
 import com.appunite.loudius.network.services.PullRequestsService
-import com.appunite.loudius.network.services.PullRequestsServiceImpl
 import com.appunite.loudius.network.services.UserService
 import com.appunite.loudius.network.services.UserServiceImpl
 import dagger.Module
@@ -27,7 +26,19 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
+import org.koin.dsl.module
+import retrofit2.Retrofit
 import javax.inject.Singleton
+
+val serviceModule = module {
+    single<AuthService> {
+        AuthServiceImpl(get())
+    }
+
+    single<UserService> {
+        UserServiceImpl(get())
+    }
+}
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -45,6 +56,6 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideReposService(@BaseAPI httpClient: HttpClient): PullRequestsService =
-        PullRequestsServiceImpl(httpClient)
+    fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =
+        retrofit.create(PullRequestsService::class.java)
 }
