@@ -50,7 +50,7 @@ interface PullRequestRepository {
     ): Result<Unit>
 }
 
-class PullRequestRepositoryImpl @Inject constructor(
+class PullRequestRepositoryImpl(
     private val pullRequestsDataSource: PullRequestDataSource,
     private val userDataSource: UserDataSource,
 ) : PullRequestRepository {

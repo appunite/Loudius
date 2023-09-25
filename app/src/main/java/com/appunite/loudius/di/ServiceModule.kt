@@ -19,28 +19,14 @@ package com.appunite.loudius.di
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.services.AuthServiceImpl
 import com.appunite.loudius.network.services.PullRequestsService
+import com.appunite.loudius.network.services.PullRequestsServiceImpl
 import com.appunite.loudius.network.services.UserService
 import com.appunite.loudius.network.services.UserServiceImpl
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import javax.inject.Singleton
 
 val serviceModule = module {
-    single<AuthService> {  AuthServiceImpl(get(named("auth"))) }
-    single<UserService> {  UserServiceImpl(get(named("base"))) }
-}
-
-@InstallIn(SingletonComponent::class)
-@Module
-object ServiceModule {
-
-    @Singleton
-    @Provides
-    fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =
-        retrofit.create(PullRequestsService::class.java)
+    single<AuthService> { AuthServiceImpl(get(named("auth"))) }
+    single<UserService> { UserServiceImpl(get(named("base"))) }
+    single<PullRequestsService> { PullRequestsServiceImpl(get(named("base"))) }
 }

@@ -59,8 +59,9 @@ interface PullRequestsService {
     ): Result<Unit>
 }
 
-class PullRequestsServiceImpl @Inject constructor(private val client: HttpClient) :
-    PullRequestsService {
+class PullRequestsServiceImpl(
+    private val client: HttpClient
+) :  PullRequestsService {
     override suspend fun getPullRequestsForUser(
         query: String,
         page: Int,

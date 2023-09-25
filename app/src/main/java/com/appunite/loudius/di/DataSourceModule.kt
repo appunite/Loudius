@@ -21,7 +21,7 @@ import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
 import com.appunite.loudius.network.datasource.AuthDataSourceImpl
 import com.appunite.loudius.network.datasource.PullRequestDataSource
-import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.PullRequestsDataSourceImpl
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.datasource.UserDataSourceImpl
 import org.koin.core.module.dsl.bind
@@ -32,5 +32,5 @@ val dataSourceModule = module {
     singleOf(::UserDataSourceImpl) { bind<UserDataSource>() }
     singleOf(::UserLocalDataSourceImpl) { bind<UserLocalDataSource>() }
     singleOf(::AuthDataSourceImpl) { bind<AuthDataSource>() }
-    singleOf(::PullRequestsNetworkDataSource) { bind<PullRequestDataSource>() }
+    singleOf(::PullRequestsDataSourceImpl) { bind<PullRequestDataSource>() }
 }
