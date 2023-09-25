@@ -43,6 +43,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import javax.inject.Singleton
+import com.appunite.loudius.network.utils.ApiRequester
 
 val networkModule = module {
     single<HttpLoggingInterceptor> {
@@ -83,78 +84,19 @@ val networkModule = module {
         }
     }
 
+    single {
+        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+            .create()
+    }
+
     singleOf(::AuthFailureHandler)
+    singleOf(::ApiRequester)
 }
 
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
-
-    // // subject for deletion
-    @Provides
-    @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
-    }
-
-    // subject for deletion
-    @Provides
-    @AuthAPI
-    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
-
-    // // subject for deletion
-    @Provides
-    @BaseAPI
-    fun provideBaseAPIUrl() = Constants.BASE_API_URL
-
-    // // subject for deletion
-    @Provides
-    @Singleton
-    @AuthAPI
-    fun provideAuthHttpClient(
-        gson: Gson,
-        @AuthAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-    ): HttpClient = HttpClient(OkHttp) {
-        expectSuccess = true
-        engine {
-            addInterceptor(TestInterceptor)
-            addInterceptor(loggingInterceptor)
-        }
-        defaultRequest {
-            url(baseUrl)
-        }
-        install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
-        }
-    }
-
-    // // subject for deletion
-    @Provides
-    @Singleton
-    @BaseAPI
-    fun provideBaseHttpClient(
-        gson: Gson,
-        @BaseAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
-    ): HttpClient = HttpClient(OkHttp) {
-        expectSuccess = true
-        engine {
-            addInterceptor(authInterceptor)
-            addInterceptor(TestInterceptor)
-            addInterceptor(AuthFailureInterceptor(authFailureHandler))
-            addInterceptor(loggingInterceptor)
-        }
-        defaultRequest {
-            url(baseUrl)
-        }
-        install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
-        }
-    }
-
     @Provides
     @Singleton
     @BaseAPI
@@ -178,11 +120,4 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
-
-    @Provides
-    @Singleton
-    fun provideGson(): Gson =
-        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
-            .create()
 }

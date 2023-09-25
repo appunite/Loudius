@@ -24,8 +24,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class ApiRequester @Inject constructor(private val gson: Gson) {
-
+class ApiRequester(private val gson: Gson) {
     suspend fun <T> safeApiCall(
         errorParser: RequestErrorParser = DefaultErrorParser,
         apiCall: suspend () -> T,

@@ -40,17 +40,6 @@ val serviceModule = module {
 @InstallIn(SingletonComponent::class)
 @Module
 object ServiceModule {
-
-    @Singleton
-    @Provides
-    fun provideAuthService(@AuthAPI httpClient: HttpClient): AuthService =
-        AuthServiceImpl(httpClient)
-
-    @Singleton
-    @Provides
-    fun provideUserService(@BaseAPI httpClient: HttpClient): UserService =
-        UserServiceImpl(httpClient)
-
     @Singleton
     @Provides
     fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =

@@ -37,22 +37,3 @@ val repositoryModule = module {
     singleOf(::PullRequestRepositoryImpl) { bind<PullRequestRepository>() }
     singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
 }
-
-@InstallIn(SingletonComponent::class)
-@Module
-object RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun providePullRequestRepository(
-        dataSource: PullRequestDataSource,
-        userDataSource: UserDataSource,
-    ): PullRequestRepository = PullRequestRepositoryImpl(dataSource, userDataSource)
-
-    @Singleton
-    @Provides
-    fun provideAuthRepository(
-        authDataSource: AuthDataSource,
-        userLocalDataSource: UserLocalDataSource,
-    ): AuthRepository = AuthRepositoryImpl(authDataSource, userLocalDataSource)
-}

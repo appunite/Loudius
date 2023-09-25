@@ -27,11 +27,3 @@ import org.koin.dsl.module
 val dispatcherModule = module {
     factory<CoroutineDispatcher> { Dispatchers.Default }
 }
-
-@InstallIn(SingletonComponent::class)
-@Module
-object DispatchersModule {
-
-    @Provides
-    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
-}
