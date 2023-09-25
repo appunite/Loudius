@@ -31,8 +31,7 @@ interface AuthRepository {
     fun getAccessToken(): AccessToken
 }
 
-@Singleton
-class AuthRepositoryImpl @Inject constructor(
+class AuthRepositoryImpl(
     private val authDataSource: AuthDataSource,
     private val userLocalDataSource: UserLocalDataSource,
 ) : AuthRepository {

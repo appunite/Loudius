@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+
 import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator

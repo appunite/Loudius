@@ -24,12 +24,9 @@ import com.appunite.loudius.di.networkModule
 import com.appunite.loudius.di.repositoryModule
 import com.appunite.loudius.di.serviceModule
 import com.appunite.loudius.di.viewModelModule
-import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
-import org.koin.dsl.module
 
-@HiltAndroidApp
 class LoudiusApplication : Application() {
     override fun onCreate() {
         super.onCreate()

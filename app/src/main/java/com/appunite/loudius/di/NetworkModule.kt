@@ -93,31 +93,3 @@ val networkModule = module {
     singleOf(::AuthFailureHandler)
     singleOf(::ApiRequester)
 }
-
-@InstallIn(SingletonComponent::class)
-@Module
-object NetworkModule {
-    @Provides
-    @Singleton
-    @BaseAPI
-    fun provideBaseRetrofit(
-        gson: Gson,
-        @BaseAPI baseAPIUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(AuthFailureInterceptor(authFailureHandler))
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseAPIUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-    }
-}

@@ -34,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
 import com.appunite.loudius.components.components.LoudiusDialog

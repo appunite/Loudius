@@ -36,10 +36,8 @@ import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
-import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModel<MainViewModel>()

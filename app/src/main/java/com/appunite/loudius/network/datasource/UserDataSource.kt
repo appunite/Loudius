@@ -23,8 +23,7 @@ interface UserDataSource {
     suspend fun getUser(): Result<User>
 }
 
-@Singleton
-class UserDataSourceImpl @Inject constructor(
+class UserDataSourceImpl(
     private val userService: UserService,
 ) : UserDataSource {
     override suspend fun getUser(): Result<User> = userService.getUser()

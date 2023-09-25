@@ -31,8 +31,7 @@ interface AuthDataSource {
     ): Result<AccessToken>
 }
 
-@Singleton
-class AuthDataSourceImpl @Inject constructor(
+class AuthDataSourceImpl(
     private val authService: AuthService,
 ) : AuthDataSource {
 
