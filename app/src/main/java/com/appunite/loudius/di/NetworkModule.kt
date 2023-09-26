@@ -17,33 +17,22 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
-import com.appunite.loudius.network.intercept.AuthFailureInterceptor
-import com.appunite.loudius.network.intercept.AuthInterceptor
+import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
-import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
-import javax.inject.Singleton
-import com.appunite.loudius.network.utils.ApiRequester
 
 val networkModule = module {
     single<HttpLoggingInterceptor> {
