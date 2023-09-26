@@ -16,7 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.appunite.loudius.util.HiltTestRunner"
+        testInstrumentationRunner "com.appunite.loudius.util.InstrumentationTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -136,8 +136,6 @@ dependencies {
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
-
-    testInstrumentationRunner "com.appunite.loudius."
 }
 
 tasks.withType(Test) {

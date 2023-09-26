@@ -23,7 +23,6 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,11 +33,6 @@ class PullRequestsScreenTest {
 
     @get:Rule
     val integrationTestRule = IntegrationTestRule()
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
