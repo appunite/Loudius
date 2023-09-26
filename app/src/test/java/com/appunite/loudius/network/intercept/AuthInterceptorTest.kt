@@ -18,27 +18,41 @@
 
 package com.appunite.loudius.network.intercept
 
-import com.appunite.loudius.fakes.FakeAuthRepository
-import com.appunite.loudius.network.retrofitTestDouble
-import com.appunite.loudius.network.testOkHttpClient
+import com.appunite.loudius.domain.repository.AuthRepository
+import com.appunite.loudius.network.httpClientTestDouble
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.http.GET
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
 class AuthInterceptorTest {
-    private val fakeUserRepository = FakeAuthRepository()
-    private val testOkHttpClient = testOkHttpClient(fakeUserRepository)
+
     private val mockWebServer: MockWebServer = MockWebServer()
-    private val service = retrofitTestDouble(
-        mockWebServer = mockWebServer,
-        client = testOkHttpClient,
-    ).create(TestApi::class.java)
+
+    private lateinit var client: HttpClient
+    private lateinit var service: TestApi
+
+    @MockK
+    private lateinit var repository: AuthRepository
+
+    @BeforeEach
+    fun setUp() {
+        MockKAnnotations.init(this)
+        mockWebServer.start()
+        client = httpClientTestDouble(mockWebServer = mockWebServer)
+        service = TestApi(client)
+    }
 
     @AfterEach
     fun tearDown() {
@@ -48,9 +62,10 @@ class AuthInterceptorTest {
     @Test
     fun `GIVEN saved token WHEN making an api call THEN authorization token should be added`() {
         runTest {
+            every { repository.getAccessToken() } returns "validToken"
             val testDataJson = "{\"name\":\"test\"}"
             val successResponse = MockResponse().setBody(testDataJson)
-            mockWebServer.enqueue(successResponse)
+            mockWebServer.enqueue(successResponse.addHeader("Content-type", "application/json"))
 
             service.test()
             val request = mockWebServer.takeRequest()
@@ -61,10 +76,9 @@ class AuthInterceptorTest {
         }
     }
 
-    private interface TestApi {
+    private class TestApi(private val client: HttpClient) {
 
-        @GET("/test")
-        suspend fun test(): TestData
+        suspend fun test(): Result<TestData> = runCatching { client.get("/test").body() }
     }
 
     private data class TestData(val name: String)

@@ -20,13 +20,12 @@ import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.intercept.AuthFailureInterceptor
 import com.appunite.loudius.network.intercept.AuthInterceptor
-import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -35,8 +34,6 @@ import io.ktor.serialization.gson.GsonConverter
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
@@ -56,21 +53,10 @@ private fun testGson() =
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
-fun testRequester() = ApiRequester(testGson())
-
-fun retrofitTestDouble(
-    client: OkHttpClient = testOkHttpClient(),
-    gson: Gson = testGson(),
-    mockWebServer: MockWebServer,
-): Retrofit = Retrofit.Builder()
-    .client(client)
-    .addConverterFactory(GsonConverterFactory.create(gson))
-    .baseUrl(mockWebServer.url("/"))
-    .build()
-
 fun httpClientTestDouble(
     mockWebServer: MockWebServer,
-): HttpClient = HttpClient(OkHttp) {
+    engine: HttpClientEngine = OkHttp.create()
+): HttpClient = HttpClient(engine) {
     expectSuccess = true
     defaultRequest {
         url(

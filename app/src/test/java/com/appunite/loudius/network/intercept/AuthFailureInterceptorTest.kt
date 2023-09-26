@@ -18,9 +18,12 @@
 
 package com.appunite.loudius.network.intercept
 
-import com.appunite.loudius.network.retrofitTestDouble
-import com.appunite.loudius.network.testOkHttpClient
+import com.appunite.loudius.network.httpClientTestDouble
 import com.appunite.loudius.network.utils.AuthFailureHandler
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.serialization.ContentConvertException
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,22 +31,27 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.HttpException
-import retrofit2.http.GET
 import strikt.api.expectCatching
 import strikt.assertions.isA
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
 class AuthFailureInterceptorTest {
+
     private val fakeAuthFailureHandler: AuthFailureHandler = mockk(relaxed = true)
-    private val testOkHttpClient = testOkHttpClient(authFailureHandler = fakeAuthFailureHandler)
     private val mockWebServer: MockWebServer = MockWebServer()
-    private val service = retrofitTestDouble(
-        mockWebServer = mockWebServer,
-        client = testOkHttpClient,
-    ).create(TestApi::class.java)
+
+    private lateinit var client: HttpClient
+    private lateinit var service: TestApi
+
+    @BeforeEach
+    fun setUp() {
+        mockWebServer.start()
+        client = httpClientTestDouble(mockWebServer)
+        service = TestApi(client)
+    }
 
     @AfterEach
     fun tearDown() {
@@ -56,11 +64,11 @@ class AuthFailureInterceptorTest {
             val testDataJson = "{\"message\":\"AuthFailureResponse\"}"
             val failureResponse =
                 MockResponse().setResponseCode(401).setBody(testDataJson)
-            mockWebServer.enqueue(failureResponse)
+            mockWebServer.enqueue(failureResponse.addHeader("Content-type", "application/json"))
 
             expectCatching { service.makeARequest() }
                 .isFailure()
-                .isA<HttpException>()
+                .isA<ContentConvertException>()
             coVerify(exactly = 1) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 
@@ -77,10 +85,9 @@ class AuthFailureInterceptorTest {
             coVerify(exactly = 0) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 
-    private interface TestApi {
+    private class TestApi(private val client: HttpClient) {
 
-        @GET("/test")
-        suspend fun makeARequest(): TestData
+        suspend fun makeARequest(): Result<TestData> = runCatching { client.get("/test").body() }
     }
 
     private data class TestData(val message: String)

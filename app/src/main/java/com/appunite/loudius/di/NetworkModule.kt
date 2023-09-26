@@ -34,10 +34,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
-import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import javax.inject.Singleton
 
@@ -102,30 +99,6 @@ object NetworkModule {
         install(ContentNegotiation) {
             register(ContentType.Application.Json, GsonConverter(gson))
         }
-    }
-
-    @Provides
-    @Singleton
-    @BaseAPI
-    fun provideBaseRetrofit(
-        gson: Gson,
-        @BaseAPI baseAPIUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(AuthFailureInterceptor(authFailureHandler))
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseAPIUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
     }
 
     @Provides
