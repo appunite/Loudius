@@ -33,7 +33,7 @@ import org.junit.runner.RunWith
 class ReviewersScreenTest {
 
     @get:Rule
-    val integrationTestRule = IntegrationTestRule(this)
+    val integrationTestRule = IntegrationTestRule()
 
     @Before
     fun setUp() {

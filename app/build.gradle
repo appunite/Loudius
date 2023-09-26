@@ -17,6 +17,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.appunite.loudius.util.InstrumentationTestRunner"
+
         vectorDrawables {
             useSupportLibrary true
         }

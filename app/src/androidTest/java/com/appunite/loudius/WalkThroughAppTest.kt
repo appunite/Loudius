@@ -30,7 +30,6 @@ import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,7 +38,7 @@ import org.junit.runner.RunWith
 class WalkThroughAppTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule = IntegrationTestRule(this, MainActivity::class.java)
+    val integrationTestRule = IntegrationTestRule(MainActivity::class.java)
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
