@@ -20,12 +20,14 @@ package com.appunite.loudius.network.intercept
 
 import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.httpClientTestDouble
+import com.appunite.loudius.network.utils.AuthFailureHandler
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -44,14 +46,19 @@ class AuthInterceptorTest {
     private lateinit var service: TestApi
 
     @MockK
-    private lateinit var repository: AuthRepository
+    private lateinit var authRepository: AuthRepository
+    private lateinit var authInterceptor: AuthInterceptor
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockWebServer.start()
+
+        authInterceptor= AuthInterceptor(authRepository)
         client = httpClientTestDouble(mockWebServer = mockWebServer)
+        { engine { addInterceptor(authInterceptor) } }
         service = TestApi(client)
+
+        mockWebServer.start()
     }
 
     @AfterEach
@@ -62,7 +69,7 @@ class AuthInterceptorTest {
     @Test
     fun `GIVEN saved token WHEN making an api call THEN authorization token should be added`() {
         runTest {
-            every { repository.getAccessToken() } returns "validToken"
+            every { authRepository.getAccessToken() } returns "validToken"
             val testDataJson = "{\"name\":\"test\"}"
             val successResponse = MockResponse().setBody(testDataJson)
             mockWebServer.enqueue(successResponse.addHeader("Content-type", "application/json"))

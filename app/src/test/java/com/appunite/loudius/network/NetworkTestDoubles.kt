@@ -25,8 +25,10 @@ import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.okhttp.OkHttpConfig
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
@@ -54,8 +56,11 @@ private fun testGson() =
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
 fun httpClientTestDouble(
-    mockWebServer: MockWebServer
+    mockWebServer: MockWebServer,
+    block: HttpClientConfig<OkHttpConfig>.() -> Unit = {}
 ): HttpClient = HttpClient(OkHttp) {
+    block(this)
+
     expectSuccess = true
     defaultRequest {
         url(
