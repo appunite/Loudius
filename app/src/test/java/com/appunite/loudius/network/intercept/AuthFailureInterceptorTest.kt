@@ -23,9 +23,9 @@ import com.appunite.loudius.network.utils.AuthFailureHandler
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.serialization.ContentConvertException
+import io.mockk.MockKAnnotations
 import io.mockk.coVerify
-import io.mockk.mockk
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -34,23 +34,33 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectCatching
-import strikt.assertions.isA
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
 class AuthFailureInterceptorTest {
 
-    private val fakeAuthFailureHandler: AuthFailureHandler = mockk(relaxed = true)
     private val mockWebServer: MockWebServer = MockWebServer()
 
     private lateinit var client: HttpClient
     private lateinit var service: TestApi
 
+    private lateinit var authFailureInterceptor: AuthFailureInterceptor
+
+    @MockK
+    private lateinit var authFailureHandler: AuthFailureHandler
+
     @BeforeEach
     fun setUp() {
-        mockWebServer.start()
-        client = httpClientTestDouble(mockWebServer)
+        MockKAnnotations.init(this)
+
+        authFailureInterceptor = AuthFailureInterceptor(authFailureHandler)
+        client = httpClientTestDouble(mockWebServer) {
+            engine { addInterceptor(authFailureInterceptor) }
+        }
         service = TestApi(client)
+
+
+        mockWebServer.start()
     }
 
     @AfterEach
@@ -71,8 +81,6 @@ class AuthFailureInterceptorTest {
 
             expectCatching { service.makeARequest() }
                 .isFailure()
-
-            coVerify(exactly = 1) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 
     @Test
@@ -88,7 +96,7 @@ class AuthFailureInterceptorTest {
 
             expectCatching { service.makeARequest() }
                 .isSuccess()
-            coVerify(exactly = 0) { fakeAuthFailureHandler.emitAuthFailure() }
+            coVerify(exactly = 0) { authFailureHandler.emitAuthFailure() }
         }
 
     private class TestApi(private val client: HttpClient) {

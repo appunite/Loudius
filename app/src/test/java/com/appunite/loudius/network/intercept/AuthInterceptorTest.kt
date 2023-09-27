@@ -45,9 +45,11 @@ class AuthInterceptorTest {
     private lateinit var client: HttpClient
     private lateinit var service: TestApi
 
+    private lateinit var authInterceptor: AuthInterceptor
+
     @MockK
     private lateinit var authRepository: AuthRepository
-    private lateinit var authInterceptor: AuthInterceptor
+
 
     @BeforeEach
     fun setUp() {
