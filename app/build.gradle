@@ -106,15 +106,14 @@ dependencies {
     implementation "io.ktor:ktor-client-core:2.3.4"
     implementation "io.ktor:ktor-client-okhttp:2.3.4"
     implementation "io.ktor:ktor-client-content-negotiation:2.3.4"
-    implementation "io.ktor:ktor-serialization-gson:2.3.4"
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
     testImplementation("io.ktor:ktor-client-mock:2.3.4")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     //retrofit & okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
-
-    //gson
-    implementation 'com.google.code.gson:gson:2.10.1'
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug
