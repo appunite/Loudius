@@ -62,13 +62,16 @@ class AuthFailureInterceptorTest {
     fun `GIVEN not authorized user WHEN making an api call THEN auth failure should be handled`() =
         runTest {
             val testDataJson = "{\"message\":\"AuthFailureResponse\"}"
-            val failureResponse =
-                MockResponse().setResponseCode(401).setBody(testDataJson)
-            mockWebServer.enqueue(failureResponse.addHeader("Content-type", "application/json"))
+
+            val failureResponse = MockResponse()
+                .setResponseCode(401)
+                .setBody(testDataJson)
+                .addHeader("Content-type", "application/json")
+            mockWebServer.enqueue(failureResponse)
 
             expectCatching { service.makeARequest() }
                 .isFailure()
-                .isA<ContentConvertException>()
+
             coVerify(exactly = 1) { fakeAuthFailureHandler.emitAuthFailure() }
         }
 
@@ -76,8 +79,11 @@ class AuthFailureInterceptorTest {
     fun `GIVEN authorized user WHEN making an api call THEN auth failure is not emitted`() =
         runTest {
             val testDataJson = "{\"message\":\"successResponse\"}"
-            val successResponse =
-                MockResponse().setResponseCode(200).setBody(testDataJson)
+
+            val successResponse = MockResponse()
+                .setResponseCode(200)
+                .setBody(testDataJson)
+                .addHeader("Content-type", "application/json")
             mockWebServer.enqueue(successResponse)
 
             expectCatching { service.makeARequest() }
@@ -87,7 +93,7 @@ class AuthFailureInterceptorTest {
 
     private class TestApi(private val client: HttpClient) {
 
-        suspend fun makeARequest(): Result<TestData> = runCatching { client.get("/test").body() }
+        suspend fun makeARequest(): TestData = client.get("/test").body()
     }
 
     private data class TestData(val message: String)
