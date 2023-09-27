@@ -34,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
 import com.appunite.loudius.components.components.LoudiusDialog
@@ -43,11 +42,12 @@ import com.appunite.loudius.components.components.LoudiusOutlinedButtonIcon
 import com.appunite.loudius.components.components.LoudiusOutlinedButtonStyle
 import com.appunite.loudius.components.components.LoudiusText
 import com.appunite.loudius.components.components.LoudiusTextStyle
+import org.koin.androidx.compose.koinViewModel
 import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginScreenViewModel = hiltViewModel(),
+    viewModel: LoginScreenViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val navigateTo = viewModel.state.navigateTo

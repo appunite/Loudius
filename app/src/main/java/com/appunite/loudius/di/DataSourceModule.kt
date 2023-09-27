@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.di
 
-import android.content.Context
 import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
@@ -25,40 +24,13 @@ import com.appunite.loudius.network.datasource.PullRequestDataSource
 import com.appunite.loudius.network.datasource.PullRequestsDataSourceImpl
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.datasource.UserDataSourceImpl
-import com.appunite.loudius.network.services.AuthService
-import com.appunite.loudius.network.services.PullRequestsService
-import com.appunite.loudius.network.services.UserService
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-@InstallIn(SingletonComponent::class)
-@Module
-object DataSourceModule {
-
-    @Provides
-    @Singleton
-    fun providePullRequestNetworkDataSource(
-        service: PullRequestsService
-    ): PullRequestDataSource = PullRequestsDataSourceImpl(service)
-
-    @Provides
-    @Singleton
-    fun provideUserDataSource(
-        userService: UserService,
-    ): UserDataSource = UserDataSourceImpl(userService)
-
-    @Singleton
-    @Provides
-    fun provideUserLocalDataSource(@ApplicationContext context: Context): UserLocalDataSource =
-        UserLocalDataSourceImpl(context)
-
-    @Singleton
-    @Provides
-    fun provideAuthDataSource(
-        service: AuthService,
-    ): AuthDataSource = AuthDataSourceImpl(service)
+val dataSourceModule = module {
+    singleOf(::UserDataSourceImpl) { bind<UserDataSource>() }
+    singleOf(::UserLocalDataSourceImpl) { bind<UserLocalDataSource>() }
+    singleOf(::AuthDataSourceImpl) { bind<AuthDataSource>() }
+    singleOf(::PullRequestsDataSourceImpl) { bind<PullRequestDataSource>() }
 }

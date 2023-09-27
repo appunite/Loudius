@@ -20,15 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+
 import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator
 import com.appunite.loudius.components.theme.LoudiusTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AuthenticatingScreen(
-    viewModel: AuthenticatingViewModel = hiltViewModel(),
+    viewModel: AuthenticatingViewModel = koinViewModel(),
     onNavigateToPullRequest: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {

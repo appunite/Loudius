@@ -20,31 +20,11 @@ import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.domain.repository.AuthRepositoryImpl
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.domain.repository.PullRequestRepositoryImpl
-import com.appunite.loudius.domain.store.UserLocalDataSource
-import com.appunite.loudius.network.datasource.AuthDataSource
-import com.appunite.loudius.network.datasource.PullRequestDataSource
-import com.appunite.loudius.network.datasource.UserDataSource
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.module
 
-@InstallIn(SingletonComponent::class)
-@Module
-object RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun providePullRequestRepository(
-        dataSource: PullRequestDataSource,
-        userDataSource: UserDataSource,
-    ): PullRequestRepository = PullRequestRepositoryImpl(dataSource, userDataSource)
-
-    @Singleton
-    @Provides
-    fun provideAuthRepository(
-        authDataSource: AuthDataSource,
-        userLocalDataSource: UserLocalDataSource,
-    ): AuthRepository = AuthRepositoryImpl(authDataSource, userLocalDataSource)
+val repositoryModule = module {
+    singleOf(::PullRequestRepositoryImpl) { bind<PullRequestRepository>() }
+    singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
 }

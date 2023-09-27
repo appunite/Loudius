@@ -17,17 +17,11 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
-import com.appunite.loudius.network.intercept.AuthFailureInterceptor
-import com.appunite.loudius.network.intercept.AuthInterceptor
+import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -35,76 +29,56 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import java.time.LocalDateTime
-import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
-    }
-
-    @Provides
-    @AuthAPI
-    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
-
-    @Provides
-    @BaseAPI
-    fun provideBaseAPIUrl() = Constants.BASE_API_URL
-
-    @Provides
-    @Singleton
-    @AuthAPI
-    fun provideAuthHttpClient(
-        gson: Gson,
-        @AuthAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-    ): HttpClient = HttpClient(OkHttp) {
-        expectSuccess = true
-        engine {
-            addInterceptor(TestInterceptor)
-            addInterceptor(loggingInterceptor)
-        }
-        defaultRequest {
-            url(baseUrl)
-        }
-        install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
+val networkModule = module {
+    single<HttpLoggingInterceptor> {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
         }
     }
 
-    @Provides
-    @Singleton
-    @BaseAPI
-    fun provideBaseHttpClient(
-        gson: Gson,
-        @BaseAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
-    ): HttpClient = HttpClient(OkHttp) {
-        expectSuccess = true
-        engine {
-            addInterceptor(authInterceptor)
-            addInterceptor(TestInterceptor)
-            addInterceptor(AuthFailureInterceptor(authFailureHandler))
-            addInterceptor(loggingInterceptor)
-        }
-        defaultRequest {
-            url(baseUrl)
-        }
-        install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
+    single<HttpClient>(named("auth")) {
+        HttpClient(OkHttp) {
+            expectSuccess = true
+            engine {
+                addInterceptor(TestInterceptor)
+                addInterceptor(get<HttpLoggingInterceptor>())
+            }
+            defaultRequest {
+                url(Constants.AUTH_API_URL)
+            }
+            install(ContentNegotiation) {
+                register(ContentType.Application.Json, GsonConverter(get()))
+            }
         }
     }
 
-    @Provides
-    @Singleton
-    fun provideGson(): Gson =
+    single<HttpClient>(named("base")) {
+        HttpClient(OkHttp) {
+            expectSuccess = true
+            engine {
+                addInterceptor(TestInterceptor)
+                addInterceptor(get<HttpLoggingInterceptor>())
+            }
+            defaultRequest {
+                url(Constants.BASE_API_URL)
+            }
+            install(ContentNegotiation) {
+                register(ContentType.Application.Json, GsonConverter(get()))
+            }
+        }
+    }
+
+    single {
         GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
             .create()
+    }
+
+    singleOf(::AuthFailureHandler)
+    singleOf(::ApiRequester)
 }

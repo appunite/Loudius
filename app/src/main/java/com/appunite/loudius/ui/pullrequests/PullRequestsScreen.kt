@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.components.components.LoudiusFullScreenError
@@ -53,13 +52,14 @@ import com.appunite.loudius.components.components.LoudiusTextStyle
 import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.network.model.PullRequest
+import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDateTime
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
 @Composable
 fun PullRequestsScreen(
-    viewModel: PullRequestsViewModel = hiltViewModel(),
+    viewModel: PullRequestsViewModel = koinViewModel(),
     navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state

@@ -25,7 +25,6 @@ import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.User
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import javax.inject.Inject
 
 interface PullRequestRepository {
     suspend fun getReviews(
@@ -50,7 +49,7 @@ interface PullRequestRepository {
     ): Result<Unit>
 }
 
-class PullRequestRepositoryImpl @Inject constructor(
+class PullRequestRepositoryImpl(
     private val pullRequestsDataSource: PullRequestDataSource,
     private val userDataSource: UserDataSource,
 ) : PullRequestRepository {

@@ -19,18 +19,13 @@ package com.appunite.loudius.domain.store
 import android.content.Context
 import android.content.SharedPreferences
 import com.appunite.loudius.network.model.AccessToken
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
 interface UserLocalDataSource {
     fun saveAccessToken(accessToken: AccessToken)
     fun getAccessToken(): AccessToken
 }
 
-@Singleton
-class UserLocalDataSourceImpl @Inject constructor(@ApplicationContext context: Context) :
-    UserLocalDataSource {
+class UserLocalDataSourceImpl(context: Context) : UserLocalDataSource {
 
     companion object {
         private const val FILE_NAME = "com.appunite.loudius.sharedPreferences"
