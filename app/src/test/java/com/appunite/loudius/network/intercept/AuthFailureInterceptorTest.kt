@@ -25,6 +25,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -54,11 +55,12 @@ class AuthFailureInterceptorTest {
         MockKAnnotations.init(this)
 
         authFailureInterceptor = AuthFailureInterceptor(authFailureHandler)
+        every { authFailureHandler.emitAuthFailure() } returns Unit
+
         client = httpClientTestDouble(mockWebServer) {
             engine { addInterceptor(authFailureInterceptor) }
         }
         service = TestApi(client)
-
 
         mockWebServer.start()
     }
