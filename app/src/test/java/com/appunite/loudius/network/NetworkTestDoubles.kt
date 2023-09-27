@@ -54,9 +54,8 @@ private fun testGson() =
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
 fun httpClientTestDouble(
-    mockWebServer: MockWebServer,
-    engine: HttpClientEngine = OkHttp.create()
-): HttpClient = HttpClient(engine) {
+    mockWebServer: MockWebServer
+): HttpClient = HttpClient(OkHttp) {
     expectSuccess = true
     defaultRequest {
         url(
