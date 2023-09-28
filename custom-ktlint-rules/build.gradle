@@ -14,7 +14,7 @@ dependencies {
     compileOnly 'com.twitter.compose.rules:ktlint:0.0.26'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'io.strikt:strikt-core:0.34.0'
-    testImplementation 'org.assertj:assertj-core:3.10.0'
+    testImplementation 'org.assertj:assertj-core:3.23.1'
     testImplementation 'com.pinterest.ktlint:ktlint-core:0.48.2'
     testImplementation 'com.pinterest.ktlint:ktlint-test:0.48.2'
 }

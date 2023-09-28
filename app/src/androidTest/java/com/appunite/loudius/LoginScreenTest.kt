@@ -35,7 +35,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.di.GithubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
-import com.appunite.loudius.ui.login.LoginScreen
+import com.appunite.loudius.ui.login.loginScreen
 import com.appunite.loudius.util.ScreenshotTestRule
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -85,7 +85,7 @@ class LoginScreenTest {
 
         composeTestRule.setContent {
             LoudiusTheme {
-                LoginScreen()
+                loginScreen()
             }
         }
 
@@ -106,7 +106,7 @@ class LoginScreenTest {
 
         composeTestRule.setContent {
             LoudiusTheme {
-                LoginScreen()
+                loginScreen()
             }
         }
 
@@ -129,7 +129,7 @@ class LoginScreenTest {
 
         composeTestRule.setContent {
             LoudiusTheme {
-                LoginScreen()
+                loginScreen()
             }
         }
 

@@ -34,7 +34,7 @@ import com.appunite.loudius.common.Screen
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.MainViewModel
 import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
-import com.appunite.loudius.ui.login.LoginScreen
+import com.appunite.loudius.ui.login.loginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.Login.route,
                     ) {
                         composable(route = Screen.Login.route) {
-                            LoginScreen()
+                            loginScreen()
                         }
                         composable(
                             route = Screen.Authenticating.route,
