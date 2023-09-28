@@ -16,39 +16,19 @@
 
 package com.appunite.loudius.network
 
-import com.appunite.loudius.domain.repository.AuthRepository
-import com.appunite.loudius.fakes.FakeAuthRepository
-import com.appunite.loudius.network.intercept.AuthFailureInterceptor
-import com.appunite.loudius.network.intercept.AuthInterceptor
-import com.appunite.loudius.network.utils.AuthFailureHandler
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
-import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.engine.okhttp.OkHttpConfig
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
-import kotlinx.coroutines.Dispatchers
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
-
-fun testOkHttpClient(
-    authRepository: AuthRepository = FakeAuthRepository(),
-    authFailureHandler: AuthFailureHandler = AuthFailureHandler(Dispatchers.Unconfined),
-) = OkHttpClient.Builder()
-    .connectTimeout(1, TimeUnit.SECONDS)
-    .readTimeout(1, TimeUnit.SECONDS)
-    .writeTimeout(1, TimeUnit.SECONDS)
-    .addInterceptor(AuthInterceptor(authRepository))
-    .addInterceptor(AuthFailureInterceptor(authFailureHandler))
-    .build()
 
 private fun testGson() =
     GsonBuilder()
