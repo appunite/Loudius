@@ -28,10 +28,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.http.ContentType
+import io.ktor.serialization.gson.GsonConverter
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDateTime
 import javax.inject.Singleton
 
@@ -55,45 +58,47 @@ object NetworkModule {
     @Provides
     @Singleton
     @AuthAPI
-    fun provideAuthRetrofit(
+    fun provideAuthHttpClient(
         gson: Gson,
         @AuthAPI baseUrl: String,
         loggingInterceptor: HttpLoggingInterceptor,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(TestInterceptor)
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            register(ContentType.Application.Json, GsonConverter(gson))
+        }
     }
 
     @Provides
     @Singleton
     @BaseAPI
-    fun provideBaseRetrofit(
+    fun provideBaseHttpClient(
         gson: Gson,
-        @BaseAPI baseAPIUrl: String,
+        @BaseAPI baseUrl: String,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         authFailureHandler: AuthFailureHandler,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(AuthFailureInterceptor(authFailureHandler))
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseAPIUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(authInterceptor)
+            addInterceptor(TestInterceptor)
+            addInterceptor(AuthFailureInterceptor(authFailureHandler))
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            register(ContentType.Application.Json, GsonConverter(gson))
+        }
     }
 
     @Provides

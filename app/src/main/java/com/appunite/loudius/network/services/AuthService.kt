@@ -17,19 +17,42 @@
 package com.appunite.loudius.network.services
 
 import com.appunite.loudius.network.model.AccessTokenResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.headers
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.parameters
+import javax.inject.Inject
 
 interface AuthService {
 
-    @Headers("Accept: application/json")
-    @POST("login/oauth/access_token")
-    @FormUrlEncoded
     suspend fun getAccessToken(
-        @Field("client_id") clientId: String,
-        @Field("client_secret") clientSecret: String,
-        @Field("code") code: String,
-    ): AccessTokenResponse
+        clientId: String,
+        clientSecret: String,
+        code: String,
+    ): Result<AccessTokenResponse>
+}
+
+class AuthServiceImpl @Inject constructor(private val client: HttpClient) : AuthService {
+
+    override suspend fun getAccessToken(
+        clientId: String,
+        clientSecret: String,
+        code: String,
+    ): Result<AccessTokenResponse> = runCatching {
+        client.submitForm(
+            url = "login/oauth/access_token",
+            formParameters = parameters {
+                append("client_id", clientId)
+                append("client_secret", clientSecret)
+                append("code", code)
+            },
+        ) {
+            headers {
+                append(HttpHeaders.Accept, ContentType.Application.Json.toString())
+            }
+        }.body()
+    }
 }

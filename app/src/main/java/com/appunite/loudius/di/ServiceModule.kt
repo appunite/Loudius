@@ -17,13 +17,16 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.network.services.AuthService
+import com.appunite.loudius.network.services.AuthServiceImpl
 import com.appunite.loudius.network.services.PullRequestsService
+import com.appunite.loudius.network.services.PullRequestsServiceImpl
 import com.appunite.loudius.network.services.UserService
+import com.appunite.loudius.network.services.UserServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
+import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -32,16 +35,16 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideAuthService(@AuthAPI retrofit: Retrofit): AuthService =
-        retrofit.create(AuthService::class.java)
+    fun provideAuthService(@AuthAPI httpClient: HttpClient): AuthService =
+        AuthServiceImpl(httpClient)
 
     @Singleton
     @Provides
-    fun provideUserService(@BaseAPI retrofit: Retrofit): UserService =
-        retrofit.create(UserService::class.java)
+    fun provideUserService(@BaseAPI httpClient: HttpClient): UserService =
+        UserServiceImpl(httpClient)
 
     @Singleton
     @Provides
-    fun provideReposService(@BaseAPI retrofit: Retrofit): PullRequestsService =
-        retrofit.create(PullRequestsService::class.java)
+    fun provideReposService(@BaseAPI httpClient: HttpClient): PullRequestsService =
+        PullRequestsServiceImpl(httpClient)
 }

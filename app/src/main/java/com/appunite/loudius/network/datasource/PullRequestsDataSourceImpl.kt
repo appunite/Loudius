@@ -21,7 +21,6 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.request.NotifyRequestBody
 import com.appunite.loudius.network.services.PullRequestsService
-import com.appunite.loudius.network.utils.ApiRequester
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -49,38 +48,31 @@ interface PullRequestDataSource {
 }
 
 @Singleton
-class PullRequestsNetworkDataSource @Inject constructor(
+class PullRequestsDataSourceImpl @Inject constructor(
     private val service: PullRequestsService,
-    private val apiRequester: ApiRequester,
-) :
-    PullRequestDataSource {
+) : PullRequestDataSource {
+
     override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> =
-        apiRequester.safeApiCall {
-            service.getPullRequestsForUser("author:$author type:pr state:open")
-        }
+        service.getPullRequestsForUser("author:$author type:pr state:open")
 
     override suspend fun getReviewers(
         owner: String,
         repository: String,
         pullRequestNumber: String,
-    ): Result<RequestedReviewersResponse> = apiRequester.safeApiCall {
+    ): Result<RequestedReviewersResponse> =
         service.getReviewers(owner, repository, pullRequestNumber)
-    }
 
     override suspend fun getReviews(
         owner: String,
         repository: String,
         pullRequestNumber: String,
-    ): Result<List<Review>> = apiRequester.safeApiCall {
-        service.getReviews(owner, repository, pullRequestNumber)
-    }
+    ): Result<List<Review>> = service.getReviews(owner, repository, pullRequestNumber)
 
     override suspend fun notify(
         owner: String,
         repository: String,
         pullRequestNumber: String,
         message: String,
-    ): Result<Unit> = apiRequester.safeApiCall {
+    ): Result<Unit> =
         service.notify(owner, repository, pullRequestNumber, NotifyRequestBody(message))
-    }
 }

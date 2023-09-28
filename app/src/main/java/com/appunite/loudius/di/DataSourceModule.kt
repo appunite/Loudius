@@ -20,15 +20,14 @@ import android.content.Context
 import com.appunite.loudius.domain.store.UserLocalDataSource
 import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
 import com.appunite.loudius.network.datasource.AuthDataSource
-import com.appunite.loudius.network.datasource.AuthNetworkDataSource
+import com.appunite.loudius.network.datasource.AuthDataSourceImpl
 import com.appunite.loudius.network.datasource.PullRequestDataSource
-import com.appunite.loudius.network.datasource.PullRequestsNetworkDataSource
+import com.appunite.loudius.network.datasource.PullRequestsDataSourceImpl
 import com.appunite.loudius.network.datasource.UserDataSource
 import com.appunite.loudius.network.datasource.UserDataSourceImpl
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.services.PullRequestsService
 import com.appunite.loudius.network.services.UserService
-import com.appunite.loudius.network.utils.ApiRequester
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,15 +43,13 @@ object DataSourceModule {
     @Singleton
     fun providePullRequestNetworkDataSource(
         service: PullRequestsService,
-        apiRequester: ApiRequester,
-    ): PullRequestDataSource = PullRequestsNetworkDataSource(service, apiRequester)
+    ): PullRequestDataSource = PullRequestsDataSourceImpl(service)
 
     @Provides
     @Singleton
     fun provideUserDataSource(
         userService: UserService,
-        apiRequester: ApiRequester,
-    ): UserDataSource = UserDataSourceImpl(userService, apiRequester)
+    ): UserDataSource = UserDataSourceImpl(userService)
 
     @Singleton
     @Provides
@@ -61,8 +58,7 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideAuthNetworkDataSource(
+    fun provideAuthDataSource(
         service: AuthService,
-        apiRequester: ApiRequester,
-    ): AuthDataSource = AuthNetworkDataSource(service, apiRequester)
+    ): AuthDataSource = AuthDataSourceImpl(service)
 }

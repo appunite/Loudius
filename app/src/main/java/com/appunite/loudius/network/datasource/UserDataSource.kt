@@ -18,7 +18,6 @@ package com.appunite.loudius.network.datasource
 
 import com.appunite.loudius.network.model.User
 import com.appunite.loudius.network.services.UserService
-import com.appunite.loudius.network.utils.ApiRequester
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,10 +28,6 @@ interface UserDataSource {
 @Singleton
 class UserDataSourceImpl @Inject constructor(
     private val userService: UserService,
-    private val apiRequester: ApiRequester,
-) :
-    UserDataSource {
-    override suspend fun getUser(): Result<User> = apiRequester.safeApiCall {
-        userService.getUser()
-    }
+) : UserDataSource {
+    override suspend fun getUser(): Result<User> = userService.getUser()
 }

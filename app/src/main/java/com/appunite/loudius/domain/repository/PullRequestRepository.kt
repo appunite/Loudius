@@ -51,12 +51,12 @@ interface PullRequestRepository {
 }
 
 class PullRequestRepositoryImpl @Inject constructor(
-    private val pullRequestsNetworkDataSource: PullRequestDataSource,
+    private val pullRequestsDataSource: PullRequestDataSource,
     private val userDataSource: UserDataSource,
 ) : PullRequestRepository {
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
         val currentUser = userDataSource.getUser()
-        return currentUser.flatMap { pullRequestsNetworkDataSource.getPullRequestsForUser(it.login) }
+        return currentUser.flatMap { pullRequestsDataSource.getPullRequestsForUser(it.login) }
     }
 
     override suspend fun getReviews(
@@ -66,7 +66,7 @@ class PullRequestRepositoryImpl @Inject constructor(
     ): Result<List<Review>> = coroutineScope {
         val currentUserDeferred = async { userDataSource.getUser() }
         val reviewsDeferred = async {
-            pullRequestsNetworkDataSource.getReviews(owner, repo, pullRequestNumber)
+            pullRequestsDataSource.getReviews(owner, repo, pullRequestNumber)
         }
         val currentUser = currentUserDeferred.await()
         val reviews = reviewsDeferred.await()
@@ -85,7 +85,7 @@ class PullRequestRepositoryImpl @Inject constructor(
         repo: String,
         pullRequestNumber: String,
     ): Result<RequestedReviewersResponse> =
-        pullRequestsNetworkDataSource.getReviewers(owner, repo, pullRequestNumber)
+        pullRequestsDataSource.getReviewers(owner, repo, pullRequestNumber)
 
     override suspend fun notify(
         owner: String,
@@ -93,5 +93,5 @@ class PullRequestRepositoryImpl @Inject constructor(
         pullRequestNumber: String,
         message: String,
     ): Result<Unit> =
-        pullRequestsNetworkDataSource.notify(owner, repo, pullRequestNumber, message)
+        pullRequestsDataSource.notify(owner, repo, pullRequestNumber, message)
 }

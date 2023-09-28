@@ -20,7 +20,6 @@ import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
-import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.WebException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,9 +34,8 @@ interface AuthDataSource {
 }
 
 @Singleton
-class AuthNetworkDataSource @Inject constructor(
+class AuthDataSourceImpl @Inject constructor(
     private val authService: AuthService,
-    private val apiRequester: ApiRequester,
 ) : AuthDataSource {
 
     companion object {
@@ -49,14 +47,13 @@ class AuthNetworkDataSource @Inject constructor(
         clientSecret: String,
         code: String,
     ): Result<AccessToken> =
-        apiRequester.safeApiCall { authService.getAccessToken(clientId, clientSecret, code) }
-            .flatMap { response ->
-                if (response.accessToken != null) {
-                    Result.success(response.accessToken)
-                } else {
-                    Result.failure(response.mapErrorToException())
-                }
+        authService.getAccessToken(clientId, clientSecret, code).flatMap { response ->
+            if (response.accessToken != null) {
+                Result.success(response.accessToken)
+            } else {
+                Result.failure(response.mapErrorToException())
             }
+        }
 
     private fun AccessTokenResponse.mapErrorToException(): Exception {
         return when (error) {
