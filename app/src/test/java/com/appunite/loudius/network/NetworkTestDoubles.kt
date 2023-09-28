@@ -37,7 +37,7 @@ private fun testGson() =
 
 fun httpClientTestDouble(
     mockWebServer: MockWebServer,
-    block: HttpClientConfig<OkHttpConfig>.() -> Unit = {}
+    block: HttpClientConfig<OkHttpConfig>.() -> Unit = {},
 ): HttpClient = HttpClient(OkHttp) {
     block(this)
 
