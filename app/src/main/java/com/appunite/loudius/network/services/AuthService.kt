@@ -40,7 +40,7 @@ class AuthServiceImpl(private val client: HttpClient) : AuthService {
         clientId: String,
         clientSecret: String,
         code: String,
-    ): Result<AccessTokenResponse> = runCatching {
+    ): Result<AccessTokenResponse> = runCatching<AuthServiceImpl, AccessTokenResponse> {
         client.submitForm(
             url = "login/oauth/access_token",
             formParameters = parameters {
@@ -53,5 +53,7 @@ class AuthServiceImpl(private val client: HttpClient) : AuthService {
                 append(HttpHeaders.Accept, ContentType.Application.Json.toString())
             }
         }.body()
+    }.onFailure {
+        println(it.message)
     }
 }

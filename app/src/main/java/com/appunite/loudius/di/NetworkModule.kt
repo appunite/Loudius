@@ -17,7 +17,6 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
-import com.appunite.loudius.network.utils.ApiRequester
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
@@ -28,6 +27,8 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
@@ -35,13 +36,13 @@ import org.koin.dsl.module
 import java.time.LocalDateTime
 
 val networkModule = module {
-    single<HttpLoggingInterceptor> {
+    single {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
     }
 
-    single<HttpClient>(named("auth")) {
+    single(named("auth")) {
         HttpClient(OkHttp) {
             expectSuccess = true
             engine {
@@ -52,12 +53,12 @@ val networkModule = module {
                 url(Constants.AUTH_API_URL)
             }
             install(ContentNegotiation) {
-                register(ContentType.Application.Json, GsonConverter(get()))
+                json(get())
             }
         }
     }
 
-    single<HttpClient>(named("base")) {
+    single(named("base")) {
         HttpClient(OkHttp) {
             expectSuccess = true
             engine {
@@ -74,11 +75,18 @@ val networkModule = module {
     }
 
     single {
+        Json {
+            encodeDefaults = true
+            isLenient = true
+            prettyPrint = true
+        }
+    }
+
+    single {
         GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
             .create()
     }
 
     singleOf(::AuthFailureHandler)
-    singleOf(::ApiRequester)
 }

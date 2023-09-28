@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
 }
 
 android {
@@ -109,11 +110,15 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
     testImplementation("io.ktor:ktor-client-mock:2.3.4")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
 
     //retrofit & okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation "io.ktor:ktor-serialization-gson:2.3.4"
 
     // koin
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
