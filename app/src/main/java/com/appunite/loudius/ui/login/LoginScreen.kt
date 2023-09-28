@@ -55,7 +55,7 @@ import com.appunite.loudius.getBrowserIntent
 import com.appunite.loudius.components.R as componentsR
 
 @Composable
-fun loginScreen(
+fun LoginScreen(
     viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
