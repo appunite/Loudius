@@ -151,6 +151,7 @@ dependencies {
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+    ktlintRuleset 'com.twitter.compose.rules:ktlint:0.0.26'
 }
 
 tasks.withType(Test) {
