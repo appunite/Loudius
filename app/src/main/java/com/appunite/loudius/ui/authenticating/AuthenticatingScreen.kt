@@ -21,6 +21,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator
@@ -82,7 +84,7 @@ private fun ShowLoudiusGenericErrorScreen(
     LoudiusFullScreenError(onButtonClick = onTryAgainClick)
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
 fun ShowLoudiusGenericErrorScreenPreview() {
     LoudiusTheme {
@@ -90,15 +92,16 @@ fun ShowLoudiusGenericErrorScreenPreview() {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
+@ShowkaseComposable(skip = true)
 fun ShowLoudiusLoginErrorScreenPreview() {
     LoudiusTheme {
         AuthenticatingScreenStateless(errorScreenType = LoadingErrorType.LOGIN_ERROR) {}
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
 fun ShowLoadingIndicatorScreenPreview() {
     LoudiusTheme {

@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.components.R
 import com.appunite.loudius.components.theme.LoudiusTheme
 
@@ -46,8 +47,9 @@ fun LoudiusErrorDialog(
     }
 }
 
-@Preview
 @Composable
+@ShowkaseComposable(skip = true)
+@Preview(group = "Dialogs")
 fun LoudiusErrorDialogPreview() {
     LoudiusTheme {
         LoudiusErrorDialog(onConfirmButtonClick = {})

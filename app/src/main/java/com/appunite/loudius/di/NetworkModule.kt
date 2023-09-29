@@ -32,7 +32,6 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.time.LocalDateTime
-import com.appunite.loudius.network.utils.ApiRequester
 
 val networkModule = module {
     single<HttpLoggingInterceptor> {
@@ -80,5 +79,4 @@ val networkModule = module {
     }
 
     singleOf(::AuthFailureHandler)
-    singleOf(::ApiRequester)
 }
