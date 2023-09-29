@@ -29,6 +29,7 @@ import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import com.appunite.loudius.components.getMetadata
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector

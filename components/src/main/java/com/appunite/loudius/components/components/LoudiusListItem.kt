@@ -76,7 +76,7 @@ fun LoudiusListIcon(modifier: Modifier, painter: Painter, contentDescription: St
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "List Item")
 fun LoudiusListItemManyWithAllItemsPreview() {
     Column {
         LoudiusListItemExample(0)
@@ -86,7 +86,7 @@ fun LoudiusListItemManyWithAllItemsPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "List Item")
 fun LoudiusListItemJustContentPreview() {
     LoudiusListItem(
         index = 0,
@@ -101,7 +101,7 @@ fun LoudiusListItemJustContentPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "List Item")
 fun LoudiusListItemMultiplePreview() {
     LoudiusListItem(
         index = 0,
@@ -121,7 +121,7 @@ fun LoudiusListItemMultiplePreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "List Item")
 fun LoudiusListItemWithHeaderPreview() {
     LoudiusListItem(
         index = 0,
@@ -141,7 +141,7 @@ fun LoudiusListItemWithHeaderPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "List Item")
 fun LoudiusListItemContentAndActionPreview() {
     LoudiusListItem(
         index = 0,
@@ -159,7 +159,7 @@ fun LoudiusListItemContentAndActionPreview() {
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "List Item")
 fun LoudiusListItemContentAndIconPreview() {
     LoudiusListItem(
         index = 0,

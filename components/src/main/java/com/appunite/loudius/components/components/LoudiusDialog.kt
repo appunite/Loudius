@@ -20,6 +20,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.components.theme.LoudiusTheme
 
 @Composable
@@ -48,7 +49,8 @@ fun LoudiusDialog(
 }
 
 @Composable
-@Preview
+@ShowkaseComposable(skip = true)
+@Preview(group = "Dialogs")
 fun LoudiusDialogSimplePreview() {
     LoudiusTheme {
         LoudiusDialog(
@@ -62,7 +64,8 @@ fun LoudiusDialogSimplePreview() {
 }
 
 @Composable
-@Preview
+@ShowkaseComposable(skip = true)
+@Preview(group = "Dialogs")
 fun LoudiusDialogAdvancedPreview() {
     LoudiusTheme {
         LoudiusDialog(
