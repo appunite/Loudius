@@ -23,7 +23,6 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

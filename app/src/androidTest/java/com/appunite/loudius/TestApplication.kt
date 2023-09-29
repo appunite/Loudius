@@ -1,7 +1,6 @@
 package com.appunite.loudius
 
 import android.app.Application
-import androidx.test.platform.app.InstrumentationRegistry
 import com.appunite.loudius.di.dataSourceModule
 import com.appunite.loudius.di.dispatcherModule
 import com.appunite.loudius.di.githubHelperModule
@@ -23,7 +22,7 @@ class TestApplication : Application() {
                 networkModule,
                 repositoryModule,
                 serviceModule,
-                viewModelModule
+                viewModelModule,
             )
 
             androidContext(this@TestApplication)

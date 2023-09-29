@@ -18,10 +18,8 @@ package com.appunite.loudius.util
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
 import com.appunite.loudius.components.components.countingResource
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
-import net.bytebuddy.dynamic.TypeResolutionStrategy.Active
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
