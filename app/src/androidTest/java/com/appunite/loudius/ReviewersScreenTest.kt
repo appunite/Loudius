@@ -24,22 +24,19 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class ReviewersScreenTest {
 
     @get:Rule
-    val integrationTestRule = IntegrationTestRule(this)
+    val integrationTestRule = IntegrationTestRule()
 
     @Before
     fun setUp() {
-        integrationTestRule.setUp()
         integrationTestRule.initTests()
     }
 

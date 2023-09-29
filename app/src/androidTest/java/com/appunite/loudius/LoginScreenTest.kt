@@ -19,7 +19,7 @@ package com.appunite.loudius
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.intent.Intents.intended
@@ -33,32 +33,21 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
-import com.appunite.loudius.di.GithubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.util.ScreenshotTestRule
-import dagger.hilt.android.testing.BindValue
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@UninstallModules(GithubHelperModule::class)
-@HiltAndroidTest
 class LoginScreenTest {
 
-    @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
-
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<TestActivity>()
+    val composeTestRule = createComposeRule()
 
     @get:Rule(order = 2)
     val intents = IntentsRule()
@@ -67,12 +56,6 @@ class LoginScreenTest {
     @JvmField
     val screenshotTestRule = ScreenshotTestRule()
 
-    @Before
-    fun setUp() {
-        hiltRule.inject()
-    }
-
-    @BindValue
     @JvmField
     val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
         every { shouldAskForXiaomiIntent() } returns false

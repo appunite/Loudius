@@ -23,23 +23,16 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class PullRequestsScreenTest {
 
     @get:Rule
-    val integrationTestRule = IntegrationTestRule(this)
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
+    val integrationTestRule = IntegrationTestRule()
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
