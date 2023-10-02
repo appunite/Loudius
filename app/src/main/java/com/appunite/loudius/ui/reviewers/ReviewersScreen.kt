@@ -65,7 +65,7 @@ import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
 import com.appunite.loudius.components.R as componentsR
 
 @Composable
-fun ReviewersScreen(
+fun reviewersScreen(
      viewModel: ReviewersViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
