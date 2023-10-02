@@ -150,7 +150,6 @@ dependencies {
     androidTestImplementation 'com.google.firebase:testlab-instr-lib:0.2'
 
     // ktlint
-    implementation project(":custom-ktlint-rules")
     implementation 'com.twitter.compose.rules:ktlint:0.0.26'
 }
 
