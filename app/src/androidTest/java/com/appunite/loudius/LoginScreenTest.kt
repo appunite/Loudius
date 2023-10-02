@@ -19,6 +19,7 @@ package com.appunite.loudius
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -51,7 +52,7 @@ import org.koin.dsl.module
 class LoginScreenTest {
 
     @get:Rule(order = 0)
-    val composeTestRule = createAndroidComposeRule<TestActivity>()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
