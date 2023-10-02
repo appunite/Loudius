@@ -56,7 +56,7 @@ jobs:
           # https://megalinter.github.io/configuration/
           VALIDATE_ALL_CODEBASE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          KOTLIN_KTLINT_ARGUMENTS: "--ruleset=com.twitter.compose.rules:ktlint:0.0.26,custom-ktlint-rules/build/libs/custom-ktlint-rules.jar"
+          KOTLIN_KTLINT_ARGUMENTS: "--ruleset=com.twitter.compose.rules:ktlint:0.0.26"
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
 
