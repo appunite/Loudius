@@ -66,7 +66,7 @@ import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun reviewersScreen(
-     viewModel: ReviewersViewModel = hiltViewModel(),
+    viewModel: ReviewersViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
     val viewModel: ReviewersViewModel = hiltViewModel()
@@ -147,7 +147,7 @@ private fun ReviewersScreenStateless(
                     refreshing,
                     onRefresh,
                     padding,
-                    onAction
+                    onAction,
                 )
             }
         },
@@ -266,7 +266,7 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
 private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
     stringResource(
         id = R.string.reviewers_screen_reviewed_message,
-        reviewer.hoursFromReviewDone ?: 0
+        reviewer.hoursFromReviewDone ?: 0,
     )
 } else {
     stringResource(id = R.string.reviewers_screen_not_reviewed_message, reviewer.hoursFromPRStart)
