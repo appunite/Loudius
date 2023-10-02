@@ -60,6 +60,7 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
     val navigateTo = viewModel.state.navigateTo
+
     LaunchedEffect(navigateTo) {
         when (navigateTo) {
             LoginNavigateTo.OpenGithubAuth -> {

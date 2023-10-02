@@ -19,7 +19,7 @@ package com.appunite.loudius
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.intent.Intents.intended
@@ -42,24 +42,40 @@ import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import com.appunite.loudius.di.githubHelperModule
+import org.junit.Before
+import org.koin.core.context.GlobalContext
+import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
 class LoginScreenTest {
 
-    @get:Rule(order = 1)
-    val composeTestRule = createComposeRule()
+    @get:Rule(order = 0)
+    val composeTestRule = createAndroidComposeRule<TestActivity>()
 
-    @get:Rule(order = 2)
+    @get:Rule(order = 1)
     val intents = IntentsRule()
 
     @Rule
     @JvmField
     val screenshotTestRule = ScreenshotTestRule()
 
-    @JvmField
-    val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
+    private val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
         every { shouldAskForXiaomiIntent() } returns false
     }
+
+    @Before
+    fun init() {
+        // we want to provide a mock definition of GithubHelper into the koin
+        // therefore we need to unload the module first and load a module with
+        // mock definition of GithubHelper.
+        GlobalContext.get().unloadModules(listOf(githubHelperModule))
+        val githubMockModule = module {
+            single<GithubHelper> { githubHelper }
+        }
+        GlobalContext.get().loadModules(listOf(githubMockModule))
+    }
+
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() {
