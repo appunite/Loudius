@@ -2,6 +2,7 @@ package com.appunite.loudius.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.appunite.loudius.appModule
 import com.appunite.loudius.util.MainDispatcherExtension
 import io.mockk.every
 import io.mockk.mockkClass
@@ -26,12 +27,7 @@ class CheckModulesTest : KoinTest {
 
         koinApplication {
             modules(
-                dataSourceModule,
-                dispatcherModule,
-                githubHelperModule,
-                networkModule,
-                repositoryModule,
-                serviceModule,
+               appModule
             )
 
             checkModules() {

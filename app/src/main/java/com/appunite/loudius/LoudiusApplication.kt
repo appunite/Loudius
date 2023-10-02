@@ -26,8 +26,21 @@ import com.appunite.loudius.di.serviceModule
 import com.appunite.loudius.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.dsl.module
+
+
+val appModule = module {
+    includes(
+        dataSourceModule,
+        dispatcherModule,
+        githubHelperModule,
+        networkModule,
+        serviceModule
+    )
+}
 
 class LoudiusApplication : Application() {
+
     override fun onCreate() {
         super.onCreate()
 
@@ -35,13 +48,8 @@ class LoudiusApplication : Application() {
             androidContext(this@LoudiusApplication)
 
             modules(
-                dataSourceModule,
-                dispatcherModule,
-                githubHelperModule,
-                networkModule,
-                repositoryModule,
-                serviceModule,
-                viewModelModule,
+                appModule,
+                viewModelModule
             )
         }
     }
