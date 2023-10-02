@@ -66,9 +66,10 @@ import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun ReviewersScreen(
-    viewModel: ReviewersViewModel = hiltViewModel(),
+     viewModel: ReviewersViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
+    val viewModel: ReviewersViewModel = hiltViewModel()
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
     val refreshing by viewModel.isRefreshing.collectAsState()
@@ -141,7 +142,13 @@ private fun ReviewersScreenStateless(
                 )
 
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> ReviewersScreenContent(data, refreshing, onRefresh, padding, onAction)
+                is Data.Success -> ReviewersScreenContent(
+                    data,
+                    refreshing,
+                    onRefresh,
+                    padding,
+                    onAction
+                )
             }
         },
     )
@@ -257,7 +264,10 @@ private fun IsReviewedHeadlineText(reviewer: Reviewer) {
 
 @Composable
 private fun resolveIsReviewedText(reviewer: Reviewer) = if (reviewer.isReviewDone) {
-    stringResource(id = R.string.reviewers_screen_reviewed_message, reviewer.hoursFromReviewDone ?: 0)
+    stringResource(
+        id = R.string.reviewers_screen_reviewed_message,
+        reviewer.hoursFromReviewDone ?: 0
+    )
 } else {
     stringResource(id = R.string.reviewers_screen_not_reviewed_message, reviewer.hoursFromPRStart)
 }
