@@ -2,6 +2,7 @@ package com.appunite.loudius.rules
 
 import com.pinterest.ktlint.core.RuleProvider
 import com.pinterest.ktlint.core.RuleSetProviderV2
+import com.twitter.compose.rules.ktlint.TwitterComposeRuleSetProvider
 
 internal const val RULE_SET_ID = "loudius-rule-set-id"
 
