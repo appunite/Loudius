@@ -57,7 +57,6 @@ class AuthenticatingViewModel(
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)
-
     var state by mutableStateOf(AuthenticatingState())
         private set
 

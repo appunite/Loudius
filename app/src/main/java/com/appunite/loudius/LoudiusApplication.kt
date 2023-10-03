@@ -35,7 +35,8 @@ val appModule = module {
         dispatcherModule,
         githubHelperModule,
         networkModule,
-        serviceModule
+        serviceModule,
+        repositoryModule
     )
 }
 
