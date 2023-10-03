@@ -43,7 +43,7 @@ jobs:
           cache: gradle
 
       - name: Build custom rules
-        run: ./gradlew shadowJar :custom-ktlint-rules
+        run: ./gradlew :custom-ktlint-rules:shadowJar
 
       # MegaLinter
       - name: MegaLinter
