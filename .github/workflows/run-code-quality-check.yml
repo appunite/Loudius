@@ -45,9 +45,6 @@ jobs:
       - name: Build custom rules
         run: ./gradlew :custom-ktlint-rules:assemble
 
-      - name: Download Twitter Compose ruleset
-        run: curl -O -L https://github.com/twitter/compose-rules/releases/download/v0.0.26/ktlint-twitter-compose-0.0.26-all.jar
-
       # MegaLinter
       - name: MegaLinter
         id: ml
