@@ -18,6 +18,4 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.23.1'
     testImplementation 'com.pinterest.ktlint:ktlint-core:0.48.2'
     testImplementation 'com.pinterest.ktlint:ktlint-test:0.48.2'
-
-
 }
