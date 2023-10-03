@@ -31,12 +31,12 @@ import org.koin.dsl.module
 
 val appModule = module {
     includes(
-        dataSourceModule,
-        dispatcherModule,
-        githubHelperModule,
         networkModule,
+        dataSourceModule,
         serviceModule,
-        repositoryModule
+        repositoryModule,
+        githubHelperModule,
+        dispatcherModule,
     )
 }
 
