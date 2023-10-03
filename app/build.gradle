@@ -149,6 +149,9 @@ dependencies {
     // Firebase instrumentation lib
     androidTestImplementation 'com.google.firebase:testlab-instr-lib:0.2'
 
+    // code check
+    implementation 'org.jacoco:org.jacoco.core:0.8.4'
+
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
 }
