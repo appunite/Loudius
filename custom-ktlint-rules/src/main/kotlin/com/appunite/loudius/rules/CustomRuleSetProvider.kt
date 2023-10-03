@@ -8,6 +8,6 @@ internal const val RULE_SET_ID = "loudius-rule-set-id"
 class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
     override fun getRuleProviders(): Set<RuleProvider> =
         setOf(
-            RuleProvider { UseStriktAssertionLibrary() },
+            RuleProvider { UseStriktAssertionLibrary() }
         )
 }
