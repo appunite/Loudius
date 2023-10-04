@@ -30,6 +30,7 @@ import io.ktor.serialization.gson.GsonConverter
 import okhttp3.mockwebserver.MockWebServer
 import java.time.LocalDateTime
 import junit.framework.TestCase.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 private fun testGson() =
     GsonBuilder()
