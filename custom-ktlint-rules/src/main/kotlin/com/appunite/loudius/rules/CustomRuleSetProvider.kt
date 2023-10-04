@@ -25,23 +25,6 @@ internal const val RULE_SET_ID = "loudius-rule-set-id"
 class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
     override fun getRuleProviders(): Set<RuleProvider> =
         setOf(
-            RuleProvider { UseStriktAssertionLibrary() },
-            RuleProvider { ComposeCompositionLocalAllowlistCheck() },
-            RuleProvider { ComposeCompositionLocalNamingCheck() },
-            RuleProvider { ComposeContentEmitterReturningValuesCheck() },
-            RuleProvider { ComposeModifierComposableCheck() },
-            RuleProvider { ComposeModifierMissingCheck() },
-            RuleProvider { ComposeModifierReusedCheck() },
-            RuleProvider { ComposeModifierWithoutDefaultCheck() },
-            RuleProvider { ComposeMultipleContentEmittersCheck() },
-            RuleProvider { ComposeMutableParametersCheck() },
-            RuleProvider { ComposeNamingCheck() },
-            RuleProvider { ComposeParameterOrderCheck() },
-            RuleProvider { ComposePreviewNamingCheck() },
-            RuleProvider { ComposePreviewPublicCheck() },
-            RuleProvider { ComposeRememberMissingCheck() },
-            RuleProvider { ComposeUnstableCollectionsCheck() },
-            RuleProvider { ComposeViewModelForwardingCheck() },
-            RuleProvider { ComposeViewModelInjectionCheck() }
+            RuleProvider { UseStriktAssertionLibrary() }
         )
 }
