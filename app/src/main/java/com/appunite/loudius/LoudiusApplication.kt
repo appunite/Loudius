@@ -41,7 +41,6 @@ val appModule = module {
 }
 
 class LoudiusApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
 

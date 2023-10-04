@@ -19,7 +19,7 @@ package com.appunite.loudius.util
 import android.app.Application
 import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
-import com.appunite.loudius.TestApplication
+import com.appunite.loudius.LoudiusApplication
 
 class InstrumentationTestRunner : AndroidJUnitRunner() {
     override fun newApplication(
@@ -27,6 +27,6 @@ class InstrumentationTestRunner : AndroidJUnitRunner() {
         className: String?,
         context: Context?,
     ): Application {
-        return super.newApplication(classLoader, TestApplication::class.java.name, context)
+        return super.newApplication(classLoader, LoudiusApplication::class.java.name, context)
     }
 }

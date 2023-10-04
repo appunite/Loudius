@@ -39,8 +39,6 @@ class CheckModulesTest : KoinTest {
 
         every { mockContext.getSharedPreferences(any(), any()) } returns mockSharedPref
 
-        MockProvider.register { mockkClass(it) }
-
         koinApplication {
             modules(
                appModule
