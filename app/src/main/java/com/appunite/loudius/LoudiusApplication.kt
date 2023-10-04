@@ -28,7 +28,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.module
 
-
 val appModule = module {
     includes(
         networkModule,
@@ -49,7 +48,7 @@ class LoudiusApplication : Application() {
 
             modules(
                 appModule,
-                viewModelModule
+                viewModelModule,
             )
         }
     }

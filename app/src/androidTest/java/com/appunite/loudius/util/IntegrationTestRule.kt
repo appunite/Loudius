@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.util
 
-
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.appunite.loudius.components.components.countingResource

@@ -27,7 +27,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.koin.dsl.koinApplication
 import org.koin.test.KoinTest
 import org.koin.test.check.checkModules
-import org.koin.test.mock.MockProvider
 
 @ExtendWith(MainDispatcherExtension::class)
 class CheckModulesTest : KoinTest {
@@ -41,7 +40,7 @@ class CheckModulesTest : KoinTest {
 
         koinApplication {
             modules(
-               appModule
+                appModule,
             )
 
             checkModules() {

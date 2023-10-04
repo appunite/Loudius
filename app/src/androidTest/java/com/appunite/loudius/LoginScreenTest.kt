@@ -34,17 +34,17 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
+import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.util.ScreenshotTestRule
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import com.appunite.loudius.di.githubHelperModule
-import org.junit.Before
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 
@@ -76,7 +76,6 @@ class LoginScreenTest {
         }
         GlobalContext.get().loadModules(listOf(githubMockModule))
     }
-
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() {
