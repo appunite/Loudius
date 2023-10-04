@@ -45,6 +45,11 @@ jobs:
       - name: Build custom rules
         run: ./gradlew :custom-ktlint-rules:shadowJar
 
+      - name: Download Twitter Compose Ruleset
+        run: |
+         mkdir -p rules
+         wget https://github.com/twitter/compose-rules/releases/download/v0.0.26/ktlint-twitter-compose-0.0.26-all.jar -O rules/ktlint-twitter-compose-0.0.26-all.jar
+
       # MegaLinter
       - name: MegaLinter
         id: ml
@@ -56,7 +61,7 @@ jobs:
           # https://megalinter.github.io/configuration/
           VALIDATE_ALL_CODEBASE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          KOTLIN_KTLINT_ARGUMENTS: "--ruleset=custom-ktlint-rules/build/libs/custom-ktlint-rules.jar"
+          KOTLIN_KTLINT_ARGUMENTS: "--ruleset=custom-ktlint-rules/build/libs/custom-ktlint-rules.jar,rules/ktlint-twitter-compose-0.0.26-all.jar"
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
 
