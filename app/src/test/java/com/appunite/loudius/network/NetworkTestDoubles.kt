@@ -29,6 +29,7 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.gson.GsonConverter
 import okhttp3.mockwebserver.MockWebServer
 import java.time.LocalDateTime
+import junit.framework.TestCase.assertEquals
 
 private fun testGson() =
     GsonBuilder()
