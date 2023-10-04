@@ -43,7 +43,7 @@ jobs:
           cache: gradle
 
       - name: Build custom rules
-        run: ./gradlew :custom-ktlint-rules:shadowJar
+        run: ./gradlew :custom-ktlint-rules:assemble
 
       - name: Download Twitter Compose Ruleset
         run: |
