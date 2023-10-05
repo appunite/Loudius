@@ -151,6 +151,9 @@ dependencies {
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+
+
+    implementation "org.jacoco:org.jacoco.core:0.8.10"
 }
 
 tasks.withType(Test) {
