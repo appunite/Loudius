@@ -1,0 +1,31 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build and Test
+        run: |
+          ./gradlew clean assembleDebug testDebug
+          ./gradlew jacocoTestReport
+
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: app/build/reports/jacoco/jacocoTestReport/html
