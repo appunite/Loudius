@@ -13,19 +13,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      # Execute unit tests
+      - name: Unit Test with Android Emulator Runner
+        uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
-          java-version: '11'
-          distribution: "adopt"
+          api-level: 29
+          script: ./gradlew connectedCheck
 
-      - name: Build and Test
-        run: |
-          ./gradlew clean assembleDebug testDebug
-          ./gradlew jacocoTestReport
-
-      - name: Upload JaCoCo Report
+      - name: generate report
         uses: actions/upload-artifact@v2
         with:
-          name: jacoco-report
-          path: app/build/reports/jacoco/jacocoTestReport/html
+            name: report
+            path: app/build/reports/coverage/debug
