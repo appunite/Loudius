@@ -64,7 +64,6 @@ android {
                 includeNoLocationClasses = true
             }
         }
-        unitTests.returnDefaultValues = true
 
         packagingOptions {
             jniLibs {
