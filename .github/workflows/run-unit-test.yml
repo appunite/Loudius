@@ -30,11 +30,11 @@ jobs:
           GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: generate report
-        uses: actions/upload-artifact@v2
-        with:
-            name: report
-            path: app/build/reports/coverage/debug
+#      - name: generate report
+#        uses: actions/upload-artifact@v2
+#        with:
+#            name: report
+#            path: app/build/reports/coverage/debug
 
       - name: Include Slack Notification
         if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
