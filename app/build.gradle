@@ -69,7 +69,6 @@ android {
                 includeNoLocationClasses = true
             }
         }
-        unitTests.returnDefaultValues = true
     }
     kapt {
         arguments {
