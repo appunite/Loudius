@@ -15,7 +15,7 @@ permissions: read-all
 
 jobs:
   unit-tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #      - name: generate report
-#        uses: actions/upload-artifact@v2
+#        uses: actions/upload-artifact@v3
 #        with:
 #            name: report
 #            path: app/build/reports/coverage/debug
