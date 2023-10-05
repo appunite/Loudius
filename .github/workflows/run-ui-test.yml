@@ -54,6 +54,12 @@ jobs:
         with:
           install_components: "gsutil"
 
+      - name: generate report
+        uses: actions/upload-artifact@v2
+        with:
+          name: report
+          path: app/build/reports/coverage/debug
+
       - id: generate-dir
         name: Generate random directory
         run: |-
