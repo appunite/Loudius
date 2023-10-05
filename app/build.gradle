@@ -59,6 +59,12 @@ android {
         }
     }
     testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+
         packagingOptions {
             jniLibs {
                 useLegacyPackaging true
