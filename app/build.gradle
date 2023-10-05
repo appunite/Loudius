@@ -33,6 +33,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug{
+            testCoverageEnabled true
+        }
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -56,6 +59,13 @@ android {
         }
     }
     testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+        unitTests.returnDefaultValues = true
+
         packagingOptions {
             jniLibs {
                 useLegacyPackaging true
