@@ -18,12 +18,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: gradle/wrapper-validation-action@v1
 
       # Execute unit tests
       - name: Unit Test with Android Emulator Runner
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
+          target: google_apis
           script: ./gradlew connectedCheck
 
       # run: ./gradlew testDebugUnitTest
