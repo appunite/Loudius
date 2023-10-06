@@ -34,7 +34,7 @@ android {
         }
     }
     compileOptions {
-        coreLibraryDesugaringEnabled true
+//        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -71,7 +71,7 @@ android {
 dependencies {
 //    implementation project(':components')
     //Desugaring for use of java.time in api lower then 26
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     //Base android deps
     implementation 'androidx.core:core-ktx:1.9.0'
