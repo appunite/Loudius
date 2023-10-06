@@ -15,26 +15,20 @@ permissions: read-all
 
 jobs:
   unit-tests:
-    runs-on: macos-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Unit Test with Android Emulator Runner
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedCheck
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
 
+      - name: Run test
+        run: ./gradlew connectedCheck
         env:
           GITHUB_USER: ${{ github.actor }}
-
-      - name: Upload report
-        uses: actions/upload-artifact@v2
-        with:
-          name: report
-          path: app/build/reports/coverage/androidTest/debug
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Include Slack Notification
         if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
