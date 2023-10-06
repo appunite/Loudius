@@ -4,7 +4,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    id 'jacoco'
 }
+
+apply from: '../jacoco-report.gradle'
 
 android {
     namespace 'com.appunite.loudius'
@@ -70,10 +73,6 @@ android {
         }
     }
 }
-kotlin {
-    jvmToolchain(17)
-}
-
 
 dependencies {
     implementation project(':components')
