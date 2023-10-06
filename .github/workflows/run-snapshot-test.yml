@@ -1,8 +1,6 @@
 #---
 #name: Snapshot verification
-#
-#on:
-#  pull_request:
+#]
 #
 #concurrency:
 #  group: ${{ github.ref }}-${{ github.workflow }}

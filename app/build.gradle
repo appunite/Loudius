@@ -70,10 +70,6 @@ android {
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
     reports {
-        xml.configure {
-            setEnabled(true)
-            setBuildDir("${buildDir}/coverage-report")
-        }
         html.configure {
             setEnabled(true)
             setBuildDir("${buildDir}/coverage-report")
