@@ -21,11 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Prepare Android Environment
-        uses: ./.github/actions/prepare-android-env
-
-      - name: Run test
-        run: ./gradlew testDebugUnitTest
+      # Execute unit tests
+      - name: Unit Test with Android Emulator Runner
+        uses: ReactiveCircus/android-emulator-runner@v2.14.3
+        with:
+          api-level: 29
+          script: ./gradlew connectedCheck
 
         env:
           GITHUB_USER: ${{ github.actor }}
