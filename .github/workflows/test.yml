@@ -13,12 +13,20 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: macos-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - uses: gradle/wrapper-validation-action@v1
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "adopt"
+          cache: gradle
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
 
       # Execute unit tests
       - name: Unit Test with Android Emulator Runner
