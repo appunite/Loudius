@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: report
-            path: app/build/reports/coverage/debug
+            path: app/build/reports/coverage/androidTest/debug
 
       - name: Include Slack Notification
         if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')

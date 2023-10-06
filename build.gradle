@@ -10,7 +10,6 @@ buildscript {
 
 }
 
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'app.cash.paparazzi' version '1.2.0' apply false
@@ -22,17 +21,15 @@ plugins {
     id 'jacoco'
 }
 
-jacoco {
-    toolVersion = "0.8.7"
-}
-
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
     reports {
         xml.configure {
             setEnabled(true)
+            setBuildDir("${buildDir}/coverage-report")
         }
         html.configure {
             setEnabled(true)
+            setBuildDir("${buildDir}/coverage-report")
         }
     }
 
