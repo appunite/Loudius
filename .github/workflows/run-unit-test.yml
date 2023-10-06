@@ -26,11 +26,9 @@ jobs:
 
       - name: Run test
         run: ./gradlew testDebugUnitTest
+             ./gradlew createDebugCoverageReport
         env:
           GITHUB_USER: ${{ github.actor }}
-
-      - name: Build and Generate Coverage Report
-        run: ./gradlew createDebugCoverageReport
 
       - name: Upload report
         uses: actions/upload-artifact@v2
