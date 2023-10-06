@@ -26,7 +26,7 @@ jobs:
 
       - name: Run test
         run: ./gradlew testDebugUnitTest
-             ./gradlew createDebugCoverageReport
+
         env:
           GITHUB_USER: ${{ github.actor }}
 
