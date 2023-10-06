@@ -1,9 +1,9 @@
 plugins {
-    id "com.android.application" version "8.1.0"
+    id 'com.android.application'
     id 'kotlin-kapt'
-    id "org.jetbrains.kotlin.android" version "1.5.31"
+    id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
-//    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
 }
 
 android {
@@ -34,7 +34,7 @@ android {
         }
     }
     compileOptions {
-//        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -45,7 +45,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.3'
+        kotlinCompilerExtensionVersion '1.4.2'
     }
     packagingOptions {
         resources {
@@ -54,13 +54,13 @@ android {
             excludes += '/META-INF/LICENSE-notice.md'
         }
     }
-//    testOptions {
-//        packagingOptions {
-//            jniLibs {
-//                useLegacyPackaging true
-//            }
-//        }
-//    }
+    testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging true
+            }
+        }
+    }
     kapt {
         arguments {
             arg("skipPrivatePreviews", "true")
@@ -69,9 +69,9 @@ android {
 }
 
 dependencies {
-//    implementation project(':components')
+    implementation project(':components')
     //Desugaring for use of java.time in api lower then 26
-//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     //Base android deps
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -156,7 +156,7 @@ dependencies {
 tasks.withType(Test) {
     useJUnitPlatform()
 }
-//
-//kapt {
-//    correctErrorTypes true
-//}
+
+kapt {
+    correctErrorTypes true
+}
