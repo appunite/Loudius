@@ -38,8 +38,6 @@ jobs:
           target: google_apis
           script: ./gradlew connectedCheck
 
-      # run: ./gradlew testDebugUnitTest
-
       - name: generate report
         uses: actions/upload-artifact@v2
         with:
