@@ -45,7 +45,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.4.3'
     }
     packagingOptions {
         resources {
@@ -54,13 +54,13 @@ android {
             excludes += '/META-INF/LICENSE-notice.md'
         }
     }
-    testOptions {
-        packagingOptions {
-            jniLibs {
-                useLegacyPackaging true
-            }
-        }
-    }
+//    testOptions {
+//        packagingOptions {
+//            jniLibs {
+//                useLegacyPackaging true
+//            }
+//        }
+//    }
     kapt {
         arguments {
             arg("skipPrivatePreviews", "true")
@@ -156,7 +156,7 @@ dependencies {
 tasks.withType(Test) {
     useJUnitPlatform()
 }
-
-kapt {
-    correctErrorTypes true
-}
+//
+//kapt {
+//    correctErrorTypes true
+//}
