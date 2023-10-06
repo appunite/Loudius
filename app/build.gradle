@@ -76,9 +76,10 @@ kotlin {
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
-
     reports {
-        xml.enabled = true
+        xml.destination "build/reports/myReport.xml"
+
+//        xml.enabled = true
         html.enabled = true
     }
 
@@ -93,7 +94,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             "outputs/code-coverage/connected/*coverage.ec"
     ]))
 }
-
 
 dependencies {
     implementation project(':components')
