@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.intercept
+package com.appunite.loudius.components
 
-import com.appunite.loudius.domain.repository.AuthRepository
-import okhttp3.Interceptor
-import okhttp3.Response
+import com.airbnb.android.showkase.annotation.ShowkaseRoot
+import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 
-class AuthInterceptor(
-    private val authRepository: AuthRepository,
-) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val authenticatedRequest = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer ${authRepository.getAccessToken()}")
-            .build()
-
-        return chain.proceed(authenticatedRequest)
-    }
-}
+@ShowkaseRoot
+class ShowkaseRoot : ShowkaseRootModule

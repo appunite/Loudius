@@ -19,21 +19,30 @@ package com.appunite.loudius.ui.login
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
+import com.airbnb.android.showkase.models.Showkase
+import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants.AUTHORIZATION_URL
 import com.appunite.loudius.components.components.LoudiusDialog
@@ -43,6 +52,7 @@ import com.appunite.loudius.components.components.LoudiusOutlinedButtonStyle
 import com.appunite.loudius.components.components.LoudiusText
 import com.appunite.loudius.components.components.LoudiusTextStyle
 import org.koin.androidx.compose.koinViewModel
+import com.appunite.loudius.getBrowserIntent
 import com.appunite.loudius.components.R as componentsR
 
 @Composable
@@ -59,9 +69,16 @@ fun LoginScreen(
                 )
                 viewModel.onAction(LoginAction.ClearNavigation)
             }
+
             LoginNavigateTo.OpenXiaomiPermissionManager -> {
                 context.startActivity(GithubHelper.xiaomiPermissionManagerForGithub())
             }
+
+            LoginNavigateTo.OpenComponentsBrowser -> {
+                context.startActivity(Showkase.getBrowserIntent(context))
+                viewModel.onAction(LoginAction.ClearNavigation)
+            }
+
             null -> Unit
         }
     }
@@ -76,6 +93,11 @@ fun LoginScreenStateless(
     state: LoginState,
     onAction: (LoginAction) -> Unit,
 ) {
+    if (BuildConfig.DEBUG) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            BrowseComponentIcon(onAction)
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -102,6 +124,21 @@ fun LoginScreenStateless(
             XiaomiPermissionDialog(onAction)
         }
     }
+}
+
+@Composable
+private fun BrowseComponentIcon(onClick: (LoginAction) -> Unit) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_components_browser),
+        contentDescription = stringResource(
+            id = R.string.login_screen_loudius_browser_components_icon_description,
+        ),
+        modifier = Modifier
+            .clip(CircleShape)
+            .clickable { onClick(LoginAction.ClickBrowseComponents) }
+            .padding(16.dp)
+            .size(24.dp),
+    )
 }
 
 @Composable
@@ -138,8 +175,9 @@ fun LoginImage() {
     )
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showSystemUi = true, showBackground = true, group = "Full screen")
 @Composable
+@ShowkaseComposable(skip = true)
 fun LoginScreenPreview() {
     MaterialTheme {
         LoginScreenStateless(
@@ -149,8 +187,9 @@ fun LoginScreenPreview() {
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
+@Preview(showSystemUi = true, showBackground = true, group = "Dialogs")
+@ShowkaseComposable(skip = true)
 fun LoginScreenPreviewWithDialog() {
     MaterialTheme {
         LoginScreenStateless(

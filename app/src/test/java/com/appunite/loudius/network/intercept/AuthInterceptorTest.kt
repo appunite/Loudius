@@ -43,15 +43,20 @@ class AuthInterceptorTest {
     private lateinit var client: HttpClient
     private lateinit var service: TestApi
 
+    private lateinit var authInterceptor: AuthInterceptor
+
     @MockK
-    private lateinit var repository: AuthRepository
+    private lateinit var authRepository: AuthRepository
 
     @BeforeEach
     fun setUp() {
         MockKAnnotations.init(this)
-        mockWebServer.start()
-        client = httpClientTestDouble(mockWebServer = mockWebServer)
+
+        authInterceptor = AuthInterceptor(authRepository)
+        client = httpClientTestDouble(mockWebServer = mockWebServer) { engine { addInterceptor(authInterceptor) } }
         service = TestApi(client)
+
+        mockWebServer.start()
     }
 
     @AfterEach
@@ -62,7 +67,7 @@ class AuthInterceptorTest {
     @Test
     fun `GIVEN saved token WHEN making an api call THEN authorization token should be added`() {
         runTest {
-            every { repository.getAccessToken() } returns "validToken"
+            every { authRepository.getAccessToken() } returns "validToken"
             val testDataJson = "{\"name\":\"test\"}"
             val successResponse = MockResponse().setBody(testDataJson)
             mockWebServer.enqueue(successResponse.addHeader("Content-type", "application/json"))

@@ -39,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
 import com.appunite.loudius.components.components.LoudiusFullScreenError
@@ -259,6 +261,7 @@ private val successData = Data.Success(
 
 @Preview("Pull requests - filled list")
 @Composable
+@ShowkaseComposable(skip = true)
 fun PullRequestsScreenPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
@@ -272,6 +275,7 @@ fun PullRequestsScreenPreview() {
 
 @Preview("Pull requests - empty list")
 @Composable
+@ShowkaseComposable(skip = true)
 fun PullRequestsScreenEmptyListPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
@@ -285,6 +289,7 @@ fun PullRequestsScreenEmptyListPreview() {
 
 @Preview("Pull requests - Loading")
 @Composable
+@ShowkaseComposable(skip = true)
 fun PullRequestsScreenLoadingPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
@@ -298,6 +303,7 @@ fun PullRequestsScreenLoadingPreview() {
 
 @Preview("Pull requests - Error")
 @Composable
+@ShowkaseComposable(skip = true)
 fun PullRequestsScreenErrorPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
@@ -311,6 +317,7 @@ fun PullRequestsScreenErrorPreview() {
 
 @Preview("Pull requests - refreshing")
 @Composable
+@ShowkaseComposable(skip = true)
 fun PullRequestsScreenRefreshingPreview() {
     LoudiusTheme {
         PullRequestsScreenStateless(
