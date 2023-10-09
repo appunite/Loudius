@@ -76,9 +76,7 @@ val networkModule = module {
 
     single {
         Json {
-            encodeDefaults = true
-            isLenient = true
-            prettyPrint = true
+            ignoreUnknownKeys = true
         }
     }
 

@@ -16,31 +16,14 @@
 
 package com.appunite.loudius.network.model
 
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.time.Instant
 
 typealias AccessToken = String
 
-@Serializable(with = InstantSerializer::class)
+@Serializable
 data class AccessTokenResponse(
     @SerialName("access_token")
     val accessToken: AccessToken?,
     val error: String? = null,
 )
-
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = Instant::class)
-object InstantSerializer : KSerializer<Instant> {
-    override fun deserialize(decoder: Decoder): Instant
-            = Instant.parse(decoder.decodeString())
-
-    override fun serialize(encoder: Encoder, value: Instant) {
-        encoder.encodeString(value.toString())
-    }
-}

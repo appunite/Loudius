@@ -16,6 +16,7 @@
 
 package com.appunite.loudius.network.services
 
+import android.util.Log
 import com.appunite.loudius.network.model.AccessTokenResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -54,6 +55,6 @@ class AuthServiceImpl(private val client: HttpClient) : AuthService {
             }
         }.body()
     }.onFailure {
-        println(it.message)
+        Log.i("GetAccessTokenFailure", it.message.toString())
     }
 }
