@@ -157,7 +157,7 @@ dependencies {
     ktlintRuleset project(":custom-ktlint-rules")
 }
 
-task jacocoTestReport(name: "unitTestCoverageReport",type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+tasks.create(name: "unitTestCoverageReport",type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     reports {
         xml.configure {
             setEnabled(true)
