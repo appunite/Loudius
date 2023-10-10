@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: coverage-report
-            path: "${{github.workspace}}/app/build/reports/jacoco/unitTestCoverageReport/html/"
+            path: "${{github.workspace}}/app/build/reports/jacoco/"
 
       - name: Include Slack Notification
         if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
