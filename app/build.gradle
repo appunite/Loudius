@@ -34,7 +34,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
-            testCoverageEnabled true
+            enableUnitTestCoverage true
         }
     }
     compileOptions {
@@ -157,7 +157,7 @@ dependencies {
     ktlintRuleset project(":custom-ktlint-rules")
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+task jacocoTestReport(name: "unitTestCoverageReport",type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
     reports {
         xml.configure {
             setEnabled(true)
