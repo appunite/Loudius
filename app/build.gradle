@@ -163,19 +163,10 @@ tasks.register('codeCoverage',JacocoReport) {
         html.required.set(true)
         html.outputLocation =layout.buildDirectory.dir('reports/jacoco')
     }
-
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories.setFrom(files([mainSrc]))
-    classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec",
-            "outputs/code-coverage/connected/*coverage.ec"
-    ]))
+    sourceDirectories.setFrom("${project.projectDir}/src/main/java")
+    classDirectories.setFrom("${project.buildDir}/tmp/kotlin-classes/localDebug")
+    executionData.setFrom("${project.buildDir}/outputs/unit_test_code_coverage/debugUniTest/testDebugUnitTest.exec")
 }
-
 
 tasks.withType(Test) {
     useJUnitPlatform()
