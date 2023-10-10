@@ -34,7 +34,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
-            enableUnitTestCoverage true
+            testCoverageEnabled true
         }
     }
     compileOptions {
@@ -157,16 +157,11 @@ dependencies {
     ktlintRuleset project(":custom-ktlint-rules")
 }
 
-tasks.create(name: "unitTestCoverageReport",type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+tasks.register('codeCoverage',JacocoReport) {
+    dependsOn 'testDebugUnitTest', 'createDebugCoverageReport'
     reports {
-        xml.configure {
-            setEnabled(true)
-            setBuildDir("${buildDir}/coverage-report")
-        }
-        html.configure {
-            setEnabled(true)
-            setBuildDir("${buildDir}/coverage-report")
-        }
+        html.required.set(true)
+        html.outputLocation =layout.buildDirectory.dir('reports/jacoco')
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
