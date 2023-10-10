@@ -167,7 +167,7 @@ tasks.register('codeCoverage',JacocoReport) {
     sourceDirectories.setFrom("${project.projectDir}/src/main/java")
     classDirectories.setFrom("${project.buildDir}/tmp/kotlin-classes/localDebug")
     println("${project.buildDir}")
-    executionData.setFrom("${project.buildDir}/app/build/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+    executionData.setFrom("${project.buildDir}/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
 }
 
 tasks.withType(Test) {
