@@ -9,5 +9,6 @@ class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABO
     override fun getRuleProviders(): Set<RuleProvider> =
         setOf(
             RuleProvider { UseStriktAssertionLibrary() },
+            RuleProvider { DoNotMixJunitVersions() },
         )
 }
