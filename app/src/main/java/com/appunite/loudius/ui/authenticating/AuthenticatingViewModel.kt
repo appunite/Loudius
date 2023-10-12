@@ -51,7 +51,6 @@ sealed class AuthenticatingScreenNavigation {
     object NavigateToLogin : AuthenticatingScreenNavigation()
 }
 
-
 class AuthenticatingViewModel(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
