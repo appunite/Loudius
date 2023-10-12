@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
 }
 
 android {
@@ -73,4 +74,7 @@ dependencies {
 
     // Firebase instrumentation lib
     api 'com.google.firebase:testlab-instr-lib:0.2'
+
+    // ktlint
+    ktlintRuleset project(":custom-ktlint-rules")
 }
