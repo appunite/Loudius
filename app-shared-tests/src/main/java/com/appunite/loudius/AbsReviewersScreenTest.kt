@@ -22,6 +22,7 @@ import androidx.compose.ui.test.performClick
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
+import com.appunite.loudius.util.Register
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -51,7 +52,7 @@ abstract class AbsReviewersScreenTest {
     @Test
     fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
-            com.appunite.loudius.util.Register.comment(mockWebServer)
+            Register.comment(mockWebServer)
 
             composeTestRule.setContent {
                 LoudiusTheme {
@@ -87,8 +88,8 @@ abstract class AbsReviewersScreenTest {
             putExtra("submission_date", "2022-01-29T08:00:00")
             putExtra("pull_request_number", "1")
         }
-        com.appunite.loudius.util.Register.user(mockWebServer)
-        com.appunite.loudius.util.Register.requestedReviewers(mockWebServer)
-        com.appunite.loudius.util.Register.reviews(mockWebServer)
+        Register.user(mockWebServer)
+        Register.requestedReviewers(mockWebServer)
+        Register.reviews(mockWebServer)
     }
 }

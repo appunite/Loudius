@@ -24,15 +24,15 @@ import okio.Buffer
 import strikt.api.Assertion
 import strikt.assertions.isNotNull
 
-inline val Assertion.Builder<Request>.url: Assertion.Builder<HttpUrl> get() = get(com.appunite.loudius.util.Request::url)
-inline val Assertion.Builder<Request>.method: Assertion.Builder<String> get() = get(com.appunite.loudius.util.Request::method)
+inline val Assertion.Builder<Request>.url: Assertion.Builder<HttpUrl> get() = get(Request::url)
+inline val Assertion.Builder<Request>.method: Assertion.Builder<String> get() = get(Request::method)
 
 @get:JvmName("requestBody")
-inline val Assertion.Builder<Request>.body: Assertion.Builder<Buffer> get() = get(com.appunite.loudius.util.Request::body)
+inline val Assertion.Builder<Request>.body: Assertion.Builder<Buffer> get() = get(Request::body)
 inline val Assertion.Builder<Buffer>.utf8: Assertion.Builder<String> get() = get("utf8 string") { readUtf8() }
 
 @get:JvmName("requestHeaders")
-inline val Assertion.Builder<Request>.headers: Assertion.Builder<Headers> get() = get(com.appunite.loudius.util.Request::headers)
+inline val Assertion.Builder<Request>.headers: Assertion.Builder<Headers> get() = get(Request::headers)
 inline val Assertion.Builder<Response>.code: Assertion.Builder<Int> get() = get("code") { code }
 
 @get:JvmName("responseBody")
