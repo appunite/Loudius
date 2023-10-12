@@ -80,14 +80,6 @@ android {
     }
 }
 
-configurations {
-    androidTestImplementation {
-        resolutionStrategy.dependencySubstitution {
-            substitute module("io.mockk:mockk") using module("io.mockk:mockk-android:1.13.3") because "test"
-        }
-    }
-}
-
 dependencies {
     api project(':components')
     //Desugaring for use of java.time in api lower then 26
