@@ -64,7 +64,7 @@ fun PullRequestsScreen(
     navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state
-    val refreshing by viewModel.isRefreshing.collectAsState()
+    val refreshing = viewModel.isRefreshing
 
     PullRequestsScreenStateless(
         state = state,

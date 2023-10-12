@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius
+@file:OptIn(ExperimentalTestApi::class)
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.runner.RunWith
+package com.appunite.loudius.util
 
-@RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
-class IntegrationPullRequestsScreenTest : AbsPullRequestsScreenTest()
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasStateDescription
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+
+
+fun AndroidComposeTestRule<*, *>.waitUntilLoadingDoesNotExist() {
+    waitUntilDoesNotExist(hasStateDescription("Loading data…"), 10_000L)
+}
