@@ -26,7 +26,6 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.robolectric.shadows.ShadowLog
 
 class IntegrationTestRule(
     testClass: Any,
@@ -41,9 +40,6 @@ class IntegrationTestRule(
     private val screenshotTestRule = ScreenshotTestRule()
 
     override fun apply(base: Statement, description: Description): Statement {
-        if (!isAndroidTest) {
-            ShadowLog.stream = System.out;
-        }
         return RuleChain.outerRule(mockWebServer)
             .around(hiltRule)
             .around(composeTestRule)
