@@ -22,7 +22,6 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 
-
 fun AndroidComposeTestRule<*, *>.waitUntilLoadingDoesNotExist() {
     waitUntilDoesNotExist(hasStateDescription("Loading data…"), 10_000L)
 }

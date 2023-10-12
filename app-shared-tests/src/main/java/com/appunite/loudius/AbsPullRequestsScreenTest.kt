@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed

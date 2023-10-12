@@ -30,5 +30,4 @@ class IntegrationLoginScreenTest : AbsLoginScreenTest() {
 
     @BindValue @JvmField
     val githubHelperBind = githubHelper
-
 }

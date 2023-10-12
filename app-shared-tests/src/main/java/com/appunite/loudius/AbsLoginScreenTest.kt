@@ -104,7 +104,6 @@ abstract class AbsLoginScreenTest {
         composeTestRule.onNodeWithText("Log in").performClick()
         composeTestRule.onNodeWithText("I've already granted").performClick()
 
-
         composeTestRule.waitForIdle()
         intended(
             allOf(

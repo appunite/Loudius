@@ -83,7 +83,7 @@ class DoNotMixJunitVersionsTest {
             .hasLintViolationWithoutAutoCorrect(
                 1,
                 1,
-                "org.junit.Test and org.junit.jupiter.api.Test packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test."
+                "org.junit.Test and org.junit.jupiter.api.Test packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test.",
             )
     }
 
@@ -102,7 +102,7 @@ class DoNotMixJunitVersionsTest {
             .hasLintViolationWithoutAutoCorrect(
                 1,
                 1,
-                "org.junit.Test,org.junit.Before and org.junit.jupiter.api.Test,org.junit.jupiter.api.BeforeEach packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test."
+                "org.junit.Test,org.junit.Before and org.junit.jupiter.api.Test,org.junit.jupiter.api.BeforeEach packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test.",
             )
     }
 }

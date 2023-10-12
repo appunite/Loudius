@@ -30,7 +30,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.Q], application = HiltTestApplication::class)
 @DisplayName("ensure activity tests are set correctly")

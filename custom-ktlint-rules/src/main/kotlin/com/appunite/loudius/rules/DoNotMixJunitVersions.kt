@@ -29,7 +29,7 @@ class DoNotMixJunitVersions : Rule("do-not-mix-junit-versions") {
         "org.junit.Ignore",
         "org.junit.runner.RunWith",
         "org.junit.runners.Parameterized",
-        "org.junit.runners.Theory"
+        "org.junit.runners.Theory",
     )
     val junit5Annotations = listOf(
         "org.junit.jupiter.api.Test",
@@ -38,7 +38,7 @@ class DoNotMixJunitVersions : Rule("do-not-mix-junit-versions") {
         "org.junit.jupiter.api.Disabled",
         "org.junit.jupiter.api.extension.ExtendWith",
         "org.junit.jupiter.params.ParameterizedTest",
-        "org.junit.jupiter.params.provider.ValueSource"
+        "org.junit.jupiter.params.provider.ValueSource",
     )
 
     override fun beforeVisitChildNodes(
@@ -59,8 +59,8 @@ class DoNotMixJunitVersions : Rule("do-not-mix-junit-versions") {
 
                 if (junit4Imports.isNotEmpty() && junit5Imports.isNotEmpty()) {
                     val errorMessage = "${junit4Imports.joinToString(separator = ",")} " +
-                            "and ${junit5Imports.joinToString(separator = ",")} " +
-                            "packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test."
+                        "and ${junit5Imports.joinToString(separator = ",")} " +
+                        "packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test."
                     emit(
                         node.startOffset,
                         errorMessage,
@@ -70,6 +70,4 @@ class DoNotMixJunitVersions : Rule("do-not-mix-junit-versions") {
             }
         }
     }
-
-
 }
