@@ -23,7 +23,6 @@ import androidx.test.runner.screenshot.Screenshot
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -70,7 +69,3 @@ open class ScreenshotTestRule : TestRule {
         screenshot.process()
     }
 }
-
-
-val isAndroidTest =
-    System.getProperty("java.runtime.name").lowercase(Locale.getDefault()).contains("android")

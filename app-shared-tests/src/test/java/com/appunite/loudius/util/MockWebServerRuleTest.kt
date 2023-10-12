@@ -16,11 +16,12 @@
 
 package com.appunite.loudius.util
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.util.Log
 import com.appunite.loudius.di.TestInterceptor
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,7 +33,7 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
-import org.junit.runner.RunWith
+import org.junit.rules.TestWatcher
 import strikt.api.expectThat
 import strikt.assertions.contains
 import strikt.assertions.first
@@ -45,7 +46,6 @@ import strikt.assertions.message
 import strikt.assertions.single
 import strikt.mockk.captured
 
-@RunWith(AndroidJUnit4::class)
 class MockWebServerRuleTest {
 
     @Suppress("DEPRECATION")
@@ -53,6 +53,9 @@ class MockWebServerRuleTest {
     val expectedException: ExpectedException = ExpectedException.none()
 
     @get:Rule(order = 1)
+    val loggerMockRule: LoggerMockRule = LoggerMockRule()
+
+    @get:Rule(order = 2)
     val mockWebServerRule: MockWebServerRule = MockWebServerRule()
 
     @Test
@@ -302,5 +305,16 @@ private fun <T> matcher(check: (T) -> Unit): Matcher<T> = object : TypeSafeMatch
         } catch (e: AssertionError) {
             false
         }
+    }
+}
+
+class LoggerMockRule : TestWatcher() {
+    override fun starting(description: org.junit.runner.Description?) {
+        mockkStatic(Log::class)
+        every { Log.v(any(), any())} returns 0
+        every { Log.v(any(), any(), any())} returns 0
+        every { Log.w(any(), any<String>())} returns 0
+        every { Log.w(any(), any<Throwable>())} returns 0
+        every { Log.w(any(), any(), any())} returns 0
     }
 }

@@ -95,13 +95,14 @@ class LoginScreenTest {
 
         composeTestRule.onNodeWithText("Log in").performClick()
 
-        composeTestRule.waitForIdle()
-        intended(
-            allOf(
-                hasAction(Intent.ACTION_VIEW),
-                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
-            ),
-        )
+        composeTestRule.runOnIdle {
+            intended(
+                allOf(
+                    hasAction(Intent.ACTION_VIEW),
+                    hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
+                ),
+            )
+        }
     }
 
     @Test
@@ -119,13 +120,14 @@ class LoginScreenTest {
         composeTestRule.onNodeWithText("Log in").performClick()
         composeTestRule.onNodeWithText("I've already granted").performClick()
 
-        composeTestRule.waitForIdle()
-        intended(
-            allOf(
-                hasAction(Intent.ACTION_VIEW),
-                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
-            ),
-        )
+        composeTestRule.runOnIdle {
+            intended(
+                allOf(
+                    hasAction(Intent.ACTION_VIEW),
+                    hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
+                ),
+            )
+        }
     }
 
     @Test

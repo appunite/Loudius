@@ -24,7 +24,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
-import com.appunite.loudius.util.Register
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Before
@@ -62,7 +61,7 @@ class ReviewersScreenTest {
     @Test
     fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
-            Register.comment(mockWebServer)
+            com.appunite.loudius.util.Register.comment(mockWebServer)
 
             composeTestRule.setContent {
                 LoudiusTheme {
@@ -98,8 +97,8 @@ class ReviewersScreenTest {
             putExtra("submission_date", "2022-01-29T08:00:00")
             putExtra("pull_request_number", "1")
         }
-        Register.user(mockWebServer)
-        Register.requestedReviewers(mockWebServer)
-        Register.reviews(mockWebServer)
+        com.appunite.loudius.util.Register.user(mockWebServer)
+        com.appunite.loudius.util.Register.requestedReviewers(mockWebServer)
+        com.appunite.loudius.util.Register.reviews(mockWebServer)
     }
 }
