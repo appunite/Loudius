@@ -17,14 +17,29 @@
 package com.appunite.loudius.network.model
 
 import com.appunite.loudius.common.Constants
-import java.time.LocalDateTime
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
+@Serializable
 data class PullRequest(
     val id: Int,
     val draft: Boolean,
     val number: Int,
+    @SerialName("repository_url")
     val repositoryUrl: String,
     val title: String,
+    @SerialName("created_at")
+    @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime,
 ) {
     val fullRepositoryName: String
@@ -38,5 +53,17 @@ data class PullRequest(
 
     companion object {
         private const val REPOSITORY_PATH = Constants.BASE_API_URL + "/repos/"
+    }
+}
+
+object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: LocalDateTime) {
+        encoder.encodeString(value.toString())
+    }
+
+    override fun deserialize(decoder: Decoder): LocalDateTime {
+        return Instant.parse(decoder.decodeString()).toLocalDateTime(TimeZone.UTC)
     }
 }

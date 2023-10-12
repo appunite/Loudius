@@ -24,7 +24,7 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 sealed class Screen(val route: String) {
     open val arguments: List<NamedNavArgument> = emptyList()
@@ -77,7 +77,7 @@ sealed class Screen(val route: String) {
             repo = checkNotNull(savedStateHandle[repoArg]),
             pullRequestNumber = checkNotNull(savedStateHandle[pullRequestNumberArg]),
             submissionTime = checkNotNull(
-                LocalDateTime.parse(savedStateHandle[submissionDateArg]),
+                LocalDateTime.parse(savedStateHandle[submissionDateArg]?:""),
             ),
         )
 

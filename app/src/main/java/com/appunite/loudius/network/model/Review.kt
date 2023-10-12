@@ -16,8 +16,10 @@
 
 package com.appunite.loudius.network.model
 
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Review(
     val id: String,
     val user: User,

@@ -16,6 +16,7 @@
 
 package com.appunite.loudius.network.services
 
+import android.util.Log
 import com.appunite.loudius.network.model.PullRequestsResponse
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
@@ -65,28 +66,40 @@ class PullRequestsServiceImpl(
         query: String,
         page: Int,
         perPage: Int,
-    ): Result<PullRequestsResponse> = runCatching {
+    ): Result<PullRequestsResponse> = runCatching<PullRequestsServiceImpl, PullRequestsResponse> {
         client.get("/search/issues") {
             parameter("q".encodeURLParameter(), query)
             parameter("page", page)
             parameter("per_page", perPage)
         }.body()
+    }.onFailure {
+        Log.i("GetUserFailure", it.message.toString())
+    }.onSuccess {
+        Log.i("GetUserSuccess", it.toString())
     }
 
     override suspend fun getReviewers(
         owner: String,
         repo: String,
         pullRequestNumber: String,
-    ): Result<RequestedReviewersResponse> = runCatching {
+    ): Result<RequestedReviewersResponse> = runCatching<PullRequestsServiceImpl, RequestedReviewersResponse> {
         client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/requested_reviewers").body()
+    }.onFailure {
+        Log.i("GetUserFailure", it.message.toString())
+    }.onSuccess {
+        Log.i("GetUserSuccess", it.toString())
     }
 
     override suspend fun getReviews(
         owner: String,
         repo: String,
         pullRequestNumber: String,
-    ): Result<List<Review>> = runCatching {
+    ): Result<List<Review>> = runCatching<PullRequestsServiceImpl, List<Review>> {
         client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/reviews").body()
+    }.onFailure {
+        Log.i("GetUserFailure", it.message.toString())
+    }.onSuccess {
+        Log.i("GetUserSuccess", it.toString())
     }
 
     override suspend fun notify(
@@ -94,10 +107,14 @@ class PullRequestsServiceImpl(
         repo: String,
         issueNumber: String,
         body: NotifyRequestBody,
-    ): Result<Unit> = runCatching {
+    ): Result<Unit> = runCatching<PullRequestsServiceImpl, Unit> {
         client.post("/repos/$owner/$repo/issues/$issueNumber/comments") {
             setBody(body)
             contentType(ContentType.Application.Json)
         }.body()
+    }.onFailure {
+        Log.i("GetUserFailure", it.message.toString())
+    }.onSuccess {
+        Log.i("GetUserSuccess", it.toString())
     }
 }

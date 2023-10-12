@@ -17,23 +17,19 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
+import com.appunite.loudius.network.intercept.AuthFailureInterceptor
+import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.http.ContentType
-import io.ktor.serialization.gson.GsonConverter
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import java.time.LocalDateTime
 
 val networkModule = module {
     single {
@@ -64,12 +60,14 @@ val networkModule = module {
             engine {
                 addInterceptor(TestInterceptor)
                 addInterceptor(get<HttpLoggingInterceptor>())
+                addInterceptor(AuthFailureInterceptor(get()))
+                addInterceptor(AuthInterceptor(get()))
             }
             defaultRequest {
                 url(Constants.BASE_API_URL)
             }
             install(ContentNegotiation) {
-                register(ContentType.Application.Json, GsonConverter(get()))
+                json(get())
             }
         }
     }
@@ -78,12 +76,6 @@ val networkModule = module {
         Json {
             ignoreUnknownKeys = true
         }
-    }
-
-    single {
-        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
-            .create()
     }
 
     singleOf(::AuthFailureHandler)
