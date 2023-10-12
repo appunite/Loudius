@@ -31,7 +31,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class PullRequestsScreenTest {
+class IntegrationPullRequestsScreenTest {
 
     @get:Rule
     val integrationTestRule = IntegrationTestRule(this)

@@ -19,27 +19,20 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
-import com.appunite.loudius.util.Register
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
-class ReviewersScreenTest {
+abstract class AbsReviewersScreenTest {
 
     @get:Rule
-    val integrationTestRule = IntegrationTestRule(this)
+    val integrationTestRule by lazy { IntegrationTestRule(this) }
 
     @Before
     fun setUp() {
-        integrationTestRule.setUp()
         integrationTestRule.initTests()
     }
 
@@ -58,7 +51,7 @@ class ReviewersScreenTest {
     @Test
     fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
-            Register.comment(mockWebServer)
+            com.appunite.loudius.util.Register.comment(mockWebServer)
 
             composeTestRule.setContent {
                 LoudiusTheme {
@@ -94,8 +87,8 @@ class ReviewersScreenTest {
             putExtra("submission_date", "2022-01-29T08:00:00")
             putExtra("pull_request_number", "1")
         }
-        Register.user(mockWebServer)
-        Register.requestedReviewers(mockWebServer)
-        Register.reviews(mockWebServer)
+        com.appunite.loudius.util.Register.user(mockWebServer)
+        com.appunite.loudius.util.Register.requestedReviewers(mockWebServer)
+        com.appunite.loudius.util.Register.reviews(mockWebServer)
     }
 }

@@ -31,19 +31,25 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class WalkThroughAppTest {
+class IntegrationWalkThroughAppTest {
 
     @get:Rule(order = 0)
     val integrationTestRule = IntegrationTestRule(this, MainActivity::class.java)
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
+
+    @Before
+    fun setUp() {
+        integrationTestRule.setUp()
+    }
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
