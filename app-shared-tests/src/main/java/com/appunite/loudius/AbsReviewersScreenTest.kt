@@ -35,6 +35,7 @@ abstract class AbsReviewersScreenTest {
     @Before
     fun setUp() {
         integrationTestRule.initTests()
+        integrationTestRule.setUp()
     }
 
     @Test

@@ -63,6 +63,14 @@ android {
         unitTests {
             includeAndroidResources = true
             animationsDisabled = true
+            all {
+                // Disable tests on release because on release we don't have TestActivity.
+                // We could also filter tasks by filter {}, but right now we don't need to test
+                // release version.
+                if (it.name == 'testReleaseUnitTest') {
+                    it.enabled = false
+                }
+            }
         }
     }
     kapt {
