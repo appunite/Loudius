@@ -34,7 +34,7 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure() # run this step even if previous step failed
         with:
-          name: JEST Tests
+          name: Tests Results
           path: "*/build/test-results/**/*.xml"
           reporter: java-junit
 
