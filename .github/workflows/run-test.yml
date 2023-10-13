@@ -1,0 +1,164 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "develop"
+      - "main"
+  schedule:
+    # Run twice a day the sanity check, at 9:13 and 21:13.
+    # You ask why 13? because probably less people schedule their tasks at exactly this time, so I
+    # guess CI is less occupied. And 13 is a lucky number ;)
+    - cron: "13 9,21 * * *"
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
+      - name: Run test
+        run: ./gradlew test
+
+      - name: Upload tests results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            */build/test-results/**
+            */build/paparazzi/failures/**
+          retention-days: 5
+
+  android-tests:
+    name: Run UI tests on Firebase Test Lab
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: LFS-warning - Prevent large files that are not LFS tracked
+        uses: ppremk/lfs-warning@v3.2
+
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
+      - name: Assemble App Debug APK and Android Instrumentation Tests
+        run: ./gradlew assembleDebug assembleDebugAndroidTest
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          install_components: "gsutil"
+
+      - name: Generate random directory
+        id: generate-dir
+        run: |-
+          echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
+          echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
+
+      - name: Run tests on Firebase Test Lab
+        run: |-
+          gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}"
+
+      - name: Download test results from Firebase Test Lab
+        if: always()
+        run: |-
+          mkdir "app/build/test-results"
+          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2-30-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
+
+      - name: Upload tests results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            */build/test-results/**
+          retention-days: 5
+
+
+  test-results:
+    name: Upload tests results
+    runs-on: ubuntu-20.04
+    if: always()
+    needs:
+      - android-tests
+      - unit-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: build-tools/
+
+      - name: Download tests results for both jobs
+        uses: actions/download-artifact@v3
+        with:
+          name: test-results
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "build-tools/requirements.txt"
+
+      - name: Upload to Big Query
+        run: |-
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            python "build-tools/upload-junit-to-cloud.py" --url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --final --glob "*/build/test-results/**/*.xml"
+          else
+            python "build-tools/upload-junit-to-cloud.py" --url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --glob "*/build/test-results/**/*.xml"
+          fi
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        with:
+          name: Tests Results
+          path: "*/build/test-results/**/*.xml"
+          reporter: java-junit
+          fail-on-error: 'false'
+
+      - name: Include Slack Notification
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+        uses: ./.github/actions/slack-notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_GIT_REF: ${{ github.ref }}
+          SLACK_WORKFLOW: ${{ github.workflow }}
