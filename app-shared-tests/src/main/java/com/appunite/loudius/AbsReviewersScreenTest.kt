@@ -28,7 +28,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@RunWith(AndroidJUnit4::class)
 abstract class AbsReviewersScreenTest {
 
     @get:Rule
@@ -37,7 +36,6 @@ abstract class AbsReviewersScreenTest {
     @Before
     fun setUp() {
         integrationTestRule.initTests()
-        integrationTestRule.setUp()
     }
 
     @Test

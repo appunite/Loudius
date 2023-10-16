@@ -37,7 +37,6 @@ import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.util.ScreenshotTestRule
-import dagger.hilt.android.testing.HiltAndroidRule
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
@@ -48,7 +47,6 @@ import org.junit.runner.RunWith
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 
-@RunWith(AndroidJUnit4::class)
 abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 0)

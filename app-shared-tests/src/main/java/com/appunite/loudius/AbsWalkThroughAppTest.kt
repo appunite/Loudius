@@ -34,19 +34,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@RunWith(AndroidJUnit4::class)
-class AbsWalkThroughAppTest {
+abstract class AbsWalkThroughAppTest {
 
     @get:Rule(order = 0)
     val integrationTestRule by lazy { IntegrationTestRule(MainActivity::class.java) }
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {

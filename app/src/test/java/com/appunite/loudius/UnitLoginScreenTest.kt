@@ -18,20 +18,9 @@ package com.appunite.loudius
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.di.GithubHelperModule
-import dagger.hilt.android.testing.BindValue
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
-import dagger.hilt.android.testing.UninstallModules
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.Q], application = HiltTestApplication::class)
-@HiltAndroidTest
-@UninstallModules(GithubHelperModule::class)
-class UnitLoginScreenTest : AbsLoginScreenTest() {
-
-    @BindValue @JvmField
-    val githubHelperBind = githubHelper
-}
+@Config(sdk = [Build.VERSION_CODES.Q], application = LoudiusApplication::class)
+class UnitLoginScreenTest : AbsLoginScreenTest()

@@ -27,16 +27,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@RunWith(AndroidJUnit4::class)
 abstract class AbsPullRequestsScreenTest {
 
     @get:Rule
     val integrationTestRule = IntegrationTestRule()
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
