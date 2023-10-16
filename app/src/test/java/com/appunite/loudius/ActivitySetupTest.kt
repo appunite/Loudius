@@ -16,44 +16,37 @@
 
 package com.appunite.loudius
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithText
+import android.os.Build
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.components.theme.LoudiusTheme
-import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
-import com.appunite.loudius.util.IntegrationTestRule
-import com.appunite.loudius.util.Register
+import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.DisplayName
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
+@Config(sdk = [Build.VERSION_CODES.Q], application = HiltTestApplication::class)
+@DisplayName("ensure activity tests are set correctly")
 @HiltAndroidTest
-class PullRequestsScreenTest {
+class ActivitySetupTest {
 
-    @get:Rule
-    val integrationTestRule = IntegrationTestRule(this)
+    @get:Rule(order = 0)
+    val hiltRule by lazy { HiltAndroidRule(this) }
 
     @Before
     fun setUp() {
-        integrationTestRule.setUp()
+        Assume.assumeTrue(BuildConfig.DEBUG)
+        hiltRule.inject()
     }
 
     @Test
-    fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
-        with(integrationTestRule) {
-            Register.user(mockWebServer)
-            Register.issues(mockWebServer)
-
-            composeTestRule.setContent {
-                LoudiusTheme {
-                    PullRequestsScreen { _, _, _, _ -> }
-                }
-            }
-
-            composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
-        }
+    fun `ensure test activity can be started during tests`() {
+        ActivityScenario.launch(TestActivity::class.java)
     }
 }

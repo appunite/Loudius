@@ -24,8 +24,6 @@ import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -60,8 +58,8 @@ class PullRequestsViewModel @Inject constructor(
     var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+    var isRefreshing: Boolean by mutableStateOf(false)
+        private set
 
     init {
         fetchData()
@@ -69,14 +67,14 @@ class PullRequestsViewModel @Inject constructor(
 
     fun refreshData() {
         viewModelScope.launch {
-            _isRefreshing.value = true
+            isRefreshing = true
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
                 }.onFailure {
                     state = state.copy(data = Data.Error)
                 }
-            _isRefreshing.value = false
+            isRefreshing = false
         }
     }
 

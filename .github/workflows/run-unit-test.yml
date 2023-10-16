@@ -11,7 +11,10 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
-permissions: read-all
+permissions:
+  contents: read
+  actions: read
+  checks: write
 
 jobs:
   unit-tests:
@@ -25,10 +28,23 @@ jobs:
         uses: ./.github/actions/prepare-android-env
 
       - name: Run test
-        run: ./gradlew testDebugUnitTest
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew test
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure() # run this step even if previous step failed
+        with:
+          name: Tests Results
+          path: "*/build/test-results/**/*.xml"
+          reporter: java-junit
+
+      - name: Upload failed tests results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failed-tests-results
+          path: |
+            */build/reports/**
 
       - name: Include Slack Notification
         if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')

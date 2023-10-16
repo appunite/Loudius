@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.rules
+@file:OptIn(ExperimentalTestApi::class)
 
-import com.pinterest.ktlint.core.RuleProvider
-import com.pinterest.ktlint.core.RuleSetProviderV2
+package com.appunite.loudius.util
 
-internal const val RULE_SET_ID = "loudius-rule-set-id"
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasStateDescription
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 
-class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
-    override fun getRuleProviders(): Set<RuleProvider> =
-        setOf(
-            RuleProvider { UseStriktAssertionLibrary() },
-            RuleProvider { DoNotMixJunitVersions() },
-        )
+fun AndroidComposeTestRule<*, *>.waitUntilLoadingDoesNotExist() {
+    waitUntilDoesNotExist(hasStateDescription("Loading data…"), 10_000L)
 }

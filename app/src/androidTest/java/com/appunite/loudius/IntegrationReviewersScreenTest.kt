@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 AppUnite S.A.
+ * Copyright 2023 owner S.A.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.rules
+package com.appunite.loudius
 
-import com.pinterest.ktlint.core.RuleProvider
-import com.pinterest.ktlint.core.RuleSetProviderV2
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.runner.RunWith
 
-internal const val RULE_SET_ID = "loudius-rule-set-id"
-
-class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
-    override fun getRuleProviders(): Set<RuleProvider> =
-        setOf(
-            RuleProvider { UseStriktAssertionLibrary() },
-            RuleProvider { DoNotMixJunitVersions() },
-        )
-}
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+class IntegrationReviewersScreenTest : AbsReviewersScreenTest()
