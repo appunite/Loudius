@@ -19,25 +19,25 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
+import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class ReviewersScreenTest {
+abstract class AbsReviewersScreenTest {
 
     @get:Rule
-    val integrationTestRule = IntegrationTestRule()
+    val integrationTestRule by lazy { IntegrationTestRule() }
 
     @Before
     fun setUp() {
         integrationTestRule.initTests()
+        integrationTestRule.setUp()
     }
 
     @Test
@@ -48,6 +48,9 @@ class ReviewersScreenTest {
                     ReviewersScreen { }
                 }
             }
+
+            composeTestRule.waitUntilLoadingDoesNotExist()
+
             composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
         }
     }
@@ -62,7 +65,13 @@ class ReviewersScreenTest {
                     ReviewersScreen { }
                 }
             }
+
+            composeTestRule.waitUntilLoadingDoesNotExist()
+
             composeTestRule.onNodeWithText("Notify").performClick()
+
+            composeTestRule.waitUntilLoadingDoesNotExist()
+
             composeTestRule
                 .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
                 .assertIsDisplayed()
@@ -77,7 +86,13 @@ class ReviewersScreenTest {
                     ReviewersScreen { }
                 }
             }
+
+            composeTestRule.waitUntilLoadingDoesNotExist()
+
             composeTestRule.onNodeWithText("Notify").performClick()
+
+            composeTestRule.waitUntilLoadingDoesNotExist()
+
             composeTestRule
                 .onNodeWithText("Uh-oh, it seems that Loudius has taken a vacation. Don't worry, we're sending a postcard to bring it back ASAP!")
                 .assertIsDisplayed()

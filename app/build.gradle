@@ -60,6 +60,18 @@ android {
                 useLegacyPackaging true
             }
         }
+        unitTests {
+            includeAndroidResources = true
+            animationsDisabled = true
+            all {
+                // Disable tests on release because on release we don't have TestActivity.
+                // We could also filter tasks by filter {}, but right now we don't need to test
+                // release version.
+                if (it.name == 'testReleaseUnitTest') {
+                    it.enabled = false
+                }
+            }
+        }
     }
     kapt {
         arguments {
@@ -69,7 +81,7 @@ android {
 }
 
 dependencies {
-    implementation project(':components')
+    api project(':components')
     //Desugaring for use of java.time in api lower then 26
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
@@ -141,6 +153,11 @@ dependencies {
 
     // Firebase instrumentation lib
     androidTestImplementation 'com.google.firebase:testlab-instr-lib:0.2'
+
+    testImplementation project(":app-shared-tests")
+    androidTestImplementation(project(":app-shared-tests")) {
+        exclude group: 'org.robolectric', module: 'robolectric'
+    }
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")

@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.rules
+package com.appunite.loudius.util
 
-import com.pinterest.ktlint.core.RuleProvider
-import com.pinterest.ktlint.core.RuleSetProviderV2
+import java.util.Locale
 
-internal const val RULE_SET_ID = "loudius-rule-set-id"
-
-class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
-    override fun getRuleProviders(): Set<RuleProvider> =
-        setOf(
-            RuleProvider { UseStriktAssertionLibrary() },
-            RuleProvider { DoNotMixJunitVersions() },
-        )
-}
+/**
+ * Returns true if test is androidTest, returns false if this is unit test or robolectric test
+ */
+val isAndroidTest =
+    System.getProperty("java.runtime.name")
+        ?.lowercase(Locale.US)
+        ?.contains("android")
+        ?: false

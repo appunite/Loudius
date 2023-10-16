@@ -31,6 +31,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 open class ScreenshotTestRule : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement {
+        if (!isAndroidTest) {
+            // Only with AndroidTest we can do screenshots, otherwise ignore this rule
+            return base
+        }
         return object : Statement() {
             @Throws(Throwable::class)
             override fun evaluate() {

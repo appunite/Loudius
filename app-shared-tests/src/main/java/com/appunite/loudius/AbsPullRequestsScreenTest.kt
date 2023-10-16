@@ -18,20 +18,25 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
+import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class PullRequestsScreenTest {
+abstract class AbsPullRequestsScreenTest {
 
     @get:Rule
     val integrationTestRule = IntegrationTestRule()
+
+    @Before
+    fun setUp() {
+        integrationTestRule.setUp()
+    }
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
@@ -44,6 +49,8 @@ class PullRequestsScreenTest {
                     PullRequestsScreen { _, _, _, _ -> }
                 }
             }
+
+            composeTestRule.waitUntilLoadingDoesNotExist()
 
             composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
         }

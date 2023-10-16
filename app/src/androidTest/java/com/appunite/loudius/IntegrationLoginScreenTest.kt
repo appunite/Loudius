@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.rules
+package com.appunite.loudius
 
-import com.pinterest.ktlint.core.RuleProvider
-import com.pinterest.ktlint.core.RuleSetProviderV2
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.di.GithubHelperModule
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import org.junit.runner.RunWith
 
-internal const val RULE_SET_ID = "loudius-rule-set-id"
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@UninstallModules(GithubHelperModule::class)
+class IntegrationLoginScreenTest : AbsLoginScreenTest() {
 
-class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
-    override fun getRuleProviders(): Set<RuleProvider> =
-        setOf(
-            RuleProvider { UseStriktAssertionLibrary() },
-            RuleProvider { DoNotMixJunitVersions() },
-        )
+    @BindValue @JvmField
+    val githubHelperBind = githubHelper
 }

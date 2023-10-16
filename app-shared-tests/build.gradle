@@ -1,0 +1,98 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+}
+
+android {
+    namespace 'com.appunite.loudius'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        compose true
+    }
+    packagingOptions {
+        resources {
+            excludes += 'META-INF/{AL2.0,LGPL2.1}'
+            excludes += 'META-INF/LICENSE.md'
+            excludes += 'META-INF/LICENSE-notice.md'
+        }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.2'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation(project(":app"))
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.45"
+    kapt "com.google.dagger:hilt-compiler:2.45"
+    api 'com.google.dagger:hilt-android-testing:2.45'
+
+    // assertion library
+    // cannot use 0.34.0 due to an existing bug
+    // https://github.com/robfletcher/strikt/issues/259
+    api 'io.strikt:strikt-core:0.33.0'
+    api 'io.strikt:strikt-mockk:0.33.0'
+
+    // Setup Junit4 and Junit5
+    api(platform("org.junit:junit-bom:5.10.0"))
+    api("org.junit.jupiter:junit-jupiter") {
+        because 'allows to write and run Jupiter tests'
+    }
+    api("junit:junit:4.13.2")
+    runtimeOnly("org.junit.vintage:junit-vintage-engine") {
+        because 'allows JUnit 3 and JUnit 4 tests to run'
+    }
+    runtimeOnly("org.junit.platform:junit-platform-launcher") {
+        because 'allows tests to run from IDEs that bundle older version of launcher'
+    }
+
+    //testing
+    api 'androidx.test:core-ktx:1.5.0'
+    api 'org.robolectric:robolectric:4.10.3'
+    api 'androidx.test.ext:junit-ktx:1.1.5'
+
+    api "io.mockk:mockk:1.13.3"
+
+    api "com.squareup.okhttp3:mockwebserver:4.10.0"
+
+    api 'androidx.test.ext:junit:1.1.5'
+    api 'androidx.test.espresso:espresso-core:3.5.1'
+    api "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    api 'androidx.test.espresso:espresso-intents:3.5.1'
+
+    // Firebase instrumentation lib
+    api 'com.google.firebase:testlab-instr-lib:0.2'
+
+    // ktlint
+    ktlintRuleset project(":custom-ktlint-rules")
+}

@@ -32,12 +32,12 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.util.ScreenshotTestRule
+import dagger.hilt.android.testing.HiltAndroidRule
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
@@ -49,7 +49,7 @@ import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 
 @RunWith(AndroidJUnit4::class)
-class LoginScreenTest {
+abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 0)
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -89,6 +89,8 @@ class LoginScreenTest {
         }
 
         composeTestRule.onNodeWithText("Log in").performClick()
+
+        composeTestRule.waitForIdle()
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
@@ -112,6 +114,7 @@ class LoginScreenTest {
         composeTestRule.onNodeWithText("Log in").performClick()
         composeTestRule.onNodeWithText("I've already granted").performClick()
 
+        composeTestRule.waitForIdle()
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
@@ -135,6 +138,7 @@ class LoginScreenTest {
         composeTestRule.onNodeWithText("Log in").performClick()
         composeTestRule.onNodeWithText("Grant permission").performClick()
 
+        composeTestRule.waitForIdle()
         intended(
             allOf(
                 hasAction("miui.intent.action.APP_PERM_EDITOR"),
