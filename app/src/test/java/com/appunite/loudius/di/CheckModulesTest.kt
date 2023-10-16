@@ -1,12 +1,9 @@
 package com.appunite.loudius.di
 
-
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.SavedStateHandle
 import com.appunite.loudius.util.MainDispatcherExtension
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.mockkClass
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -34,7 +31,7 @@ class CheckModulesTest : KoinTest {
                 githubHelperModule,
                 networkModule,
                 repositoryModule,
-                serviceModule
+                serviceModule,
             )
 
             checkModules() {

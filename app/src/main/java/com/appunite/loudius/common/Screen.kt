@@ -77,7 +77,7 @@ sealed class Screen(val route: String) {
             repo = checkNotNull(savedStateHandle[repoArg]),
             pullRequestNumber = checkNotNull(savedStateHandle[pullRequestNumberArg]),
             submissionTime = checkNotNull(
-                LocalDateTime.parse(savedStateHandle[submissionDateArg]?:""),
+                LocalDateTime.parse(savedStateHandle[submissionDateArg] ?: ""),
             ),
         )
 

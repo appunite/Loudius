@@ -41,7 +41,7 @@ class LoudiusApplication : Application() {
                 networkModule,
                 repositoryModule,
                 serviceModule,
-                viewModelModule
+                viewModelModule,
             )
         }
     }
