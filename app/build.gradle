@@ -161,7 +161,10 @@ tasks.register('codeCoverage',JacocoReport) {
     dependsOn 'testDebugUnitTest'
     reports {
         html.required.set(true)
-        html.outputLocation =layout.buildDirectory.dir('reports/jacoco')
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/html/')
+
+        xml.required.set(true)
+        xml.outputLocation = layout.buildDirectory.dir('reports/jacoco/xml/')
     }
 
     sourceDirectories.setFrom("${project.projectDir}/src/main/java")
