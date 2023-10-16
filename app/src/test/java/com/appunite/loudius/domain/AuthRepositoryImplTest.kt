@@ -50,7 +50,7 @@ class AuthRepositoryImplTest {
             coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
             expectThat(accessToken)
                 .isSuccess()
-                .isEqualTo("validAccessToken")
+                .isEqualTo("thisShouldFail")
         }
 
     @Test

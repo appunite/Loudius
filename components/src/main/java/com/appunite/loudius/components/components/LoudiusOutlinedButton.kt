@@ -105,7 +105,7 @@ fun LoudiusOutlinedButtonWithIconPreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
             onClick = { },
-            text = "Log In",
+            text = "This should fail",
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.components_ic_github),

@@ -52,6 +52,8 @@ abstract class AbsPullRequestsScreenTest {
             composeTestRule.waitUntilLoadingDoesNotExist()
 
             composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
+
+            composeTestRule.onNodeWithText("This should fail, because we don't have such view").assertIsDisplayed()
         }
     }
 }
