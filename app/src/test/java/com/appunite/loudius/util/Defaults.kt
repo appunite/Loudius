@@ -39,7 +39,7 @@ object Defaults {
         number = id,
         repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
         title = "example title",
-        LocalDateTime.parse("2023-03-07T08:21:45").toInstant(TimeZone.UTC).plus(id.toLong().hours).toLocalDateTime(TimeZone.UTC)
+        LocalDateTime.parse("2023-03-07T08:21:45").toInstant(TimeZone.UTC).plus(id.toLong().hours).toLocalDateTime(TimeZone.UTC),
     )
 
     fun reviews() = listOf(
