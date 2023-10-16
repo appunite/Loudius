@@ -103,7 +103,6 @@ jobs:
             */build/test-results/**
           retention-days: 5
 
-
   test-results:
     name: Upload tests results
     runs-on: ubuntu-20.04
@@ -153,7 +152,7 @@ jobs:
           name: Tests Results
           path: "*/build/test-results/**/*.xml"
           reporter: java-junit
-          fail-on-error: 'false'
+          fail-on-error: "false"
 
       - name: Include Slack Notification
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
