@@ -29,6 +29,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDateTime
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
@@ -43,7 +44,6 @@ import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 import strikt.assertions.single
 import java.net.ConnectException
-import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsDataSourceImplTest {

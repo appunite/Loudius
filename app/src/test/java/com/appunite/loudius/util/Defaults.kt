@@ -22,7 +22,11 @@ import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Duration.Companion.hours
 
 object Defaults {
     val date1: LocalDateTime = LocalDateTime.parse("2022-01-29T10:00:00")
@@ -35,7 +39,7 @@ object Defaults {
         number = id,
         repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
         title = "example title",
-        LocalDateTime.parse("2023-03-07T08:21:45").plusHours(id.toLong()),
+        LocalDateTime.parse("2023-03-07T08:21:45").toInstant(TimeZone.UTC).plus(id.toLong().hours).toLocalDateTime(TimeZone.UTC)
     )
 
     fun reviews() = listOf(

@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.network.services
 
-import android.util.Log
 import com.appunite.loudius.network.model.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -32,15 +31,11 @@ interface UserService {
 
 class UserServiceImpl(private val client: HttpClient) : UserService {
 
-    override suspend fun getUser(): Result<User> = runCatching<UserServiceImpl, User> {
+    override suspend fun getUser(): Result<User> = runCatching {
         client.get("user") {
             headers {
                 append(HttpHeaders.Accept, ContentType.Application.Json.toString())
             }
         }.body()
-    }.onFailure {
-        Log.i("GetUserFailure", it.message.toString())
-    }.onSuccess {
-        Log.i("GetUserSuccess", it.toString())
     }
 }
