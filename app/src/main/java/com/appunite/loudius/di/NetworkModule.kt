@@ -17,6 +17,8 @@
 package com.appunite.loudius.di
 
 import com.appunite.loudius.common.Constants
+import com.appunite.loudius.network.intercept.AuthFailureInterceptor
+import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.AuthFailureHandler
 import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
 import com.google.gson.FieldNamingPolicy
@@ -62,6 +64,8 @@ val networkModule = module {
             engine {
                 addInterceptor(TestInterceptor)
                 addInterceptor(get<HttpLoggingInterceptor>())
+                addInterceptor(get<AuthFailureInterceptor>())
+                addInterceptor(get<AuthInterceptor>())
             }
             defaultRequest {
                 url(Constants.BASE_API_URL)
@@ -78,5 +82,7 @@ val networkModule = module {
             .create()
     }
 
+    singleOf(::AuthFailureInterceptor)
+    singleOf(::AuthInterceptor)
     singleOf(::AuthFailureHandler)
 }
