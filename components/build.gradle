@@ -35,6 +35,7 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
+    namespace 'com.appunite.loudius.components'
 }
 
 dependencies {
