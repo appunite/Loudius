@@ -16,8 +16,6 @@
 
 package com.appunite.loudius
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -29,10 +27,6 @@ import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.compose.LocalKoinApplication
-import org.koin.compose.LocalKoinScope
-import org.koin.core.annotation.KoinInternalApi
-import org.koin.mp.KoinPlatformTools
 
 
 abstract class AbsReviewersScreenTest {
@@ -46,13 +40,11 @@ abstract class AbsReviewersScreenTest {
     }
 
     @Test
-    open fun whenResponseIsCorrectThenReviewersAreVisible() {
+    fun whenResponseIsCorrectThenReviewersAreVisible() {
         with(integrationTestRule) {
             composeTestRule.setContent {
-                KoinFix {
-                    LoudiusTheme {
-                        ReviewersScreen { }
-                    }
+                LoudiusTheme {
+                    ReviewersScreen { }
                 }
             }
 
@@ -63,15 +55,13 @@ abstract class AbsReviewersScreenTest {
     }
 
     @Test
-    open fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
+    fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
             Register.comment(mockWebServer)
 
             composeTestRule.setContent {
-                KoinFix {
-                    LoudiusTheme {
-                        ReviewersScreen { }
-                    }
+                LoudiusTheme {
+                    ReviewersScreen { }
                 }
             }
 
@@ -91,10 +81,8 @@ abstract class AbsReviewersScreenTest {
     fun whenClickOnNotifyAndDoNotCommentThenShowError() {
         with(integrationTestRule) {
             composeTestRule.setContent {
-                KoinFix {
-                    LoudiusTheme {
-                        ReviewersScreen { }
-                    }
+                LoudiusTheme {
+                    ReviewersScreen { }
                 }
             }
 
@@ -122,15 +110,4 @@ abstract class AbsReviewersScreenTest {
         Register.reviews(mockWebServer)
     }
 
-}
-
-@OptIn(KoinInternalApi::class)
-@Composable
-fun KoinFix(content: @Composable () -> Unit) {
-    CompositionLocalProvider(
-        LocalKoinScope provides KoinPlatformTools.defaultContext().get().scopeRegistry.rootScope,
-        LocalKoinApplication provides KoinPlatformTools.defaultContext().get()
-    ) {
-        content()
-    }
 }

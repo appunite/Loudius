@@ -23,13 +23,4 @@ import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.Q])
-class UnitReviewersScreenTest : AbsReviewersScreenTest(){
-    override fun whenResponseIsCorrectThenReviewersAreVisible() {
-        super.whenResponseIsCorrectThenReviewersAreVisible()
-    }
-
-    override fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
-        super.whenClickOnNotifyAndCommentThenNotifyReviewer()
-    }
-
-}
+class UnitReviewersScreenTest : AbsReviewersScreenTest()

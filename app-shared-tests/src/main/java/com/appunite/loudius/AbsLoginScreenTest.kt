@@ -36,6 +36,7 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
+import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.ScreenshotTestRule
 import io.mockk.every
 import io.mockk.mockk
@@ -52,14 +53,10 @@ import org.koin.dsl.module
 abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 0)
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    val integrationTestRule = IntegrationTestRule()
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
-
-    @Rule
-    @JvmField
-    val screenshotTestRule = ScreenshotTestRule()
 
     private val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
         every { shouldAskForXiaomiIntent() } returns false
@@ -78,7 +75,7 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() {
+    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() = with(integrationTestRule) {
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
@@ -100,7 +97,7 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth() {
+    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth() = with(integrationTestRule) {
         every { githubHelper.shouldAskForXiaomiIntent() } returns true
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
@@ -124,7 +121,7 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() {
+    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() = with(integrationTestRule) {
         every { githubHelper.shouldAskForXiaomiIntent() } returns true
         intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))

@@ -26,6 +26,7 @@ import com.appunite.loudius.di.serviceModule
 import com.appunite.loudius.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
 import org.koin.core.logger.Level
 import org.koin.dsl.module
 
@@ -52,5 +53,10 @@ class LoudiusApplication : Application() {
                 viewModelModule,
             )
         }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        stopKoin()
     }
 }
