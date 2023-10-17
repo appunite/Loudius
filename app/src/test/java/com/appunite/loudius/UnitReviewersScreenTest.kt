@@ -16,7 +16,6 @@
 
 package com.appunite.loudius
 
-import TestApplication
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith

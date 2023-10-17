@@ -22,21 +22,35 @@ import com.appunite.loudius.components.components.countingResource
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
+import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import org.koin.core.context.GlobalContext
 
-class IntegrationTestRule(testActivity: Class<out ComponentActivity> = ComponentActivity::class.java) : TestRule {
+class IntegrationTestRule(testActivity: Class<out ComponentActivity> = ComponentActivity::class.java) :
+    TestRule {
 
     val mockWebServer = MockWebServerRule()
     val composeTestRule = createAndroidComposeRule(testActivity).apply {
         registerIdlingResource(countingResource.toIdlingResource())
     }
+
+    private val koinRule = KoinRule()
     private val screenshotTestRule = ScreenshotTestRule()
 
     override fun apply(base: Statement, description: Description): Statement {
-        return RuleChain.outerRule(mockWebServer)
+        return RuleChain.emptyRuleChain()
+            .around(koinRule)
+            .around(mockWebServer)
             .around(composeTestRule)
             .around(screenshotTestRule)
             .apply(base, description)
+    }
+}
+
+private class KoinRule : TestWatcher() {
+
+    override fun finished(description: Description) {
+        GlobalContext.stopKoin()
     }
 }

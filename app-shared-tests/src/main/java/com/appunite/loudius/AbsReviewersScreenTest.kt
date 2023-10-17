@@ -16,50 +16,28 @@
 
 package com.appunite.loudius
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.platform.app.InstrumentationRegistry
 import com.appunite.loudius.components.theme.LoudiusTheme
-import com.appunite.loudius.di.viewModelModule
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
-import org.koin.core.context.GlobalContext
-import org.koin.core.context.stopKoin
-import org.koin.android.ext.koin.androidContext
+import org.koin.compose.LocalKoinApplication
+import org.koin.compose.LocalKoinScope
+import org.koin.core.annotation.KoinInternalApi
+import org.koin.mp.KoinPlatformTools
 
-
-class KoinRule: TestWatcher() {
-    override fun starting(description: Description) {
-        GlobalContext.startKoin {
-            androidContext(InstrumentationRegistry.getInstrumentation().targetContext)
-            modules(
-                appModule,
-                viewModelModule,
-            )
-        }
-    }
-
-    override fun finished(description: Description) {
-        println("Finished")
-        stopKoin()
-    }
-}
 
 abstract class AbsReviewersScreenTest {
 
-    @get:Rule(order = 0)
-    val koinRule = KoinRule()
-
-    @get:Rule(order = 1)
+    @get:Rule
     val integrationTestRule = IntegrationTestRule()
 
     @Before
@@ -71,8 +49,10 @@ abstract class AbsReviewersScreenTest {
     open fun whenResponseIsCorrectThenReviewersAreVisible() {
         with(integrationTestRule) {
             composeTestRule.setContent {
-                LoudiusTheme {
-                    ReviewersScreen { }
+                KoinFix {
+                    LoudiusTheme {
+                        ReviewersScreen { }
+                    }
                 }
             }
 
@@ -83,13 +63,15 @@ abstract class AbsReviewersScreenTest {
     }
 
     @Test
-   open fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
+    open fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
             Register.comment(mockWebServer)
 
             composeTestRule.setContent {
-                LoudiusTheme {
-                    ReviewersScreen { }
+                KoinFix {
+                    LoudiusTheme {
+                        ReviewersScreen { }
+                    }
                 }
             }
 
@@ -109,8 +91,10 @@ abstract class AbsReviewersScreenTest {
     fun whenClickOnNotifyAndDoNotCommentThenShowError() {
         with(integrationTestRule) {
             composeTestRule.setContent {
-                LoudiusTheme {
-                    ReviewersScreen { }
+                KoinFix {
+                    LoudiusTheme {
+                        ReviewersScreen { }
+                    }
                 }
             }
 
@@ -138,4 +122,15 @@ abstract class AbsReviewersScreenTest {
         Register.reviews(mockWebServer)
     }
 
+}
+
+@OptIn(KoinInternalApi::class)
+@Composable
+fun KoinFix(content: @Composable () -> Unit) {
+    CompositionLocalProvider(
+        LocalKoinScope provides KoinPlatformTools.defaultContext().get().scopeRegistry.rootScope,
+        LocalKoinApplication provides KoinPlatformTools.defaultContext().get()
+    ) {
+        content()
+    }
 }
