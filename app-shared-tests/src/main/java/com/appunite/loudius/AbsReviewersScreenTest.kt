@@ -28,7 +28,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
 abstract class AbsReviewersScreenTest {
 
     @get:Rule
@@ -109,5 +108,4 @@ abstract class AbsReviewersScreenTest {
         Register.requestedReviewers(mockWebServer)
         Register.reviews(mockWebServer)
     }
-
 }

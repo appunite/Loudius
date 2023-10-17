@@ -23,11 +23,8 @@ import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.stopKoin
 
 abstract class AbsPullRequestsScreenTest {
 
@@ -51,5 +48,4 @@ abstract class AbsPullRequestsScreenTest {
             composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
         }
     }
-
 }

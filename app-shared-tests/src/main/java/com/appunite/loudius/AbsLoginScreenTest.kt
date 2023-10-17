@@ -19,8 +19,6 @@ package com.appunite.loudius
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.intent.Intents.intended
@@ -37,17 +35,13 @@ import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.util.IntegrationTestRule
-import com.appunite.loudius.util.ScreenshotTestRule
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.koin.core.context.GlobalContext
-import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 abstract class AbsLoginScreenTest {
@@ -149,5 +143,4 @@ abstract class AbsLoginScreenTest {
             ),
         )
     }
-
 }
