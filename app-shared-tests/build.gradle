@@ -17,6 +17,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        if (System.env.LOUDIUS_GITHUB_USER_PASSWORD == null || System.env.LOUDIUS_GITHUB_USER_PASSWORD.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_PASSWORD in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_PASSWORD", "\"${System.env.LOUDIUS_GITHUB_USER_PASSWORD}\""
+        if (System.env.LOUDIUS_GITHUB_USER_NAME == null || System.env.LOUDIUS_GITHUB_USER_NAME.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_NAME in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_NAME", "\"${System.env.LOUDIUS_GITHUB_USER_NAME}\""
     }
     buildFeatures {
         compose true
