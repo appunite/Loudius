@@ -6,6 +6,10 @@ plugins {
     id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     compileSdkVersion 33
 
@@ -15,19 +19,14 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
-    }
-    kotlinOptions {
-        jvmTarget = '18'
-    }
     buildFeatures {
         compose true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.2'
     }
+
     resourcePrefix "components_"
 
     kapt {
@@ -35,6 +34,7 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
+
     namespace 'com.appunite.loudius.components'
 }
 

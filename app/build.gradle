@@ -5,6 +5,10 @@ plugins {
     id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace 'com.appunite.loudius'
 
@@ -32,14 +36,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
-    }
-    kotlinOptions {
-        jvmTarget = '18'
     }
     buildFeatures {
         compose true
