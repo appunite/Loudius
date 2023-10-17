@@ -26,6 +26,7 @@ import com.appunite.loudius.di.serviceModule
 import com.appunite.loudius.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.logger.Level
 import org.koin.dsl.module
 
 val appModule = module {
@@ -41,11 +42,11 @@ val appModule = module {
 
 class LoudiusApplication : Application() {
     override fun onCreate() {
+        println("OnCreate")
         super.onCreate()
 
         startKoin {
             androidContext(this@LoudiusApplication)
-
             modules(
                 appModule,
                 viewModelModule,

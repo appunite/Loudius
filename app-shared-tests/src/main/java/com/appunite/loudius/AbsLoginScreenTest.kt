@@ -40,11 +40,13 @@ import com.appunite.loudius.util.ScreenshotTestRule
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.GlobalContext
+import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 abstract class AbsLoginScreenTest {
@@ -150,4 +152,5 @@ abstract class AbsLoginScreenTest {
             ),
         )
     }
+
 }

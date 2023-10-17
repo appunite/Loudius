@@ -53,6 +53,7 @@ dependencies {
     // koin
     implementation "io.insert-koin:koin-core:$koin_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"
+    implementation "io.insert-koin:koin-android:$koin_version"
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug

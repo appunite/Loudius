@@ -30,9 +30,11 @@ import androidx.test.espresso.intent.rule.IntentsRule
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.stopKoin
 
 abstract class AbsWalkThroughAppTest {
 
@@ -83,5 +85,10 @@ abstract class AbsWalkThroughAppTest {
         composeTestRule
             .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
             .assertIsDisplayed()
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
     }
 }

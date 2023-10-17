@@ -19,19 +19,48 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.platform.app.InstrumentationRegistry
 import com.appunite.loudius.components.theme.LoudiusTheme
+import com.appunite.loudius.di.viewModelModule
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
+import org.koin.core.context.GlobalContext
+import org.koin.core.context.stopKoin
+import org.koin.android.ext.koin.androidContext
+
+
+class KoinRule: TestWatcher() {
+    override fun starting(description: Description) {
+        GlobalContext.startKoin {
+            androidContext(InstrumentationRegistry.getInstrumentation().targetContext)
+            modules(
+                appModule,
+                viewModelModule,
+            )
+        }
+    }
+
+    override fun finished(description: Description) {
+        println("Finished")
+        stopKoin()
+    }
+}
 
 abstract class AbsReviewersScreenTest {
 
-    @get:Rule
-    val integrationTestRule by lazy { IntegrationTestRule() }
+    @get:Rule(order = 0)
+    val koinRule = KoinRule()
+
+    @get:Rule(order = 1)
+    val integrationTestRule = IntegrationTestRule()
 
     @Before
     fun setUp() {
@@ -39,7 +68,7 @@ abstract class AbsReviewersScreenTest {
     }
 
     @Test
-    fun whenResponseIsCorrectThenReviewersAreVisible() {
+    open fun whenResponseIsCorrectThenReviewersAreVisible() {
         with(integrationTestRule) {
             composeTestRule.setContent {
                 LoudiusTheme {
@@ -54,7 +83,7 @@ abstract class AbsReviewersScreenTest {
     }
 
     @Test
-    fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
+   open fun whenClickOnNotifyAndCommentThenNotifyReviewer() {
         with(integrationTestRule) {
             Register.comment(mockWebServer)
 
@@ -108,4 +137,5 @@ abstract class AbsReviewersScreenTest {
         Register.requestedReviewers(mockWebServer)
         Register.reviews(mockWebServer)
     }
+
 }

@@ -41,4 +41,5 @@ class ActivitySetupTest {
     fun `ensure test activity can be started during tests`() {
         ActivityScenario.launch(ComponentActivity::class.java)
     }
+
 }
