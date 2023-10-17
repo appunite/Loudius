@@ -5,6 +5,10 @@ plugins {
     id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace 'com.appunite.loudius'
     compileSdk 33
@@ -34,13 +38,6 @@ android {
         release {
             minifyEnabled false
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
