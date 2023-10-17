@@ -26,6 +26,7 @@ import androidx.test.uiautomator.Condition
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import com.appunite.loudius.util.description
 import com.appunite.loudius.util.githubUserName
 import com.appunite.loudius.util.githubUserPassword
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -54,45 +55,51 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
             automatorTestRule.device.findObject(By.pkg("com.android.chrome")) != null
         }
 
-        // Wait for onboarding or the webpage
-        automatorTestRule.device.wait(
-            hasAnyOfObjects(
-                By.text("Accept & continue"),
-                By.text("Username or email address"),
-            ),
-            30_000L,
-        )
-
-        // Google Chrome onboarding process
-        val hasOnboarding = automatorTestRule.device.findObject(By.text("Accept & continue")) != null
-        if (hasOnboarding) {
-            automatorTestRule.device.waitAndFind(By.text("Accept & continue"))
-                .clickAndWait(Until.newWindow(), 3_000L)
-
-            automatorTestRule.device.waitAndFind(By.text("No thanks"))
-                .clickAndWait(Until.newWindow(), 3_000L)
-
-            automatorTestRule.device.waitAndFind(By.text("No thanks"))
-                .clickAndWait(Until.newWindow(), 3_000L)
+        description("Wait for onboarding or the webpage") {
+            automatorTestRule.device.ensure(
+                hasAnyOfObjects(
+                    By.text("Accept & continue - aaa"),
+                    By.text("Username or email address - aaa")
+                )
+            )
         }
 
-        // Fill user name
-        automatorTestRule.device.waitAndFind(By.text("Username or email address"))
-            .click()
-        Thread.sleep(5_000L)
-        automatorTestRule.device.type(githubUserName)
+        description("Skip Google Chrome onboarding process") {
+            val hasOnboarding =
+                automatorTestRule.device.findObject(By.text("Accept & continue")) != null
+            if (hasOnboarding) {
+                automatorTestRule.device.waitAndFind(By.text("Accept & continue"))
+                    .clickAndWait(Until.newWindow(), 3_000L)
 
-        // Fill password
-        automatorTestRule.device.pressKeyCode(KeyEvent.KEYCODE_TAB)
-        automatorTestRule.device.type(githubUserPassword)
+                automatorTestRule.device.waitAndFind(By.text("No thanks"))
+                    .clickAndWait(Until.newWindow(), 3_000L)
 
-        // Click log-in
-        automatorTestRule.device.pressEnter()
+                automatorTestRule.device.waitAndFind(By.text("No thanks"))
+                    .clickAndWait(Until.newWindow(), 3_000L)
+            }
+        }
 
-        // Wait for return to the app
-        automatorTestRule.device.waitAndFind(
-            By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName),
-        )
+        description("Fill user name") {
+            automatorTestRule.device.waitAndFind(By.text("Username or email address"))
+                .click()
+            Thread.sleep(5_000L)
+            automatorTestRule.device.type(githubUserName)
+        }
+
+        description("Fill password") {
+            automatorTestRule.device.pressKeyCode(KeyEvent.KEYCODE_TAB)
+            automatorTestRule.device.type(githubUserPassword)
+        }
+
+        description("Click log-in") {
+            automatorTestRule.device.pressEnter()
+        }
+
+        description("Wait for return to the app") {
+            automatorTestRule.device.waitAndFind(
+                By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName)
+            )
+        }
     }
 }
 
@@ -124,14 +131,30 @@ private fun UiDevice.type(text: String) {
 }
 
 private fun UiDevice.waitAndFind(
-    selector: BySelector,
+    selector: BySelector
 ): UiObject2 {
-    wait(Until.hasObject(selector), 30_000L)
+    ensure(Until.hasObject(selector))
 
-    return findObject(selector)
-        ?: throw AssertionError("Could not find object")
+    return findObject(selector) ?: throw AssertionError("Could not find object: $selector")
+}
+
+private fun UiDevice.ensure(
+    condition: Condition<in UiDevice, Boolean>,
+    timeout: Long = 30_000L
+) {
+    val result = wait(condition, timeout) ?: throw AssertionError("Error in condition")
+    if (!result) {
+        throw AssertionError("Could not satisfy: $condition")
+    }
 }
 
 private fun hasAnyOfObjects(vararg selectors: BySelector): Condition<UiDevice, Boolean> {
-    return Condition<UiDevice, Boolean> { device -> selectors.any { selector -> device.hasObject(selector) } }
+    return object : Condition<UiDevice, Boolean> {
+        override fun apply(device: UiDevice): Boolean =
+            selectors.any { selector -> device.hasObject(selector) }
+
+        override fun toString(): String =
+            "hasAnyOfObjects[${selectors.joinToString(separator = ",")}]"
+
+    }
 }
