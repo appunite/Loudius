@@ -42,6 +42,7 @@ jobs:
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
           LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
+          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
       - name: Upload tests results
         if: always()
@@ -76,6 +77,7 @@ jobs:
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
           LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
+          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
       - id: auth
         name: Authenticate to Google Cloud

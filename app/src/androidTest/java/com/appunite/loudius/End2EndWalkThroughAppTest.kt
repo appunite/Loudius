@@ -27,6 +27,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import com.appunite.loudius.util.description
+import com.appunite.loudius.util.generateOtp
 import com.appunite.loudius.util.githubUserName
 import com.appunite.loudius.util.githubUserPassword
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -58,8 +59,8 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
         description("Wait for onboarding or the webpage") {
             automatorTestRule.device.ensure(
                 hasAnyOfObjects(
-                    By.text("Accept & continue - aaa"),
-                    By.text("Username or email address - aaa")
+                    By.text("Accept & continue"),
+                    By.text("Username or email address")
                 )
             )
         }
@@ -93,6 +94,11 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
         description("Click log-in") {
             automatorTestRule.device.pressEnter()
+        }
+
+        description("Fill authentication code") {
+            automatorTestRule.device.waitAndFind(By.text("Verify"))
+            automatorTestRule.device.type(generateOtp())
         }
 
         description("Wait for return to the app") {
