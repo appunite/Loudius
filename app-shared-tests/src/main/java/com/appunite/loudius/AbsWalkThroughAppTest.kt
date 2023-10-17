@@ -59,7 +59,7 @@ abstract class AbsWalkThroughAppTest {
                 Instrumentation.ActivityResult(Activity.RESULT_OK, null)
             }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
+        composeTestRule.onNodeWithText("Log in", useUnmergedTree = true).performClick()
 
         // simulate opening a deeplink
         ActivityScenario.launch<MainActivity>(
@@ -73,11 +73,11 @@ abstract class AbsWalkThroughAppTest {
 
         composeTestRule.waitUntilLoadingDoesNotExist()
 
-        composeTestRule.onNodeWithText("First Pull-Request title").performClick()
+        composeTestRule.onNodeWithText("First Pull-Request title", useUnmergedTree = true).performClick()
 
         composeTestRule.waitUntilLoadingDoesNotExist()
 
-        composeTestRule.onNodeWithText("Notify").performClick()
+        composeTestRule.onNodeWithText("Notify", useUnmergedTree = true).performClick()
 
         composeTestRule.waitUntilLoadingDoesNotExist()
 

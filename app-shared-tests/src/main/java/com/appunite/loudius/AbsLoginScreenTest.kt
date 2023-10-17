@@ -79,7 +79,7 @@ abstract class AbsLoginScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
+        composeTestRule.onNodeWithText("Log in", useUnmergedTree = true).performClick()
 
         composeTestRule.waitForIdle()
         intended(
