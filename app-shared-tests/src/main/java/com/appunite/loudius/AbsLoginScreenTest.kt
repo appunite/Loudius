@@ -47,7 +47,7 @@ import org.koin.dsl.module
 abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule = IntegrationTestRule()
+    val integrationTestRule by lazy { IntegrationTestRule() }
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
@@ -115,32 +115,33 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() = with(integrationTestRule) {
-        every { githubHelper.shouldAskForXiaomiIntent() } returns true
-        intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
-            .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
+    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() =
+        with(integrationTestRule) {
+            every { githubHelper.shouldAskForXiaomiIntent() } returns true
+            intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
+                .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
-        composeTestRule.setContent {
-            LoudiusTheme {
-                LoginScreen()
+            composeTestRule.setContent {
+                LoudiusTheme {
+                    LoginScreen()
+                }
             }
-        }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
-        composeTestRule.onNodeWithText("Grant permission").performClick()
+            composeTestRule.onNodeWithText("Log in").performClick()
+            composeTestRule.onNodeWithText("Grant permission").performClick()
 
-        composeTestRule.waitForIdle()
-        intended(
-            allOf(
-                hasAction("miui.intent.action.APP_PERM_EDITOR"),
-                hasExtra("extra_pkgname", "com.github.android"),
-                hasComponent(
-                    allOf(
-                        hasPackageName("com.miui.securitycenter"),
-                        hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity"),
+            composeTestRule.waitForIdle()
+            intended(
+                allOf(
+                    hasAction("miui.intent.action.APP_PERM_EDITOR"),
+                    hasExtra("extra_pkgname", "com.github.android"),
+                    hasComponent(
+                        allOf(
+                            hasPackageName("com.miui.securitycenter"),
+                            hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity"),
+                        ),
                     ),
                 ),
-            ),
-        )
-    }
+            )
+        }
 }
