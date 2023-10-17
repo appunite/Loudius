@@ -11,11 +11,12 @@ kotlin {
 
 android {
     namespace 'com.appunite.loudius'
-    compileSdk 33
+
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 34
+        compileSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
