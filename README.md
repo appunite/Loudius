@@ -66,20 +66,20 @@ Here's an example of an experiment that meets our rules:
 
 ## 🚀 Project setup
 
-In order to properly start the application and use it, the `LOUDIUS_CLIENT_SECRET` and 
+In order to properly start the application and use it, the `LOUDIUS_CLIENT_SECRET` and
 `LOUDIUS_CLIENT_ID` environment variables must be set on your computer.
 
 * `LOUDIUS_CLIENT_SECRET` is a GitHub client secret key
 * `LOUDIUS_CLIENT_ID` is a GitHub client id
-* 
+*
 both are provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
 If you're not AppUniter, here's a video to help you create such appliation:
 
 <https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd>.
 
-If you'd like to run end-to-end tests you'd also need `LOUDIUS_GITHUB_USER_NAME` and 
-`LOUDIUS_GITHUB_USER_PASSWORD` which are credentials to GitHub test account. 
+If you'd like to run end-to-end tests you'd also need `LOUDIUS_GITHUB_USER_NAME` and
+`LOUDIUS_GITHUB_USER_PASSWORD` which are credentials to GitHub test account.
 This is just a standard GitHub account that you can create by yourself.
 
 If you're AppUniter, you can find those secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).

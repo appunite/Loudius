@@ -57,5 +57,4 @@ abstract class UniversalWalkThroughAppTest {
     }
 
     abstract fun performGitHubLogin()
-
 }

@@ -65,5 +65,4 @@ abstract class AbsWalkThroughAppTest : UniversalWalkThroughAppTest() {
             },
         )
     }
-
 }

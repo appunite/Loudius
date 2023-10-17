@@ -35,7 +35,6 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
@@ -49,7 +48,6 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
     }
 
     override fun performGitHubLogin(): Unit = with(integrationTestRule) {
-
         // Here we need to use `composeTestRule.waitUntil` instead of `device.waitAndFind`
         // because compose actions need to finished to execute startActivity().
         composeTestRule.waitUntil(30_000L) {
@@ -57,10 +55,13 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
         }
 
         // Wait for onboarding or the webpage
-        automatorTestRule.device.wait(hasAnyOfObjects(
-            By.text("Accept & continue"),
-            By.text("Username or email address")
-        ), 30_000L)
+        automatorTestRule.device.wait(
+            hasAnyOfObjects(
+                By.text("Accept & continue"),
+                By.text("Username or email address"),
+            ),
+            30_000L,
+        )
 
         // Google Chrome onboarding process
         val hasOnboarding = automatorTestRule.device.findObject(By.text("Accept & continue")) != null
@@ -90,10 +91,9 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
         // Wait for return to the app
         automatorTestRule.device.waitAndFind(
-            By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName)
+            By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName),
         )
     }
-
 }
 
 class AutomatorTestRule : TestWatcher() {
@@ -124,7 +124,7 @@ private fun UiDevice.type(text: String) {
 }
 
 private fun UiDevice.waitAndFind(
-    selector: BySelector
+    selector: BySelector,
 ): UiObject2 {
     wait(Until.hasObject(selector), 30_000L)
 

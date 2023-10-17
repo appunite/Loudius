@@ -36,7 +36,6 @@ class IntegrationTestRule(
     private val hiltRule = HiltAndroidRule(testClass)
     private val screenshotTestRule = ScreenshotTestRule()
 
-
     override fun apply(base: Statement, description: Description): Statement {
         return RuleChain.emptyRuleChain()
             .around(hiltRule)
