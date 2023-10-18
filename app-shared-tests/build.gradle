@@ -8,17 +8,18 @@ plugins {
 
 android {
     namespace 'com.appunite.loudius'
-    compileSdk 33
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
-
+        compileSdk 33
+        targetSdk 34
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildFeatures {
         compose true
     }
+
     packagingOptions {
         resources {
             excludes += 'META-INF/{AL2.0,LGPL2.1}'
@@ -28,7 +29,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.5.0'
     }
 
     buildTypes {
@@ -50,14 +51,14 @@ dependencies {
     implementation(project(":app"))
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt "com.google.dagger:hilt-compiler:2.45"
-    api 'com.google.dagger:hilt-android-testing:2.45'
+    implementation "com.google.dagger:hilt-android:2.47"
+    kapt "com.google.dagger:hilt-compiler:2.48"
+    api 'com.google.dagger:hilt-android-testing:2.47'
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
-    api 'io.strikt:strikt-core:0.33.0'
+    api 'io.strikt:strikt-core:0.34.0'
     api 'io.strikt:strikt-mockk:0.33.0'
 
     // Setup Junit4 and Junit5
@@ -78,9 +79,9 @@ dependencies {
     api 'org.robolectric:robolectric:4.10.3'
     api 'androidx.test.ext:junit-ktx:1.1.5'
 
-    api "io.mockk:mockk:1.13.3"
+    api "io.mockk:mockk:1.13.5"
 
-    api "com.squareup.okhttp3:mockwebserver:4.10.0"
+    api "com.squareup.okhttp3:mockwebserver:4.11.0"
 
     api 'androidx.test.ext:junit:1.1.5'
     api 'androidx.test.espresso:espresso-core:3.5.1'
