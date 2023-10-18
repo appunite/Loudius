@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("ktlint:filename")
 
 package com.appunite.loudius.util
 
 import android.view.KeyEvent
-
-
-data class KeyTypeEvent(val keyCodes: List<Int>, val metaState: Int)
 
 /**
  * Optimize typing by grouping characters with the same metaState
@@ -48,3 +46,5 @@ fun groupKeys(list: List<KeyEvent>): List<KeyTypeEvent> = list
             acc.plus(KeyTypeEvent(listOf(event.keyCode), event.metaState))
         }
     }
+
+data class KeyTypeEvent(val keyCodes: List<Int>, val metaState: Int)

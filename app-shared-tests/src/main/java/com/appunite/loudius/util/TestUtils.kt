@@ -27,6 +27,9 @@ const val githubUserPassword = BuildConfig.LOUDIUS_GITHUB_USER_PASSWORD
 const val githubUserName = BuildConfig.LOUDIUS_GITHUB_USER_NAME
 const val githubOtpSecret = BuildConfig.LOUDIUS_GITHUB_USER_OTP_SECRET
 
+/**
+ * Generates Google Authenticator One Time Password for Log-in via Github
+ */
 fun generateOtp(): String {
     val timeProvider = SystemTimeProvider()
     val codeGenerator = DefaultCodeGenerator()

@@ -24,7 +24,6 @@ import strikt.api.expectThat
 import strikt.assertions.containsExactly
 import strikt.assertions.isEmpty
 
-
 class KeyGroupingKtTest {
     @Test
     fun `empty list`() {
@@ -38,7 +37,7 @@ class KeyGroupingKtTest {
             listOf(
                 mockKeyEvent(1),
                 mockKeyEvent(2),
-                mockKeyEvent(3),
+                mockKeyEvent(3)
             )
         )
         expectThat(grouped)
@@ -54,7 +53,7 @@ class KeyGroupingKtTest {
                 mockKeyEvent(1, action = KeyEvent.ACTION_DOWN),
                 mockKeyEvent(1, action = KeyEvent.ACTION_UP),
                 mockKeyEvent(2, action = KeyEvent.ACTION_DOWN),
-                mockKeyEvent(2, action = KeyEvent.ACTION_UP),
+                mockKeyEvent(2, action = KeyEvent.ACTION_UP)
             )
         )
         expectThat(grouped)
@@ -69,14 +68,14 @@ class KeyGroupingKtTest {
             listOf(
                 mockKeyEvent(1, metaState = 1),
                 mockKeyEvent(2, metaState = 2),
-                mockKeyEvent(3, metaState = 3),
+                mockKeyEvent(3, metaState = 3)
             )
         )
         expectThat(grouped)
             .containsExactly(
                 KeyTypeEvent(listOf(1), 1),
                 KeyTypeEvent(listOf(2), 2),
-                KeyTypeEvent(listOf(3), 3),
+                KeyTypeEvent(listOf(3), 3)
             )
     }
 
@@ -88,14 +87,14 @@ class KeyGroupingKtTest {
                 mockKeyEvent(2, metaState = 1),
                 mockKeyEvent(3, metaState = 2),
                 mockKeyEvent(4, metaState = 2),
-                mockKeyEvent(5, metaState = 1),
+                mockKeyEvent(5, metaState = 1)
             )
         )
         expectThat(grouped)
             .containsExactly(
                 KeyTypeEvent(listOf(1, 2), 1),
                 KeyTypeEvent(listOf(3, 4), 2),
-                KeyTypeEvent(listOf(5), 1),
+                KeyTypeEvent(listOf(5), 1)
             )
     }
 
@@ -108,5 +107,4 @@ class KeyGroupingKtTest {
         every { getAction() } returns action
         every { getMetaState() } returns metaState
     }
-
 }
