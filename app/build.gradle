@@ -140,7 +140,7 @@ dependencies {
     androidTestImplementation(project(":app-shared-tests")) {
         exclude group: 'org.robolectric', module: 'robolectric'
     }
-    androidTestImplementation "io.mockk:mockk-android:1.13.3"
+    androidTestImplementation "io.mockk:mockk-android:1.13.5"
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
