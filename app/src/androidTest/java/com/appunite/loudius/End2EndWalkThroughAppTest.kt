@@ -16,25 +16,23 @@
 
 package com.appunite.loudius
 
-import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.BySelector
-import androidx.test.uiautomator.Condition
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import com.appunite.loudius.util.AutomatorTestRule
 import com.appunite.loudius.util.description
+import com.appunite.loudius.util.ensure
 import com.appunite.loudius.util.generateOtp
 import com.appunite.loudius.util.githubUserName
 import com.appunite.loudius.util.githubUserPassword
+import com.appunite.loudius.util.hasAnyOfObjects
+import com.appunite.loudius.util.type
+import com.appunite.loudius.util.waitAndFind
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -110,57 +108,3 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
     }
 }
 
-class AutomatorTestRule : TestWatcher() {
-    private var internalDevice: UiDevice? = null
-    val device: UiDevice get() = internalDevice!!
-
-    override fun starting(description: Description?) {
-        internalDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-    }
-
-    override fun finished(description: Description?) {
-        internalDevice = null
-    }
-}
-
-private fun UiDevice.type(text: String) {
-    val keyMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
-    waitForIdle()
-    keyMap.getEvents(text.toCharArray())
-        .filter { it.action == KeyEvent.ACTION_UP }
-        .forEach {
-            pressKeyCode(
-                it.keyCode,
-                it.metaState,
-            )
-        }
-    waitForIdle()
-}
-
-private fun UiDevice.waitAndFind(
-    selector: BySelector,
-): UiObject2 {
-    ensure(Until.hasObject(selector))
-
-    return findObject(selector) ?: throw AssertionError("Could not find object: $selector")
-}
-
-private fun UiDevice.ensure(
-    condition: Condition<in UiDevice, Boolean>,
-    timeout: Long = 30_000L,
-) {
-    val result = wait(condition, timeout) ?: throw AssertionError("Error in condition")
-    if (!result) {
-        throw AssertionError("Could not satisfy: $condition")
-    }
-}
-
-private fun hasAnyOfObjects(vararg selectors: BySelector): Condition<UiDevice, Boolean> {
-    return object : Condition<UiDevice, Boolean> {
-        override fun apply(device: UiDevice): Boolean =
-            selectors.any { selector -> device.hasObject(selector) }
-
-        override fun toString(): String =
-            "hasAnyOfObjects[${selectors.joinToString(separator = ",")}]"
-    }
-}
