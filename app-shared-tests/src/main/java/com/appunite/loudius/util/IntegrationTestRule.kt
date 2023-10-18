@@ -19,6 +19,8 @@ package com.appunite.loudius.util
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.appunite.loudius.TestActivity
+import com.appunite.loudius.components.components.countingResource
+import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
 import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
@@ -31,7 +33,7 @@ class IntegrationTestRule(
 ) : TestRule {
 
     val composeTestRule = createAndroidComposeRule(testActivity).apply {
-//        registerIdlingResource(countingResource.toIdlingResource())
+        registerIdlingResource(countingResource.toIdlingResource())
     }
     private val hiltRule = HiltAndroidRule(testClass)
     private val screenshotTestRule = ScreenshotTestRule()

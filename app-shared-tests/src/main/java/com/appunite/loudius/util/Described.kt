@@ -18,6 +18,30 @@ package com.appunite.loudius.util
 
 /**
  * Adds description to a test, so failures are better recorded
+ *
+ * Example usage:
+ * ```kt
+ *   description("Log-in") {
+ *     description("Fill e-mail and password") {
+ *        onView(withHint("E-mail")).perform(type("jacek.marchwicki@gmail.com"))
+ *        onView(withHint("Password")).perform(type("password"))
+ *     }
+ *     description("Submit") {
+ *        onView(withId(R.id.login_button)).perform(click())
+ *     }
+ *   }
+ *   description("Ensure home screen is displayed") {
+ *     onView(withClass("com.example.com.LoginScreen")).check(isDisplayed())
+ *   }
+ * ```
+ *
+ * In case of failure, you'll see:
+ *
+ * ```
+ * Exception thrown DescriptionAssertionError("Error in step: Log-in -> Fill e-mail and password")
+ * ```
+ *
+ * The exception is always thrown with the root cause attached.
  */
 fun <T> description(description: String, lambda: () -> T): T {
     try {

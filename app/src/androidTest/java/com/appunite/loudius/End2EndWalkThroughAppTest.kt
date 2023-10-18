@@ -46,6 +46,7 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
     @Before
     fun prepareGoogleChrome() {
+        // Clear Google Chrome user data to ensure that Google Chrome behaves always the same
         automatorTestRule.device.executeShellCommand("pm clear com.android.chrome")
     }
 
