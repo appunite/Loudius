@@ -31,7 +31,6 @@ class DescribedKtTest {
     fun `test without failure, is success`() {
         expectCatching {
             description("test without failure") {
-
             }
         }
             .isSuccess()
@@ -66,6 +65,7 @@ class DescribedKtTest {
                     .isEqualTo("Some error")
             }
     }
+
     @Test
     fun `test with multiple descriptions, descriptions are merged`() {
         expectCatching {

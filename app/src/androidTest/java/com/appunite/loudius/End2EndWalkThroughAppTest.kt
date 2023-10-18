@@ -60,8 +60,8 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
             automatorTestRule.device.ensure(
                 hasAnyOfObjects(
                     By.text("Accept & continue"),
-                    By.text("Username or email address")
-                )
+                    By.text("Username or email address"),
+                ),
             )
         }
 
@@ -103,7 +103,7 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
         description("Wait for return to the app") {
             automatorTestRule.device.waitAndFind(
-                By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName)
+                By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName),
             )
         }
     }
@@ -137,7 +137,7 @@ private fun UiDevice.type(text: String) {
 }
 
 private fun UiDevice.waitAndFind(
-    selector: BySelector
+    selector: BySelector,
 ): UiObject2 {
     ensure(Until.hasObject(selector))
 
@@ -146,7 +146,7 @@ private fun UiDevice.waitAndFind(
 
 private fun UiDevice.ensure(
     condition: Condition<in UiDevice, Boolean>,
-    timeout: Long = 30_000L
+    timeout: Long = 30_000L,
 ) {
     val result = wait(condition, timeout) ?: throw AssertionError("Error in condition")
     if (!result) {
@@ -161,6 +161,5 @@ private fun hasAnyOfObjects(vararg selectors: BySelector): Condition<UiDevice, B
 
         override fun toString(): String =
             "hasAnyOfObjects[${selectors.joinToString(separator = ",")}]"
-
     }
 }

@@ -29,7 +29,5 @@ fun <T> description(description: String, lambda: () -> T): T {
     }
 }
 
-
 class DescriptionAssertionError(val step: String, cause: Throwable) :
-    AssertionError("Error in step: \"$step\"", cause) {
-}
+    AssertionError("Error in step: \"$step\"", cause)
