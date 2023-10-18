@@ -35,6 +35,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.appunite.loudius.components.R
 import com.appunite.loudius.components.theme.LoudiusTheme
+import com.loudious.components.R
 
 @Composable
 fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
