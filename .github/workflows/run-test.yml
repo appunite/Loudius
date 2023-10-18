@@ -114,7 +114,7 @@ jobs:
         if: always()
         run: |-
           mkdir "app/build/test-results"
-          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2-30-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
+          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2.arm-33-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
 
       - name: Upload tests results
         if: always()
