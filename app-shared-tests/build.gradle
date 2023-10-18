@@ -58,7 +58,7 @@ dependencies {
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
-    api 'io.strikt:strikt-core:0.34.0'
+    api 'io.strikt:strikt-core:0.33.0'
     api 'io.strikt:strikt-mockk:0.33.0'
 
     // Setup Junit4 and Junit5
