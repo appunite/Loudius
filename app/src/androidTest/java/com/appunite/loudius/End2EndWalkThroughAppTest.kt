@@ -107,4 +107,3 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
         }
     }
 }
-

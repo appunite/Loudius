@@ -37,12 +37,12 @@ class KeyGroupingKtTest {
             listOf(
                 mockKeyEvent(1),
                 mockKeyEvent(2),
-                mockKeyEvent(3)
-            )
+                mockKeyEvent(3),
+            ),
         )
         expectThat(grouped)
             .containsExactly(
-                KeyTypeEvent(listOf(1, 2, 3), 0)
+                KeyTypeEvent(listOf(1, 2, 3), 0),
             )
     }
 
@@ -53,12 +53,12 @@ class KeyGroupingKtTest {
                 mockKeyEvent(1, action = KeyEvent.ACTION_DOWN),
                 mockKeyEvent(1, action = KeyEvent.ACTION_UP),
                 mockKeyEvent(2, action = KeyEvent.ACTION_DOWN),
-                mockKeyEvent(2, action = KeyEvent.ACTION_UP)
-            )
+                mockKeyEvent(2, action = KeyEvent.ACTION_UP),
+            ),
         )
         expectThat(grouped)
             .containsExactly(
-                KeyTypeEvent(listOf(1, 2), 0)
+                KeyTypeEvent(listOf(1, 2), 0),
             )
     }
 
@@ -68,14 +68,14 @@ class KeyGroupingKtTest {
             listOf(
                 mockKeyEvent(1, metaState = 1),
                 mockKeyEvent(2, metaState = 2),
-                mockKeyEvent(3, metaState = 3)
-            )
+                mockKeyEvent(3, metaState = 3),
+            ),
         )
         expectThat(grouped)
             .containsExactly(
                 KeyTypeEvent(listOf(1), 1),
                 KeyTypeEvent(listOf(2), 2),
-                KeyTypeEvent(listOf(3), 3)
+                KeyTypeEvent(listOf(3), 3),
             )
     }
 
@@ -87,21 +87,21 @@ class KeyGroupingKtTest {
                 mockKeyEvent(2, metaState = 1),
                 mockKeyEvent(3, metaState = 2),
                 mockKeyEvent(4, metaState = 2),
-                mockKeyEvent(5, metaState = 1)
-            )
+                mockKeyEvent(5, metaState = 1),
+            ),
         )
         expectThat(grouped)
             .containsExactly(
                 KeyTypeEvent(listOf(1, 2), 1),
                 KeyTypeEvent(listOf(3, 4), 2),
-                KeyTypeEvent(listOf(5), 1)
+                KeyTypeEvent(listOf(5), 1),
             )
     }
 
     private fun mockKeyEvent(
         keyCode: Int,
         metaState: Int = 0,
-        action: Int = KeyEvent.ACTION_UP
+        action: Int = KeyEvent.ACTION_UP,
     ): KeyEvent = mockk<KeyEvent> {
         every { getKeyCode() } returns keyCode
         every { getAction() } returns action

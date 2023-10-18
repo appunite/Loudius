@@ -108,8 +108,8 @@ abstract class AbsLoginScreenTest {
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
-                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
-            )
+                hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"),
+            ),
         )
     }
 
@@ -136,10 +136,10 @@ abstract class AbsLoginScreenTest {
                 hasComponent(
                     allOf(
                         hasPackageName("com.miui.securitycenter"),
-                        hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity")
-                    )
-                )
-            )
+                        hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity"),
+                    ),
+                ),
+            ),
         )
     }
 }

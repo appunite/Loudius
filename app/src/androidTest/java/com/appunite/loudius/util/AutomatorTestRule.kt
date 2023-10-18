@@ -17,7 +17,6 @@
 package com.appunite.loudius.util
 
 import android.view.KeyCharacterMap
-import android.view.KeyEvent
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Condition
