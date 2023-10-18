@@ -56,7 +56,7 @@ import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginScreenViewModel = hiltViewModel(),
+    viewModel: LoginScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val navigateTo = viewModel.state.navigateTo
@@ -64,7 +64,7 @@ fun LoginScreen(
         when (navigateTo) {
             LoginNavigateTo.OpenGithubAuth -> {
                 context.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(AUTHORIZATION_URL)),
+                    Intent(Intent.ACTION_VIEW, Uri.parse(AUTHORIZATION_URL))
                 )
                 viewModel.onAction(LoginAction.ClearNavigation)
             }
@@ -83,14 +83,14 @@ fun LoginScreen(
     }
     LoginScreenStateless(
         state = viewModel.state,
-        onAction = viewModel::onAction,
+        onAction = viewModel::onAction
     )
 }
 
 @Composable
 fun LoginScreenStateless(
     state: LoginState,
-    onAction: (LoginAction) -> Unit,
+    onAction: (LoginAction) -> Unit
 ) {
     if (BuildConfig.DEBUG) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
@@ -100,7 +100,7 @@ fun LoginScreenStateless(
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LoginImage()
         LoudiusOutlinedButton(
@@ -115,9 +115,9 @@ fun LoginScreenStateless(
             icon = {
                 LoudiusOutlinedButtonIcon(
                     contentDescription = stringResource(R.string.login_screen_github_icon_content_description),
-                    painter = painterResource(id = componentsR.drawable.components_ic_github),
+                    painter = painterResource(id = componentsR.drawable.components_ic_github)
                 )
-            },
+            }
         )
         if (state.showXiaomiPermissionDialog) {
             XiaomiPermissionDialog(onAction)
@@ -130,13 +130,13 @@ private fun BrowseComponentIcon(onClick: (LoginAction) -> Unit) {
     Image(
         painter = painterResource(id = R.drawable.ic_components_browser),
         contentDescription = stringResource(
-            id = R.string.login_screen_loudius_browser_components_icon_description,
+            id = R.string.login_screen_loudius_browser_components_icon_description
         ),
         modifier = Modifier
             .clip(CircleShape)
             .clickable { onClick(LoginAction.ClickBrowseComponents) }
             .padding(16.dp)
-            .size(24.dp),
+            .size(24.dp)
     )
 }
 
@@ -148,7 +148,7 @@ private fun XiaomiPermissionDialog(onAction: (LoginAction) -> Unit) {
         text = {
             LoudiusText(
                 style = LoudiusTextStyle.ScreenContent,
-                text = stringResource(R.string.login_screen_xiaomi_dialog_text),
+                text = stringResource(R.string.login_screen_xiaomi_dialog_text)
             )
         },
         confirmButton = {
@@ -160,7 +160,7 @@ private fun XiaomiPermissionDialog(onAction: (LoginAction) -> Unit) {
             LoudiusOutlinedButton(text = stringResource(R.string.login_screen_xiaomi_dialog_already_granted)) {
                 onAction(LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission)
             }
-        },
+        }
     )
 }
 
@@ -169,8 +169,8 @@ fun LoginImage() {
     Image(
         painter = painterResource(id = R.drawable.loudius_logo),
         contentDescription = stringResource(
-            R.string.login_screen_loudius_logo_content_description,
-        ),
+            R.string.login_screen_loudius_logo_content_description
+        )
     )
 }
 
@@ -181,7 +181,7 @@ fun LoginScreenPreview() {
     MaterialTheme {
         LoginScreenStateless(
             state = LoginState(showXiaomiPermissionDialog = false, navigateTo = null),
-            onAction = {},
+            onAction = {}
         )
     }
 }
@@ -193,7 +193,7 @@ fun LoginScreenPreviewWithDialog() {
     MaterialTheme {
         LoginScreenStateless(
             state = LoginState(showXiaomiPermissionDialog = true, navigateTo = null),
-            onAction = {},
+            onAction = {}
         )
     }
 }

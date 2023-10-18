@@ -69,10 +69,10 @@ abstract class AbsWalkThroughAppTest {
         ActivityScenario.launch<MainActivity>(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("loudius://callback?code=example_code"),
+                Uri.parse("loudius://callback?code=example_code")
             ).apply {
                 setPackage(composeTestRule.activity.packageName)
-            },
+            }
         )
 
         composeTestRule.waitUntilLoadingDoesNotExist()

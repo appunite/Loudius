@@ -37,8 +37,8 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
                 color = color,
                 start = Offset(x = 0f, y = height),
                 end = Offset(x = width, y = height),
-                strokeWidth = strokeWidthPx,
+                strokeWidth = strokeWidthPx
             )
         }
-    },
+    }
 )

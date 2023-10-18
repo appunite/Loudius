@@ -97,7 +97,7 @@ class PullRequestsViewModelTest {
     fun `WHEN fetching data failed on init THEN display error`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
             Result.failure(
-                WebException.NetworkError(),
+                WebException.NetworkError()
             )
         }
         val viewModel = createViewModel()
@@ -109,7 +109,7 @@ class PullRequestsViewModelTest {
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
             Result.failure(
-                WebException.NetworkError(),
+                WebException.NetworkError()
             )
         }
         val viewModel = createViewModel()
@@ -139,8 +139,8 @@ class PullRequestsViewModelTest {
                     pullRequest.owner,
                     pullRequest.shortRepositoryName,
                     pullRequest.number.toString(),
-                    pullRequest.createdAt.toString(),
-                ),
+                    pullRequest.createdAt.toString()
+                )
             )
     }
 

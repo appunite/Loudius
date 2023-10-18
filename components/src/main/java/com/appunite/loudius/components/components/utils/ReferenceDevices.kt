@@ -33,30 +33,30 @@ object ReferenceDevices {
     showSystemUi = true,
     name = "small phone - portrait",
     group = "multi screen",
-    device = ReferenceDevices.SmallPhone,
+    device = ReferenceDevices.SmallPhone
 )
 @Preview(
     showSystemUi = true,
     name = "small phone - landscape",
     group = "multi screen",
-    device = ReferenceDevices.SmallPhoneLandscape,
+    device = ReferenceDevices.SmallPhoneLandscape
 )
 @Preview(
     showSystemUi = true,
     name = "default phone",
     group = "multi screen",
-    device = ReferenceDevices.Default,
+    device = ReferenceDevices.Default
 )
 @Preview(
     showSystemUi = true,
     name = "tablet - landscape",
     group = "multi screen",
-    device = ReferenceDevices.Tablet,
+    device = ReferenceDevices.Tablet
 )
 @Preview(
     showSystemUi = true,
     name = "tablet - portrait",
     group = "multi screen",
-    device = ReferenceDevices.TabletPortrait,
+    device = ReferenceDevices.TabletPortrait
 )
 annotation class MultiScreenPreviews

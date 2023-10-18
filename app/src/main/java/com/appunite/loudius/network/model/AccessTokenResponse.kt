@@ -20,5 +20,5 @@ typealias AccessToken = String
 
 data class AccessTokenResponse(
     val accessToken: AccessToken?,
-    val error: String? = null,
+    val error: String? = null
 )
