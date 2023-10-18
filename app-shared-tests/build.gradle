@@ -28,7 +28,7 @@ android {
         if (System.env.LOUDIUS_GITHUB_USER_OTP_SECRET == null || System.env.LOUDIUS_GITHUB_USER_OTP_SECRET.isEmpty()) {
             logger.warn("You need to set LOUDIUS_GITHUB_USER_OTP_SECRET in your environment variables")
         }
-        buildConfigField "String", "LOUDIUS_GITHUB_USER_OTP_SECRET", "\"${System.env.LOUDIUS_GITHUB_USER_NAME}\""
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_OTP_SECRET", "\"${System.env.LOUDIUS_GITHUB_USER_OTP_SECRET}\""
     }
     buildFeatures {
         compose true
