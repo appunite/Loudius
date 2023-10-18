@@ -18,6 +18,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.appunite.loudius.util.HiltTestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables {
             useSupportLibrary true
         }
@@ -59,6 +60,8 @@ android {
         }
     }
     testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+
         packagingOptions {
             jniLibs {
                 useLegacyPackaging true
@@ -93,6 +96,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.6.1'
+
+    // Orchestrator
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
 
     //Compose
     def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
