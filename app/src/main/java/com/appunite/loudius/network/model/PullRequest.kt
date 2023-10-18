@@ -17,18 +17,10 @@
 package com.appunite.loudius.network.model
 
 import com.appunite.loudius.common.Constants
-import kotlinx.datetime.Instant
+import com.appunite.loudius.network.utils.LocalDateTimeSerializer
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class PullRequest(
@@ -53,17 +45,5 @@ data class PullRequest(
 
     companion object {
         private const val REPOSITORY_PATH = Constants.BASE_API_URL + "/repos/"
-    }
-}
-
-object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalDateTime", PrimitiveKind.STRING)
-
-    override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(value.toString())
-    }
-
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        return Instant.parse(decoder.decodeString()).toLocalDateTime(TimeZone.UTC)
     }
 }
