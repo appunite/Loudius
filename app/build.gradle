@@ -119,8 +119,8 @@ dependencies {
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.45'
 
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2"
 
     // ktor
     implementation "io.ktor:ktor-client-core:$ktor_version"
