@@ -26,7 +26,7 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -34,7 +34,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import org.junit.Before
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -50,19 +50,12 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
-import kotlin.time.Duration.Companion.hours
 
 @ExtendWith(MainDispatcherExtension::class)
 class ReviewersViewModelTest {
 
     private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
-    private val duration = systemNow.toInstant(TimeZone.UTC).toEpochMilliseconds().hours
-    private val systemClockFixed = Clock.System.now() + duration//).toLocalDateTime(TimeZone.UTC).hour
-    //private val systemClockFixed =
-    //    Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
-
-    //val fixedInstant: Instant = Instant.parse("2022-01-29T15:00:00Z")
-    //val fixedClock: Clock = Clock.from(fixedInstant, TimeZone.UTC)
+    private val systemClockFixed = systemNow.toInstant(TimeZone.UTC)
 
     private val repository = spyk(FakePullRequestRepository())
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true) {
@@ -74,9 +67,9 @@ class ReviewersViewModelTest {
 
     private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle)
 
-    @Before
+    @BeforeEach
     fun setup() {
-        mockkStatic(Clock::class)
+        mockkObject(Clock.System)
         every { Clock.System.now() } returns systemClockFixed
     }
 

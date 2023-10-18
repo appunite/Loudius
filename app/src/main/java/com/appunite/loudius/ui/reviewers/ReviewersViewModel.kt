@@ -35,10 +35,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
 import kotlinx.datetime.toInstant
-import kotlin.math.abs
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -169,7 +170,8 @@ class ReviewersViewModel(
     }
 
     private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
-        abs(Clock.System.now().epochSeconds - submissionTime.toInstant(TimeZone.UTC).epochSeconds) / 3600
+        Clock.System.now().minus(submissionTime.toInstant(TimeZone.UTC), DateTimeUnit.HOUR)
+        //abs(Clock.System.now().epochSeconds - submissionTime.toInstant(TimeZone.UTC).epochSeconds) / 3600
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyReviewer(action.userLogin)

@@ -24,6 +24,6 @@ typealias AccessToken = String
 @Serializable
 data class AccessTokenResponse(
     @SerialName("access_token")
-    val accessToken: AccessToken?,
+    val accessToken: AccessToken? = null,
     val error: String? = null,
 )
