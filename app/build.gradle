@@ -22,10 +22,14 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        if (System.env.CLIENT_SECRET == null || System.env.CLIENT_SECRET.isEmpty()) {
-            logger.warn("You need to set CLIENT_SECRET in your environment variables")
+        if (System.env.LOUDIUS_CLIENT_SECRET == null || System.env.LOUDIUS_CLIENT_SECRET.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_CLIENT_SECRET in your environment variables")
         }
-        buildConfigField "String", "CLIENT_SECRET", "\"${System.env.CLIENT_SECRET}\""
+        buildConfigField "String", "LOUDIUS_CLIENT_SECRET", "\"${System.env.LOUDIUS_CLIENT_SECRET}\""
+        if (System.env.LOUDIUS_CLIENT_ID == null || System.env.LOUDIUS_CLIENT_ID.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_CLIENT_ID in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_CLIENT_ID", "\"${System.env.LOUDIUS_CLIENT_ID}\""
     }
 
     buildTypes {
@@ -148,6 +152,7 @@ dependencies {
         exclude group: 'org.robolectric', module: 'robolectric'
     }
     androidTestImplementation "io.mockk:mockk-android:1.13.3"
+    androidTestImplementation('androidx.test.uiautomator:uiautomator:2.3.0-alpha03')
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
