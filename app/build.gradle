@@ -149,12 +149,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation "io.ktor:ktor-serialization-gson:2.3.4"
 
-    // koin
-    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
-    implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-core:$koin_version"
-    testImplementation "io.insert-koin:koin-test:$koin_version"
-
     testImplementation project(":app-shared-tests")
     androidTestImplementation(project(":app-shared-tests")) {
         exclude group: 'org.robolectric', module: 'robolectric'

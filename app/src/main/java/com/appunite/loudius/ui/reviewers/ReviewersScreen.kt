@@ -46,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
@@ -61,12 +62,11 @@ import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import org.koin.androidx.compose.koinViewModel
 import com.appunite.loudius.components.R as componentsR
 
 @Composable
 fun ReviewersScreen(
-    viewModel: ReviewersViewModel = koinViewModel(),
+    viewModel: ReviewersViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
 ) {
     val state = viewModel.state

@@ -23,7 +23,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
@@ -49,7 +51,8 @@ data class NavigationPayload(
     val submissionTime: String,
 )
 
-class PullRequestsViewModel(
+@HiltViewModel
+class PullRequestsViewModel @Inject constructor(
     private val pullRequestsRepository: PullRequestRepository,
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())

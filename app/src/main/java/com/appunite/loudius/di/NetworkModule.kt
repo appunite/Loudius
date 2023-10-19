@@ -20,6 +20,10 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.intercept.AuthFailureInterceptor
 import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.AuthFailureHandler
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -27,56 +31,70 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.core.module.dsl.singleOf
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import javax.inject.Singleton
 
-val networkModule = module {
-    single {
-        HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
+@InstallIn(SingletonComponent::class)
+@Module
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BASIC
+    }
+
+    @Provides
+    @AuthAPI
+    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
+
+    @Provides
+    @BaseAPI
+    fun provideBaseAPIUrl() = Constants.BASE_API_URL
+
+    @Provides
+    @Singleton
+    @AuthAPI
+    fun provideAuthHttpClient(
+        @AuthAPI baseUrl: String,
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(TestInterceptor)
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+            })
         }
     }
 
-    single(named("auth")) {
-        HttpClient(OkHttp) {
-            expectSuccess = true
-            engine {
-                addInterceptor(TestInterceptor)
-                addInterceptor(get<HttpLoggingInterceptor>())
-            }
-            defaultRequest {
-                url(Constants.AUTH_API_URL)
-            }
-            install(ContentNegotiation) {
-                json(get())
-            }
+    @Provides
+    @Singleton
+    @BaseAPI
+    fun provideBaseHttpClient(
+        @BaseAPI baseUrl: String,
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
+        authFailureHandler: AuthFailureHandler,
+    ): HttpClient = HttpClient(OkHttp) {
+        expectSuccess = true
+        engine {
+            addInterceptor(authInterceptor)
+            addInterceptor(TestInterceptor)
+            addInterceptor(AuthFailureInterceptor(authFailureHandler))
+            addInterceptor(loggingInterceptor)
+        }
+        defaultRequest {
+            url(baseUrl)
+        }
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+            })
         }
     }
-
-    single(named("base")) {
-        HttpClient(OkHttp) {
-            expectSuccess = true
-            engine {
-                addInterceptor(TestInterceptor)
-                addInterceptor(get<HttpLoggingInterceptor>())
-                addInterceptor(AuthFailureInterceptor(get()))
-                addInterceptor(AuthInterceptor(get()))
-            }
-            defaultRequest {
-                url(Constants.BASE_API_URL)
-            }
-            install(ContentNegotiation) {
-                json(get())
-            }
-        }
-    }
-
-    single {
-        Json {
-            ignoreUnknownKeys = true
-        }
-    }
-
-    singleOf(::AuthFailureHandler)
 }
