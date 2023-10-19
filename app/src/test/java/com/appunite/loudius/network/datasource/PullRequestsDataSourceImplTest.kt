@@ -29,7 +29,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
@@ -409,7 +409,7 @@ class PullRequestsDataSourceImplTest {
                             "1",
                             User(10000000, "exampleUser"),
                             ReviewState.COMMENTED,
-                            LocalDateTime.parse("2023-03-02T10:21:36"),
+                            Instant.parse("2023-03-02T10:21:36Z"),
                         ),
                     )
             }
