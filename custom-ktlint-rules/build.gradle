@@ -14,8 +14,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     // Add SLF4J and Logback dependencies
-    implementation 'org.slf4j:slf4j-api:2.0.7' // SLF4J API
-    implementation 'ch.qos.logback:logback-classic:1.3.0' // Logback as the logging implementation
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
