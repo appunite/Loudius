@@ -9,8 +9,13 @@ java {
 }
 
 kotlin {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceSets.configureEach {
+        // Set the source and target compatibility for Kotlin
+        languageSettings {
+            languageVersion = "1.5" // Set the desired Kotlin version
+            apiVersion = "1.5" // Set the desired Kotlin version
+        }
+    }
 }
 
 dependencies {
