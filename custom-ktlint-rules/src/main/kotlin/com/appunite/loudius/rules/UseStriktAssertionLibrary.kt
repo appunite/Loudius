@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes
 
-class UseStriktAssertionLibrary : Rule(RuleId("use-strikt-assertion-library"), about = About()) {
+class UseStriktAssertionLibrary : Rule(RuleId("custom:use-strikt-assertion-library"), about = About()) {
     private val forbiddenPackageNames = listOf(
         "junit.framework.TestCase",
         "org.junit.jupiter.api.Assertions",
