@@ -24,6 +24,7 @@ android {
 
     buildFeatures {
         compose true
+        buildConfig true
     }
 
     packagingOptions {
@@ -46,7 +47,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":app"))
 
     // Hilt
