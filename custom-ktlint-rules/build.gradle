@@ -8,6 +8,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+kotlin {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 dependencies {
     compileOnly 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
     compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:1.0.1'
