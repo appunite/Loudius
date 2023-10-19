@@ -13,7 +13,6 @@ dependencies {
     compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:1.0.1'
     testImplementation 'junit:junit:4.13.2'
 
-    // Add SLF4J and Logback dependencies
     implementation 'org.slf4j:slf4j-api:2.0.7'
 
     // assertion library
