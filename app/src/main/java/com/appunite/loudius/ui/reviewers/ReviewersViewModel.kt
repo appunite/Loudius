@@ -38,6 +38,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.minus
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -168,8 +172,8 @@ class ReviewersViewModel @Inject constructor(
         }
     }
 
-    private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
-        ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
+    private fun countHoursTillNow(submissionTime: Instant): Long =
+        Clock.System.now().minus(submissionTime, DateTimeUnit.HOUR)
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyReviewer(action.userLogin)

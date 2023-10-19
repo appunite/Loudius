@@ -17,15 +17,22 @@
 package com.appunite.loudius.network.model
 
 import com.appunite.loudius.common.Constants
-import java.time.LocalDateTime
+import com.appunite.loudius.network.utils.InstantSerializer
+import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PullRequest(
     val id: Int,
     val draft: Boolean,
     val number: Int,
+    @SerialName("repository_url")
     val repositoryUrl: String,
     val title: String,
-    val createdAt: LocalDateTime,
+    @SerialName("created_at")
+    @Serializable(with = InstantSerializer::class)
+    val createdAt: Instant,
 ) {
     val fullRepositoryName: String
         get() = repositoryUrl.removePrefix(REPOSITORY_PATH)

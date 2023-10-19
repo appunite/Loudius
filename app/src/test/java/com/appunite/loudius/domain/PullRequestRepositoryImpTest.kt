@@ -29,7 +29,6 @@ import com.appunite.loudius.util.Defaults
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -39,7 +38,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PullRequestRepositoryImpTest {
 
     private val pullRequestDataSource = spyk(FakePullRequestDataSource())

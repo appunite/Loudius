@@ -16,9 +16,14 @@
 
 package com.appunite.loudius.network.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 typealias AccessToken = String
 
+@Serializable
 data class AccessTokenResponse(
-    val accessToken: AccessToken?,
+    @SerialName("access_token")
+    val accessToken: AccessToken? = null,
     val error: String? = null,
 )

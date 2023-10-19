@@ -16,24 +16,17 @@
 
 package com.appunite.loudius.network
 
-import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.engine.okhttp.OkHttpConfig
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.http.ContentType
-import io.ktor.serialization.gson.GsonConverter
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import okhttp3.mockwebserver.MockWebServer
-import java.time.LocalDateTime
 
-private fun testGson() =
-    GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+private fun registerJson() = Json { ignoreUnknownKeys = true }
 
 fun httpClientTestDouble(
     mockWebServer: MockWebServer,
@@ -48,9 +41,6 @@ fun httpClientTestDouble(
         )
     }
     install(ContentNegotiation) {
-        register(
-            ContentType.Application.Json,
-            GsonConverter(testGson()),
-        )
+        json(registerJson())
     }
 }
