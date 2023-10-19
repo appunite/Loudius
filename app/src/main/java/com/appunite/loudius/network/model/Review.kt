@@ -16,8 +16,8 @@
 
 package com.appunite.loudius.network.model
 
-import com.appunite.loudius.network.utils.LocalDateTimeSerializer
-import kotlinx.datetime.LocalDateTime
+import com.appunite.loudius.network.utils.InstantSerializer
+import kotlinx.datetime.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -34,8 +34,8 @@ data class Review(
     val user: User,
     val state: ReviewState,
     @SerialName("submitted_at")
-    @Serializable(with = LocalDateTimeSerializer::class)
-    val submittedAt: LocalDateTime,
+    @Serializable(with = InstantSerializer::class)
+    val submittedAt: Instant,
 )
 
 object IdSerializer: KSerializer<String> {

@@ -147,6 +147,7 @@ private fun ReviewersScreenStateless(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ReviewersScreenContent(
     data: Data.Success,

@@ -24,7 +24,8 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toInstant
 
 sealed class Screen(val route: String) {
     open val arguments: List<NamedNavArgument> = emptyList()
@@ -76,16 +77,14 @@ sealed class Screen(val route: String) {
             owner = checkNotNull(savedStateHandle[ownerArg]),
             repo = checkNotNull(savedStateHandle[repoArg]),
             pullRequestNumber = checkNotNull(savedStateHandle[pullRequestNumberArg]),
-            submissionTime = checkNotNull(
-                LocalDateTime.parse(savedStateHandle[submissionDateArg] ?: ""),
-            ),
+            submissionTime = checkNotNull((savedStateHandle[submissionDateArg] ?: "").toInstant()),
         )
 
         data class ReviewersInitialValues(
             val owner: String,
             val repo: String,
             val pullRequestNumber: String,
-            val submissionTime: LocalDateTime,
+            val submissionTime: Instant,
         )
     }
 }
