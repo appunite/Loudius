@@ -91,7 +91,7 @@ class AuthenticatingViewModel @Inject constructor(
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
                     clientId = CLIENT_ID,
-                    clientSecret = BuildConfig.CLIENT_SECRET,
+                    clientSecret = BuildConfig.LOUDIUS_CLIENT_SECRET,
                     code = code
                 ).onSuccess {
                     state = state.copy(
