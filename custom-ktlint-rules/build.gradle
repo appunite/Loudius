@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
 }
 
@@ -8,7 +8,6 @@ java {
         languageVersion = JavaLanguageVersion.of(8)
     }
 }
-
 
 dependencies {
     compileOnly 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
