@@ -152,7 +152,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          sparse-checkout: build-tools/
+          sparse-checkout: |
+            build-tools/
+            .github/
 
       - name: Download tests results for both jobs
         uses: actions/download-artifact@v3
@@ -192,7 +194,7 @@ jobs:
           fail-on-error: "false"
 
       - name: Include Slack Notification
-        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+        if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
         uses: ./.github/actions/slack-notification
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
