@@ -33,7 +33,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -64,7 +63,7 @@ fun PullRequestsScreen(
     navigateToReviewers: NavigateToReviewers,
 ) {
     val state = viewModel.state
-    val refreshing by viewModel.isRefreshing.collectAsState()
+    val refreshing = viewModel.isRefreshing
 
     PullRequestsScreenStateless(
         state = state,

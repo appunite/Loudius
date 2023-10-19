@@ -19,6 +19,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.appunite.loudius.util.HiltTestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables {
             useSupportLibrary true
         }
@@ -56,9 +57,23 @@ android {
         }
     }
     testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+
         packagingOptions {
             jniLibs {
                 useLegacyPackaging true
+            }
+        }
+        unitTests {
+            includeAndroidResources = true
+            animationsDisabled = true
+            all {
+                // Disable tests on release because on release we don't have TestActivity.
+                // We could also filter tasks by filter {}, but right now we don't need to test
+                // release version.
+                if (it.name == 'testReleaseUnitTest') {
+                    it.enabled = false
+                }
             }
         }
     }
@@ -70,7 +85,7 @@ android {
 }
 
 dependencies {
-    implementation project(':components')
+    api project(':components')
     //Desugaring for use of java.time in api lower then 26
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
@@ -78,6 +93,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.6.1'
+
+    // Orchestrator
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
 
     //Compose
     def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
@@ -101,7 +120,6 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     //DI - for local unit tests
-    testImplementation 'com.google.dagger:hilt-android-testing:2.45'
     kaptTest 'com.google.dagger:hilt-compiler:2.45'
 
     // DI - For instrumented tests.
@@ -137,29 +155,11 @@ dependencies {
     implementation "io.insert-koin:koin-core:$koin_version"
     testImplementation "io.insert-koin:koin-test:$koin_version"
 
-    // assertion library
-    // cannot use 0.34.0 due to an existing bug
-    // https://github.com/robfletcher/strikt/issues/259
-    testImplementation 'io.strikt:strikt-core:0.33.0'
-    testImplementation 'io.strikt:strikt-mockk:0.33.0'
-    androidTestImplementation 'io.strikt:strikt-core:0.33.0'
-    androidTestImplementation 'io.strikt:strikt-mockk:0.33.0'
-
-    //testing
-    testImplementation "io.mockk:mockk:1.13.3"
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
-    androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
-    androidTestImplementation("io.mockk:mockk-android:1.13.3")
-
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
-
-    // Firebase instrumentation lib
-    androidTestImplementation 'com.google.firebase:testlab-instr-lib:0.2'
+    testImplementation project(":app-shared-tests")
+    androidTestImplementation(project(":app-shared-tests")) {
+        exclude group: 'org.robolectric', module: 'robolectric'
+    }
+    androidTestImplementation "io.mockk:mockk-android:1.13.3"
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")

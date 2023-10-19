@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.fakes
+@file:OptIn(ExperimentalTestApi::class)
 
-import com.appunite.loudius.domain.store.UserLocalDataSource
-import com.appunite.loudius.network.model.AccessToken
+package com.appunite.loudius.util
 
-class FakeUserLocalDataSource : UserLocalDataSource {
-    private var token = ""
-    override fun saveAccessToken(accessToken: AccessToken) {
-        token = accessToken
-    }
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasStateDescription
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 
-    override fun getAccessToken(): AccessToken = token
+fun AndroidComposeTestRule<*, *>.waitUntilLoadingDoesNotExist() {
+    waitUntilDoesNotExist(hasStateDescription("Loading data…"), 10_000L)
 }
