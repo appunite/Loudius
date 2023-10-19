@@ -4,6 +4,10 @@ plugins {
 }
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
@@ -12,9 +16,7 @@ dependencies {
     compileOnly 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
     compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:1.0.1'
     testImplementation 'junit:junit:4.13.2'
-
     implementation 'org.slf4j:slf4j-api:2.0.7'
-
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
