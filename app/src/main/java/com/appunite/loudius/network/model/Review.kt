@@ -38,7 +38,7 @@ data class Review(
     val submittedAt: Instant,
 )
 
-object IdSerializer: KSerializer<String> {
+object IdSerializer : KSerializer<String> {
     override val descriptor: SerialDescriptor
         get() = PrimitiveSerialDescriptor("id", PrimitiveKind.STRING)
 
