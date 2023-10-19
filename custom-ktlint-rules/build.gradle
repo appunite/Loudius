@@ -1,22 +1,14 @@
 plugins {
-    id 'java-library'
+    id 'java'
     id 'org.jetbrains.kotlin.jvm'
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-kotlin {
-    sourceSets.configureEach {
-        // Set the source and target compatibility for Kotlin
-        languageSettings {
-            languageVersion = "1.5" // Set the desired Kotlin version
-            apiVersion = "1.5" // Set the desired Kotlin version
-        }
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
     }
 }
+
 
 dependencies {
     compileOnly 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
