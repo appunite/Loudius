@@ -66,9 +66,11 @@ object NetworkModule {
             url(baseUrl)
         }
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-            })
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                },
+            )
         }
     }
 
@@ -92,9 +94,11 @@ object NetworkModule {
             url(baseUrl)
         }
         install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-            })
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                },
+            )
         }
     }
 }

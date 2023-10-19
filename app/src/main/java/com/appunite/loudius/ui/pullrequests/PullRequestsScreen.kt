@@ -60,7 +60,7 @@ typealias NavigateToReviewers = (String, String, String, String) -> Unit
 fun PullRequestsScreen(
     viewModel: PullRequestsViewModel = hiltViewModel(),
     navigateToReviewers: NavigateToReviewers,
-    ) {
+) {
     val state = viewModel.state
     val refreshing = viewModel.isRefreshing
 
