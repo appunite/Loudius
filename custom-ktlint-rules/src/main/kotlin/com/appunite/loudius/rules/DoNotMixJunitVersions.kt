@@ -22,7 +22,7 @@ import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtImportDirective
 
-class DoNotMixJunitVersions : Rule(RuleId("do-not-mix-junit-versions"), about = About()) {
+class DoNotMixJunitVersions : Rule(RuleId("custom:do-not-mix-junit-versions"), about = About()) {
     val junit4Annotations = listOf(
         "org.junit.Test",
         "org.junit.Before",
@@ -60,8 +60,8 @@ class DoNotMixJunitVersions : Rule(RuleId("do-not-mix-junit-versions"), about = 
 
                 if (junit4Imports.isNotEmpty() && junit5Imports.isNotEmpty()) {
                     val errorMessage = "${junit4Imports.joinToString(separator = ",")} " +
-                        "and ${junit5Imports.joinToString(separator = ",")} " +
-                        "packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test."
+                            "and ${junit5Imports.joinToString(separator = ",")} " +
+                            "packages are from different JUnit versions. Don't mix Junit4 with Junit5 in a single test."
                     emit(
                         node.startOffset,
                         errorMessage,

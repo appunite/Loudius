@@ -4,20 +4,19 @@ plugins {
 }
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
-    compileOnly 'com.pinterest.ktlint:ktlint-core:0.49.1'
-    compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:0.49.1'
+    compileOnly 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
+    compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:1.0.1'
     testImplementation 'junit:junit:4.13.2'
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
     testImplementation 'io.strikt:strikt-core:0.33.0'
-    testImplementation 'org.assertj:assertj-core:3.23.1'
-    testImplementation 'com.pinterest.ktlint:ktlint-core:0.49.1'
-    testImplementation 'com.pinterest.ktlint:ktlint-test:0.49.1'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
+    testImplementation 'com.pinterest.ktlint:ktlint-test:1.0.1'
 }
