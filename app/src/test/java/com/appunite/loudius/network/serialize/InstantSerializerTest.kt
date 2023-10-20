@@ -17,11 +17,12 @@
 package com.appunite.loudius.network.serialize
 
 import com.appunite.loudius.network.utils.InstantSerializer
-import junit.framework.TestCase.assertEquals
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.json.Json
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 class InstantSerializerTest {
 
@@ -31,7 +32,7 @@ class InstantSerializerTest {
         val serialized = Json.encodeToString(InstantSerializer, instant)
         val deserialized = Json.decodeFromString(InstantSerializer, serialized)
 
-        assertEquals(instant, deserialized)
+        expectThat(instant).isEqualTo(deserialized)
     }
 
     @Test
@@ -40,6 +41,6 @@ class InstantSerializerTest {
         val deserialized = Json.decodeFromString(InstantSerializer, json)
         val expectedInstant = Instant.parse("2023-10-20T12:34:56.789Z")
 
-        assertEquals(expectedInstant, deserialized)
+        expectThat(expectedInstant).isEqualTo(deserialized)
     }
 }

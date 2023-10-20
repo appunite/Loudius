@@ -17,9 +17,10 @@
 package com.appunite.loudius.network.serialize
 
 import com.appunite.loudius.network.model.IdSerializer
-import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.json.Json
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 class IdSerializerTest {
 
@@ -28,6 +29,6 @@ class IdSerializerTest {
         val serializedIntId = "123"
         val deserialized = Json.decodeFromString(IdSerializer, serializedIntId)
 
-        assertEquals(serializedIntId, deserialized)
+        expectThat(serializedIntId).isEqualTo(deserialized)
     }
 }
