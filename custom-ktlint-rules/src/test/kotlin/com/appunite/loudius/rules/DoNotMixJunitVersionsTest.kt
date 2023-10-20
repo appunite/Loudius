@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.rules
 
-
 import com.pinterest.ktlint.test.KtLintAssertThat
 import org.junit.Test
 
@@ -107,5 +106,3 @@ class DoNotMixJunitVersionsTest {
             )
     }
 }
-
-
