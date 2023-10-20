@@ -5,6 +5,8 @@ plugins {
 
 java {
     toolchain {
+        // somehow megalinter has problem building when the java version is above 11,
+        // also I was not able to specify 11 by toolchain, so I used 8
         languageVersion = JavaLanguageVersion.of(8)
     }
 }
