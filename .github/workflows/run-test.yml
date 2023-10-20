@@ -51,7 +51,7 @@ jobs:
         with:
           name: coverage-report
           path: |
-           */build/reports/jacoco/html/**
+           */build/reports/jacoco/codeCoverage/html/**
 
       - name: Add coverage to PR
         id: jacoco
