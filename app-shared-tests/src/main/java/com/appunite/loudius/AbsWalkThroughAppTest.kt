@@ -20,35 +20,25 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsRule
-import com.appunite.loudius.util.IntegrationTestRule
+import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
-import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
-abstract class AbsWalkThroughAppTest {
-
-    @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(this, MainActivity::class.java) }
+abstract class AbsWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
     @get:Rule(order = 1)
+    var mockWebServer: MockWebServerRule = MockWebServerRule()
+
+    @get:Rule(order = 2)
     val intents = IntentsRule()
 
     @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
-
-    @Test
-    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
+    fun prepareMocks() {
         Register.run {
             user(mockWebServer)
             accessToken(mockWebServer)
@@ -62,31 +52,17 @@ abstract class AbsWalkThroughAppTest {
             .respondWithFunction {
                 Instrumentation.ActivityResult(Activity.RESULT_OK, null)
             }
+    }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
-
+    override fun performGitHubLogin() {
         // simulate opening a deeplink
         ActivityScenario.launch<MainActivity>(
             Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("loudius://callback?code=example_code"),
             ).apply {
-                setPackage(composeTestRule.activity.packageName)
+                setPackage(integrationTestRule.composeTestRule.activity.packageName)
             },
         )
-
-        composeTestRule.waitUntilLoadingDoesNotExist()
-
-        composeTestRule.onNodeWithText("First Pull-Request title").performClick()
-
-        composeTestRule.waitUntilLoadingDoesNotExist()
-
-        composeTestRule.onNodeWithText("Notify").performClick()
-
-        composeTestRule.waitUntilLoadingDoesNotExist()
-
-        composeTestRule
-            .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
-            .assertIsDisplayed()
     }
 }
