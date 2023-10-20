@@ -92,6 +92,20 @@ android {
     }
 }
 
+tasks.register('codeCoverage',JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+
+    sourceDirectories.setFrom("${project.projectDir}/src/main/java")
+    classDirectories.setFrom("${project.buildDir}/tmp/kotlin-classes/debugUnitTest")
+    println("${project.buildDir}")
+    executionData.setFrom("${project.buildDir}/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+}
+
 dependencies {
     api project(':components')
     //Desugaring for use of java.time in api lower then 26
