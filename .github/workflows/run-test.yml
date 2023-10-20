@@ -55,7 +55,7 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
         with:
-          path: |
+          paths: |
            */build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
 
