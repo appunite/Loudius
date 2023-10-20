@@ -31,6 +31,8 @@ interface AuthRepository {
     ): Result<AccessToken>
 
     fun getAccessToken(): AccessToken
+
+    fun test()
 }
 
 @Singleton
@@ -52,4 +54,13 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun getAccessToken(): AccessToken = userLocalDataSource.getAccessToken()
+    override fun test() {
+        val test = "123"
+
+        if(test == "123"){
+
+        }else{
+
+        }
+    }
 }
