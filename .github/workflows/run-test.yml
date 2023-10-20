@@ -48,14 +48,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: "${{github.workspace}}/app/build/reports/jacoco/html/"
+          path: |
+           */build/reports/jacoco/html/**
 
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
         with:
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/codeCoverage/codeCoverage.xml
+          path: |
+           */build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
 
       - name: Upload tests results
