@@ -101,9 +101,25 @@ tasks.register('codeCoverage',JacocoReport) {
         xml.required.set(true)
     }
 
-    sourceDirectories.setFrom("${project.projectDir}/src/main/java")
-    classDirectories.setFrom("${project.buildDir}/tmp/kotlin-classes/debugUnitTest")
-    executionData.setFrom("${project.buildDir}/outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec")
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include(
+                        "**/tmp/kotlin-classes/$classPathBuildVariant/**"
+                )
+            }
+    )
+
+    sourceDirectories.setFrom(
+            fileTree(project.projectDir) {
+                include("src/main/java/**", "src/main/kotlin/**")
+            }
+    )
+
+    executionData.setFrom(
+            fileTree(project.buildDir) {
+                include("**/*.exec", "**/*.ec")
+            }
+    )
 }
 
 dependencies {
