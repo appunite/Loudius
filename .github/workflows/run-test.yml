@@ -60,6 +60,7 @@ jobs:
           paths: |
            */build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+          debug-mode: true
 
       - name: Upload tests results
         if: always()
