@@ -24,26 +24,28 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
-import dagger.hilt.android.testing.HiltAndroidTest
+import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
-class WalkThroughAppTest {
+abstract class AbsWalkThroughAppTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule = IntegrationTestRule(this, MainActivity::class.java)
+    val integrationTestRule by lazy { IntegrationTestRule(this, MainActivity::class.java) }
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
+
+    @Before
+    fun setUp() {
+        integrationTestRule.setUp()
+    }
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
@@ -56,7 +58,7 @@ class WalkThroughAppTest {
             comment(mockWebServer)
         }
 
-        Intents.intending(IntentMatchers.hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"))
+        intending(IntentMatchers.hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo"))
             .respondWithFunction {
                 Instrumentation.ActivityResult(Activity.RESULT_OK, null)
             }
@@ -73,9 +75,16 @@ class WalkThroughAppTest {
             },
         )
 
+        composeTestRule.waitUntilLoadingDoesNotExist()
+
         composeTestRule.onNodeWithText("First Pull-Request title").performClick()
 
+        composeTestRule.waitUntilLoadingDoesNotExist()
+
         composeTestRule.onNodeWithText("Notify").performClick()
+
+        composeTestRule.waitUntilLoadingDoesNotExist()
+
         composeTestRule
             .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
             .assertIsDisplayed()

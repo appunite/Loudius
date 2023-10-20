@@ -31,31 +31,22 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appunite.loudius.components.theme.LoudiusTheme
-import com.appunite.loudius.di.GithubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.util.ScreenshotTestRule
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-@UninstallModules(GithubHelperModule::class)
-@HiltAndroidTest
-class LoginScreenTest {
+abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
+    val hiltRule by lazy { HiltAndroidRule(this) }
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<TestActivity>()
@@ -72,8 +63,6 @@ class LoginScreenTest {
         hiltRule.inject()
     }
 
-    @BindValue
-    @JvmField
     val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
         every { shouldAskForXiaomiIntent() } returns false
     }
@@ -90,6 +79,8 @@ class LoginScreenTest {
         }
 
         composeTestRule.onNodeWithText("Log in").performClick()
+
+        composeTestRule.waitForIdle()
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
@@ -113,6 +104,7 @@ class LoginScreenTest {
         composeTestRule.onNodeWithText("Log in").performClick()
         composeTestRule.onNodeWithText("I've already granted").performClick()
 
+        composeTestRule.waitForIdle()
         intended(
             allOf(
                 hasAction(Intent.ACTION_VIEW),
@@ -136,6 +128,7 @@ class LoginScreenTest {
         composeTestRule.onNodeWithText("Log in").performClick()
         composeTestRule.onNodeWithText("Grant permission").performClick()
 
+        composeTestRule.waitForIdle()
         intended(
             allOf(
                 hasAction("miui.intent.action.APP_PERM_EDITOR"),

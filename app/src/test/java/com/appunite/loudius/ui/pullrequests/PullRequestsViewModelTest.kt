@@ -52,7 +52,7 @@ class PullRequestsViewModelTest {
 
         viewModel.refreshData()
 
-        expectThat(viewModel.isRefreshing.value).isTrue()
+        expectThat(viewModel.isRefreshing).isTrue()
     }
 
     @Test
@@ -61,7 +61,7 @@ class PullRequestsViewModelTest {
 
         viewModel.refreshData()
 
-        expectThat(viewModel.isRefreshing.value).isFalse()
+        expectThat(viewModel.isRefreshing).isFalse()
     }
 
     @Test

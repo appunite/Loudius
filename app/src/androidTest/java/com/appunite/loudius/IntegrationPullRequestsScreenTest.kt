@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.fakes
+package com.appunite.loudius
 
-import com.appunite.loudius.domain.store.UserLocalDataSource
-import com.appunite.loudius.network.model.AccessToken
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.runner.RunWith
 
-class FakeUserLocalDataSource : UserLocalDataSource {
-    private var token = ""
-    override fun saveAccessToken(accessToken: AccessToken) {
-        token = accessToken
-    }
-
-    override fun getAccessToken(): AccessToken = token
-}
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+class IntegrationPullRequestsScreenTest : AbsPullRequestsScreenTest()

@@ -16,3 +16,4 @@ rootProject.name = "Loudius"
 include ':app'
 include ':custom-ktlint-rules'
 include ':components'
+include ':app-shared-tests'

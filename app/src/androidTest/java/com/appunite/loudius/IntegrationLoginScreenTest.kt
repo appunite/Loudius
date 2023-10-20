@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.fakes
+package com.appunite.loudius
 
-import com.appunite.loudius.domain.store.UserLocalDataSource
-import com.appunite.loudius.network.model.AccessToken
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.appunite.loudius.di.GithubHelperModule
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import org.junit.runner.RunWith
 
-class FakeUserLocalDataSource : UserLocalDataSource {
-    private var token = ""
-    override fun saveAccessToken(accessToken: AccessToken) {
-        token = accessToken
-    }
+@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@UninstallModules(GithubHelperModule::class)
+class IntegrationLoginScreenTest : AbsLoginScreenTest() {
 
-    override fun getAccessToken(): AccessToken = token
+    @BindValue @JvmField
+    val githubHelperBind = githubHelper
 }
