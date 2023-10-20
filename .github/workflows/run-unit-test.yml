@@ -42,7 +42,7 @@ jobs:
         uses: madrapps/jacoco-report@v1.6.1
         with:
          paths: |
-          ${{ github.workspace }}/**/build/reports/jacoco/xml/debugCoverage.xml
+          ${{ github.workspace }}/**/build/reports/jacoco/codeCoverage/codeCoverage.xml
 
       - name: Include Slack Notification
         if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
