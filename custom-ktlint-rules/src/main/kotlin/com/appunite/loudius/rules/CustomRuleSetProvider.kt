@@ -16,12 +16,13 @@
 
 package com.appunite.loudius.rules
 
-import com.pinterest.ktlint.core.RuleProvider
-import com.pinterest.ktlint.core.RuleSetProviderV2
+import com.pinterest.ktlint.cli.ruleset.core.api.RuleSetProviderV3
+import com.pinterest.ktlint.rule.engine.core.api.RuleProvider
+import com.pinterest.ktlint.rule.engine.core.api.RuleSetId
 
-internal const val RULE_SET_ID = "loudius-rule-set-id"
+internal val RULE_SET_ID = RuleSetId("loudius-rule-set-id")
 
-class CustomRuleSetProvider : RuleSetProviderV2(id = RULE_SET_ID, about = NO_ABOUT) {
+class CustomRuleSetProvider : RuleSetProviderV3(id = RULE_SET_ID) {
     override fun getRuleProviders(): Set<RuleProvider> =
         setOf(
             RuleProvider { UseStriktAssertionLibrary() },

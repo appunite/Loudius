@@ -16,12 +16,13 @@
 
 package com.appunite.loudius.rules
 
-import com.pinterest.ktlint.core.Rule
-import com.pinterest.ktlint.core.ast.ElementType
+import com.pinterest.ktlint.rule.engine.core.api.ElementType
+import com.pinterest.ktlint.rule.engine.core.api.Rule
+import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtImportDirective
 
-class DoNotMixJunitVersions : Rule("do-not-mix-junit-versions") {
+class DoNotMixJunitVersions : Rule(RuleId("custom:do-not-mix-junit-versions"), about = About()) {
     val junit4Annotations = listOf(
         "org.junit.Test",
         "org.junit.Before",

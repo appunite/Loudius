@@ -3,17 +3,27 @@ plugins {
     id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 android {
     namespace 'com.appunite.loudius'
-    compileSdkVersion 33
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId "com.appunite.loudius"
         minSdk 24
-        targetSdk 33
+        compileSdk 34
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -40,17 +50,12 @@ android {
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.5.0'
     }
     packagingOptions {
         resources {
@@ -90,48 +95,48 @@ android {
 dependencies {
     api project(':components')
     //Desugaring for use of java.time in api lower then 26
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     //Base android deps
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation 'androidx.activity:activity-compose:1.8.0'
 
     // Orchestrator
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestUtil 'androidx.test:orchestrator:1.4.2'
 
     //Compose
-    def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
+    def composeBom = platform('androidx.compose:compose-bom:2023.10.01')
     implementation composeBom
     androidTestImplementation composeBom
     implementation 'androidx.compose.material3:material3'
-    implementation 'androidx.compose.material:material:1.4.0'
+    implementation 'androidx.compose.material:material:1.5.3'
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation "androidx.navigation:navigation-compose:2.5.3"
+    implementation "androidx.navigation:navigation-compose:2.7.4"
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     //Showkase
-    implementation "com.airbnb.android:showkase:1.0.0-beta18"
-    kapt "com.airbnb.android:showkase-processor:1.0.0-beta18"
+    implementation "com.airbnb.android:showkase:1.0.2"
+    kapt "com.airbnb.android:showkase-processor:1.0.2"
 
     //DI - Hilt
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt "com.google.dagger:hilt-compiler:2.45"
+    implementation "com.google.dagger:hilt-android:2.47"
+    kapt "com.google.dagger:hilt-compiler:2.48.1"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     //DI - for local unit tests
-    kaptTest 'com.google.dagger:hilt-compiler:2.45'
+    kaptTest 'com.google.dagger:hilt-compiler:2.48.1'
 
     // DI - For instrumented tests.
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.45'
-    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.45'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.47'
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.48.1'
 
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2"
 
     // ktor
     implementation "io.ktor:ktor-client-core:$ktor_version"
@@ -141,7 +146,7 @@ dependencies {
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
 
     //retrofit & okhttp
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 
     //gson
@@ -151,6 +156,7 @@ dependencies {
     androidTestImplementation(project(":app-shared-tests")) {
         exclude group: 'org.robolectric', module: 'robolectric'
     }
+    
     androidTestImplementation "io.mockk:mockk-android:1.13.3"
     androidTestImplementation('androidx.test.uiautomator:uiautomator:2.3.0-alpha03')
 
