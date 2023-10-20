@@ -35,4 +35,8 @@ class FakeAuthRepository : AuthRepository {
     override fun getAccessToken(): String {
         return "validToken"
     }
+
+    override fun test() {
+        TODO("Not yet implemented")
+    }
 }
