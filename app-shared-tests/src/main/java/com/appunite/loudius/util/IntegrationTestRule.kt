@@ -32,7 +32,6 @@ class IntegrationTestRule(
     testActivity: Class<out ComponentActivity> = TestActivity::class.java,
 ) : TestRule {
 
-    val mockWebServer = MockWebServerRule()
     val composeTestRule = createAndroidComposeRule(testActivity).apply {
         registerIdlingResource(countingResource.toIdlingResource())
     }
@@ -40,7 +39,7 @@ class IntegrationTestRule(
     private val screenshotTestRule = ScreenshotTestRule()
 
     override fun apply(base: Statement, description: Description): Statement {
-        return RuleChain.outerRule(mockWebServer)
+        return RuleChain.emptyRuleChain()
             .around(hiltRule)
             .around(composeTestRule)
             .around(screenshotTestRule)

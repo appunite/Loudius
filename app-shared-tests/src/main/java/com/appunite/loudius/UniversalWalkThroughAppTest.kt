@@ -18,23 +18,17 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
-import com.appunite.loudius.components.theme.LoudiusTheme
-import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
+import androidx.compose.ui.test.performClick
 import com.appunite.loudius.util.IntegrationTestRule
-import com.appunite.loudius.util.MockWebServerRule
-import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-abstract class AbsPullRequestsScreenTest {
+abstract class UniversalWalkThroughAppTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(this) }
-
-    @get:Rule(order = 1)
-    var mockWebServer: MockWebServerRule = MockWebServerRule()
+    val integrationTestRule by lazy { IntegrationTestRule(this, MainActivity::class.java) }
 
     @Before
     fun setUp() {
@@ -42,20 +36,25 @@ abstract class AbsPullRequestsScreenTest {
     }
 
     @Test
-    fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
-        with(integrationTestRule) {
-            Register.user(mockWebServer)
-            Register.issues(mockWebServer)
+    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
+        composeTestRule.onNodeWithText("Log in").performClick()
 
-            composeTestRule.setContent {
-                LoudiusTheme {
-                    PullRequestsScreen { _, _, _, _ -> }
-                }
-            }
+        performGitHubLogin()
 
-            composeTestRule.waitUntilLoadingDoesNotExist()
+        composeTestRule.waitUntilLoadingDoesNotExist()
 
-            composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
-        }
+        composeTestRule.onNodeWithText("First Pull-Request title").performClick()
+
+        composeTestRule.waitUntilLoadingDoesNotExist()
+
+        composeTestRule.onNodeWithText("Notify").performClick()
+
+        composeTestRule.waitUntilLoadingDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
+            .assertIsDisplayed()
     }
+
+    abstract fun performGitHubLogin()
 }

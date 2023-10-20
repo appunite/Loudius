@@ -37,6 +37,12 @@ jobs:
 
       - name: Run test
         run: ./gradlew test
+        env:
+          LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
+          LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
+          LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
+          LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
+          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
       - name: Upload tests results
         if: always()
@@ -66,6 +72,12 @@ jobs:
 
       - name: Assemble App Debug APK and Android Instrumentation Tests
         run: ./gradlew assembleDebug assembleDebugAndroidTest
+        env:
+          LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
+          LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
+          LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
+          LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
+          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
       - id: auth
         name: Authenticate to Google Cloud
@@ -86,13 +98,23 @@ jobs:
 
       - name: Run tests on Firebase Test Lab
         run: |-
-          gcloud firebase test android run ".github/tests.yml:android-pixel-2" --results-dir="${{ steps.generate-dir.outputs.results_dir }}" --results-bucket="${{ steps.generate-dir.outputs.bucket }}"
+          gcloud firebase test android run \
+            --app="app/build/outputs/apk/debug/app-debug.apk" \
+            --test="app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" \
+            --device="model=Pixel2.arm,version=33,locale=en,orientation=portrait" \
+            --type=instrumentation \
+            --use-orchestrator \
+            --test-runner-class="com.appunite.loudius.util.HiltTestRunner" \
+            --timeout="20m" \
+            --results-dir="${{ steps.generate-dir.outputs.results_dir }}" \
+            --results-bucket="${{ steps.generate-dir.outputs.bucket }}" \
+            --environment-variables "clearPackageData=true,coverage=true,coverageFilePath=/sdcard/Download/"
 
       - name: Download test results from Firebase Test Lab
         if: always()
         run: |-
           mkdir "app/build/test-results"
-          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2-30-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
+          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2.arm-33-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
 
       - name: Upload tests results
         if: always()
