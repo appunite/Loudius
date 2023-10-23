@@ -32,21 +32,8 @@ class AuthFailureHandler @Inject constructor(
     val authFailureFlow: SharedFlow<Unit> = _authFailureFlow
 
     fun emitAuthFailure() {
-        val test = "costam"
-
-        if(test == "costam123")
-            return
-
         CoroutineScope(dispatcher).launch {
             _authFailureFlow.emit(Unit)
         }
-    }
-
-    fun testCodeCovearge(){
-
-    }
-
-    fun shouldDecreaseevenMore(){
-
     }
 }
