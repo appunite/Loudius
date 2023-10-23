@@ -93,19 +93,20 @@ android {
     }
 }
 
-tasks.register('codeCoverage',JacocoReport) {
+tasks.register('codeCoverage', JacocoReport) {
     dependsOn 'testDebugUnitTest'
+
+    def outputDir = "$buildDir/jacoco/html"
 
     reports {
         html.required.set(true)
         xml.required.set(true)
+        html.outputLocation.set(file(outputDir))
     }
 
     classDirectories.setFrom(
             fileTree(project.buildDir) {
-                include(
-                        "**/tmp/kotlin-classes/$classPathBuildVariant/**"
-                )
+                include("**/tmp/kotlin-classes/$classPathBuildVariant/**")
             }
     )
 
@@ -120,6 +121,8 @@ tasks.register('codeCoverage',JacocoReport) {
                 include("**/*.exec", "**/*.ec")
             }
     )
+
+    doLast { println("Report file: $outputDir/index.html") }
 }
 
 dependencies {
@@ -186,7 +189,7 @@ dependencies {
     androidTestImplementation(project(":app-shared-tests")) {
         exclude group: 'org.robolectric', module: 'robolectric'
     }
-    
+
     androidTestImplementation "io.mockk:mockk-android:1.13.3"
     androidTestImplementation('androidx.test.uiautomator:uiautomator:2.3.0-alpha03')
 
