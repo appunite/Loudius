@@ -118,8 +118,6 @@ tasks.register('codeCoverage', JacocoReport) {
                 include("**/*.exec", "**/*.ec")
             }
     )
-
-    doLast { println("Report file: $buildDir") }
 }
 
 dependencies {
