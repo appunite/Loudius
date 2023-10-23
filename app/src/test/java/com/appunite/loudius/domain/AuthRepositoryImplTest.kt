@@ -31,11 +31,12 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isSuccess
 
 class AuthRepositoryImplTest {
+
     private val networkDataSource: AuthDataSource = mockk {
         coEvery {
             getAccessToken(any(), any(), any())
         } returns Result.success("validAccessToken")
-    }
+}
 
     private val localDataSource: UserLocalDataSource = FakeUserLocalDataSource()
     private val repository = AuthRepositoryImpl(networkDataSource, localDataSource)

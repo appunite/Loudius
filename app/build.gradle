@@ -97,16 +97,16 @@ android {
 tasks.register('codeCoverage', JacocoReport) {
     dependsOn 'testDebugUnitTest'
 
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-
     reports {
         html.required.set(true)
         xml.required.set(true)
     }
 
     classDirectories.setFrom(
-            files([debugTree])
+            fileTree(project.projectDir){
+                include("**/intermediates/classes/debug/**")
+                exclude('**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', 'androidx/**/*.*')
+            }
     )
 
     sourceDirectories.setFrom(
