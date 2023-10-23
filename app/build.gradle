@@ -103,7 +103,7 @@ tasks.register('codeCoverage', JacocoReport) {
 
     classDirectories.setFrom(
             fileTree(project.buildDir) {
-                include("**/tmp/kotlin-classes/$classPathBuildVariant/**")
+                include("**/tmp/kotlin-classes/debugUnitTest/**")
             }
     )
 
