@@ -69,7 +69,7 @@ object NetworkModule {
             json(
                 Json {
                     ignoreUnknownKeys = true
-                },
+                }
             )
         }
     }
@@ -97,7 +97,7 @@ object NetworkModule {
             json(
                 Json {
                     ignoreUnknownKeys = true
-                },
+                }
             )
         }
     }
