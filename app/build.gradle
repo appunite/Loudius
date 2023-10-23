@@ -96,12 +96,9 @@ android {
 tasks.register('codeCoverage', JacocoReport) {
     dependsOn 'testDebugUnitTest'
 
-    def outputDir = "$buildDir/jacoco/html"
-
     reports {
         html.required.set(true)
         xml.required.set(true)
-        html.outputLocation.set(file(outputDir))
     }
 
     classDirectories.setFrom(
