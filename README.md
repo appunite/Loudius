@@ -66,22 +66,33 @@ Here's an example of an experiment that meets our rules:
 
 ## 🚀 Project setup
 
-In order to properly start the application and use it, the CLIENT_SECRET environment variable must
-be set on your computer. CLIENT_SECRET is a GitHub client secret key provided
-from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
+In order to properly start the application and use it, the `LOUDIUS_CLIENT_SECRET` and
+`LOUDIUS_CLIENT_ID` environment variables must be set on your computer.
 
-If you're AppUniter, you can find this secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
+* `LOUDIUS_CLIENT_SECRET` is a GitHub client secret key
+* `LOUDIUS_CLIENT_ID` is a GitHub client id
+*
+both are provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
-If you're not, don't worry, here's a video to help you create a new one:
+If you're not AppUniter, here's a video to help you create such appliation:
 
-<https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd>
+<https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd>.
+
+If you'd like to run end-to-end tests you'd also need `LOUDIUS_GITHUB_USER_NAME` and
+`LOUDIUS_GITHUB_USER_PASSWORD` which are credentials to GitHub test account.
+This is just a standard GitHub account that you can create by yourself.
+
+If you're AppUniter, you can find those secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
 
 ### How to set environmental variable on mac?
 
 1. Launch zsh (command `zsh`)
-2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
-3. Restart Android studio and Terminal.
-4. `$ echo $CLIENT_SECRET`
+2. `$ echo 'export LOUDIUS_CLIENT_SECRET="you know what"' >> ~/.zshenv`
+3. `$ echo 'export LOUDIUS_CLIENT_ID="you know what"' >> ~/.zshenv`
+4. optionally: `$ echo 'export LOUDIUS_GITHUB_USER_NAME="you know what"' >> ~/.zshenv`
+5. optionally: `$ echo 'export LOUDIUS_GITHUB_USER_PASSWORD="you know what"' >> ~/.zshenv`
+6. Restart Android studio and Terminal.
+7. `$ echo $LOUDIUS_CLIENT_ID/$LOUDIUS_CLIENT_SECRET $LOUDIUS_GITHUB_USER_NAME/$LOUDIUS_GITHUB_USER_PASSWORD`
 
 ### Screenshots tests
 

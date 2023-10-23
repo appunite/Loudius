@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.common
+package com.appunite.loudius.util
 
-import com.appunite.loudius.BuildConfig
+import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.hasLength
 
-object Constants {
+class TestUtilsKtTest {
 
-    const val AUTH_API_URL = "https://github.com"
-    const val BASE_API_URL = "https://api.github.com"
-    const val AUTH_PATH = "/login/oauth/authorize"
-    const val NAME_PARAM_CLIENT_ID = "?client_id="
-    const val SCOPE_PARAM = "&scope=repo"
-    const val CLIENT_ID = BuildConfig.LOUDIUS_CLIENT_ID
-    const val REDIRECT_URL = "loudius://callback"
-    const val AUTHORIZATION_URL =
-        AUTH_API_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID + SCOPE_PARAM
+    @Test
+    fun verifyOtpIsGenerated() {
+        expectThat(generateOtp()).hasLength(6)
+    }
 }

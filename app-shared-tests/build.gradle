@@ -3,24 +3,42 @@ plugins {
     id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 android {
     namespace 'com.appunite.loudius'
-    compileSdk 33
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
-
+        compileSdk 34
+        targetSdk 34
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        if (System.env.LOUDIUS_GITHUB_USER_PASSWORD == null || System.env.LOUDIUS_GITHUB_USER_PASSWORD.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_PASSWORD in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_PASSWORD", "\"${System.env.LOUDIUS_GITHUB_USER_PASSWORD}\""
+        if (System.env.LOUDIUS_GITHUB_USER_NAME == null || System.env.LOUDIUS_GITHUB_USER_NAME.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_NAME in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_NAME", "\"${System.env.LOUDIUS_GITHUB_USER_NAME}\""
+        if (System.env.LOUDIUS_GITHUB_USER_OTP_SECRET == null || System.env.LOUDIUS_GITHUB_USER_OTP_SECRET.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_OTP_SECRET in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_OTP_SECRET", "\"${System.env.LOUDIUS_GITHUB_USER_OTP_SECRET}\""
     }
+
     buildFeatures {
         compose true
+        buildConfig true
     }
+
     packagingOptions {
         resources {
             excludes += 'META-INF/{AL2.0,LGPL2.1}'
@@ -30,7 +48,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.5.0'
     }
 
     buildTypes {
@@ -38,23 +56,15 @@ android {
             minifyEnabled false
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
 }
 
 dependencies {
-
     implementation(project(":app"))
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt "com.google.dagger:hilt-compiler:2.45"
-    api 'com.google.dagger:hilt-android-testing:2.45'
+    implementation "com.google.dagger:hilt-android:2.47"
+    kapt "com.google.dagger:hilt-compiler:2.48.1"
+    api 'com.google.dagger:hilt-android-testing:2.47'
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug
@@ -80,9 +90,9 @@ dependencies {
     api 'org.robolectric:robolectric:4.10.3'
     api 'androidx.test.ext:junit-ktx:1.1.5'
 
-    api "io.mockk:mockk:1.13.3"
+    api "io.mockk:mockk:1.13.5"
 
-    api "com.squareup.okhttp3:mockwebserver:4.10.0"
+    api "com.squareup.okhttp3:mockwebserver:4.11.0"
 
     api 'androidx.test.ext:junit:1.1.5'
     api 'androidx.test.espresso:espresso-core:3.5.1'
@@ -92,6 +102,7 @@ dependencies {
 
     // Firebase instrumentation lib
     api 'com.google.firebase:testlab-instr-lib:0.2'
+    api 'dev.samstevens.totp:totp:1.7.1'
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
