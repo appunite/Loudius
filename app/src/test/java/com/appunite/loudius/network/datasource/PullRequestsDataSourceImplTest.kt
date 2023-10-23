@@ -410,7 +410,7 @@ class PullRequestsDataSourceImplTest {
                             User(10000000, "exampleUser"),
                             ReviewState.COMMENTED,
                             Instant.parse("2023-03-02T10:21:36Z")
-                        ),
+                        )
                     )
             }
 
