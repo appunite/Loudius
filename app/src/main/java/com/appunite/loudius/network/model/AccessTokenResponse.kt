@@ -25,5 +25,5 @@ typealias AccessToken = String
 data class AccessTokenResponse(
     @SerialName("access_token")
     val accessToken: AccessToken? = null,
-    val error: String? = null,
+    val error: String? = null
 )

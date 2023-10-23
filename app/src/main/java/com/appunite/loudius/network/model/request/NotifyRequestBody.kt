@@ -20,5 +20,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NotifyRequestBody(
-    val body: String,
+    val body: String
 )

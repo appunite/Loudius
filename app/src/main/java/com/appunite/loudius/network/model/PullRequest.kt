@@ -32,7 +32,7 @@ data class PullRequest(
     val title: String,
     @SerialName("created_at")
     @Serializable(with = InstantSerializer::class)
-    val createdAt: Instant,
+    val createdAt: Instant
 ) {
     val fullRepositoryName: String
         get() = repositoryUrl.removePrefix(REPOSITORY_PATH)

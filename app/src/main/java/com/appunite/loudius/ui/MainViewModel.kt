@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MainState(
-    val authFailureEvent: Unit? = null,
+    val authFailureEvent: Unit? = null
 )
 
 @HiltViewModel

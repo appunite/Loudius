@@ -36,7 +36,7 @@ object Defaults {
         number = id,
         repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
         title = "example title",
-        Instant.parse("2023-03-07T08:21:45Z").plus(id.toLong().hours),
+        Instant.parse("2023-03-07T08:21:45Z").plus(id.toLong().hours)
     )
 
     fun reviews() = listOf(
@@ -45,18 +45,18 @@ object Defaults {
         Review("3", currentUser(), ReviewState.APPROVED, date3),
         Review("4", User(1, "user1"), ReviewState.COMMENTED, date1),
         Review("5", User(1, "user1"), ReviewState.COMMENTED, date2),
-        Review("6", User(1, "user1"), ReviewState.APPROVED, date3),
+        Review("6", User(1, "user1"), ReviewState.APPROVED, date3)
     )
 
     fun requestedReviewers() = listOf(
         RequestedReviewer(2, "user2"),
-        RequestedReviewer(3, "user3"),
+        RequestedReviewer(3, "user3")
     )
 
     fun pullRequestsResponse() = PullRequestsResponse(
         incompleteResults = false,
         totalCount = 1,
-        items = listOf(pullRequest()),
+        items = listOf(pullRequest())
     )
 
     fun currentUser() = User(0, "currentUser")

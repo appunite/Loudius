@@ -32,10 +32,10 @@ class FakePullRequestDataSource : PullRequestDataSource {
     override suspend fun getReviews(
         owner: String,
         repository: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyReviewsPullNumber" -> Result.success(
-            Defaults.reviews(),
+            Defaults.reviews()
         )
         else -> Result.failure(WebException.UnknownError(404, null))
     }
@@ -43,15 +43,15 @@ class FakePullRequestDataSource : PullRequestDataSource {
     override suspend fun getReviewers(
         owner: String,
         repository: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse> = when (pullRequestNumber) {
         "correctPullRequestNumber", "onlyRequestedReviewersPullNumber" -> Result.success(
             RequestedReviewersResponse(
                 listOf(
                     RequestedReviewer(3, "user3"),
-                    RequestedReviewer(4, "user4"),
-                ),
-            ),
+                    RequestedReviewer(4, "user4")
+                )
+            )
         )
         else -> Result.failure(WebException.UnknownError(404, null))
     }
@@ -65,7 +65,7 @@ class FakePullRequestDataSource : PullRequestDataSource {
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        message: String,
+        message: String
     ): Result<Unit> = when (pullRequestNumber) {
         "correctPullRequestNumber" -> Result.success(Unit)
         else -> Result.failure(WebException.UnknownError(404, null))

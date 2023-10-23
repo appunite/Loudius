@@ -82,7 +82,7 @@ class ReviewersViewModelTest {
                 get(Data.Success::reviewers).containsExactly(
                     Reviewer(1, "user1", true, 7, 5),
                     Reviewer(2, "user2", false, 7, null),
-                    Reviewer(3, "user3", false, 7, null),
+                    Reviewer(3, "user3", false, 7, null)
                 )
             }
         }
@@ -95,7 +95,7 @@ class ReviewersViewModelTest {
                 repository.getRequestedReviewers(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
 
@@ -103,7 +103,7 @@ class ReviewersViewModelTest {
                 repository.getReviews(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
 
@@ -153,7 +153,7 @@ class ReviewersViewModelTest {
                 repository.getReviews(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
             viewModel = createViewModel()
@@ -167,14 +167,14 @@ class ReviewersViewModelTest {
                 repository.getReviews(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } returns Result.success(emptyList())
             coEvery {
                 repository.getRequestedReviewers(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } returns Result.success(RequestedReviewersResponse(emptyList()))
 
@@ -194,7 +194,7 @@ class ReviewersViewModelTest {
                     get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
-                        Reviewer(3, "user3", false, 7, null),
+                        Reviewer(3, "user3", false, 7, null)
                     )
                 }
             }
@@ -203,7 +203,7 @@ class ReviewersViewModelTest {
         fun `GIVEN reviewers with no review done WHEN init THEN list of reviewers is fetched`() =
             runTest {
                 coEvery { repository.getReviews(any(), any(), any()) } returns Result.success(
-                    emptyList(),
+                    emptyList()
                 )
                 viewModel = createViewModel()
 
@@ -211,7 +211,7 @@ class ReviewersViewModelTest {
                     get(Data.Success::reviewers)
                         .containsExactly(
                             Reviewer(2, "user2", false, 7, null),
-                            Reviewer(3, "user3", false, 7, null),
+                            Reviewer(3, "user3", false, 7, null)
                         )
                 }
             }
@@ -223,14 +223,14 @@ class ReviewersViewModelTest {
                     repository.getRequestedReviewers(
                         any(),
                         any(),
-                        any(),
+                        any()
                     )
                 } returns Result.success(RequestedReviewersResponse(emptyList()))
                 viewModel = createViewModel()
 
                 expectThat(viewModel.state.data).isA<Data.Success>().and {
                     get(Data.Success::reviewers).containsExactly(
-                        Reviewer(1, "user1", true, 7, 5),
+                        Reviewer(1, "user1", true, 7, 5)
                     )
                 }
             }
@@ -239,13 +239,13 @@ class ReviewersViewModelTest {
         fun `WHEN there is an error during fetching data from 2 requests on init THEN error is shown`() =
             runTest {
                 coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(
-                    WebException.NetworkError(),
+                    WebException.NetworkError()
                 )
                 coEvery {
                     repository.getRequestedReviewers(
                         any(),
                         any(),
-                        any(),
+                        any()
                     )
                 } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
@@ -260,7 +260,7 @@ class ReviewersViewModelTest {
                     repository.getRequestedReviewers(
                         any(),
                         any(),
-                        any(),
+                        any()
                     )
                 } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
@@ -272,7 +272,7 @@ class ReviewersViewModelTest {
         fun `WHEN there is an error during fetching data on init only from reviews request THEN error is shown`() =
             runTest {
                 coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(
-                    WebException.NetworkError(),
+                    WebException.NetworkError()
                 )
                 viewModel = createViewModel()
 
@@ -302,7 +302,7 @@ class ReviewersViewModelTest {
                     any(),
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
 
@@ -369,7 +369,7 @@ class ReviewersViewModelTest {
                     get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
-                        Reviewer(3, "user3", false, 7, null),
+                        Reviewer(3, "user3", false, 7, null)
                     )
                 }
             }

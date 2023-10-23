@@ -59,10 +59,10 @@ abstract class AbsWalkThroughAppTest : UniversalWalkThroughAppTest() {
         ActivityScenario.launch<MainActivity>(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("loudius://callback?code=example_code"),
+                Uri.parse("loudius://callback?code=example_code")
             ).apply {
                 setPackage(integrationTestRule.composeTestRule.activity.packageName)
-            },
+            }
         )
     }
 }

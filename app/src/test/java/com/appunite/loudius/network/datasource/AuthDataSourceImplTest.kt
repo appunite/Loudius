@@ -66,7 +66,7 @@ class AuthDataSourceImplTest {
                 MockResponse()
                     .setResponseCode(200)
                     .setBody(jsonResponse)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val result =
@@ -89,7 +89,7 @@ class AuthDataSourceImplTest {
                 MockResponse()
                     .setResponseCode(200)
                     .setBody(jsonResponse)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val result =
@@ -112,7 +112,7 @@ class AuthDataSourceImplTest {
                 MockResponse()
                     .setResponseCode(200)
                     .setBody(jsonResponse)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val result = authDataSourceImpl.getAccessToken("", "", "")

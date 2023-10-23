@@ -35,7 +35,7 @@ data class Review(
     val state: ReviewState,
     @SerialName("submitted_at")
     @Serializable(with = InstantSerializer::class)
-    val submittedAt: Instant,
+    val submittedAt: Instant
 )
 
 object IdSerializer : KSerializer<String> {

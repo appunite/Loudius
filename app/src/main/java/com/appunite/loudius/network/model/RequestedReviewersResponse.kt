@@ -20,5 +20,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestedReviewersResponse(
-    val users: List<RequestedReviewer>,
+    val users: List<RequestedReviewer>
 )

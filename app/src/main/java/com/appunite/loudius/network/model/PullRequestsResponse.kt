@@ -25,5 +25,5 @@ data class PullRequestsResponse(
     val incompleteResults: Boolean,
     val items: List<PullRequest>,
     @SerialName("total_count")
-    val totalCount: Int,
+    val totalCount: Int
 )

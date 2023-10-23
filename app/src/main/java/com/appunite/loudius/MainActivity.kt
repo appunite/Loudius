@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
 
@@ -60,14 +60,14 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Login.route,
+                        startDestination = Screen.Login.route
                     ) {
                         composable(route = Screen.Login.route) {
                             LoginScreen()
                         }
                         composable(
                             route = Screen.Authenticating.route,
-                            deepLinks = Screen.Authenticating.deepLinks,
+                            deepLinks = Screen.Authenticating.deepLinks
                         ) {
                             AuthenticatingScreen(
                                 onNavigateToPullRequest = {
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(Screen.Login.route) {
                                         popUpTo(Screen.Login.route) { inclusive = true }
                                     }
-                                },
+                                }
                             )
                         }
                         composable(route = Screen.PullRequests.route) {
@@ -88,14 +88,14 @@ class MainActivity : ComponentActivity() {
                                     owner = owner,
                                     repo = repo,
                                     pullRequestNumber = pullRequestNumber,
-                                    submissionDate = submissionTime,
+                                    submissionDate = submissionTime
                                 )
                                 navController.navigate(route)
                             }
                         }
                         composable(
                             route = Screen.Reviewers.route,
-                            arguments = Screen.Reviewers.arguments,
+                            arguments = Screen.Reviewers.arguments
                         ) {
                             ReviewersScreen { navController.popBackStack() }
                         }
@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(
             this@MainActivity,
             getString(R.string.common_user_unauthorized_error_message),
-            Toast.LENGTH_LONG,
+            Toast.LENGTH_LONG
         ).show()
     }
 }
