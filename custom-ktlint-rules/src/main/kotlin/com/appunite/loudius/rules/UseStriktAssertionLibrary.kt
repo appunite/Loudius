@@ -16,12 +16,13 @@
 
 package com.appunite.loudius.rules
 
-import com.pinterest.ktlint.core.Rule
+import com.pinterest.ktlint.rule.engine.core.api.Rule
+import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes
 
-class UseStriktAssertionLibrary : Rule("use-strikt-assertion-library") {
+class UseStriktAssertionLibrary : Rule(RuleId("custom:use-strikt-assertion-library"), about = About()) {
     private val forbiddenPackageNames = listOf(
         "junit.framework.TestCase",
         "org.junit.jupiter.api.Assertions",
