@@ -45,21 +45,21 @@ fun LoudiusListItem(
     modifier: Modifier = Modifier,
     icon: @Composable (Modifier) -> Unit = {},
     content: @Composable (Modifier) -> Unit,
-    action: @Composable () -> Unit = {},
+    action: @Composable () -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(resolveListItemBackgroundColor(index))
             .bottomBorder(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            .padding(16.dp),
+            .padding(16.dp)
     ) {
         icon(Modifier.align(Alignment.CenterVertically))
         content(
             Modifier
                 .weight(1f)
                 .padding(start = 16.dp)
-                .align(Alignment.CenterVertically),
+                .align(Alignment.CenterVertically)
         )
         action()
     }
@@ -71,7 +71,7 @@ fun LoudiusListIcon(modifier: Modifier, painter: Painter, contentDescription: St
         painter = painter,
         contentDescription = contentDescription,
         modifier = modifier,
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
     )
 }
 
@@ -94,9 +94,9 @@ fun LoudiusListItemJustContentPreview() {
             LoudiusText(
                 text = "Text",
                 modifier = modifier,
-                style = LoudiusTextStyle.ListItem,
+                style = LoudiusTextStyle.ListItem
             )
-        },
+        }
     )
 }
 
@@ -109,14 +109,14 @@ fun LoudiusListItemMultiplePreview() {
             Column(modifier = modifier) {
                 LoudiusText(
                     text = "Title",
-                    style = LoudiusTextStyle.ListItem,
+                    style = LoudiusTextStyle.ListItem
                 )
                 LoudiusText(
                     text = "Caption",
-                    style = LoudiusTextStyle.ListCaption,
+                    style = LoudiusTextStyle.ListCaption
                 )
             }
-        },
+        }
     )
 }
 
@@ -129,14 +129,14 @@ fun LoudiusListItemWithHeaderPreview() {
             Column(modifier = modifier) {
                 LoudiusText(
                     text = "Header text",
-                    style = LoudiusTextStyle.ListHeader,
+                    style = LoudiusTextStyle.ListHeader
                 )
                 LoudiusText(
                     text = "Title",
-                    style = LoudiusTextStyle.ListItem,
+                    style = LoudiusTextStyle.ListItem
                 )
             }
-        },
+        }
     )
 }
 
@@ -149,12 +149,12 @@ fun LoudiusListItemContentAndActionPreview() {
             LoudiusText(
                 text = "Text",
                 modifier = modifier,
-                style = LoudiusTextStyle.ListItem,
+                style = LoudiusTextStyle.ListItem
             )
         },
         action = {
             LoudiusOutlinedButton(text = "Button") {}
-        },
+        }
     )
 }
 
@@ -167,16 +167,16 @@ fun LoudiusListItemContentAndIconPreview() {
             LoudiusListIcon(
                 painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
                 contentDescription = "Test",
-                modifier = modifier,
+                modifier = modifier
             )
         },
         content = { modifier ->
             LoudiusText(
                 text = "Text",
                 modifier = modifier,
-                style = LoudiusTextStyle.ListItem,
+                style = LoudiusTextStyle.ListItem
             )
-        },
+        }
     )
 }
 
@@ -188,18 +188,18 @@ private fun LoudiusListItemExample(index: Int) {
             LoudiusListIcon(
                 modifier = modifier,
                 painter = painterResource(id = componentsR.drawable.components_person_outline_24px),
-                contentDescription = "Test",
+                contentDescription = "Test"
             )
         },
         content = { modifier ->
             LoudiusText(
                 text = "Text",
                 modifier = modifier,
-                style = LoudiusTextStyle.ListItem,
+                style = LoudiusTextStyle.ListItem
             )
         },
         action = {
             LoudiusOutlinedButton(text = "Button", onClick = {})
-        },
+        }
     )
 }

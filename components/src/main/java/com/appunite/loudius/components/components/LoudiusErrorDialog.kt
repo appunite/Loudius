@@ -32,7 +32,7 @@ fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
     dialogTitle: String = stringResource(id = R.string.components_error_dialog_title),
     dialogText: String = stringResource(id = R.string.components_error_dialog_description),
-    confirmText: String = stringResource(R.string.components_error_dialog_confirm_button),
+    confirmText: String = stringResource(R.string.components_error_dialog_confirm_button)
 ) {
     var openDialog by remember { mutableStateOf(true) }
     if (openDialog) {
@@ -42,7 +42,7 @@ fun LoudiusErrorDialog(
             text = { LoudiusText(style = LoudiusTextStyle.ScreenContent, text = dialogText) },
             confirmButton = {
                 LoudiusOutlinedButton(text = confirmText, onClick = onConfirmButtonClick)
-            },
+            }
         )
     }
 }

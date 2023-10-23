@@ -27,7 +27,7 @@ interface AuthRepository {
     suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessToken>
 
     fun getAccessToken(): AccessToken
@@ -36,13 +36,13 @@ interface AuthRepository {
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-    private val userLocalDataSource: UserLocalDataSource,
+    private val userLocalDataSource: UserLocalDataSource
 ) : AuthRepository {
 
     override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessToken> {
         val result = authDataSource.getAccessToken(clientId, clientSecret, code)
         result.onSuccess {

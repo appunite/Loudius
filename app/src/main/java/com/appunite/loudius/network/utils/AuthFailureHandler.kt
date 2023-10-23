@@ -26,7 +26,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthFailureHandler @Inject constructor(
-    private val dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher
 ) {
     private val _authFailureFlow = MutableSharedFlow<Unit>()
     val authFailureFlow: SharedFlow<Unit> = _authFailureFlow

@@ -37,20 +37,20 @@ private fun testGson() =
 
 fun httpClientTestDouble(
     mockWebServer: MockWebServer,
-    block: HttpClientConfig<OkHttpConfig>.() -> Unit = {},
+    block: HttpClientConfig<OkHttpConfig>.() -> Unit = {}
 ): HttpClient = HttpClient(OkHttp) {
     block(this)
 
     expectSuccess = true
     defaultRequest {
         url(
-            mockWebServer.url("/").toString(),
+            mockWebServer.url("/").toString()
         )
     }
     install(ContentNegotiation) {
         register(
             ContentType.Application.Json,
-            GsonConverter(testGson()),
+            GsonConverter(testGson())
         )
     }
 }

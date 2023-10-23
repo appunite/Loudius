@@ -42,13 +42,13 @@ fun LoudiusFullScreenError(
     modifier: Modifier = Modifier,
     errorText: String = stringResource(id = R.string.components_error_dialog_description),
     buttonText: String = stringResource(id = R.string.components_error_dialog_try_again_button),
-    onButtonClick: () -> Unit,
+    onButtonClick: () -> Unit
 ) {
     ScreenErrorWithSpacers(
         modifier = modifier,
         errorText = errorText,
         buttonText = buttonText,
-        onButtonClick = onButtonClick,
+        onButtonClick = onButtonClick
     )
 }
 
@@ -57,28 +57,28 @@ fun ScreenErrorWithSpacers(
     modifier: Modifier,
     errorText: String,
     buttonText: String,
-    onButtonClick: () -> Unit,
+    onButtonClick: () -> Unit
 ) {
     Column(
         modifier = modifier
             .background(color = Color.White)
             .padding(32.dp)
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(weight = 0.15f))
         ErrorImage(
             modifier = Modifier
                 .weight(weight = .35f)
                 .sizeIn(maxWidth = 400.dp, maxHeight = 400.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
         Spacer(modifier = Modifier.weight(weight = 0.05f))
         ErrorText(text = errorText)
         LoudiusOutlinedButton(
             modifier = Modifier.padding(vertical = 16.dp),
             onClick = onButtonClick,
-            text = buttonText,
+            text = buttonText
         )
         Spacer(modifier = Modifier.weight(weight = 0.25f))
     }
@@ -86,12 +86,12 @@ fun ScreenErrorWithSpacers(
 
 @Composable
 private fun ErrorImage(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Image(
         modifier = modifier,
         painter = painterResource(id = R.drawable.components_error_image),
-        contentDescription = stringResource(R.string.components_error_dialog_image_content_description),
+        contentDescription = stringResource(R.string.components_error_dialog_image_content_description)
     )
 }
 
@@ -100,7 +100,7 @@ private fun ErrorText(text: String) {
     LoudiusText(
         text = text,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-        style = LoudiusTextStyle.ScreenContent,
+        style = LoudiusTextStyle.ScreenContent
     )
 }
 
@@ -119,7 +119,7 @@ fun LoudiusErrorScreenCustomTextsPreview() {
     LoudiusTheme {
         LoudiusFullScreenError(
             errorText = "Custom title",
-            buttonText = "My Button Text",
+            buttonText = "My Button Text"
         ) {}
     }
 }

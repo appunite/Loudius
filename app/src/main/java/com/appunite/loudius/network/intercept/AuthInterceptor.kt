@@ -22,7 +22,7 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val authRepository: AuthRepository
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val authenticatedRequest = chain.request().newBuilder()

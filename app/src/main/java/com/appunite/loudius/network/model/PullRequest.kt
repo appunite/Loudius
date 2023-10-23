@@ -25,7 +25,7 @@ data class PullRequest(
     val number: Int,
     val repositoryUrl: String,
     val title: String,
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime
 ) {
     val fullRepositoryName: String
         get() = repositoryUrl.removePrefix(REPOSITORY_PATH)

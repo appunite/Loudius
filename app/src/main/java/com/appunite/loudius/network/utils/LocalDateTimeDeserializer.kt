@@ -30,7 +30,7 @@ class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime> {
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type,
-        context: JsonDeserializationContext,
+        context: JsonDeserializationContext
     ): LocalDateTime {
         try {
             json ?: throw JsonParseException("Cannot deserialize null value")
