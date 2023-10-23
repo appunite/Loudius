@@ -16,6 +16,9 @@
 
 package com.appunite.loudius.network.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RequestedReviewersResponse(
     val users: List<RequestedReviewer>
 )

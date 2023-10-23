@@ -16,8 +16,14 @@
 
 package com.appunite.loudius.network.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PullRequestsResponse(
+    @SerialName("incomplete_results")
     val incompleteResults: Boolean,
     val items: List<PullRequest>,
+    @SerialName("total_count")
     val totalCount: Int
 )

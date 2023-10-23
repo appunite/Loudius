@@ -16,6 +16,9 @@
 
 package com.appunite.loudius.network.model.request
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class NotifyRequestBody(
     val body: String
 )

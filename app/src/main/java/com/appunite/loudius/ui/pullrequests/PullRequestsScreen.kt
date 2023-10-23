@@ -33,7 +33,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,7 +52,7 @@ import com.appunite.loudius.components.components.LoudiusTextStyle
 import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.network.model.PullRequest
-import java.time.LocalDateTime
+import kotlinx.datetime.Instant
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
@@ -228,7 +227,7 @@ private val successData = Data.Success(
             number = 0,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
             title = "[SIL-67] Details screen - network layer",
-            createdAt = LocalDateTime.parse("2021-11-29T16:31:41")
+            createdAt = Instant.parse("2021-11-29T16:31:41Z")
         ),
         PullRequest(
             id = 1,
@@ -236,7 +235,7 @@ private val successData = Data.Success(
             number = 1,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
             title = "[SIL-66] Add client secret to build config",
-            createdAt = LocalDateTime.parse("2022-11-29T16:31:41")
+            createdAt = Instant.parse("2022-11-29T16:31:41Z")
         ),
         PullRequest(
             id = 2,
@@ -244,7 +243,7 @@ private val successData = Data.Success(
             number = 2,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
             title = "[SIL-73] Storing access token",
-            createdAt = LocalDateTime.parse("2023-01-29T16:31:41")
+            createdAt = Instant.parse("2023-01-29T16:31:41Z")
         ),
         PullRequest(
             id = 3,
@@ -252,7 +251,7 @@ private val successData = Data.Success(
             number = 3,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
             title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-            createdAt = LocalDateTime.parse("2022-01-29T16:31:41")
+            createdAt = Instant.parse("2022-01-29T16:31:41Z")
         )
     )
 )

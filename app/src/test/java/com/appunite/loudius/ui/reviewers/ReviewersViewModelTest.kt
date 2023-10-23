@@ -26,11 +26,12 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -47,23 +48,16 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class ReviewersViewModelTest {
 
-    private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
-    private val systemClockFixed =
-        Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
+    private val systemNow = Instant.parse("2022-01-29T15:00:00Z")
 
     private val repository = spyk(FakePullRequestRepository())
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true) {
         every { get<String>(any()) } returns "example"
-        every { get<String>("submission_date") } returns "2022-01-29T08:00:00"
+        every { get<String>("submission_date") } returns "2022-01-29T08:00:00Z"
         every { get<String>("pull_request_number") } returns "correctPullRequestNumber"
     }
     private lateinit var viewModel: ReviewersViewModel
@@ -72,8 +66,8 @@ class ReviewersViewModelTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(Clock::class)
-        every { Clock.systemDefaultZone() } returns systemClockFixed
+        mockkObject(Clock.System)
+        every { Clock.System.now() } returns systemNow
     }
 
     @Nested
