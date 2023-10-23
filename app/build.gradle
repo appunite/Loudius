@@ -84,6 +84,7 @@ android {
                     it.enabled = false
                 }
             }
+            unitTests.returnDefaultValues = true
         }
     }
     kapt {
@@ -118,6 +119,11 @@ tasks.register('codeCoverage', JacocoReport) {
                 include("**/*.exec", "**/*.ec")
             }
     )
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses true
+    jacoco.excludes = ['jdk.internal.*']
 }
 
 dependencies {
