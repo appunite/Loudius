@@ -36,4 +36,8 @@ class AuthFailureHandler @Inject constructor(
             _authFailureFlow.emit(Unit)
         }
     }
+
+    fun testCodeCovearge(){
+
+    }
 }

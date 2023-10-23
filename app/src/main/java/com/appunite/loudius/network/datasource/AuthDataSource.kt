@@ -25,7 +25,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface AuthDataSource {
-
     suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
