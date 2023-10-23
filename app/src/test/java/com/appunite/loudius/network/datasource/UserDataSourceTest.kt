@@ -63,7 +63,7 @@ class UserDataSourceTest {
             mockWebServer.enqueue(
                 MockResponse()
                     .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val response = userDataSource.getUser()
@@ -117,7 +117,7 @@ class UserDataSourceTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(jsonResponse)
-                .addHeader("Content-type", "application/json"),
+                .addHeader("Content-type", "application/json")
         )
 
         val response = userDataSource.getUser()
@@ -142,7 +142,7 @@ class UserDataSourceTest {
                 MockResponse()
                     .setResponseCode(401)
                     .setBody(jsonResponse)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val response = userDataSource.getUser()

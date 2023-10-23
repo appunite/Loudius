@@ -35,7 +35,7 @@ fun LoudiusPullToRefreshBox(
     pullRefreshState: PullRefreshState,
     refreshing: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     Box(modifier = modifier.pullRefresh(pullRefreshState)) {
         content()
@@ -49,7 +49,7 @@ private fun LoudiusPullToRefreshBoxPreview() {
     LoudiusTheme {
         LoudiusPullToRefreshBox(
             pullRefreshState = rememberPullRefreshState(refreshing = true, onRefresh = {}),
-            refreshing = true,
+            refreshing = true
         ) {}
     }
 }

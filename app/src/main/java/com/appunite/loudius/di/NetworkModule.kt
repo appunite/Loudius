@@ -61,7 +61,7 @@ object NetworkModule {
     fun provideAuthHttpClient(
         gson: Gson,
         @AuthAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
     ): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
         engine {
@@ -84,7 +84,7 @@ object NetworkModule {
         @BaseAPI baseUrl: String,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
+        authFailureHandler: AuthFailureHandler
     ): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
         engine {

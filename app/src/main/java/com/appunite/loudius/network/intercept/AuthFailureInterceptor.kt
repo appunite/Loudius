@@ -22,7 +22,7 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class AuthFailureInterceptor @Inject constructor(
-    private val authFailureHandler: AuthFailureHandler,
+    private val authFailureHandler: AuthFailureHandler
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()

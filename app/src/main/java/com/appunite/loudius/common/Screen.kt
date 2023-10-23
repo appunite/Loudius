@@ -42,7 +42,7 @@ sealed class Screen(val route: String) {
             get() = listOf(
                 navDeepLink {
                     uriPattern = Constants.REDIRECT_URL
-                },
+                }
             )
     }
 
@@ -61,7 +61,7 @@ sealed class Screen(val route: String) {
                     navArgument(pullRequestNumberArg) { type = NavType.StringType },
                     navArgument(ownerArg) { type = NavType.StringType },
                     navArgument(repoArg) { type = NavType.StringType },
-                    navArgument(submissionDateArg) { type = NavType.StringType },
+                    navArgument(submissionDateArg) { type = NavType.StringType }
                 )
             }
 
@@ -69,7 +69,7 @@ sealed class Screen(val route: String) {
             owner: String,
             repo: String,
             pullRequestNumber: String,
-            submissionDate: String,
+            submissionDate: String
         ): String = "reviewers_screen/$pullRequestNumber/$owner/$repo/$submissionDate"
 
         fun getInitialValues(savedStateHandle: SavedStateHandle) = ReviewersInitialValues(
@@ -77,15 +77,15 @@ sealed class Screen(val route: String) {
             repo = checkNotNull(savedStateHandle[repoArg]),
             pullRequestNumber = checkNotNull(savedStateHandle[pullRequestNumberArg]),
             submissionTime = checkNotNull(
-                LocalDateTime.parse(savedStateHandle[submissionDateArg]),
-            ),
+                LocalDateTime.parse(savedStateHandle[submissionDateArg])
+            )
         )
 
         data class ReviewersInitialValues(
             val owner: String,
             val repo: String,
             val pullRequestNumber: String,
-            val submissionTime: LocalDateTime,
+            val submissionTime: LocalDateTime
         )
     }
 }

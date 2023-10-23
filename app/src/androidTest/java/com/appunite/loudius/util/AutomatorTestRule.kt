@@ -55,7 +55,7 @@ fun UiDevice.type(text: String) {
         .forEach {
             pressKeyCodes(
                 it.keyCodes.toIntArray(),
-                it.metaState,
+                it.metaState
             )
         }
     waitForIdle()
@@ -73,7 +73,7 @@ fun UiDevice.type(text: String) {
  * ```
  */
 fun UiDevice.waitAndFind(
-    selector: BySelector,
+    selector: BySelector
 ): UiObject2 {
     ensure(Until.hasObject(selector))
 
@@ -93,7 +93,7 @@ fun UiDevice.waitAndFind(
  */
 fun UiDevice.ensure(
     condition: Condition<in UiDevice, Boolean>,
-    timeout: Long = 30_000L,
+    timeout: Long = 30_000L
 ) {
     val result = wait(condition, timeout) ?: throw AssertionError("Error in condition")
     if (!result) {

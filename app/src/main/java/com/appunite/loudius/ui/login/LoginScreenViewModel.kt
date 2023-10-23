@@ -40,12 +40,12 @@ sealed class LoginNavigateTo {
 
 data class LoginState(
     val showXiaomiPermissionDialog: Boolean = false,
-    val navigateTo: LoginNavigateTo? = null,
+    val navigateTo: LoginNavigateTo? = null
 )
 
 @HiltViewModel
 class LoginScreenViewModel @Inject constructor(
-    private val githubHelper: GithubHelper,
+    private val githubHelper: GithubHelper
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -60,7 +60,7 @@ class LoginScreenViewModel @Inject constructor(
             LoginAction.ClickLogIn -> {
                 if (githubHelper.shouldAskForXiaomiIntent()) {
                     state = state.copy(
-                        showXiaomiPermissionDialog = true,
+                        showXiaomiPermissionDialog = true
                     )
                 } else {
                     state = state.copy(navigateTo = LoginNavigateTo.OpenGithubAuth)
@@ -78,7 +78,7 @@ class LoginScreenViewModel @Inject constructor(
             LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission -> {
                 state = state.copy(
                     showXiaomiPermissionDialog = false,
-                    navigateTo = LoginNavigateTo.OpenGithubAuth,
+                    navigateTo = LoginNavigateTo.OpenGithubAuth
                 )
             }
 

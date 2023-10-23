@@ -31,7 +31,7 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 fun AuthenticatingScreen(
     viewModel: AuthenticatingViewModel = hiltViewModel(),
     onNavigateToPullRequest: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val state = viewModel.state
     LaunchedEffect(key1 = state.navigateTo) {
@@ -55,7 +55,7 @@ fun AuthenticatingScreen(
 @Composable
 fun AuthenticatingScreenStateless(
     errorScreenType: LoadingErrorType?,
-    onTryAgainClick: () -> Unit,
+    onTryAgainClick: () -> Unit
 ) {
     when (errorScreenType) {
         LoadingErrorType.GENERIC_ERROR -> ShowLoudiusGenericErrorScreen(onTryAgainClick)
@@ -66,18 +66,18 @@ fun AuthenticatingScreenStateless(
 
 @Composable
 private fun ShowLoudiusLoginErrorScreen(
-    navigateToLogin: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     LoudiusFullScreenError(
         errorText = stringResource(id = R.string.authenticating_screen_error_screen_error_message),
         buttonText = stringResource(id = R.string.authenticating_screen_error_screen_login_button),
-        onButtonClick = navigateToLogin,
+        onButtonClick = navigateToLogin
     )
 }
 
 @Composable
 private fun ShowLoudiusGenericErrorScreen(
-    onTryAgainClick: () -> Unit,
+    onTryAgainClick: () -> Unit
 ) {
     LoudiusFullScreenError(onButtonClick = onTryAgainClick)
 }

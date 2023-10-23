@@ -158,6 +158,20 @@ jobs:
       - name: Ensure license headers are added
         run: python "build-tools/check-license-headers.py"
 
+  verify-formatting:
+    name: Verify ktlint formatting
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
+      - name: Run test
+        run: ./gradlew ktlintCheck
+
   test-results:
     name: Upload tests results
     runs-on: ubuntu-20.04
@@ -165,12 +179,16 @@ jobs:
     needs:
       - android-tests
       - unit-tests
+      - verify-formatting
+      - test-license-headers
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          sparse-checkout: build-tools/
+          sparse-checkout: |
+            build-tools/
+            .github/
 
       - name: Download tests results for both jobs
         uses: actions/download-artifact@v3
@@ -210,7 +228,7 @@ jobs:
           fail-on-error: "false"
 
       - name: Include Slack Notification
-        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+        if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
         uses: ./.github/actions/slack-notification
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
