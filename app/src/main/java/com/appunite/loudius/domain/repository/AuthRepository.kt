@@ -27,24 +27,22 @@ interface AuthRepository {
     suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessToken>
 
     fun getAccessToken(): AccessToken
-
-    fun test()
 }
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
-    private val userLocalDataSource: UserLocalDataSource,
+    private val userLocalDataSource: UserLocalDataSource
 ) : AuthRepository {
 
     override suspend fun fetchAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessToken> {
         val result = authDataSource.getAccessToken(clientId, clientSecret, code)
         result.onSuccess {
@@ -54,13 +52,4 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun getAccessToken(): AccessToken = userLocalDataSource.getAccessToken()
-    override fun test() {
-        val test = "123"
-
-        if(test == "123"){
-
-        }else{
-
-        }
-    }
 }

@@ -40,6 +40,18 @@ class AuthRepositoryImplTest {
     private val localDataSource: UserLocalDataSource = FakeUserLocalDataSource()
     private val repository = AuthRepositoryImpl(networkDataSource, localDataSource)
 
+    @Test
+    fun `GIVEN valid code WHEN fetching access token THEN return success with new valid token`() =
+        runTest {
+            val code = "validCode"
+
+            val accessToken = repository.fetchAccessToken("clientId", "clientSecret", code)
+
+            coVerify(exactly = 1) { networkDataSource.getAccessToken(any(), any(), any()) }
+            expectThat(accessToken)
+                .isSuccess()
+                .isEqualTo("validAccessToken")
+        }
 
     @Test
     fun `GIVEN valid code WHEN fetching access token THEN THEN new token should be stored`() =
