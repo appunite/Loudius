@@ -94,7 +94,7 @@ class ReviewersViewModel @Inject constructor(
             state = state.copy(data = Data.Loading)
 
             val test = 1
-            if( test == 2) return
+            if( test == 2) println("test")
             getMergedData()
                 .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
                 .onFailure { state = state.copy(data = Data.Error) }
