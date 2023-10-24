@@ -117,9 +117,7 @@ tasks.register('codeCoverage', JacocoReport) {
     ]
 
     classDirectories.setFrom(
-            fileTree(dir: "$project.buildDir/**/intermediates/classes/debug/**",
-                    excludes: excludeFiles
-            )
+            files(dir: "$project.buildDir/**/intermediates/classes/debug/**", excludes: excludeFiles)
     )
 
     sourceDirectories.setFrom(
