@@ -102,7 +102,13 @@ class ReviewersViewModel @Inject constructor(
     }
 
     fun someAdditioanlMethod(){
+        val dupa  = 123
 
+        if(dupa === 123){
+            println("test123")
+        }else{
+            println("test1234556")
+        }
     }
 
     private suspend fun getMergedData(): Result<List<Reviewer>> = downloadData()
