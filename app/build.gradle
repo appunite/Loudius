@@ -112,9 +112,10 @@ tasks.register('codeCoverage', JacocoReport) {
                         "**/*Application.*",
                         '**/Manifest*.*',
                         '**/*Test*.*',
-                        'android/**/*.*',
-                        'androidx/**/*.*',
-                        'com/airbnb/**/*.*',
+                        '**/android/**/*.*',
+                        '**/androidx/**/*.*',
+                        '**/airbnb/**/*.*',
+                        "**/di/**/*.*",
                         '**/*Dagger*.*',
                         "**/*Screen*"
                 )
