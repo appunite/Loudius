@@ -21,6 +21,7 @@ import androidx.compose.ui.test.onNodeWithText
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
+import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Rule
@@ -30,6 +31,9 @@ abstract class AbsPullRequestsScreenTest {
 
     @get:Rule
     val integrationTestRule = IntegrationTestRule()
+
+    @get:Rule(order = 1)
+    var mockWebServer: MockWebServerRule = MockWebServerRule()
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {

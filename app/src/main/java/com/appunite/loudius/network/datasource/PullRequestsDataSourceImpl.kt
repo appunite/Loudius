@@ -26,13 +26,13 @@ interface PullRequestDataSource {
     suspend fun getReviewers(
         owner: String,
         repository: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse>
 
     suspend fun getReviews(
         owner: String,
         repository: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>>
 
     suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse>
@@ -41,12 +41,12 @@ interface PullRequestDataSource {
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        message: String,
+        message: String
     ): Result<Unit>
 }
 
 class PullRequestsDataSourceImpl(
-    private val service: PullRequestsService,
+    private val service: PullRequestsService
 ) : PullRequestDataSource {
 
     override suspend fun getPullRequestsForUser(author: String): Result<PullRequestsResponse> =
@@ -55,21 +55,21 @@ class PullRequestsDataSourceImpl(
     override suspend fun getReviewers(
         owner: String,
         repository: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse> =
         service.getReviewers(owner, repository, pullRequestNumber)
 
     override suspend fun getReviews(
         owner: String,
         repository: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>> = service.getReviews(owner, repository, pullRequestNumber)
 
     override suspend fun notify(
         owner: String,
         repository: String,
         pullRequestNumber: String,
-        message: String,
+        message: String
     ): Result<Unit> =
         service.notify(owner, repository, pullRequestNumber, NotifyRequestBody(message))
 }

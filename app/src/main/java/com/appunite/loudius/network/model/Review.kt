@@ -16,11 +16,35 @@
 
 package com.appunite.loudius.network.model
 
-import java.time.LocalDateTime
+import com.appunite.loudius.network.utils.InstantSerializer
+import kotlinx.datetime.Instant
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
+@Serializable
 data class Review(
+    @Serializable(with = IdSerializer::class)
     val id: String,
     val user: User,
     val state: ReviewState,
-    val submittedAt: LocalDateTime,
+    @SerialName("submitted_at")
+    @Serializable(with = InstantSerializer::class)
+    val submittedAt: Instant
 )
+
+object IdSerializer : KSerializer<String> {
+    override val descriptor: SerialDescriptor
+        get() = PrimitiveSerialDescriptor("id", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): String {
+        return decoder.decodeInt().toString()
+    }
+
+    override fun serialize(encoder: Encoder, value: String) { }
+}

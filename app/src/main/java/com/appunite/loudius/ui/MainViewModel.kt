@@ -25,7 +25,7 @@ import com.appunite.loudius.network.utils.AuthFailureHandler
 import kotlinx.coroutines.launch
 
 data class MainState(
-    val authFailureEvent: Unit? = null,
+    val authFailureEvent: Unit? = null
 )
 
 class MainViewModel(private val authFailureHandler: AuthFailureHandler) : ViewModel() {

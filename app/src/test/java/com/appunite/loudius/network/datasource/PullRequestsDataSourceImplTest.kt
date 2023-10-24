@@ -29,6 +29,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
@@ -43,7 +44,6 @@ import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 import strikt.assertions.single
 import java.net.ConnectException
-import java.time.LocalDateTime
 
 @ExperimentalCoroutinesApi
 class PullRequestsDataSourceImplTest {
@@ -74,11 +74,11 @@ class PullRequestsDataSourceImplTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getPullRequestsForUser(
-                    "exampleUser",
+                    "exampleUser"
                 )
 
                 expectThat(response)
@@ -175,7 +175,7 @@ class PullRequestsDataSourceImplTest {
                 MockResponse()
                     .setResponseCode(200)
                     .setBody(jsonResponse)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
@@ -199,7 +199,7 @@ class PullRequestsDataSourceImplTest {
                     MockResponse()
                         .setResponseCode(401)
                         .setBody(jsonResponse)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getPullRequestsForUser("exampleUser")
@@ -219,13 +219,13 @@ class PullRequestsDataSourceImplTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber",
+                    "exampleNumber"
                 )
 
                 expectThat(response)
@@ -269,13 +269,13 @@ class PullRequestsDataSourceImplTest {
                     MockResponse()
                         .setResponseCode(200)
                         .setBody(jsonResponse)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber",
+                    "exampleNumber"
                 )
 
                 expectThat(response)
@@ -283,9 +283,9 @@ class PullRequestsDataSourceImplTest {
                     .isEqualTo(
                         RequestedReviewersResponse(
                             listOf(
-                                RequestedReviewer(1, "exampleLogin"),
-                            ),
-                        ),
+                                RequestedReviewer(1, "exampleLogin")
+                            )
+                        )
                     )
             }
 
@@ -304,13 +304,13 @@ class PullRequestsDataSourceImplTest {
                     MockResponse()
                         .setResponseCode(401)
                         .setBody(jsonResponse)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getReviewers(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber",
+                    "exampleNumber"
                 )
 
                 expectThat(response)
@@ -328,13 +328,13 @@ class PullRequestsDataSourceImplTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val resposne = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber",
+                    "exampleNumber"
                 )
 
                 expectThat(resposne)
@@ -392,13 +392,13 @@ class PullRequestsDataSourceImplTest {
                     MockResponse()
                         .setResponseCode(200)
                         .setBody(jsonResponse)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber",
+                    "exampleNumber"
                 )
 
                 expectThat(response)
@@ -409,8 +409,8 @@ class PullRequestsDataSourceImplTest {
                             "1",
                             User(10000000, "exampleUser"),
                             ReviewState.COMMENTED,
-                            LocalDateTime.parse("2023-03-02T10:21:36"),
-                        ),
+                            Instant.parse("2023-03-02T10:21:36Z")
+                        )
                     )
             }
 
@@ -429,13 +429,13 @@ class PullRequestsDataSourceImplTest {
                     MockResponse()
                         .setResponseCode(401)
                         .setBody(jsonResponse)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.getReviews(
                     "exampleOwner",
                     "exampleRepo",
-                    "exampleNumber",
+                    "exampleNumber"
                 )
 
                 expectThat(response)
@@ -453,14 +453,14 @@ class PullRequestsDataSourceImplTest {
                 mockWebServer.enqueue(
                     MockResponse()
                         .setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.notify(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "@ExampleUser",
+                    "@ExampleUser"
                 )
 
                 expectThat(response)
@@ -508,14 +508,14 @@ class PullRequestsDataSourceImplTest {
                 MockResponse()
                     .setResponseCode(200)
                     .setBody(jsonResponse)
-                    .addHeader("Content-type", "application/json"),
+                    .addHeader("Content-type", "application/json")
             )
 
             val response = pullRequestDataSource.notify(
                 "exampleOwner",
                 "exampleRepo",
                 "exampleNumber",
-                "@ExampleUser",
+                "@ExampleUser"
             )
 
             expectThat(response).isSuccess()
@@ -535,14 +535,14 @@ class PullRequestsDataSourceImplTest {
                     MockResponse()
                         .setResponseCode(401)
                         .setBody(jsonResponse)
-                        .addHeader("Content-type", "application/json"),
+                        .addHeader("Content-type", "application/json")
                 )
 
                 val response = pullRequestDataSource.notify(
                     "exampleOwner",
                     "exampleRepo",
                     "exampleNumber",
-                    "@ExampleUser",
+                    "@ExampleUser"
                 )
 
                 expectThat(response)

@@ -16,6 +16,8 @@
 
 package com.appunite.loudius.common
 
+import com.appunite.loudius.BuildConfig
+
 object Constants {
 
     const val AUTH_API_URL = "https://github.com"
@@ -23,7 +25,7 @@ object Constants {
     const val AUTH_PATH = "/login/oauth/authorize"
     const val NAME_PARAM_CLIENT_ID = "?client_id="
     const val SCOPE_PARAM = "&scope=repo"
-    const val CLIENT_ID = "91131449e417c7e29912"
+    const val CLIENT_ID = BuildConfig.LOUDIUS_CLIENT_ID
     const val REDIRECT_URL = "loudius://callback"
     const val AUTHORIZATION_URL =
         AUTH_API_URL + AUTH_PATH + NAME_PARAM_CLIENT_ID + CLIENT_ID + SCOPE_PARAM

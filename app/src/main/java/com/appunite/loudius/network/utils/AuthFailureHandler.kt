@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class AuthFailureHandler(
-    private val dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher
 ) {
     private val _authFailureFlow = MutableSharedFlow<Unit>()
     val authFailureFlow: SharedFlow<Unit> = _authFailureFlow

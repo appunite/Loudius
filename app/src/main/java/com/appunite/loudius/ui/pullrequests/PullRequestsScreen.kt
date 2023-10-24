@@ -33,7 +33,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,14 +52,14 @@ import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.network.model.PullRequest
 import org.koin.androidx.compose.koinViewModel
-import java.time.LocalDateTime
+import kotlinx.datetime.Instant
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
 @Composable
 fun PullRequestsScreen(
     viewModel: PullRequestsViewModel = koinViewModel(),
-    navigateToReviewers: NavigateToReviewers,
+    navigateToReviewers: NavigateToReviewers
 ) {
     val state = viewModel.state
     val refreshing = viewModel.isRefreshing
@@ -69,7 +68,7 @@ fun PullRequestsScreen(
         state = state,
         refreshing = refreshing,
         onRefresh = viewModel::refreshData,
-        onAction = viewModel::onAction,
+        onAction = viewModel::onAction
     )
     LaunchedEffect(state.navigateToReviewers) {
         navigateToReviewers(state, navigateToReviewers, viewModel)
@@ -79,14 +78,14 @@ fun PullRequestsScreen(
 private fun navigateToReviewers(
     state: PullRequestState,
     navigateToReviewers: NavigateToReviewers,
-    viewModel: PullRequestsViewModel,
+    viewModel: PullRequestsViewModel
 ) {
     state.navigateToReviewers?.let {
         navigateToReviewers(
             it.owner,
             it.repo,
             it.pullRequestNumber,
-            it.submissionTime,
+            it.submissionTime
         )
         viewModel.onAction(PulLRequestsAction.OnNavigateToReviewers)
     }
@@ -97,7 +96,7 @@ private fun PullRequestsScreenStateless(
     state: PullRequestState,
     refreshing: Boolean,
     onRefresh: () -> Unit,
-    onAction: (PulLRequestsAction) -> Unit,
+    onAction: (PulLRequestsAction) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -107,12 +106,12 @@ private fun PullRequestsScreenStateless(
             when (state.data) {
                 is Data.Error -> LoudiusFullScreenError(
                     modifier = Modifier.padding(padding),
-                    onButtonClick = { onAction(PulLRequestsAction.RetryClick) },
+                    onButtonClick = { onAction(PulLRequestsAction.RetryClick) }
                 )
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
                 is Data.Success -> PullRequestContent(state.data, refreshing, onRefresh, padding, onAction)
             }
-        },
+        }
     )
 }
 
@@ -122,7 +121,7 @@ private fun PullRequestContent(
     refreshing: Boolean,
     onRefresh: () -> Unit,
     padding: PaddingValues,
-    onAction: (PulLRequestsAction) -> Unit,
+    onAction: (PulLRequestsAction) -> Unit
 ) {
     if (state.pullRequests.isEmpty()) {
         EmptyListPlaceholder(padding)
@@ -133,9 +132,9 @@ private fun PullRequestContent(
             onItemClick = onAction,
             pullRefreshState = rememberPullRefreshState(
                 refreshing = refreshing,
-                onRefresh = onRefresh,
+                onRefresh = onRefresh
             ),
-            refreshing = refreshing,
+            refreshing = refreshing
         )
     }
 }
@@ -146,21 +145,21 @@ private fun PullRequestsList(
     modifier: Modifier,
     onItemClick: (PulLRequestsAction) -> Unit,
     pullRefreshState: PullRefreshState,
-    refreshing: Boolean,
+    refreshing: Boolean
 ) {
     LoudiusPullToRefreshBox(
         pullRefreshState = pullRefreshState,
         refreshing = refreshing,
-        modifier = modifier,
+        modifier = modifier
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
         ) {
             itemsIndexed(pullRequests) { index, item ->
                 PullRequestItem(
                     index = index,
                     data = item,
-                    onClick = onItemClick,
+                    onClick = onItemClick
                 )
             }
         }
@@ -171,7 +170,7 @@ private fun PullRequestsList(
 private fun PullRequestItem(
     index: Int,
     data: PullRequest,
-    onClick: (PulLRequestsAction) -> Unit,
+    onClick: (PulLRequestsAction) -> Unit
 ) {
     LoudiusListItem(
         index = index,
@@ -182,9 +181,9 @@ private fun PullRequestItem(
             RepoDetails(
                 modifier = modifier,
                 pullRequestTitle = data.title,
-                repositoryName = data.fullRepositoryName,
+                repositoryName = data.fullRepositoryName
             )
-        },
+        }
     )
 }
 
@@ -193,7 +192,7 @@ private fun PullRequestIcon(modifier: Modifier) {
     LoudiusListIcon(
         modifier = modifier,
         painter = painterResource(id = R.drawable.ic_pull_request),
-        contentDescription = stringResource(id = R.string.pull_requests_screen_pull_request_content_description),
+        contentDescription = stringResource(id = R.string.pull_requests_screen_pull_request_content_description)
     )
 }
 
@@ -202,11 +201,11 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
     Column(modifier = modifier) {
         LoudiusText(
             text = pullRequestTitle,
-            style = LoudiusTextStyle.ListItem,
+            style = LoudiusTextStyle.ListItem
         )
         LoudiusText(
             text = repositoryName,
-            style = LoudiusTextStyle.ListCaption,
+            style = LoudiusTextStyle.ListCaption
         )
     }
 }
@@ -215,7 +214,7 @@ private fun RepoDetails(modifier: Modifier, pullRequestTitle: String, repository
 private fun EmptyListPlaceholder(padding: PaddingValues) {
     Box(modifier = Modifier.padding(padding)) {
         LoudiusPlaceholderText(
-            text = stringResource(id = R.string.ull_requests_screen_you_dont_have_any_pull_request_message),
+            text = stringResource(id = R.string.ull_requests_screen_you_dont_have_any_pull_request_message)
         )
     }
 }
@@ -228,7 +227,7 @@ private val successData = Data.Success(
             number = 0,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Stefan",
             title = "[SIL-67] Details screen - network layer",
-            createdAt = LocalDateTime.parse("2021-11-29T16:31:41"),
+            createdAt = Instant.parse("2021-11-29T16:31:41Z")
         ),
         PullRequest(
             id = 1,
@@ -236,7 +235,7 @@ private val successData = Data.Success(
             number = 1,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Silentus",
             title = "[SIL-66] Add client secret to build config",
-            createdAt = LocalDateTime.parse("2022-11-29T16:31:41"),
+            createdAt = Instant.parse("2022-11-29T16:31:41Z")
         ),
         PullRequest(
             id = 2,
@@ -244,7 +243,7 @@ private val successData = Data.Success(
             number = 2,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Loudius",
             title = "[SIL-73] Storing access token",
-            createdAt = LocalDateTime.parse("2023-01-29T16:31:41"),
+            createdAt = Instant.parse("2023-01-29T16:31:41Z")
         ),
         PullRequest(
             id = 3,
@@ -252,9 +251,9 @@ private val successData = Data.Success(
             number = 3,
             repositoryUrl = "${Constants.BASE_API_URL}/repos/appunite/Blocktrade",
             title = "[SIL-62/SIL-75] Provide new annotation for API instances",
-            createdAt = LocalDateTime.parse("2022-01-29T16:31:41"),
-        ),
-    ),
+            createdAt = Instant.parse("2022-01-29T16:31:41Z")
+        )
+    )
 )
 
 @Preview("Pull requests - filled list")
@@ -266,7 +265,7 @@ fun PullRequestsScreenPreview() {
             state = PullRequestState(successData),
             onAction = {},
             refreshing = false,
-            onRefresh = {},
+            onRefresh = {}
         )
     }
 }
@@ -280,7 +279,7 @@ fun PullRequestsScreenEmptyListPreview() {
             PullRequestState(Data.Success(emptyList())),
             onAction = {},
             refreshing = false,
-            onRefresh = {},
+            onRefresh = {}
         )
     }
 }
@@ -294,7 +293,7 @@ fun PullRequestsScreenLoadingPreview() {
             PullRequestState(Data.Loading),
             onAction = {},
             refreshing = false,
-            onRefresh = {},
+            onRefresh = {}
         )
     }
 }
@@ -308,7 +307,7 @@ fun PullRequestsScreenErrorPreview() {
             PullRequestState(Data.Error),
             onAction = {},
             refreshing = false,
-            onRefresh = {},
+            onRefresh = {}
         )
     }
 }
@@ -322,7 +321,7 @@ fun PullRequestsScreenRefreshingPreview() {
             state = PullRequestState(successData),
             onAction = {},
             refreshing = true,
-            onRefresh = {},
+            onRefresh = {}
         )
     }
 }

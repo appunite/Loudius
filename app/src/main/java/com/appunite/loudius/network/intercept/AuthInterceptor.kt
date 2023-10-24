@@ -21,7 +21,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(
-    private val authRepository: AuthRepository,
+    private val authRepository: AuthRepository
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val authenticatedRequest = chain.request().newBuilder()

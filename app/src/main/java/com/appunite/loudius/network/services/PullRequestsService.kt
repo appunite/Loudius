@@ -35,26 +35,26 @@ interface PullRequestsService {
     suspend fun getPullRequestsForUser(
         query: String,
         page: Int = 0,
-        perPage: Int = 100,
+        perPage: Int = 100
     ): Result<PullRequestsResponse>
 
     suspend fun getReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse>
 
     suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>>
 
     suspend fun notify(
         owner: String,
         repo: String,
         issueNumber: String,
-        body: NotifyRequestBody,
+        body: NotifyRequestBody
     ): Result<Unit>
 }
 
@@ -64,7 +64,7 @@ class PullRequestsServiceImpl(
     override suspend fun getPullRequestsForUser(
         query: String,
         page: Int,
-        perPage: Int,
+        perPage: Int
     ): Result<PullRequestsResponse> = runCatching {
         client.get("/search/issues") {
             parameter("q".encodeURLParameter(), query)
@@ -76,7 +76,7 @@ class PullRequestsServiceImpl(
     override suspend fun getReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse> = runCatching {
         client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/requested_reviewers").body()
     }
@@ -84,7 +84,7 @@ class PullRequestsServiceImpl(
     override suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>> = runCatching {
         client.get("/repos/$owner/$repo/pulls/$pullRequestNumber/reviews").body()
     }
@@ -93,7 +93,7 @@ class PullRequestsServiceImpl(
         owner: String,
         repo: String,
         issueNumber: String,
-        body: NotifyRequestBody,
+        body: NotifyRequestBody
     ): Result<Unit> = runCatching {
         client.post("/repos/$owner/$repo/issues/$issueNumber/comments") {
             setBody(body)

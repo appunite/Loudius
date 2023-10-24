@@ -33,13 +33,13 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 @Composable
 fun LoudiusTopAppBar(
     title: String,
-    onClickBackArrow: (() -> Unit)? = null,
+    onClickBackArrow: (() -> Unit)? = null
 ) {
     TopAppBar(
         title = {
             LoudiusText(
                 text = title,
-                style = LoudiusTextStyle.TitleLarge,
+                style = LoudiusTextStyle.TitleLarge
             )
         },
         navigationIcon = {
@@ -47,14 +47,14 @@ fun LoudiusTopAppBar(
                 IconButton(onClick = onClickBackArrow) {
                     Icon(
                         painter = painterResource(id = R.drawable.components_arrow_back),
-                        contentDescription = stringResource(R.string.components_common_back_button_icon_content_description),
+                        contentDescription = stringResource(R.string.components_common_back_button_icon_content_description)
                     )
                 }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     )
 }
 
@@ -64,7 +64,7 @@ fun LoudiusTopAppBar() {
     LoudiusTheme {
         LoudiusTopAppBar(
             onClickBackArrow = {},
-            title = "Loudius",
+            title = "Loudius"
         )
     }
 }
@@ -74,7 +74,7 @@ fun LoudiusTopAppBar() {
 fun LoudiusTopAppBarWithoutBackButton() {
     LoudiusTheme {
         LoudiusTopAppBar(
-            title = "Loudius",
+            title = "Loudius"
         )
     }
 }

@@ -3,14 +3,18 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'app.cash.paparazzi'
     id 'kotlin-kapt'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
 }
 
-kotlin {
-    jvmToolchain(17)
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 android {
+    namespace = "com.appunite.loudius.components"
+
     defaultConfig {
         minSdk 24
         targetSdk 34
@@ -20,10 +24,11 @@ android {
 
     buildFeatures {
         compose true
+        buildConfig true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.5.0'
     }
 
     resourcePrefix "components_"
@@ -33,28 +38,26 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
-
-    namespace 'com.appunite.loudius.components'
 }
 
 dependencies {
-    implementation platform('androidx.compose:compose-bom:2023.01.00')
+    implementation platform('androidx.compose:compose-bom:2023.10.01')
     implementation 'androidx.compose.material3:material3'
-    implementation 'androidx.compose.material:material:1.4.0'
+    implementation 'androidx.compose.material:material'
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
 
     //Showkase
-    implementation "com.airbnb.android:showkase:1.0.0-beta18"
-    kapt "com.airbnb.android:showkase-processor:1.0.0-beta18"
+    implementation "com.airbnb.android:showkase:1.0.2"
+    kapt "com.airbnb.android:showkase-processor:1.0.2"
     testImplementation "com.google.testparameterinjector:test-parameter-injector:1.8"
-    kaptTest "com.airbnb.android:showkase-processor:1.0.0-beta18"
+    kaptTest "com.airbnb.android:showkase-processor:1.0.2"
 
     //Lottie - Compose
     implementation("com.airbnb.android:lottie-compose:5.2.0")
 
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

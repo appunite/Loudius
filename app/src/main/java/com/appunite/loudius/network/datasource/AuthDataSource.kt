@@ -27,12 +27,12 @@ interface AuthDataSource {
     suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessToken>
 }
 
 class AuthDataSourceImpl(
-    private val authService: AuthService,
+    private val authService: AuthService
 ) : AuthDataSource {
 
     companion object {
@@ -42,7 +42,7 @@ class AuthDataSourceImpl(
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessToken> =
         authService.getAccessToken(clientId, clientSecret, code).flatMap { response ->
             if (response.accessToken != null) {

@@ -39,18 +39,18 @@ sealed class Data {
 
 data class PullRequestState(
     val data: Data = Data.Loading,
-    val navigateToReviewers: NavigationPayload? = null,
+    val navigateToReviewers: NavigationPayload? = null
 )
 
 data class NavigationPayload(
     val owner: String,
     val repo: String,
     val pullRequestNumber: String,
-    val submissionTime: String,
+    val submissionTime: String
 )
 
 class PullRequestsViewModel(
-    private val pullRequestsRepository: PullRequestRepository,
+    private val pullRequestsRepository: PullRequestRepository
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
@@ -102,8 +102,8 @@ class PullRequestsViewModel(
                 itemClickedData.owner,
                 itemClickedData.shortRepositoryName,
                 itemClickedData.number.toString(),
-                itemClickedData.createdAt.toString(),
-            ),
+                itemClickedData.createdAt.toString()
+            )
         )
     }
 

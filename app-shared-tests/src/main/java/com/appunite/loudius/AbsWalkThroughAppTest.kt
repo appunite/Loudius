@@ -20,31 +20,33 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsRule
 import com.appunite.loudius.util.IntegrationTestRule
+import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
-import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.stopKoin
 
-abstract class AbsWalkThroughAppTest {
+abstract class AbsWalkThroughAppTest  : UniversalWalkThroughAppTest() {
 
     @get:Rule(order = 0)
     val integrationTestRule by lazy { IntegrationTestRule(MainActivity::class.java) }
 
+
     @get:Rule(order = 1)
+    var mockWebServer: MockWebServerRule = MockWebServerRule()
+
+    @get:Rule(order = 2)
     val intents = IntentsRule()
 
-    @Test
-    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
+
+    @Before
+    fun prepareMocks() {
         Register.run {
             user(mockWebServer)
             accessToken(mockWebServer)
@@ -58,36 +60,17 @@ abstract class AbsWalkThroughAppTest {
             .respondWithFunction {
                 Instrumentation.ActivityResult(Activity.RESULT_OK, null)
             }
+    }
 
-        composeTestRule.onNodeWithText("Log in", useUnmergedTree = true).performClick()
-
+    override fun performGitHubLogin() {
         // simulate opening a deeplink
         ActivityScenario.launch<MainActivity>(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("loudius://callback?code=example_code"),
+                Uri.parse("loudius://callback?code=example_code")
             ).apply {
-                setPackage(composeTestRule.activity.packageName)
-            },
+                setPackage(integrationTestRule.composeTestRule.activity.packageName)
+            }
         )
-
-        composeTestRule.waitUntilLoadingDoesNotExist()
-
-        composeTestRule.onNodeWithText("First Pull-Request title", useUnmergedTree = true).performClick()
-
-        composeTestRule.waitUntilLoadingDoesNotExist()
-
-        composeTestRule.onNodeWithText("Notify", useUnmergedTree = true).performClick()
-
-        composeTestRule.waitUntilLoadingDoesNotExist()
-
-        composeTestRule
-            .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
-            .assertIsDisplayed()
-    }
-
-    @After
-    fun tearDown() {
-        stopKoin()
     }
 }
