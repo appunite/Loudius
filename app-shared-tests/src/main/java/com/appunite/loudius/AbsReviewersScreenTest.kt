@@ -106,7 +106,7 @@ abstract class AbsReviewersScreenTest {
         composeTestRule.activity.intent.apply {
             putExtra("owner", "exampleOwner")
             putExtra("repo", "exampleRepo")
-            putExtra("submission_date", "2022-01-29T08:00:00")
+            putExtra("submission_date", "2022-01-29T08:00:00Z")
             putExtra("pull_request_number", "1")
         }
         Register.user(mockWebServer)

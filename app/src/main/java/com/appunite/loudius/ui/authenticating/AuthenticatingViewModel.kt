@@ -40,12 +40,12 @@ sealed class AuthenticatingAction {
 
 enum class LoadingErrorType {
     LOGIN_ERROR,
-    GENERIC_ERROR,
+    GENERIC_ERROR
 }
 
 data class AuthenticatingState(
     val navigateTo: AuthenticatingScreenNavigation? = null,
-    val errorScreenType: LoadingErrorType? = null,
+    val errorScreenType: LoadingErrorType? = null
 )
 
 sealed class AuthenticatingScreenNavigation {
@@ -56,7 +56,7 @@ sealed class AuthenticatingScreenNavigation {
 @HiltViewModel
 class AuthenticatingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)
@@ -92,18 +92,18 @@ class AuthenticatingViewModel @Inject constructor(
                 authRepository.fetchAccessToken(
                     clientId = CLIENT_ID,
                     clientSecret = BuildConfig.LOUDIUS_CLIENT_SECRET,
-                    code = code,
+                    code = code
                 ).onSuccess {
                     state = state.copy(
-                        navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests,
+                        navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests
                     )
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
                 }
             }
         }, onFailure = {
-            state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
-        })
+                state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
+            })
     }
 
     private fun resolveErrorType(it: Throwable) = when (it) {

@@ -38,7 +38,7 @@ object Register {
                   "token_type": "bearer",
                   "scope": "repo"
                 }
-                """.trimIndent(),
+                """.trimIndent()
             )
         }
     }
@@ -92,7 +92,7 @@ object Register {
                       "issue_url": "https://api.github.com/repos/owner/repo/issues/1",
                       "author_association": "COLLABORATOR"
                     }
-                """.trimIndent(),
+                """.trimIndent()
             )
         }
     }
@@ -130,7 +130,7 @@ object Register {
                             ],
                             "teams": []
                         }
-                  """,
+                  """
             )
         }
     }
@@ -226,7 +226,7 @@ object Register {
                                 }
                             ]
                         }
-                    """,
+                    """
             )
         }
     }

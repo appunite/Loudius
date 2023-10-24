@@ -29,6 +29,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.Serializable
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
@@ -106,5 +107,6 @@ class AuthFailureInterceptorTest {
         suspend fun makeARequest(): TestData = client.get("/test").body()
     }
 
+    @Serializable
     private data class TestData(val message: String)
 }

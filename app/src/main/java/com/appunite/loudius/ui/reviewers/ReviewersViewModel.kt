@@ -35,8 +35,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.minus
 import javax.inject.Inject
 
 sealed class ReviewersAction {
@@ -48,7 +50,7 @@ sealed class ReviewersAction {
 data class ReviewersState(
     val data: Data = Data.Loading,
     val pullRequestNumber: String = "",
-    val snackbarTypeShown: ReviewersSnackbarType? = null,
+    val snackbarTypeShown: ReviewersSnackbarType? = null
 )
 
 sealed class Data {
@@ -64,7 +66,7 @@ enum class ReviewersSnackbarType {
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
@@ -108,14 +110,14 @@ class ReviewersViewModel @Inject constructor(
                 repository.getRequestedReviewers(
                     initialValues.owner,
                     initialValues.repo,
-                    initialValues.pullRequestNumber,
+                    initialValues.pullRequestNumber
                 )
             }
             val reviewsDeferred = async {
                 repository.getReviews(
                     initialValues.owner,
                     initialValues.repo,
-                    initialValues.pullRequestNumber,
+                    initialValues.pullRequestNumber
                 )
             }
 
@@ -127,7 +129,7 @@ class ReviewersViewModel @Inject constructor(
 
     private fun mergeData(
         requestedReviewers: Result<List<Reviewer>>,
-        reviewersWithReviews: Result<List<Reviewer>>,
+        reviewersWithReviews: Result<List<Reviewer>>
     ) = requestedReviewers.flatMap { list ->
         reviewersWithReviews.map { it + list }
     }
@@ -143,7 +145,7 @@ class ReviewersViewModel @Inject constructor(
                     requestedReviewer.login,
                     false,
                     hoursFromPRStart,
-                    null,
+                    null
                 )
             }
         }
@@ -162,14 +164,14 @@ class ReviewersViewModel @Inject constructor(
                         latestReview.user.login,
                         true,
                         hoursFromPRStart,
-                        hoursFromReviewDone,
+                        hoursFromReviewDone
                     )
                 }
         }
     }
 
-    private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
-        ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
+    private fun countHoursTillNow(submissionTime: Instant): Long =
+        Clock.System.now().minus(submissionTime, DateTimeUnit.HOUR)
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyReviewer(action.userLogin)
@@ -192,42 +194,42 @@ class ReviewersViewModel @Inject constructor(
 
     private fun setReviewerToLoading(
         successData: Data.Success,
-        userLogin: String,
+        userLogin: String
     ) {
         state = state.copy(
             data = Data.Success(
-                reviewers = successData.reviewers.updateLoadingState(userLogin, true),
-            ),
+                reviewers = successData.reviewers.updateLoadingState(userLogin, true)
+            )
         )
     }
 
     private fun onNotifyUserFailure(
         successData: Data.Success,
-        userLogin: String,
+        userLogin: String
     ) {
         state = state.copy(
             snackbarTypeShown = FAILURE,
             data = Data.Success(
-                reviewers = successData.reviewers.updateLoadingState(userLogin, false),
-            ),
+                reviewers = successData.reviewers.updateLoadingState(userLogin, false)
+            )
         )
     }
 
     private fun onNotifyUserSuccess(
         successData: Data.Success,
-        userLogin: String,
+        userLogin: String
     ) {
         state = state.copy(
             snackbarTypeShown = SUCCESS,
             data = Data.Success(
-                successData.reviewers.updateLoadingState(userLogin, false),
-            ),
+                successData.reviewers.updateLoadingState(userLogin, false)
+            )
         )
     }
 
     private fun List<Reviewer>.updateLoadingState(
         userLogin: String,
-        isLoading: Boolean,
+        isLoading: Boolean
     ): List<Reviewer> = map {
         if (it.login == userLogin) {
             it.copy(isLoading = isLoading)

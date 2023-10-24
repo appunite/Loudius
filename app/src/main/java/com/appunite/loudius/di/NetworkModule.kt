@@ -20,10 +20,6 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.intercept.AuthFailureInterceptor
 import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,10 +28,9 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.http.ContentType
-import io.ktor.serialization.gson.GsonConverter
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
-import java.time.LocalDateTime
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -59,9 +54,8 @@ object NetworkModule {
     @Singleton
     @AuthAPI
     fun provideAuthHttpClient(
-        gson: Gson,
         @AuthAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
     ): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
         engine {
@@ -72,7 +66,11 @@ object NetworkModule {
             url(baseUrl)
         }
         install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                }
+            )
         }
     }
 
@@ -80,11 +78,10 @@ object NetworkModule {
     @Singleton
     @BaseAPI
     fun provideBaseHttpClient(
-        gson: Gson,
         @BaseAPI baseUrl: String,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
+        authFailureHandler: AuthFailureHandler
     ): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
         engine {
@@ -97,14 +94,11 @@ object NetworkModule {
             url(baseUrl)
         }
         install(ContentNegotiation) {
-            register(ContentType.Application.Json, GsonConverter(gson))
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                }
+            )
         }
     }
-
-    @Provides
-    @Singleton
-    fun provideGson(): Gson =
-        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
-            .create()
 }

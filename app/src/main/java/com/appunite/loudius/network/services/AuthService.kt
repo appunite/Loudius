@@ -31,7 +31,7 @@ interface AuthService {
     suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessTokenResponse>
 }
 
@@ -40,7 +40,7 @@ class AuthServiceImpl @Inject constructor(private val client: HttpClient) : Auth
     override suspend fun getAccessToken(
         clientId: String,
         clientSecret: String,
-        code: String,
+        code: String
     ): Result<AccessTokenResponse> = runCatching {
         client.submitForm(
             url = "login/oauth/access_token",
@@ -48,7 +48,7 @@ class AuthServiceImpl @Inject constructor(private val client: HttpClient) : Auth
                 append("client_id", clientId)
                 append("client_secret", clientSecret)
                 append("code", code)
-            },
+            }
         ) {
             headers {
                 append(HttpHeaders.Accept, ContentType.Application.Json.toString())

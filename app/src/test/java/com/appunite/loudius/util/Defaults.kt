@@ -22,12 +22,13 @@ import com.appunite.loudius.network.model.RequestedReviewer
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.network.model.ReviewState
 import com.appunite.loudius.network.model.User
-import java.time.LocalDateTime
+import kotlinx.datetime.Instant
+import kotlin.time.Duration.Companion.hours
 
 object Defaults {
-    val date1: LocalDateTime = LocalDateTime.parse("2022-01-29T10:00:00")
-    val date2: LocalDateTime = LocalDateTime.parse("2022-01-29T11:00:00")
-    val date3: LocalDateTime = LocalDateTime.parse("2022-01-29T12:00:00")
+    val date1: Instant = Instant.parse("2022-01-29T10:00:00Z")
+    val date2: Instant = Instant.parse("2022-01-29T11:00:00Z")
+    val date3: Instant = Instant.parse("2022-01-29T12:00:00Z")
 
     fun pullRequest(id: Int = 1) = PullRequest(
         id = id,
@@ -35,7 +36,7 @@ object Defaults {
         number = id,
         repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
         title = "example title",
-        LocalDateTime.parse("2023-03-07T08:21:45").plusHours(id.toLong()),
+        Instant.parse("2023-03-07T08:21:45Z").plus(id.toLong().hours)
     )
 
     fun reviews() = listOf(
@@ -44,18 +45,18 @@ object Defaults {
         Review("3", currentUser(), ReviewState.APPROVED, date3),
         Review("4", User(1, "user1"), ReviewState.COMMENTED, date1),
         Review("5", User(1, "user1"), ReviewState.COMMENTED, date2),
-        Review("6", User(1, "user1"), ReviewState.APPROVED, date3),
+        Review("6", User(1, "user1"), ReviewState.APPROVED, date3)
     )
 
     fun requestedReviewers() = listOf(
         RequestedReviewer(2, "user2"),
-        RequestedReviewer(3, "user3"),
+        RequestedReviewer(3, "user3")
     )
 
     fun pullRequestsResponse() = PullRequestsResponse(
         incompleteResults = false,
         totalCount = 1,
-        items = listOf(pullRequest()),
+        items = listOf(pullRequest())
     )
 
     fun currentUser() = User(0, "currentUser")

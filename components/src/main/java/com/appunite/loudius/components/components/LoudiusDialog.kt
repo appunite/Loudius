@@ -33,7 +33,7 @@ fun LoudiusDialog(
     /**
      * For text [LoudiusTextStyle.ScreenContent] should be used
      */
-    text: @Composable (() -> Unit)? = null,
+    text: @Composable (() -> Unit)? = null
 
 ) {
     AlertDialog(
@@ -44,7 +44,7 @@ fun LoudiusDialog(
         },
         text = text,
         confirmButton = confirmButton,
-        dismissButton = dismissButton,
+        dismissButton = dismissButton
     )
 }
 
@@ -58,7 +58,7 @@ fun LoudiusDialogSimplePreview() {
             title = "Title",
             confirmButton = {
                 LoudiusOutlinedButton(text = "Confirm") {}
-            },
+            }
         )
     }
 }
@@ -74,7 +74,7 @@ fun LoudiusDialogAdvancedPreview() {
             text = {
                 LoudiusText(
                     style = LoudiusTextStyle.ScreenContent,
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus elit justo, at pharetra nulla mattis vel. Integer gravida tortor sed fringilla viverra. Duis scelerisque ante neque, a pretium eros.",
+                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus elit justo, at pharetra nulla mattis vel. Integer gravida tortor sed fringilla viverra. Duis scelerisque ante neque, a pretium eros."
                 )
             },
             confirmButton = {
@@ -82,7 +82,7 @@ fun LoudiusDialogAdvancedPreview() {
             },
             dismissButton = {
                 LoudiusOutlinedButton(text = "Dismiss") {}
-            },
+            }
         )
     }
 }

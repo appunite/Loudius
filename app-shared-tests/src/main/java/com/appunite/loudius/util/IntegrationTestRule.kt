@@ -29,7 +29,7 @@ import org.junit.runners.model.Statement
 
 class IntegrationTestRule(
     testClass: Any,
-    testActivity: Class<out ComponentActivity> = TestActivity::class.java,
+    testActivity: Class<out ComponentActivity> = TestActivity::class.java
 ) : TestRule {
 
     val composeTestRule = createAndroidComposeRule(testActivity).apply {

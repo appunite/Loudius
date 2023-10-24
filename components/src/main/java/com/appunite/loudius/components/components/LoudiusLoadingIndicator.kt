@@ -42,7 +42,7 @@ fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_indicator))
         val progress by animateLottieCompositionAsState(
             composition = composition,
-            iterations = LottieConstants.IterateForever,
+            iterations = LottieConstants.IterateForever
         )
         val loadingContentDescription = stringResource(R.string.components_loading_indicator_content_description)
         Box(
@@ -50,14 +50,14 @@ fun LoudiusLoadingIndicator(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .semantics(mergeDescendants = true) {
                     stateDescription = loadingContentDescription
-                },
+                }
         ) {
             LottieAnimation(
                 composition = composition,
                 progress = { progress },
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(96.dp),
+                    .size(96.dp)
             )
         }
     }

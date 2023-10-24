@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.network.utils
+package com.appunite.loudius.network.serialize
 
-interface RequestErrorParser {
+import com.appunite.loudius.network.model.IdSerializer
+import kotlinx.serialization.json.Json
+import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
-    operator fun invoke(responseCode: Int, responseMessage: String): Exception
+class IdSerializerTest {
+
+    @Test
+    fun testDeserialization() {
+        val serializedIntId = "123"
+        val deserialized = Json.decodeFromString(IdSerializer, serializedIntId)
+
+        expectThat(serializedIntId).isEqualTo(deserialized)
+    }
 }

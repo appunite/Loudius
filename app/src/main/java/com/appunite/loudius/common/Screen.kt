@@ -24,7 +24,8 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import java.time.LocalDateTime
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toInstant
 
 sealed class Screen(val route: String) {
     open val arguments: List<NamedNavArgument> = emptyList()
@@ -42,7 +43,7 @@ sealed class Screen(val route: String) {
             get() = listOf(
                 navDeepLink {
                     uriPattern = Constants.REDIRECT_URL
-                },
+                }
             )
     }
 
@@ -61,7 +62,7 @@ sealed class Screen(val route: String) {
                     navArgument(pullRequestNumberArg) { type = NavType.StringType },
                     navArgument(ownerArg) { type = NavType.StringType },
                     navArgument(repoArg) { type = NavType.StringType },
-                    navArgument(submissionDateArg) { type = NavType.StringType },
+                    navArgument(submissionDateArg) { type = NavType.StringType }
                 )
             }
 
@@ -69,23 +70,21 @@ sealed class Screen(val route: String) {
             owner: String,
             repo: String,
             pullRequestNumber: String,
-            submissionDate: String,
+            submissionDate: String
         ): String = "reviewers_screen/$pullRequestNumber/$owner/$repo/$submissionDate"
 
         fun getInitialValues(savedStateHandle: SavedStateHandle) = ReviewersInitialValues(
             owner = checkNotNull(savedStateHandle[ownerArg]),
             repo = checkNotNull(savedStateHandle[repoArg]),
             pullRequestNumber = checkNotNull(savedStateHandle[pullRequestNumberArg]),
-            submissionTime = checkNotNull(
-                LocalDateTime.parse(savedStateHandle[submissionDateArg]),
-            ),
+            submissionTime = checkNotNull((savedStateHandle[submissionDateArg] ?: "").toInstant())
         )
 
         data class ReviewersInitialValues(
             val owner: String,
             val repo: String,
             val pullRequestNumber: String,
-            val submissionTime: LocalDateTime,
+            val submissionTime: Instant
         )
     }
 }
