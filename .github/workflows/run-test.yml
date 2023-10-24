@@ -35,8 +35,6 @@ jobs:
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
-
-
       - name: Run test
         run: ./gradlew test
         env:
