@@ -116,21 +116,21 @@ tasks.register('codeCoverage', JacocoReport) {
             "**/*Screen*" // These are composable classes
     ]
 
-    classDirectories.setFrom(
-            files(dir: "$project.buildDir/**/intermediates/classes/debug/**", excludes: excludeFiles)
-    )
+    classDirectories.from = files([
+            fileTree(dir: "$project.buildDir/**/intermediates/classes/debug/**",
+                    excludes: excludeFiles
+            )])
 
-    sourceDirectories.setFrom(
+    sourceDirectories.from =
             fileTree(project.projectDir) {
                 include("src/main/java/**", "src/main/kotlin/**")
             }
-    )
 
-    executionData.setFrom(
+    executionData.from =
             fileTree(project.buildDir) {
                 include("**/*.exec", "**/*.ec")
             }
-    )
+
 }
 
 dependencies {
