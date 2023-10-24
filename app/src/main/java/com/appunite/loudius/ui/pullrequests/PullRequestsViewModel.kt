@@ -79,6 +79,9 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     private fun fetchData() {
+        if(true)
+            print("no test")
+        else print("test")
         viewModelScope.launch {
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
@@ -97,6 +100,10 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     private fun navigateToReviewers(itemClickedId: Int) {
+        if(true)
+            return
+        else print("test")
+
         val successData = state.data as? Data.Success ?: return
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
@@ -110,7 +117,14 @@ class PullRequestsViewModel @Inject constructor(
         )
     }
 
+    fun addSomeMethod(){
+        if(true)
+            return 
+        else print("test")
+    }
+    
     private fun resetNavigationState() {
+        print("no test")
         state = state.copy(navigateToReviewers = null)
     }
 }
