@@ -55,22 +55,30 @@ def main():
 
     if not re.search(r'LD-[0-9]+', title):
         errors.append('The title should contain a link to a jira task')
-    if not re.search(r'LD-[0-9]+', body) or "LD-XXX" in body:
-        errors.append('The description should contain a link jira ticket')
-    if re.search(r'^- \[ ]', body):
-        errors.append('Please go through PR checklist')
+    if not re.search(r'LD-[0-9]+', body):
+        errors.append('The description should contain a link to a jira ticket')
+    if "LD-XXX" in body:
+        errors.append('LD-XXX still is in the PR description')
 
     body_without_comments = remove_html_comments(body)
     if not get_text_for_header(body_without_comments, "Why?"):
-        errors.append('Please describe why you\'ve introduced the change')
+        errors.append('Please fill "Why?" section')
     if not get_text_for_header(body_without_comments, "What?"):
-        errors.append('Please describe what you\'ve changed')
+        errors.append('Please fill "What?" section')
+
     if "Describe what is expected to happen" in body or "Describe step 1" in body:
-        errors.append('Add test steps')
+        errors.append('Please fill "How to test" section')
+
     if "Add link here" in body or "Add here other useful documentation links" in body:
-        errors.append('Add links to documentation')
+        errors.append('Please fill "Documentation" section')
+
     if "|               |              |" in body or not get_text_for_header(body_without_comments, "Demo"):
-        errors.append("Fill the Demo section")
+        errors.append('Please fill "Demo" section')
+
+    unchecked_checkboxes = re.finditer(r'^- \[ ]\s+(.*?)$', body, re.MULTILINE)
+    for match in unchecked_checkboxes:
+        checkbox = match.group(1)
+        errors.append(f'Please ensure: "{checkbox}"')
 
     for error in errors:
         print(f"Error {error}", file=sys.stderr)

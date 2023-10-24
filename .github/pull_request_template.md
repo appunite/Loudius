@@ -43,7 +43,8 @@ Add a description that will help reviewer check if given change works as expecte
 All those checkboxes should be marked before submitting the PR
 -->
 
-- [ ] Functionality covered by unit tests
-- [ ] Functionality covered by integration tests
-- [ ] I have updated PR description with relevant information
-- [ ] I have manually tested if the code and app works
+- [ ] Functionality is covered by unit tests
+- [ ] Functionality is covered by integration tests
+- [ ] I've updated PR description with relevant information
+- [ ] I've done self code review
+- [ ] I've manually tested if the code and app works

@@ -11,7 +11,8 @@ on:
 permissions: read-all
 
 jobs:
-  unit-tests:
+  verify:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Verify Pull-Request Description
     runs-on: ubuntu-20.04
 
