@@ -77,11 +77,11 @@ def main():
 
     unchecked_checkboxes = re.finditer(r'^- \[ ]\s+(.*?)$', body, re.MULTILINE)
     for match in unchecked_checkboxes:
-        checkbox = match.group(1)
+        checkbox = match.group(1).strip()
         errors.append(f'Please ensure: "{checkbox}"')
 
     for error in errors:
-        print(f"Error {error}", file=sys.stderr)
+        print(f"❌️ Error: {error}", file=sys.stderr)
 
     if errors:
         sys.exit(1)
