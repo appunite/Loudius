@@ -21,7 +21,7 @@ experiments with different development libraries and tools.
 ## ⚙️ Tech/framework used
 
 - Jetpack Compose
-- Hilt
+- Koin
 - Kotlin Coroutines
 - Retrofit
 - OkHttp3
