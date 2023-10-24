@@ -102,26 +102,24 @@ tasks.register('codeCoverage', JacocoReport) {
         xml.required.set(true)
     }
 
-    def excludeFiles = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/BuildConfig.*',
-            "**/*Application.*",
-            '**/Manifest*.*',
-            '**/*Test*.*',
-            'android/**/*.*',
-            'androidx/**/*.*',
-            'com/airbnb/**/*.*',
-            '**/*Dagger*.*',
-            "**/*Screen*" // These are composable classes
-    ]
-
-    def debugTree = fileTree(
-            dir: "$project.buildDir/intermediates/classes/debug",
-            excludes: excludeFiles
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include("**/tmp/kotlin-classes/debug/**")
+                exclude(
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        "**/*Application.*",
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        'android/**/*.*',
+                        'androidx/**/*.*',
+                        'com/airbnb/**/*.*',
+                        '**/*Dagger*.*',
+                        "**/*Screen*"
+                )
+            }
     )
-
-    classDirectories.setFrom(files([debugTree]))
 
     sourceDirectories.setFrom(fileTree(
             dir: project.projectDir,
