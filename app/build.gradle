@@ -112,8 +112,8 @@ tasks.register('codeCoverage', JacocoReport) {
                         '**/Manifest*.*',
                         '**/*Test*.*',
                         'android/**/*.*',
-                        '**/androidx/**/*.*',
-                        '**/com/airbnb/**/*.*',
+                        'androidx/**/*.*',
+                        'com/airbnb/**/*.*',
                         '**/*Dagger*.*',
                         "**/*Screen*", // These are composable classes
                 )
