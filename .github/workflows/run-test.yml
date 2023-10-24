@@ -25,6 +25,8 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-20.04
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -36,13 +38,29 @@ jobs:
         uses: ./.github/actions/prepare-android-env
 
       - name: Run test
-        run: ./gradlew test
+        run: ./gradlew codeCoverage
         env:
           LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
           LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
+
+      - name: Store HTML coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            */build/reports/jacoco/codeCoverage/html/**
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            */build/reports/jacoco/codeCoverage/codeCoverage.xml
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+          debug-mode: true
 
       - name: Upload tests results
         if: always()
