@@ -101,7 +101,7 @@ class PullRequestsViewModel @Inject constructor(
 
     private fun navigateToReviewers(itemClickedId: Int) {
         if(true)
-            return
+            print("sometest")
         else print("test")
 
         val successData = state.data as? Data.Success ?: return
