@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.dagger.hilt.android'
     id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
 }
@@ -119,17 +118,13 @@ dependencies {
     implementation "com.airbnb.android:showkase:1.0.2"
     kapt "com.airbnb.android:showkase-processor:1.0.2"
 
-    //DI - Hilt
-    implementation "com.google.dagger:hilt-android:2.47"
-    kapt "com.google.dagger:hilt-compiler:2.48.1"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-
-    //DI - for local unit tests
-    kaptTest 'com.google.dagger:hilt-compiler:2.48.1'
-
-    // DI - For instrumented tests.
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.47'
-    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.48.1'
+    // koin
+    api "io.insert-koin:koin-core:$koin_version"
+    api "io.insert-koin:koin-test:$koin_version"
+    api "io.insert-koin:koin-test-junit4:$koin_version"
+    api "io.insert-koin:koin-android:$koin_version"
+    api "io.insert-koin:koin-android-test:$koin_version"
+    api "io.insert-koin:koin-androidx-compose:$koin_version"
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
