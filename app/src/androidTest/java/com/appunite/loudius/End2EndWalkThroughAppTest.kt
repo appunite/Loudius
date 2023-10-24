@@ -59,8 +59,8 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
             automatorTestRule.device.ensure(
                 hasAnyOfObjects(
                     By.text("Accept & continue"),
-                    By.text("Username or email address"),
-                ),
+                    By.text("Username or email address")
+                )
             )
         }
 
@@ -102,7 +102,7 @@ class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
         description("Wait for return to the app") {
             automatorTestRule.device.waitAndFind(
-                By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName),
+                By.pkg(InstrumentationRegistry.getInstrumentation().targetContext.packageName)
             )
         }
     }

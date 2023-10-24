@@ -38,13 +38,13 @@ object RepositoryModule {
     @Singleton
     fun providePullRequestRepository(
         dataSource: PullRequestDataSource,
-        userDataSource: UserDataSource,
+        userDataSource: UserDataSource
     ): PullRequestRepository = PullRequestRepositoryImpl(dataSource, userDataSource)
 
     @Singleton
     @Provides
     fun provideAuthRepository(
         authDataSource: AuthDataSource,
-        userLocalDataSource: UserLocalDataSource,
+        userLocalDataSource: UserLocalDataSource
     ): AuthRepository = AuthRepositoryImpl(authDataSource, userLocalDataSource)
 }

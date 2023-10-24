@@ -27,14 +27,14 @@ class FakePullRequestRepository : PullRequestRepository {
     override suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>> =
         Result.success(Defaults.reviews().filterNot { it.user == Defaults.currentUser() })
 
     override suspend fun getRequestedReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse> =
         Result.success(RequestedReviewersResponse(Defaults.requestedReviewers()))
 
@@ -45,7 +45,7 @@ class FakePullRequestRepository : PullRequestRepository {
         owner: String,
         repo: String,
         pullRequestNumber: String,
-        message: String,
+        message: String
     ): Result<Unit> = when (pullRequestNumber) {
         "correctPullRequestNumber" -> Result.success(Unit)
         else -> Result.failure(WebException.UnknownError(404, null))

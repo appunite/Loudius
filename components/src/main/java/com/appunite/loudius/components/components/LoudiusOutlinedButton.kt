@@ -31,7 +31,7 @@ import com.appunite.loudius.components.theme.LoudiusTheme
 
 enum class LoudiusOutlinedButtonStyle {
     Large,
-    Regular,
+    Regular
 }
 
 @Composable
@@ -41,12 +41,12 @@ fun LoudiusOutlinedButton(
     enabled: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     style: LoudiusOutlinedButtonStyle = LoudiusOutlinedButtonStyle.Regular,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     OutlinedButton(
         enabled = enabled,
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
     ) {
         icon?.invoke()
 
@@ -55,7 +55,7 @@ fun LoudiusOutlinedButton(
             modifier = Modifier
                 .applyIf<Modifier>(style == LoudiusOutlinedButtonStyle.Large) { padding(8.dp) }
                 .applyIf(style == LoudiusOutlinedButtonStyle.Regular && icon != null) { padding(start = 8.dp) },
-            style = LoudiusTextStyle.Button,
+            style = LoudiusTextStyle.Button
         )
     }
 }
@@ -67,12 +67,12 @@ inline fun <T> T.applyIf(predicate: Boolean, block: T.() -> T): T {
 @Composable
 fun LoudiusOutlinedButtonIcon(
     painter: Painter,
-    contentDescription: String,
+    contentDescription: String
 ) {
     Icon(
         painter = painter,
         contentDescription = contentDescription,
-        tint = Color.Black,
+        tint = Color.Black
     )
 }
 
@@ -82,7 +82,7 @@ fun LoudiusOutlinedButtonPreview() {
     LoudiusTheme {
         LoudiusOutlinedButton(
             onClick = { },
-            text = "Some button",
+            text = "Some button"
         )
     }
 }
@@ -94,7 +94,7 @@ fun LoudiusOutlinedButtonLargePreview() {
         LoudiusOutlinedButton(
             onClick = { },
             text = "Some button",
-            style = LoudiusOutlinedButtonStyle.Large,
+            style = LoudiusOutlinedButtonStyle.Large
         )
     }
 }
@@ -109,9 +109,9 @@ fun LoudiusOutlinedButtonWithIconPreview() {
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.components_ic_github),
-                    "Github Icon",
+                    "Github Icon"
                 )
-            },
+            }
         )
     }
 }
@@ -127,9 +127,9 @@ fun LoudiusOutlinedButtonDisabledPreview() {
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.components_ic_github),
-                    "Github Icon",
+                    "Github Icon"
                 )
-            },
+            }
         )
     }
 }
@@ -145,9 +145,9 @@ fun LoudiusOutlinedButtonWithIconLargePreview() {
             icon = {
                 LoudiusOutlinedButtonIcon(
                     painter = painterResource(id = R.drawable.components_ic_github),
-                    "Github Icon",
+                    "Github Icon"
                 )
-            },
+            }
         )
     }
 }

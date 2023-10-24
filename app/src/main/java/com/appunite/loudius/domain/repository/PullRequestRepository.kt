@@ -31,13 +31,13 @@ interface PullRequestRepository {
     suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>>
 
     suspend fun getRequestedReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse>
 
     suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse>
@@ -46,13 +46,13 @@ interface PullRequestRepository {
         owner: String,
         repo: String,
         pullRequestNumber: String,
-        message: String,
+        message: String
     ): Result<Unit>
 }
 
 class PullRequestRepositoryImpl @Inject constructor(
     private val pullRequestsDataSource: PullRequestDataSource,
-    private val userDataSource: UserDataSource,
+    private val userDataSource: UserDataSource
 ) : PullRequestRepository {
     override suspend fun getCurrentUserPullRequests(): Result<PullRequestsResponse> {
         val currentUser = userDataSource.getUser()
@@ -62,7 +62,7 @@ class PullRequestRepositoryImpl @Inject constructor(
     override suspend fun getReviews(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<List<Review>> = coroutineScope {
         val currentUserDeferred = async { userDataSource.getUser() }
         val reviewsDeferred = async {
@@ -77,13 +77,13 @@ class PullRequestRepositoryImpl @Inject constructor(
     }
 
     private fun List<Review>.excludeUserReviews(
-        user: User,
+        user: User
     ) = filter { review -> review.user.id != user.id }
 
     override suspend fun getRequestedReviewers(
         owner: String,
         repo: String,
-        pullRequestNumber: String,
+        pullRequestNumber: String
     ): Result<RequestedReviewersResponse> =
         pullRequestsDataSource.getReviewers(owner, repo, pullRequestNumber)
 
@@ -91,7 +91,7 @@ class PullRequestRepositoryImpl @Inject constructor(
         owner: String,
         repo: String,
         pullRequestNumber: String,
-        message: String,
+        message: String
     ): Result<Unit> =
         pullRequestsDataSource.notify(owner, repo, pullRequestNumber, message)
 }

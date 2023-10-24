@@ -140,6 +140,20 @@ jobs:
       - name: Ensure license headers are added
         run: python "build-tools/check-license-headers.py"
 
+  verify-formatting:
+    name: Verify ktlint formatting
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
+      - name: Run test
+        run: ./gradlew ktlintCheck
+
   test-results:
     name: Upload tests results
     runs-on: ubuntu-20.04
@@ -147,6 +161,8 @@ jobs:
     needs:
       - android-tests
       - unit-tests
+      - verify-formatting
+      - test-license-headers
 
     steps:
       - name: Checkout
