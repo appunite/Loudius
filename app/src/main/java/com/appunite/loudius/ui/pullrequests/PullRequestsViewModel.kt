@@ -101,7 +101,6 @@ class PullRequestsViewModel @Inject constructor(
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
         state = state.copy(
-            navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
                 itemClickedData.shortRepositoryName,
                 itemClickedData.number.toString(),
