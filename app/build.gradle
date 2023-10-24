@@ -103,7 +103,7 @@ tasks.register('codeCoverage', JacocoReport) {
     }
 
     classDirectories.setFrom(
-            fileTree(project.projectDir) {
+            fileTree(project.buildDir) {
                 include("**/intermediates/classes/debug/**")
                 exclude('**/R.class',
                         '**/R$*.class',
