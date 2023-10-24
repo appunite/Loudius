@@ -28,7 +28,6 @@ import org.junit.runners.model.Statement
 class IntegrationTestRule(testActivity: Class<out ComponentActivity> = ComponentActivity::class.java) :
     TestRule {
 
-    val mockWebServer = MockWebServerRule()
     val composeTestRule = createAndroidComposeRule(testActivity).apply {
         registerIdlingResource(countingResource.toIdlingResource())
     }
@@ -37,7 +36,6 @@ class IntegrationTestRule(testActivity: Class<out ComponentActivity> = Component
 
     override fun apply(base: Statement, description: Description): Statement {
         return RuleChain.emptyRuleChain()
-            .around(mockWebServer)
             .around(composeTestRule)
             .around(screenshotTestRule)
             .apply(base, description)

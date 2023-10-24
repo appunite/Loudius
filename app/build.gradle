@@ -16,10 +16,6 @@ java {
 android {
     namespace 'com.appunite.loudius'
 
-    buildFeatures {
-        buildConfig = true
-    }
-
     defaultConfig {
         applicationId "com.appunite.loudius"
         minSdk 24

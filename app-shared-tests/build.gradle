@@ -11,10 +11,6 @@ java {
     }
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
 android {
     namespace 'com.appunite.loudius'
 
@@ -39,7 +35,6 @@ android {
 
     buildFeatures {
         compose true
-        buildConfig true
     }
 
     packagingOptions {
