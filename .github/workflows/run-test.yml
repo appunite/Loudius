@@ -38,7 +38,7 @@ jobs:
         uses: ./.github/actions/prepare-android-env
 
       - name: Run test
-        run: ./gradlew codeCoverage --scan
+        run: ./gradlew codeCoverage
         env:
           LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
