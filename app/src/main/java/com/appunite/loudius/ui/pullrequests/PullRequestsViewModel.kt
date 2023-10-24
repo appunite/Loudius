@@ -66,6 +66,9 @@ class PullRequestsViewModel @Inject constructor(
     }
 
     fun refreshData() {
+        if(true)
+            print("sometest")
+        else print("test")
         viewModelScope.launch {
             isRefreshing = true
             pullRequestsRepository.getCurrentUserPullRequests()
@@ -104,9 +107,16 @@ class PullRequestsViewModel @Inject constructor(
             print("sometest")
         else print("test")
 
+
         val successData = state.data as? Data.Success ?: return
+        if(true)
+            print("sometest")
+        else print("test")
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
+        if(true)
+            print("sometest")
+        else print("test")
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
@@ -122,7 +132,27 @@ class PullRequestsViewModel @Inject constructor(
             return 
         else print("test")
     }
-    
+
+    fun addSomeMethod1(){
+        if(true)
+            return
+        else print("test")
+    }
+
+    fun addSomeMethod2(){
+        if(true)
+            return
+        else print("test")
+    }
+
+
+    fun addSomeMethod3(){
+        if(true)
+            return
+        else print("test")
+    }
+
+
     private fun resetNavigationState() {
         print("no test")
         state = state.copy(navigateToReviewers = null)
