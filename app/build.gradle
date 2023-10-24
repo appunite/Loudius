@@ -103,9 +103,20 @@ tasks.register('codeCoverage', JacocoReport) {
     }
 
     classDirectories.setFrom(
-            fileTree(project.projectDir){
+            fileTree(project.projectDir) {
                 include("**/intermediates/classes/debug/**")
-                exclude('**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', 'androidx/**/*.*')
+                exclude('**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        "**/*Application.*",
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        'android/**/*.*',
+                        '**/androidx/**/*.*',
+                        '**/com/airbnb/**/*.*',
+                        '**/*Dagger*.*',
+                        "**/*Screen*", // These are composable classes
+                )
             }
     )
 
