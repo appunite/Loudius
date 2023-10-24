@@ -28,12 +28,7 @@ import org.junit.Test
 abstract class UniversalWalkThroughAppTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(this, MainActivity::class.java) }
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
+    val integrationTestRule by lazy { IntegrationTestRule( MainActivity::class.java) }
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {

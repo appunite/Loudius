@@ -34,10 +34,6 @@ import org.junit.Test
 
 abstract class AbsWalkThroughAppTest  : UniversalWalkThroughAppTest() {
 
-    @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(MainActivity::class.java) }
-
-
     @get:Rule(order = 1)
     var mockWebServer: MockWebServerRule = MockWebServerRule()
 
