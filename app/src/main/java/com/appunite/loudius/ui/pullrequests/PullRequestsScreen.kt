@@ -37,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.R
 import com.appunite.loudius.common.Constants
@@ -53,12 +52,13 @@ import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.network.model.PullRequest
 import kotlinx.datetime.Instant
+import org.koin.androidx.compose.koinViewModel
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
 @Composable
 fun PullRequestsScreen(
-    viewModel: PullRequestsViewModel = hiltViewModel(),
+    viewModel: PullRequestsViewModel = koinViewModel(),
     navigateToReviewers: NavigateToReviewers
 ) {
     val state = viewModel.state
@@ -108,8 +108,15 @@ private fun PullRequestsScreenStateless(
                     modifier = Modifier.padding(padding),
                     onButtonClick = { onAction(PulLRequestsAction.RetryClick) }
                 )
+
                 is Data.Loading -> LoudiusLoadingIndicator(Modifier.padding(padding))
-                is Data.Success -> PullRequestContent(state.data, refreshing, onRefresh, padding, onAction)
+                is Data.Success -> PullRequestContent(
+                    state.data,
+                    refreshing,
+                    onRefresh,
+                    padding,
+                    onAction
+                )
             }
         }
     )

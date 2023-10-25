@@ -17,17 +17,7 @@
 package com.appunite.loudius
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.appunite.loudius.di.GithubHelperModule
-import dagger.hilt.android.testing.BindValue
-import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
-@UninstallModules(GithubHelperModule::class)
-class IntegrationLoginScreenTest : AbsLoginScreenTest() {
-
-    @BindValue @JvmField
-    val githubHelperBind = githubHelper
-}
+class IntegrationLoginScreenTest : AbsLoginScreenTest()

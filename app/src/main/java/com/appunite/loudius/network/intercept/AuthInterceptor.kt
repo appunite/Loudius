@@ -19,9 +19,8 @@ package com.appunite.loudius.network.intercept
 import com.appunite.loudius.domain.repository.AuthRepository
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
 
-class AuthInterceptor @Inject constructor(
+class AuthInterceptor(
     private val authRepository: AuthRepository
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

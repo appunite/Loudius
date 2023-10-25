@@ -104,7 +104,7 @@ jobs:
             --device="model=Pixel2.arm,version=33,locale=en,orientation=portrait" \
             --type=instrumentation \
             --use-orchestrator \
-            --test-runner-class="com.appunite.loudius.util.HiltTestRunner" \
+            --test-runner-class="com.appunite.loudius.util.InstrumentationTestRunner" \
             --timeout="20m" \
             --results-dir="${{ steps.generate-dir.outputs.results_dir }}" \
             --results-bucket="${{ steps.generate-dir.outputs.bucket }}" \
