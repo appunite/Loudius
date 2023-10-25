@@ -1,5 +1,48 @@
 [versions]
 
+desugar_jdk_libs = "2.0.3"
+ktx = "1.12.0"
+lifecycle_ktx = "2.6.2"
+activity_compose = "1.8.0"
+test_runner = "1.5.2"
+test_orchestrator = "1.4.2"
+test_uiautomator = "2.3.0-alpha03"
+mockk_android = "1.13.5"
+compose_bom = "2023.10.01"
+airbnb_showkase = "1.0.2"
+kotlinx_coroutines = "1.7.3"
+kotlinx_serialization_json = "1.6.0"
+kotlinx_datetime = "0.4.1"
+ktor = "2.3.4"
+okhttp3 = "4.12.0"
+
 [libraries]
 
-[plugins]
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
+androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle_ktx" }
+androidx-activity_compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity_compose" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "test_runner" }
+androix-test-uiautomator = { group = "androidx.test", name = "uiautomator", version.ref = "test_uiautomator" }
+androix-test-orchestartor = { group = "androidx.test", name = "orchestrator", version.ref = "test_orchestrator" }
+mockk = { group = "io.mockk", name = "mockk-android", version.ref = "mockk_android" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-navigation = { module = "androidx.navigation:navigation-compose" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+showkase = { group = "com.airbnb.android", name = "showkase", version = "airbnb_showkase" }
+showkase.processor = { group = "com.airbnb.android", name = "showkase-processor", version = "airbnb_showkase" }
+coroutines.android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "kotlinx_coroutines" }
+coroutines.test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "kotlinx_coroutines" }
+ktor.client.core = { group = "io.ktor", name = "ktor-client-core", version = "ktor" }
+ktor.client.okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version = "ktor" }
+ktor.client.content_negotation = { group = "io.ktor", name = "ktor-content-negotiation", version = "ktor" }
+ktor.serilization.json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version = "ktor" }
+ktor.client.mock = { group = "io.ktor", name = "ktor-client-mock", version = "ktor" }
+okhttp3.okhttp = { group = "com.squre.okhttp3", name = "okhttp", version = "okhttp3" }
+okhttp3.logging_interceptor = { group = "com.squre.okhttp3", name = "logging-interceptor", version = "okhttp3" }
+[
+plugins]
