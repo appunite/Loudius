@@ -42,7 +42,6 @@ val appModule = module {
 
 class LoudiusApplication : Application() {
     override fun onCreate() {
-        println("OnCreate")
         super.onCreate()
 
         startKoin {

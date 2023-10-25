@@ -28,7 +28,6 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.Q], application = LoudiusApplication::class)
 @DisplayName("ensure activity tests are set correctly")
 class ActivitySetupTest {
 
