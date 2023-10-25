@@ -53,10 +53,7 @@ abstract class AbsReviewersScreenTest {
 
             composeTestRule.waitUntilLoadingDoesNotExist()
 
-            composeTestRule.onNodeWithText(
-                "userLogin",
-                useUnmergedTree = true
-            ).assertIsDisplayed()
+            composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
         }
     }
 
@@ -73,17 +70,15 @@ abstract class AbsReviewersScreenTest {
 
             composeTestRule.waitUntilLoadingDoesNotExist()
 
-            composeTestRule.onNodeWithText("Notify", useUnmergedTree = true).performClick()
+            composeTestRule.onNodeWithText("Notify").performClick()
 
             composeTestRule.waitUntilLoadingDoesNotExist()
-//
-//            composeTestRule
-//                .onNodeWithText(
-//                    "Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89",
-//                    useUnmergedTree = true
-//                )
-//                .assertIsDisplayed()
-//
+
+            composeTestRule
+                .onNodeWithText(
+                    "Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89",
+                ).assertIsDisplayed()
+
         }
     }
 

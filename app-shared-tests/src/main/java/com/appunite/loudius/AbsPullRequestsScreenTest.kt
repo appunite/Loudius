@@ -49,7 +49,7 @@ abstract class AbsPullRequestsScreenTest {
 
             composeTestRule.waitUntilLoadingDoesNotExist()
 
-            composeTestRule.onNodeWithText("First Pull-Request title", useUnmergedTree = true)
+            composeTestRule.onNodeWithText("First Pull-Request title")
                 .assertIsDisplayed()
         }
     }
