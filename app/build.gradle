@@ -49,6 +49,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug{
+            enableUnitTestCoverage true
+        }
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
