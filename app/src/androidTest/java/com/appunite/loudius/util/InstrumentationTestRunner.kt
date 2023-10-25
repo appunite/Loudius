@@ -25,7 +25,7 @@ class InstrumentationTestRunner : AndroidJUnitRunner() {
     override fun newApplication(
         classLoader: ClassLoader?,
         className: String?,
-        context: Context?,
+        context: Context?
     ): Application {
         return super.newApplication(classLoader, LoudiusApplication::class.java.name, context)
     }
