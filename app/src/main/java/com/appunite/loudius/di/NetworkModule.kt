@@ -80,7 +80,6 @@ val networkModule = module {
         }
     }
 
-
     singleOf(::AuthFailureInterceptor)
     singleOf(::AuthInterceptor)
     singleOf(::AuthFailureHandler)

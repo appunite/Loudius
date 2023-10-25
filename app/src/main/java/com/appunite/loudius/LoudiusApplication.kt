@@ -36,7 +36,7 @@ val appModule = module {
         serviceModule,
         repositoryModule,
         githubHelperModule,
-        dispatcherModule,
+        dispatcherModule
     )
 }
 
@@ -49,7 +49,7 @@ class LoudiusApplication : Application() {
             androidContext(this@LoudiusApplication)
             modules(
                 appModule,
-                viewModelModule,
+                viewModelModule
             )
         }
     }

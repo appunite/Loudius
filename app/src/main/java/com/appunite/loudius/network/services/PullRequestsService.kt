@@ -59,7 +59,7 @@ interface PullRequestsService {
 }
 
 class PullRequestsServiceImpl(
-    private val client: HttpClient,
+    private val client: HttpClient
 ) : PullRequestsService {
     override suspend fun getPullRequestsForUser(
         query: String,
