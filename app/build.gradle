@@ -23,7 +23,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.appunite.loudius.util.HiltTestRunner"
+        testInstrumentationRunner "com.appunite.loudius.util.InstrumentationTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables {
             useSupportLibrary true
