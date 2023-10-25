@@ -24,22 +24,18 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsRule
-import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
-abstract class AbsWalkThroughAppTest  : UniversalWalkThroughAppTest() {
+abstract class AbsWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
     @get:Rule(order = 1)
     var mockWebServer: MockWebServerRule = MockWebServerRule()
 
     @get:Rule(order = 2)
     val intents = IntentsRule()
-
 
     @Before
     fun prepareMocks() {

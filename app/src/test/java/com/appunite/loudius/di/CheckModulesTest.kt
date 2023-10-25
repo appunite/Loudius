@@ -40,7 +40,7 @@ class CheckModulesTest : KoinTest {
 
         koinApplication {
             modules(
-                appModule,
+                appModule
             )
 
             checkModules() {

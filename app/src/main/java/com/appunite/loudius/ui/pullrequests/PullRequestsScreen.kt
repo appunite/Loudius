@@ -51,8 +51,8 @@ import com.appunite.loudius.components.components.LoudiusTextStyle
 import com.appunite.loudius.components.components.LoudiusTopAppBar
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.network.model.PullRequest
-import org.koin.androidx.compose.koinViewModel
 import kotlinx.datetime.Instant
+import org.koin.androidx.compose.koinViewModel
 
 typealias NavigateToReviewers = (String, String, String, String) -> Unit
 
