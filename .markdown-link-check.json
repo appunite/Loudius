@@ -5,6 +5,9 @@
   "ignorePatterns": [
     {
       "pattern": "^https://www.notion.so/appunite"
+    },
+    {
+      "pattern": "^https://loudius.atlassian.net/browse/LD-XXX$"
     }
   ]
 }
