@@ -29,7 +29,6 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +38,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.minus
-import javax.inject.Inject
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -63,8 +61,7 @@ enum class ReviewersSnackbarType {
     SUCCESS, FAILURE
 }
 
-@HiltViewModel
-class ReviewersViewModel @Inject constructor(
+class ReviewersViewModel(
     private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {

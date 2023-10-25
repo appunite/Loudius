@@ -27,9 +27,7 @@ import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.datasource.BadVerificationCodeException
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed class AuthenticatingAction {
 
@@ -53,14 +51,12 @@ sealed class AuthenticatingScreenNavigation {
     object NavigateToLogin : AuthenticatingScreenNavigation()
 }
 
-@HiltViewModel
-class AuthenticatingViewModel @Inject constructor(
+class AuthenticatingViewModel(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)
-
     var state by mutableStateOf(AuthenticatingState())
         private set
 

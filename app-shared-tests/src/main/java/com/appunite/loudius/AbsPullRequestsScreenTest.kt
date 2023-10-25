@@ -24,22 +24,16 @@ import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 abstract class AbsPullRequestsScreenTest {
 
-    @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(this) }
+    @get:Rule
+    val integrationTestRule = IntegrationTestRule()
 
     @get:Rule(order = 1)
     var mockWebServer: MockWebServerRule = MockWebServerRule()
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
@@ -55,7 +49,8 @@ abstract class AbsPullRequestsScreenTest {
 
             composeTestRule.waitUntilLoadingDoesNotExist()
 
-            composeTestRule.onNodeWithText("First Pull-Request title").assertIsDisplayed()
+            composeTestRule.onNodeWithText("First Pull-Request title")
+                .assertIsDisplayed()
         }
     }
 }

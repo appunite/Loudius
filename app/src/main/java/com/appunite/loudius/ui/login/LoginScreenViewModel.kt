@@ -20,8 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 sealed class LoginAction {
     object ClearNavigation : LoginAction()
@@ -43,8 +41,7 @@ data class LoginState(
     val navigateTo: LoginNavigateTo? = null
 )
 
-@HiltViewModel
-class LoginScreenViewModel @Inject constructor(
+class LoginScreenViewModel(
     private val githubHelper: GithubHelper
 ) : ViewModel() {
 
