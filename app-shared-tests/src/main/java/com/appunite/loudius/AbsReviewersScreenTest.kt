@@ -76,9 +76,8 @@ abstract class AbsReviewersScreenTest {
 
             composeTestRule
                 .onNodeWithText(
-                    "Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89",
+                    "Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89"
                 ).assertIsDisplayed()
-
         }
     }
 
