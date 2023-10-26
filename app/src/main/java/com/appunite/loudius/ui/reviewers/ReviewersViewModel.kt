@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.AnalyticsService
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -29,6 +30,7 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -66,7 +68,8 @@ enum class ReviewersSnackbarType {
 @HiltViewModel
 class ReviewersViewModel @Inject constructor(
     private val repository: PullRequestRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val analyticsService: AnalyticsService
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
@@ -213,6 +216,7 @@ class ReviewersViewModel @Inject constructor(
                 reviewers = successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
+        trackNotifyReviewerEvent("notify_reviewer_failure")
     }
 
     private fun onNotifyUserSuccess(
@@ -225,6 +229,7 @@ class ReviewersViewModel @Inject constructor(
                 successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
+        trackNotifyReviewerEvent("notify_reviewer_success")
     }
 
     private fun List<Reviewer>.updateLoadingState(
@@ -240,5 +245,13 @@ class ReviewersViewModel @Inject constructor(
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
+    }
+
+    private fun trackNotifyReviewerEvent(value: String) {
+        analyticsService.logEvent(
+            eventName = FirebaseAnalytics.Event.SELECT_ITEM,
+            param = FirebaseAnalytics.Param.CONTENT,
+            value = value
+        )
     }
 }

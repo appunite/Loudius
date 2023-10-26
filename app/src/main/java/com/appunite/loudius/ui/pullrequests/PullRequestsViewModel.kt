@@ -21,8 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.AnalyticsService
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,7 +55,8 @@ data class NavigationPayload(
 
 @HiltViewModel
 class PullRequestsViewModel @Inject constructor(
-    private val pullRequestsRepository: PullRequestRepository
+    private val pullRequestsRepository: PullRequestRepository,
+    private val analyticsService: AnalyticsService
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
@@ -108,9 +111,18 @@ class PullRequestsViewModel @Inject constructor(
                 itemClickedData.createdAt.toString()
             )
         )
+        trackNavigateToReviewersEvent()
     }
 
     private fun resetNavigationState() {
         state = state.copy(navigateToReviewers = null)
+    }
+
+    private fun trackNavigateToReviewersEvent() {
+        analyticsService.logEvent(
+            eventName = FirebaseAnalytics.Event.SELECT_ITEM,
+            param = FirebaseAnalytics.Param.CONTENT,
+            value = "navigate_to_reviewers"
+        )
     }
 }
