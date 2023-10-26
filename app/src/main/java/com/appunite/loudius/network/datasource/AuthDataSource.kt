@@ -21,8 +21,6 @@ import com.appunite.loudius.network.model.AccessToken
 import com.appunite.loudius.network.model.AccessTokenResponse
 import com.appunite.loudius.network.services.AuthService
 import com.appunite.loudius.network.utils.WebException
-import javax.inject.Inject
-import javax.inject.Singleton
 
 interface AuthDataSource {
 
@@ -33,8 +31,7 @@ interface AuthDataSource {
     ): Result<AccessToken>
 }
 
-@Singleton
-class AuthDataSourceImpl @Inject constructor(
+class AuthDataSourceImpl(
     private val authService: AuthService
 ) : AuthDataSource {
 

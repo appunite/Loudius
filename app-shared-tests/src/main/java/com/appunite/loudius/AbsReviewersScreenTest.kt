@@ -32,7 +32,7 @@ import org.junit.Test
 abstract class AbsReviewersScreenTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(this) }
+    val integrationTestRule = IntegrationTestRule()
 
     @get:Rule(order = 1)
     var mockWebServer: MockWebServerRule = MockWebServerRule()
@@ -40,7 +40,6 @@ abstract class AbsReviewersScreenTest {
     @Before
     fun setUp() {
         integrationTestRule.initTests()
-        integrationTestRule.setUp()
     }
 
     @Test
@@ -76,8 +75,9 @@ abstract class AbsReviewersScreenTest {
             composeTestRule.waitUntilLoadingDoesNotExist()
 
             composeTestRule
-                .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
-                .assertIsDisplayed()
+                .onNodeWithText(
+                    "Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89"
+                ).assertIsDisplayed()
         }
     }
 

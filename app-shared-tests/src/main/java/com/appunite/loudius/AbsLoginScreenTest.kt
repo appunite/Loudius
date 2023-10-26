@@ -19,7 +19,6 @@ package com.appunite.loudius
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.intent.Intents.intended
@@ -32,43 +31,45 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
 import com.appunite.loudius.components.theme.LoudiusTheme
+import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
 import com.appunite.loudius.ui.login.LoginScreen
-import com.appunite.loudius.util.ScreenshotTestRule
-import dagger.hilt.android.testing.HiltAndroidRule
+import com.appunite.loudius.util.IntegrationTestRule
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.GlobalContext
+import org.koin.dsl.module
 
 abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 0)
-    val hiltRule by lazy { HiltAndroidRule(this) }
+    val integrationTestRule by lazy { IntegrationTestRule() }
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<TestActivity>()
-
-    @get:Rule(order = 2)
     val intents = IntentsRule()
 
-    @Rule
-    @JvmField
-    val screenshotTestRule = ScreenshotTestRule()
-
-    @Before
-    fun setUp() {
-        hiltRule.inject()
-    }
-
-    val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
+    private val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
         every { shouldAskForXiaomiIntent() } returns false
     }
 
+    @Before
+    fun init() {
+        // we want to provide a mock definition of GithubHelper into the koin
+        // therefore we need to unload the module first and load a module with
+        // mock definition of GithubHelper.
+        GlobalContext.get().unloadModules(listOf(githubHelperModule))
+        val githubMockModule = module {
+            single<GithubHelper> { githubHelper }
+        }
+        GlobalContext.get().loadModules(listOf(githubMockModule))
+    }
+
     @Test
-    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() {
+    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() = with(integrationTestRule) {
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
@@ -90,7 +91,7 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth() {
+    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth() = with(integrationTestRule) {
         every { githubHelper.shouldAskForXiaomiIntent() } returns true
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
@@ -114,32 +115,33 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() {
-        every { githubHelper.shouldAskForXiaomiIntent() } returns true
-        intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
-            .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
+    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() =
+        with(integrationTestRule) {
+            every { githubHelper.shouldAskForXiaomiIntent() } returns true
+            intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
+                .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
-        composeTestRule.setContent {
-            LoudiusTheme {
-                LoginScreen()
+            composeTestRule.setContent {
+                LoudiusTheme {
+                    LoginScreen()
+                }
             }
-        }
 
-        composeTestRule.onNodeWithText("Log in").performClick()
-        composeTestRule.onNodeWithText("Grant permission").performClick()
+            composeTestRule.onNodeWithText("Log in").performClick()
+            composeTestRule.onNodeWithText("Grant permission").performClick()
 
-        composeTestRule.waitForIdle()
-        intended(
-            allOf(
-                hasAction("miui.intent.action.APP_PERM_EDITOR"),
-                hasExtra("extra_pkgname", "com.github.android"),
-                hasComponent(
-                    allOf(
-                        hasPackageName("com.miui.securitycenter"),
-                        hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity")
+            composeTestRule.waitForIdle()
+            intended(
+                allOf(
+                    hasAction("miui.intent.action.APP_PERM_EDITOR"),
+                    hasExtra("extra_pkgname", "com.github.android"),
+                    hasComponent(
+                        allOf(
+                            hasPackageName("com.miui.securitycenter"),
+                            hasClassName("com.miui.permcenter.permissions.PermissionsEditorActivity")
+                        )
                     )
                 )
             )
-        )
-    }
+        }
 }

@@ -29,7 +29,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodeURLParameter
-import javax.inject.Inject
 
 interface PullRequestsService {
 
@@ -59,8 +58,9 @@ interface PullRequestsService {
     ): Result<Unit>
 }
 
-class PullRequestsServiceImpl @Inject constructor(private val client: HttpClient) :
-    PullRequestsService {
+class PullRequestsServiceImpl(
+    private val client: HttpClient
+) : PullRequestsService {
     override suspend fun getPullRequestsForUser(
         query: String,
         page: Int,

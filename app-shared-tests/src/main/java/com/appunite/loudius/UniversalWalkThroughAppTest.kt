@@ -21,19 +21,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 abstract class UniversalWalkThroughAppTest {
 
     @get:Rule(order = 0)
-    val integrationTestRule by lazy { IntegrationTestRule(this, MainActivity::class.java) }
-
-    @Before
-    fun setUp() {
-        integrationTestRule.setUp()
-    }
+    val integrationTestRule by lazy { IntegrationTestRule(MainActivity::class.java) }
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {

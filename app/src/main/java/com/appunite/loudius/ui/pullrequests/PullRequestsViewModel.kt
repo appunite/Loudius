@@ -25,9 +25,7 @@ import com.appunite.loudius.analytics.AnalyticsService
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import com.google.firebase.analytics.FirebaseAnalytics
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
@@ -53,8 +51,7 @@ data class NavigationPayload(
     val submissionTime: String
 )
 
-@HiltViewModel
-class PullRequestsViewModel @Inject constructor(
+class PullRequestsViewModel(
     private val pullRequestsRepository: PullRequestRepository,
     private val analyticsService: AnalyticsService
 ) : ViewModel() {

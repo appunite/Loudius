@@ -18,35 +18,26 @@ package com.appunite.loudius.util
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import com.appunite.loudius.TestActivity
 import com.appunite.loudius.components.components.countingResource
 import com.appunite.loudius.util.IdlingResourceExtensions.toIdlingResource
-import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class IntegrationTestRule(
-    testClass: Any,
-    testActivity: Class<out ComponentActivity> = TestActivity::class.java
-) : TestRule {
+class IntegrationTestRule(testActivity: Class<out ComponentActivity> = ComponentActivity::class.java) :
+    TestRule {
 
     val composeTestRule = createAndroidComposeRule(testActivity).apply {
         registerIdlingResource(countingResource.toIdlingResource())
     }
-    private val hiltRule = HiltAndroidRule(testClass)
+
     private val screenshotTestRule = ScreenshotTestRule()
 
     override fun apply(base: Statement, description: Description): Statement {
         return RuleChain.emptyRuleChain()
-            .around(hiltRule)
             .around(composeTestRule)
             .around(screenshotTestRule)
             .apply(base, description)
-    }
-
-    fun setUp() {
-        hiltRule.inject()
     }
 }

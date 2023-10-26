@@ -30,13 +30,11 @@ import com.appunite.loudius.util.githubUserPassword
 import com.appunite.loudius.util.hasAnyOfObjects
 import com.appunite.loudius.util.type
 import com.appunite.loudius.util.waitAndFind
-import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@HiltAndroidTest
 class End2EndWalkThroughAppTest : UniversalWalkThroughAppTest() {
 
     @get:Rule
