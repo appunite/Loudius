@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val analyticsModule = module {
     single<AnalyticsService> {
-        val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(androidContext())
-        AnalyticsServiceImpl(firebaseAnalytics)
+        AnalyticsServiceImpl(get())
     }
+    single<FirebaseAnalytics> { FirebaseAnalytics.getInstance(androidContext()) }
 }

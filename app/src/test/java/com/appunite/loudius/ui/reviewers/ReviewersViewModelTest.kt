@@ -17,6 +17,7 @@
 package com.appunite.loudius.ui.reviewers
 
 import androidx.lifecycle.SavedStateHandle
+import com.appunite.loudius.analytics.AnalyticsService
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
@@ -61,8 +62,9 @@ class ReviewersViewModelTest {
         every { get<String>("pull_request_number") } returns "correctPullRequestNumber"
     }
     private lateinit var viewModel: ReviewersViewModel
+    private val analyticsService = mockk<AnalyticsService>(relaxed = true)
 
-    private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle)
+    private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle, analyticsService)
 
     @BeforeEach
     fun setup() {
