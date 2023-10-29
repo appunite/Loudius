@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.appunite.loudius.analytics.AnalyticsService
+import com.appunite.loudius.analytics.ReviewersEventTracker
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -30,7 +30,6 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,7 +65,7 @@ enum class ReviewersSnackbarType {
 class ReviewersViewModel(
     private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle,
-    private val analyticsService: AnalyticsService
+    private val eventTracker: ReviewersEventTracker
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
@@ -82,22 +81,36 @@ class ReviewersViewModel(
     }
 
     fun refreshData() {
+        eventTracker.trackRefreshData()
         viewModelScope.launch {
             _isRefreshing.value = true
             getMergedData()
-                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
-                .onFailure { state = state.copy(data = Data.Error) }
+                .onSuccess {
+                    state = state.copy(data = Data.Success(reviewers = it))
+                    eventTracker.trackRefreshDataSuccess()
+                }
+                .onFailure {
+                    state = state.copy(data = Data.Error)
+                    eventTracker.trackRefreshDataFailure()
+                }
             _isRefreshing.value = false
         }
     }
 
     private fun fetchData() {
+        eventTracker.trackFetchData()
         viewModelScope.launch {
             state = state.copy(data = Data.Loading)
 
             getMergedData()
-                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
-                .onFailure { state = state.copy(data = Data.Error) }
+                .onSuccess {
+                    state = state.copy(data = Data.Success(reviewers = it))
+                    eventTracker.trackFetchDataSuccess()
+                }
+                .onFailure {
+                    state = state.copy(data = Data.Error)
+                    eventTracker.trackFetchDataFailure()
+                }
         }
     }
 
@@ -180,6 +193,7 @@ class ReviewersViewModel(
     }
 
     private fun notifyReviewer(userLogin: String) {
+        eventTracker.trackClickNotify()
         val (owner, repo, pullRequestNumber) = initialValues
         val successData = state.data as? Data.Success ?: return
 
@@ -213,7 +227,7 @@ class ReviewersViewModel(
                 reviewers = successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
-        trackNotifyReviewerEvent("notify_reviewer_failure")
+        eventTracker.trackNotifyFailure()
     }
 
     private fun onNotifyUserSuccess(
@@ -226,7 +240,7 @@ class ReviewersViewModel(
                 successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
-        trackNotifyReviewerEvent("notify_reviewer_success")
+        eventTracker.trackNotifySuccess()
     }
 
     private fun List<Reviewer>.updateLoadingState(
@@ -242,13 +256,5 @@ class ReviewersViewModel(
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
-    }
-
-    private fun trackNotifyReviewerEvent(value: String) {
-        analyticsService.logEvent(
-            eventName = FirebaseAnalytics.Event.SELECT_ITEM,
-            param = FirebaseAnalytics.Param.CONTENT,
-            value = value
-        )
     }
 }

@@ -16,7 +16,6 @@
 
 package com.appunite.loudius.ui.pullrequests
 
-import com.appunite.loudius.analytics.AnalyticsService
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
@@ -24,9 +23,7 @@ import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
-import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,12 +35,10 @@ import strikt.assertions.isNull
 import strikt.assertions.isTrue
 import strikt.assertions.single
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
     private val pullRequestRepository = spyk(FakePullRequestRepository())
-    private val analyticsService = mockk<AnalyticsService>(relaxed = true)
-    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository, analyticsService)
+    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
 
     @Test
     fun `WHEN refresh data THEN start refreshing data and set isRefreshing to true`() = runTest {

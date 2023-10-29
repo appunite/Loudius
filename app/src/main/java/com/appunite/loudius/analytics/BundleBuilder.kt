@@ -16,20 +16,23 @@
 
 package com.appunite.loudius.analytics
 
-import com.google.firebase.analytics.FirebaseAnalytics
+import android.os.Bundle
 
-interface AnalyticsService {
+interface BundleBuilder {
 
-    fun logEvent(eventName: String, builder: BundleBuilder.() -> Unit)
+    fun param(key: String, value: String)
+    fun param(key: String, value: Int)
 }
 
-class AnalyticsServiceImpl(
-    private val firebaseAnalytics: FirebaseAnalytics
-) : AnalyticsService {
+class BundleBuilderImpl : BundleBuilder {
 
-    override fun logEvent(eventName: String, builder: BundleBuilder.() -> Unit) {
-        val bundleBuilder = BundleBuilderImpl()
-        builder(bundleBuilder)
-        firebaseAnalytics.logEvent(eventName, bundleBuilder.bundle)
+    val bundle = Bundle()
+
+    override fun param(key: String, value: String) {
+        bundle.putString(key, value)
+    }
+
+    override fun param(key: String, value: Int) {
+        bundle.putInt(key, value)
     }
 }
