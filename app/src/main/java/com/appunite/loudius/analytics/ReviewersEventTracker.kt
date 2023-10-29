@@ -21,14 +21,14 @@ class ReviewersEventTracker(private val analyticsService: AnalyticsService) {
     fun trackNotifySuccess() {
         analyticsService.logEvent(eventName = "action_finished") {
             param("item_name", "notify")
-            param("success", "true")
+            param("success", true)
         }
     }
 
     fun trackNotifyFailure() {
         analyticsService.logEvent(eventName = "action_finished") {
             param("item_name", "notify")
-            param("success", "false")
+            param("success", false)
         }
     }
 
@@ -47,14 +47,14 @@ class ReviewersEventTracker(private val analyticsService: AnalyticsService) {
     fun trackRefreshDataSuccess() {
         analyticsService.logEvent(eventName = "action_finished") {
             param("item_name", "refresh_data")
-            param("success", "true")
+            param("success", true)
         }
     }
 
     fun trackRefreshDataFailure() {
         analyticsService.logEvent(eventName = "action_finished") {
             param("item_name", "refresh_data")
-            param("success", "false")
+            param("success", false)
         }
     }
 
@@ -67,14 +67,14 @@ class ReviewersEventTracker(private val analyticsService: AnalyticsService) {
     fun trackFetchDataSuccess() {
         analyticsService.logEvent(eventName = "action_finished") {
             param("item_name", "fetch_data")
-            param("success", "true")
+            param("success", true)
         }
     }
 
     fun trackFetchDataFailure() {
         analyticsService.logEvent(eventName = "action_finished") {
             param("item_name", "fetch_data")
-            param("success", "false")
+            param("success", false)
         }
     }
 }

@@ -21,7 +21,7 @@ import android.os.Bundle
 interface BundleBuilder {
 
     fun param(key: String, value: String)
-    fun param(key: String, value: Int)
+    fun param(key: String, value: Boolean)
 }
 
 class BundleBuilderImpl : BundleBuilder {
@@ -32,7 +32,7 @@ class BundleBuilderImpl : BundleBuilder {
         bundle.putString(key, value)
     }
 
-    override fun param(key: String, value: Int) {
-        bundle.putInt(key, value)
+    override fun param(key: String, value: Boolean) {
+        bundle.putBoolean(key, value)
     }
 }
