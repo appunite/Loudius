@@ -1,5 +1,5 @@
 [versions]
-
+#libraries
 desugar_jdk_libs = "2.0.3"
 ktx = "1.12.0"
 lifecycle_ktx = "2.6.2"
@@ -13,11 +13,15 @@ airbnb_showkase = "1.0.2"
 kotlinx_coroutines = "1.7.3"
 kotlinx_serialization_json = "1.6.0"
 kotlinx_datetime = "0.4.1"
-ktor = "2.3.4"
+ktor = "2.3.5"
 okhttp3 = "4.12.0"
+# plugin
+paparazzi = "1.3.1"
+androidGradlePlugin = "8.1.2"
+androidLibrary = "8.1.2"
+kotlin = "1.9.0"
 
 [libraries]
-
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle_ktx" }
@@ -33,16 +37,22 @@ compose-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-navigation = { module = "androidx.navigation:navigation-compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-showkase = { group = "com.airbnb.android", name = "showkase", version = "airbnb_showkase" }
-showkase.processor = { group = "com.airbnb.android", name = "showkase-processor", version = "airbnb_showkase" }
-coroutines.android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "kotlinx_coroutines" }
-coroutines.test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "kotlinx_coroutines" }
-ktor.client.core = { group = "io.ktor", name = "ktor-client-core", version = "ktor" }
-ktor.client.okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version = "ktor" }
-ktor.client.content_negotation = { group = "io.ktor", name = "ktor-content-negotiation", version = "ktor" }
-ktor.serilization.json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version = "ktor" }
-ktor.client.mock = { group = "io.ktor", name = "ktor-client-mock", version = "ktor" }
-okhttp3.okhttp = { group = "com.squre.okhttp3", name = "okhttp", version = "okhttp3" }
-okhttp3.logging_interceptor = { group = "com.squre.okhttp3", name = "logging-interceptor", version = "okhttp3" }
-[
-plugins]
+showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "airbnb_showkase" }
+showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "airbnb_showkase" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx_coroutines" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx_coroutines" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content_negotation = { group = "io.ktor", name = "ktor-content-negotiation", version.ref = "ktor" }
+ktor-serilization-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
+okhttp3-okhttp = { group = "com.squre.okhttp3", name = "okhttp", version.ref = "okhttp3" }
+okhttp3-logging_interceptor = { group = "com.squre.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
+
+[plugins]
+
+paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidLibrary" }
+kotlin-android = { id = "com.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
