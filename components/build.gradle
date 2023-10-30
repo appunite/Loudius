@@ -2,8 +2,8 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'app.cash.paparazzi'
-    id 'kotlin-kapt'
     id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
+    id 'kotlin-kapt'
 }
 
 java {
