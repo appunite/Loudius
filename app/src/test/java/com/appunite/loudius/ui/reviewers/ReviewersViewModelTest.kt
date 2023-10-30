@@ -17,7 +17,7 @@
 package com.appunite.loudius.ui.reviewers
 
 import androidx.lifecycle.SavedStateHandle
-import com.appunite.loudius.analytics.ReviewersEventTracker
+import com.appunite.loudius.analytics.EventTracker
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
@@ -62,7 +62,7 @@ class ReviewersViewModelTest {
         every { get<String>("pull_request_number") } returns "correctPullRequestNumber"
     }
     private lateinit var viewModel: ReviewersViewModel
-    private val eventTracker = mockk<ReviewersEventTracker>(relaxed = true)
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
 
     private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle, eventTracker)
 
