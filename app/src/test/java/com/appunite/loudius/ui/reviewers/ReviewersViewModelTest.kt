@@ -30,6 +30,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.spyk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -86,6 +87,10 @@ class ReviewersViewModelTest {
                     Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null)
                 )
+            }
+            verifyOrder {
+                eventTracker.trackRefreshData()
+                eventTracker.trackRefreshDataSuccess()
             }
         }
 
