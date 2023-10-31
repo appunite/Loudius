@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
+    alias libs.plugins.kotlin.jvm
 }
 
 java {
@@ -10,15 +10,15 @@ java {
 }
 
 dependencies {
-    compileOnly 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
-    compileOnly 'com.pinterest.ktlint:ktlint-ruleset-standard:1.0.1'
-    testImplementation 'junit:junit:4.13.2'
-    implementation 'org.slf4j:slf4j-api:2.0.7'
+    compileOnly libs.ktlint.rule.engine.core
+    compileOnly libs.ktlint.ruleset.standard
+    testImplementation libs.junit
+    implementation libs.slf4j.api
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
-    testImplementation 'io.strikt:strikt-core:0.33.0'
-    testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation 'com.pinterest.ktlint:ktlint-rule-engine-core:1.0.1'
-    testImplementation 'com.pinterest.ktlint:ktlint-test:1.0.1'
+    testImplementation libs.strikt.core
+    testImplementation libs.assertj.core
+    testImplementation libs.ktlint.rule.engine.core
+    testImplementation libs.ktlint.test
 }

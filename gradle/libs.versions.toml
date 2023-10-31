@@ -1,11 +1,20 @@
 [versions]
 #libraries
+appcompat = "1.6.1"
+assertjCore = "3.24.2"
 desugarJdkLibs = "2.0.3"
+junit = "4.13.2"
+junitVersion = "1.1.5"
 kotlinxDatetimeVersion = "0.4.1"
 kotlinxSerializationJsonVersion = "1.6.0"
+ktlintRuleEngineCore = "1.0.1"
 ktx = "1.12.0"
 lifecycleKtx = "2.6.2"
 activityCompose = "1.8.0"
+lottieCompose = "5.2.0"
+slf4jApi = "2.0.7"
+striktCore = "0.34.0"
+testParameterInjector = "1.8"
 testRunner = "1.5.2"
 testOrchestrator = "1.4.2"
 testUiAutomator = "2.3.0-alpha04"
@@ -27,6 +36,9 @@ ktlintGradle = "11.6.1"
 kotlinSerialization = "1.9.0"
 
 [libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertjCore" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleKtx" }
@@ -34,8 +46,13 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "testRunner" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "testUiAutomator" }
 androidx-test-orchestartor = { group = "androidx.test", name = "orchestrator", version.ref = "testOrchestrator" }
+junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
+ktlint-rule-engine-core = { module = "com.pinterest.ktlint:ktlint-rule-engine-core", version.ref = "ktlintRuleEngineCore" }
+ktlint-ruleset-standard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlintRuleEngineCore" }
+ktlint-test = { module = "com.pinterest.ktlint:ktlint-test", version.ref = "ktlintRuleEngineCore" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 mockk = { group = "io.mockk", name = "mockk-android", version.ref = "mockkAndroid" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-material = { module = "androidx.compose.material:material" }
@@ -62,7 +79,9 @@ koin-test-junit = { group = "io.insert-koin", name = "koin-test-junit4", version
 koin-android-test = { group = "io.insert-koin", name = "koin-android-test", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-android-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
-
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
+strikt-core = { module = "io.strikt:strikt-core", version.ref = "striktCore" }
+test-parameter-injector = { module = "com.google.testparameterinjector:test-parameter-injector", version.ref = "testParameterInjector" }
 
 [plugins]
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
