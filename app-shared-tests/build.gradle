@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.android)
-    id 'com.google.dagger.hilt.android'
     alias(libs.plugins.ktlint.gradle)
 }
 
@@ -36,7 +35,6 @@ android {
 
     buildFeatures {
         compose true
-        buildConfig true
     }
 
     packagingOptions {
@@ -61,10 +59,13 @@ android {
 dependencies {
     implementation(project(":app"))
 
-    // Hilt
-    implementation "com.google.dagger:hilt-android:2.47"
-    kapt "com.google.dagger:hilt-compiler:2.48.1"
-    api 'com.google.dagger:hilt-android-testing:2.47'
+    // koin
+    api "io.insert-koin:koin-core:$koin_version"
+    api "io.insert-koin:koin-test:$koin_version"
+    api "io.insert-koin:koin-test-junit4:$koin_version"
+    api "io.insert-koin:koin-android:$koin_version"
+    api "io.insert-koin:koin-android-test:$koin_version"
+    api "io.insert-koin:koin-androidx-compose:$koin_version"
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug
@@ -96,7 +97,7 @@ dependencies {
 
     api 'androidx.test.ext:junit:1.1.5'
     api 'androidx.test.espresso:espresso-core:3.5.1'
-    api "androidx.compose.ui:ui-test-junit4:1.5.4"
+    api "androidx.compose.ui:ui-test-junit4:1.5.3"
 
     api 'androidx.test.espresso:espresso-intents:3.5.1'
 
