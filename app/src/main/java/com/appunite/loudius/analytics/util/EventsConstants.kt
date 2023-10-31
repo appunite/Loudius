@@ -14,22 +14,10 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.analytics
+package com.appunite.loudius.analytics.util
 
-import com.google.firebase.analytics.FirebaseAnalytics
+object EventsConstants {
 
-interface AnalyticsService {
-
-    fun logEvent(eventName: String, builder: BundleBuilder.() -> Unit)
-}
-
-class AnalyticsServiceImpl(
-    private val firebaseAnalytics: FirebaseAnalytics
-) : AnalyticsService {
-
-    override fun logEvent(eventName: String, builder: BundleBuilder.() -> Unit) {
-        val bundleBuilder = BundleBuilderImpl()
-        builder(bundleBuilder)
-        firebaseAnalytics.logEvent(eventName, bundleBuilder.bundle)
-    }
+    const val ITEM_NAME = "item_name"
+    const val SUCCESS = "success"
 }

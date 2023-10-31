@@ -16,23 +16,17 @@
 
 package com.appunite.loudius.analytics
 
-import android.os.Bundle
-
-interface BundleBuilder {
-
-    fun param(key: String, value: String)
-    fun param(key: String, value: Boolean)
+sealed class EventParameter<T> {
+    abstract val name: String
+    abstract val value: T
 }
 
-class BundleBuilderImpl : BundleBuilder {
+data class StringEventParameter(
+    override val name: String,
+    override val value: String
+) : EventParameter<String>()
 
-    val bundle = Bundle()
-
-    override fun param(key: String, value: String) {
-        bundle.putString(key, value)
-    }
-
-    override fun param(key: String, value: Boolean) {
-        bundle.putBoolean(key, value)
-    }
-}
+data class BooleanEventParameter(
+    override val name: String,
+    override val value: Boolean
+) : EventParameter<Boolean>()

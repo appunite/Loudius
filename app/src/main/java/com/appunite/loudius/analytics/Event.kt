@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.di
+package com.appunite.loudius.analytics
 
-import com.appunite.loudius.analytics.EventParametersConverter
-import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.FirebaseAnalyticsEventTracker
-import com.google.firebase.analytics.FirebaseAnalytics
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
-
-val analyticsModule = module {
-    single<FirebaseAnalytics> {
-        FirebaseAnalytics.getInstance(androidContext())
-    }
-    single<EventTracker> {
-        FirebaseAnalyticsEventTracker(get(), EventParametersConverter())
-    }
+interface Event {
+    val name: String
+    val parameters: List<EventParameter<*>>
 }
