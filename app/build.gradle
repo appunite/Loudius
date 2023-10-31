@@ -1,9 +1,9 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-kapt'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ktlint.gradle)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 java {
@@ -111,20 +111,20 @@ dependencies {
     implementation libs.compose.ui
     implementation libs.compose.ui.preview
     implementation libs.compose.navigation
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    debugImplementation libs.compose.ui.tooling
+    debugImplementation libs.compose.ui.test.manifest
 
     //Showkase
     implementation libs.showkase
     kapt libs.showkase.processor
 
     // koin
-    api "io.insert-koin:koin-core:3.5.0"
-    api "io.insert-koin:koin-test:3.5.0"
-    api "io.insert-koin:koin-test-junit4:3.5.0"
-    api "io.insert-koin:koin-android:3.5.0"
-    api "io.insert-koin:koin-android-test:3.5.0"
-    api "io.insert-koin:koin-androidx-compose:3.5.0"
+    api libs.koin.core
+    api libs.koin.test
+    api libs.koin.test.junit
+    api libs.koin.android
+    api libs.koin.android.test
+    api libs.koin.android.compose
 
     //coroutines
     implementation libs.coroutines.android
@@ -137,6 +137,7 @@ dependencies {
     implementation libs.ktor.serilization.json
     testImplementation libs.ktor.client.mock
 
+    // Util
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
     testImplementation(libs.kotlinx.datetime)
