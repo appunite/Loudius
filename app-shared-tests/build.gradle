@@ -60,12 +60,12 @@ dependencies {
     implementation(project(":app"))
 
     // koin
-    api "io.insert-koin:koin-core:$koin_version"
-    api "io.insert-koin:koin-test:$koin_version"
-    api "io.insert-koin:koin-test-junit4:$koin_version"
-    api "io.insert-koin:koin-android:$koin_version"
-    api "io.insert-koin:koin-android-test:$koin_version"
-    api "io.insert-koin:koin-androidx-compose:$koin_version"
+    api "io.insert-koin:koin-core:3.5.0"
+    api "io.insert-koin:koin-test:3.5.0"
+    api "io.insert-koin:koin-test-junit4:3.5.0"
+    api "io.insert-koin:koin-android:3.5.0"
+    api "io.insert-koin:koin-android-test:3.5.0"
+    api "io.insert-koin:koin-androidx-compose:3.5.0"
 
     // assertion library
     // cannot use 0.34.0 due to an existing bug
