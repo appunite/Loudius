@@ -20,12 +20,12 @@ import android.os.Bundle
 
 class EventParametersConverter {
 
-    fun convert(parameters: List<EventParameter<*>>): Bundle {
+    fun convert(parameters: List<EventParameter>): Bundle {
         val bundle = Bundle()
         for (parameter in parameters) {
             when (parameter) {
-                is StringEventParameter -> bundle.putString(parameter.name, parameter.value)
-                is BooleanEventParameter -> bundle.putBoolean(parameter.name, parameter.value)
+                is EventParameter.String -> bundle.putString(parameter.name, parameter.value)
+                is EventParameter.Boolean -> bundle.putBoolean(parameter.name, parameter.value)
             }
         }
         return bundle

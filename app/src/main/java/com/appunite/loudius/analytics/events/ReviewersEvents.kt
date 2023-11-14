@@ -16,80 +16,76 @@
 
 package com.appunite.loudius.analytics.events
 
-import com.appunite.loudius.analytics.BooleanEventParameter
 import com.appunite.loudius.analytics.Event
 import com.appunite.loudius.analytics.EventParameter
-import com.appunite.loudius.analytics.StringEventParameter
-import com.appunite.loudius.analytics.util.EventsConstants.ITEM_NAME
-import com.appunite.loudius.analytics.util.EventsConstants.SUCCESS
 
-interface ReviewersEvent: Event
+interface ReviewersEvent : Event
 
-object ClickNotifyEvent: ReviewersEvent {
+object ClickNotifyEvent : ReviewersEvent {
     override val name: String = "button_click"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "notify")
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "notify")
     )
 }
 
-object NotifySuccessEvent: ReviewersEvent {
+object NotifySuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
-    override val parameters: List<EventParameter<*>> = listOf(
-            StringEventParameter(ITEM_NAME, "notify"),
-            BooleanEventParameter(SUCCESS, true)
-        )
-}
-
-object NotifyFailureEvent: ReviewersEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "notify"),
-        BooleanEventParameter(SUCCESS, false)
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "notify"),
+        EventParameter.Boolean("success", true)
     )
 }
 
-object RefreshDataEvent: ReviewersEvent {
+object NotifyFailureEvent : ReviewersEvent {
+    override val name: String = "action_finished"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "notify"),
+        EventParameter.Boolean("success", false)
+    )
+}
+
+object RefreshDataEvent : ReviewersEvent {
     override val name: String = "action_start"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "refresh_reviewers_data")
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "refresh_reviewers_data")
     )
 }
 
-object RefreshDataSuccessEvent: ReviewersEvent {
+object RefreshDataSuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "refresh_reviewers_data"),
-        BooleanEventParameter(SUCCESS, true)
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "refresh_reviewers_data"),
+        EventParameter.Boolean("success", true)
     )
 }
 
-object RefreshDataFailureEvent: ReviewersEvent {
+object RefreshDataFailureEvent : ReviewersEvent {
     override val name: String = "action_finished"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "refresh_reviewers_data"),
-        BooleanEventParameter(SUCCESS, false)
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "refresh_reviewers_data"),
+        EventParameter.Boolean("success", false)
     )
 }
 
-object FetchDataEvent: ReviewersEvent {
+object FetchDataEvent : ReviewersEvent {
     override val name: String = "action_start"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "fetch_reviewers_data")
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "fetch_reviewers_data")
     )
 }
 
-object FetchDataSuccessEvent: ReviewersEvent {
+object FetchDataSuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "fetch_reviewers_data"),
-        BooleanEventParameter(SUCCESS, true)
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "fetch_reviewers_data"),
+        EventParameter.Boolean("success", true)
     )
 }
 
-object FetchDataFailureEvent: ReviewersEvent {
+object FetchDataFailureEvent : ReviewersEvent {
     override val name: String = "action_finished"
-    override val parameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(ITEM_NAME, "fetch_reviewers_data"),
-        BooleanEventParameter(SUCCESS, false)
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "fetch_reviewers_data"),
+        EventParameter.Boolean("success", false)
     )
 }
