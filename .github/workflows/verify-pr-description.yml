@@ -12,9 +12,11 @@ permissions: read-all
 
 jobs:
   verify:
+    # To make sure the pull request was created by dependabot.
+    if: ${{ !contains(github.event.pull_request.title, 'bump') }}
     name: Verify Pull-Request Description
     runs-on: ubuntu-20.04
-    if: github.actor != 'dependabot[bot]'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
