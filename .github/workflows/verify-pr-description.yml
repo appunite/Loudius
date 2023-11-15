@@ -17,6 +17,12 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: Debug Workflow Context
+        run: |
+          echo "Actor is ${{ github.actor }}"
+          echo "Event name is ${{ github.event_name }}"
+          echo "Pull request title: ${{ github.event.pull_request.title }}"
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
