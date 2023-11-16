@@ -16,17 +16,9 @@
 
 package com.appunite.loudius.analytics
 
-sealed class EventParameter<T> {
-    abstract val name: String
-    abstract val value: T
+sealed class EventParameter {
+    abstract val name: kotlin.String
+
+    data class String(override val name: kotlin.String, val value: kotlin.String) : EventParameter()
+    data class Boolean(override val name: kotlin.String, val value: kotlin.Boolean) : EventParameter()
 }
-
-data class StringEventParameter(
-    override val name: String,
-    override val value: String
-) : EventParameter<String>()
-
-data class BooleanEventParameter(
-    override val name: String,
-    override val value: Boolean
-) : EventParameter<Boolean>()

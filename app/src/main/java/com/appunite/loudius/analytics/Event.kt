@@ -18,5 +18,5 @@ package com.appunite.loudius.analytics
 
 interface Event {
     val name: String
-    val parameters: List<EventParameter<*>>
+    val parameters: List<EventParameter>
 }
