@@ -37,7 +37,7 @@ class FirebaseAnalyticsEventTrackerTest {
 
     private val event = object : Event {
         override val name: String = "sample_event"
-        override val parameters: List<EventParameter<*>> = emptyList()
+        override val parameters: List<EventParameter> = emptyList()
     }
 
     @Before

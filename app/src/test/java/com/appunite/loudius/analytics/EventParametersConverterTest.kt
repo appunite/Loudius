@@ -36,10 +36,10 @@ class EventParametersConverterTest {
         private const val BOOLEAN_VALUE = true
     }
 
-    private val exampleParameters: List<EventParameter<*>> = listOf(
-        StringEventParameter(PARAM_NAME1, STRING_VALUE1),
-        StringEventParameter(PARAM_NAME2, STRING_VALUE2),
-        BooleanEventParameter(PARAM_NAME3, BOOLEAN_VALUE)
+    private val exampleParameters: List<EventParameter> = listOf(
+        EventParameter.String(PARAM_NAME1, STRING_VALUE1),
+        EventParameter.String(PARAM_NAME2, STRING_VALUE2),
+        EventParameter.Boolean(PARAM_NAME3, BOOLEAN_VALUE)
     )
 
     private val converter = EventParametersConverter()
