@@ -71,15 +71,15 @@ dependencies {
     // assertion library
     // cannot use 0.34.0 due to an existing bug
     // https://github.com/robfletcher/strikt/issues/259
-    api 'io.strikt:strikt-core:0.33.0'
-    api 'io.strikt:strikt-mockk:0.33.0'
+    api libs.strikt.core
+    api libs.strikt.mockk
 
     // Setup Junit4 and Junit5
     api(platform("org.junit:junit-bom:5.10.0"))
     api("org.junit.jupiter:junit-jupiter") {
         because 'allows to write and run Jupiter tests'
     }
-    api("junit:junit:4.13.2")
+    api(libs.junit)
     runtimeOnly("org.junit.vintage:junit-vintage-engine") {
         because 'allows JUnit 3 and JUnit 4 tests to run'
     }
@@ -88,23 +88,23 @@ dependencies {
     }
 
     //testing
-    api 'androidx.test:core-ktx:1.5.0'
-    api 'org.robolectric:robolectric:4.10.3'
-    api 'androidx.test.ext:junit-ktx:1.1.5'
+    api libs.androidx.core.ktx
+    api libs.robolectric
+    api libs.androidx.junit.ktx
 
-    api "io.mockk:mockk:1.13.5"
+    api libs.mockk.mockk
 
-    api "com.squareup.okhttp3:mockwebserver:4.11.0"
+    api libs.mockwebserver
 
-    api 'androidx.test.ext:junit:1.1.5'
-    api 'androidx.test.espresso:espresso-core:3.5.1'
-    api "androidx.compose.ui:ui-test-junit4:1.5.3"
+    api libs.androidx.junit
+    api libs.androidx.espresso.core
+    api libs.androidx.ui.test.junit4
 
-    api 'androidx.test.espresso:espresso-intents:3.5.1'
+    api libs.androidx.espresso.intents
 
     // Firebase instrumentation lib
-    api 'com.google.firebase:testlab-instr-lib:0.2'
-    api 'dev.samstevens.totp:totp:1.7.1'
+    api libs.testlab.instr.lib
+    api libs.totp
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
