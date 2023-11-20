@@ -40,20 +40,17 @@ android {
 }
 
 dependencies {
-    implementation platform(libs.compose.bom)
-    implementation libs.compose.material3
-    implementation libs.compose.material
-    implementation libs.compose.ui
-    implementation libs.compose.ui.preview
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
     debugImplementation libs.compose.ui.tooling
 
-    //Showkase
+    // Showkase
     implementation libs.showkase
     kapt libs.showkase.processor
     testImplementation libs.test.parameter.injector
     kaptTest libs.showkase.processor
 
-    //Lottie - Compose
+    // Lottie - Compose
     implementation(libs.lottie.compose)
 
     implementation libs.androidx.ktx

@@ -10,15 +10,16 @@ java {
 }
 
 dependencies {
-    compileOnly libs.ktlint.rule.engine.core
-    compileOnly libs.ktlint.ruleset.standard
+    compileOnly(libs.bundles.ktlint)
+
     testImplementation libs.junit
     implementation libs.slf4j.api
-    // assertion library
-    // cannot use 0.34.0 due to an existing bug
+
+    // Assertion Library
+    // Cannot use 0.34.0 due to an existing bug.
     // https://github.com/robfletcher/strikt/issues/259
     testImplementation libs.strikt.core
+
     testImplementation libs.assertj.core
-    testImplementation libs.ktlint.rule.engine.core
-    testImplementation libs.ktlint.test
+    testImplementation libs.bundles.ktlintTesting
 }

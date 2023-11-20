@@ -60,19 +60,13 @@ android {
 dependencies {
     implementation(project(":app"))
 
-    // koin
-    api libs.koin.core
-    api libs.koin.test
-    api libs.koin.test.junit
-    api libs.koin.android
-    api libs.koin.android.test
-    api libs.koin.android.compose
+    // Koin
+    api(libs.bundles.koin)
 
-    // assertion library
-    // cannot use 0.34.0 due to an existing bug
+    // Assertion Library
+    // Cannot use 0.34.0 due to an existing bug.
     // https://github.com/robfletcher/strikt/issues/259
-    api libs.strikt.core
-    api libs.strikt.mockk
+    api(libs.bundles.strikt)
 
     // Setup Junit4 and Junit5
     api(platform("org.junit:junit-bom:5.10.0"))
@@ -87,25 +81,14 @@ dependencies {
         because 'allows tests to run from IDEs that bundle older version of launcher'
     }
 
-    //testing
-    api libs.androidx.core.ktx
-    api libs.robolectric
-    api libs.androidx.junit.ktx
-
-    api libs.mockk.mockk
-
-    api libs.mockwebserver
-
-    api libs.androidx.junit
-    api libs.androidx.espresso.core
-    api libs.androidx.ui.test.junit4
-
-    api libs.androidx.espresso.intents
+    // Testing
+    api(libs.bundles.androidxTesting)
+    api(libs.robolectric)
+    api(libs.bundles.mock)
 
     // Firebase instrumentation lib
-    api libs.testlab.instr.lib
-    api libs.totp
+    api(libs.bundles.firebase)
 
-    // ktlint
+    // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
 }

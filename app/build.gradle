@@ -91,71 +91,57 @@ android {
 
 dependencies {
     api project(':components')
-    //Desugaring for use of java.time in api lower then 26
-    coreLibraryDesugaring libs.desugar
 
-    //Base android deps
-    implementation libs.androidx.ktx
-    implementation libs.androidx.lifecycle
-    implementation libs.androidx.activity.compose
+    // Desugaring for use of java.time in api lower then 26
+    coreLibraryDesugaring(libs.desugar)
+
+    // Base android deps
+    implementation(libs.bundles.androidx)
 
     // Orchestrator
-    androidTestImplementation libs.androidx.test.runner
-    androidTestUtil libs.androidx.test.orchestartor
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestUtil(libs.androidx.test.orchestartor)
 
-    //Compose
+    // Compose
     def composeBom = platform(libs.compose.bom)
-    implementation composeBom
-    androidTestImplementation composeBom
-    implementation libs.compose.material3
-    implementation libs.compose.material
-    implementation libs.compose.ui
-    implementation libs.compose.ui.preview
-    implementation libs.compose.navigation
-    debugImplementation libs.compose.ui.tooling
-    debugImplementation libs.compose.ui.test.manifest
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation(libs.bundles.compose)
+    implementation(libs.compose.navigation)
+    debugImplementation(libs.bundles.composeDebug)
 
-    //Showkase
-    implementation libs.showkase
-    kapt libs.showkase.processor
+    // Showkase
+    implementation(libs.showkase)
+    kapt(libs.showkase.processor)
 
-    // koin
-    api libs.koin.core
-    api libs.koin.test
-    api libs.koin.test.junit
-    api libs.koin.android
-    api libs.koin.android.test
-    api libs.koin.android.compose
+    // Koin
+    api(libs.bundles.koin)
 
-    //coroutines
-    implementation libs.coroutines.android
-    testImplementation libs.coroutines.test
+    // Coroutines
+    implementation(libs.coroutines.android)
+    testImplementation(libs.coroutines.test)
 
-    // ktor
-    implementation libs.ktor.client.core
-    implementation libs.ktor.client.okhttp
-    implementation libs.ktor.client.content.negotation
-    implementation libs.ktor.serilization.json
-    testImplementation libs.ktor.client.mock
+    // Ktor
+    implementation(libs.bundles.ktor)
+    testImplementation(libs.ktor.client.mock)
 
     // Util
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.datetime)
+    implementation(libs.bundles.kotlinx)
     testImplementation(libs.kotlinx.datetime)
 
-    //okhttp
-    implementation libs.okhttp3.okhttp
-    implementation libs.okhttp3.logging.interceptor
+    // OkHttp
+    implementation(libs.bundles.okhttp)
 
+    // Testing
     testImplementation project(":app-shared-tests")
     androidTestImplementation(project(":app-shared-tests")) {
         exclude group: 'org.robolectric', module: 'robolectric'
     }
 
-    androidTestImplementation libs.mockk
-    androidTestImplementation libs.androidx.test.uiautomator
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.uiautomator)
 
-    // ktlint
+    // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
 }
 
