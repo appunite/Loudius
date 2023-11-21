@@ -7,6 +7,12 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
 }
 
+def fileName = "../app/google-services.json"
+
+if (project.file(fileName).exists()) {
+    apply plugin: 'com.google.gms.google-services'
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -206,6 +212,10 @@ dependencies {
 
     // ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
 
 tasks.withType(Test) {

@@ -22,6 +22,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.ClickNotifyEvent
+import com.appunite.loudius.analytics.events.FetchDataEvent
+import com.appunite.loudius.analytics.events.FetchDataFailureEvent
+import com.appunite.loudius.analytics.events.FetchDataSuccessEvent
+import com.appunite.loudius.analytics.events.NotifyFailureEvent
+import com.appunite.loudius.analytics.events.NotifySuccessEvent
+import com.appunite.loudius.analytics.events.RefreshDataEvent
+import com.appunite.loudius.analytics.events.RefreshDataFailureEvent
+import com.appunite.loudius.analytics.events.RefreshDataSuccessEvent
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -63,7 +73,8 @@ enum class ReviewersSnackbarType {
 
 class ReviewersViewModel(
     private val repository: PullRequestRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
@@ -79,22 +90,36 @@ class ReviewersViewModel(
     }
 
     fun refreshData() {
+        eventTracker.trackEvent(RefreshDataEvent)
         viewModelScope.launch {
             _isRefreshing.value = true
             getMergedData()
-                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
-                .onFailure { state = state.copy(data = Data.Error) }
+                .onSuccess {
+                    state = state.copy(data = Data.Success(reviewers = it))
+                    eventTracker.trackEvent(RefreshDataSuccessEvent)
+                }
+                .onFailure {
+                    state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(RefreshDataFailureEvent)
+                }
             _isRefreshing.value = false
         }
     }
 
     private fun fetchData() {
+        eventTracker.trackEvent(FetchDataEvent)
         viewModelScope.launch {
             state = state.copy(data = Data.Loading)
 
             getMergedData()
-                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
-                .onFailure { state = state.copy(data = Data.Error) }
+                .onSuccess {
+                    state = state.copy(data = Data.Success(reviewers = it))
+                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                }
+                .onFailure {
+                    state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(FetchDataFailureEvent)
+                }
         }
     }
 
@@ -177,6 +202,7 @@ class ReviewersViewModel(
     }
 
     private fun notifyReviewer(userLogin: String) {
+        eventTracker.trackEvent(ClickNotifyEvent)
         val (owner, repo, pullRequestNumber) = initialValues
         val successData = state.data as? Data.Success ?: return
 
@@ -210,6 +236,7 @@ class ReviewersViewModel(
                 reviewers = successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
+        eventTracker.trackEvent(NotifyFailureEvent)
     }
 
     private fun onNotifyUserSuccess(
@@ -222,6 +249,7 @@ class ReviewersViewModel(
                 successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
+        eventTracker.trackEvent(NotifySuccessEvent)
     }
 
     private fun List<Reviewer>.updateLoadingState(
