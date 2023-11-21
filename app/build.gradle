@@ -6,6 +6,12 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+def fileName = "../app/google-services.json"
+
+if (project.file(fileName).exists()) {
+    apply plugin: 'com.google.gms.google-services'
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -42,6 +48,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            enableUnitTestCoverage true
         }
     }
     compileOptions {
@@ -87,6 +96,50 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
+}
+
+tasks.register('codeCoverage', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include("**/tmp/kotlin-classes/debug/**")
+                exclude(
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        "**/*Application.*",
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        '**/android/**/*.*',
+                        '**/androidx/**/*.*',
+                        '**/airbnb/**/*.*',
+                        "**/di/**/*.*",
+                        '**/*Dagger*.*',
+                        "**/*Screen*"
+                )
+            }
+    )
+
+    sourceDirectories.setFrom(fileTree(
+            dir: project.projectDir,
+            includes: [
+                    "src/main/java/**",
+                    "src/main/kotlin/**"
+            ]))
+
+    executionData.setFrom(fileTree(
+            dir: project.buildDir,
+            includes: [
+                    "**/*.exec",
+                    "**/*.ec"
+            ]))
+
 }
 
 dependencies {
@@ -143,6 +196,10 @@ dependencies {
 
     // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
 
 tasks.withType(Test) {

@@ -24,7 +24,6 @@ import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -36,7 +35,6 @@ import strikt.assertions.isNull
 import strikt.assertions.isTrue
 import strikt.assertions.single
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
     private val pullRequestRepository = spyk(FakePullRequestRepository())

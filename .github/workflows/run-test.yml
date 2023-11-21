@@ -25,6 +25,8 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-20.04
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -32,17 +34,44 @@ jobs:
         with:
           lfs: true
 
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "app/google-services.json"
+          json: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: Add google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
+
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
 
       - name: Run test
-        run: ./gradlew test
+        run: ./gradlew codeCoverage
         env:
           LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
           LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
+
+      - name: Store HTML coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            */build/reports/jacoco/codeCoverage/html/**
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            */build/reports/jacoco/codeCoverage/codeCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload tests results
         if: always()
@@ -63,6 +92,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
+
+      - name: Add google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
       - name: LFS-warning - Prevent large files that are not LFS tracked
         uses: ppremk/lfs-warning@v3.2

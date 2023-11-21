@@ -17,6 +17,7 @@
 package com.appunite.loudius
 
 import android.app.Application
+import com.appunite.loudius.di.analyticsModule
 import com.appunite.loudius.di.dataSourceModule
 import com.appunite.loudius.di.dispatcherModule
 import com.appunite.loudius.di.githubHelperModule
@@ -36,7 +37,8 @@ val appModule = module {
         serviceModule,
         repositoryModule,
         githubHelperModule,
-        dispatcherModule
+        dispatcherModule,
+        analyticsModule
     )
 }
 
