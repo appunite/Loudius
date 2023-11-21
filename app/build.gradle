@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
+    id 'jacoco'
     id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
 }
@@ -42,6 +43,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            enableUnitTestCoverage true
         }
     }
     compileOptions {
@@ -87,6 +91,50 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
+}
+
+tasks.register('codeCoverage', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include("**/tmp/kotlin-classes/debug/**")
+                exclude(
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        "**/*Application.*",
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        '**/android/**/*.*',
+                        '**/androidx/**/*.*',
+                        '**/airbnb/**/*.*',
+                        "**/di/**/*.*",
+                        '**/*Dagger*.*',
+                        "**/*Screen*"
+                )
+            }
+    )
+
+    sourceDirectories.setFrom(fileTree(
+            dir: project.projectDir,
+            includes: [
+                    "src/main/java/**",
+                    "src/main/kotlin/**"
+            ]))
+
+    executionData.setFrom(fileTree(
+            dir: project.buildDir,
+            includes: [
+                    "**/*.exec",
+                    "**/*.ec"
+            ]))
+
 }
 
 dependencies {
@@ -142,10 +190,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 
-
     //retrofit & okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+
+
 
     testImplementation project(":app-shared-tests")
     androidTestImplementation(project(":app-shared-tests")) {
