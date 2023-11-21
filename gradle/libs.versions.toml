@@ -9,6 +9,7 @@ coreKtx = "1.5.0"
 desugarJdkLibs = "2.0.3"
 espressoCore = "3.5.1"
 junit = "4.13.2"
+junitBom = "5.10.0"
 junitVersion = "1.1.5"
 koin = "3.5.0"
 kotlinxCoroutines = "1.7.3"
@@ -26,6 +27,8 @@ mockkAndroid = "1.13.5"
 okhttp3 = "4.12.0"
 robolectric = "4.10.3"
 slf4jApi = "2.0.7"
+# Cannot use 0.34.0 due to an existing bug.
+# https://github.com/robfletcher/strikt/issues/259
 striktCore = "0.33.0"
 striktMockk = "0.33.0"
 testlabInstrLib = "0.2"
@@ -85,6 +88,10 @@ coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutin
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 junit = { module = "junit:junit", version.ref = "junit" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junitBom" }
+junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
+junit-vintage = { module = "org.junit.vintage:junit-vintage-engine" }
+jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 koin-test-junit = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koin" }

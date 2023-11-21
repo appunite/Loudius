@@ -64,20 +64,18 @@ dependencies {
     api(libs.bundles.koin)
 
     // Assertion Library
-    // Cannot use 0.34.0 due to an existing bug.
-    // https://github.com/robfletcher/strikt/issues/259
     api(libs.bundles.strikt)
 
     // Setup Junit4 and Junit5
-    api(platform("org.junit:junit-bom:5.10.0"))
-    api("org.junit.jupiter:junit-jupiter") {
+    api(platform(libs.junit.bom))
+    api(libs.jupiter) {
         because 'allows to write and run Jupiter tests'
     }
     api(libs.junit)
-    runtimeOnly("org.junit.vintage:junit-vintage-engine") {
+    runtimeOnly(libs.junit.vintage) {
         because 'allows JUnit 3 and JUnit 4 tests to run'
     }
-    runtimeOnly("org.junit.platform:junit-platform-launcher") {
+    runtimeOnly(libs.junit.platform) {
         because 'allows tests to run from IDEs that bundle older version of launcher'
     }
 
