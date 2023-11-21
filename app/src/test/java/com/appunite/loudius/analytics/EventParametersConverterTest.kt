@@ -27,29 +27,20 @@ import strikt.assertions.isEqualTo
 @Config(sdk = [28]) // Use the desired Android SDK version.
 class EventParametersConverterTest {
 
-    companion object {
-        private const val PARAM_NAME1 = "param_name1"
-        private const val PARAM_NAME2 = "param_name2"
-        private const val PARAM_NAME3 = "param_name3"
-        private const val STRING_VALUE1 = "string_value1"
-        private const val STRING_VALUE2 = "string_value2"
-        private const val BOOLEAN_VALUE = true
-    }
-
-    private val exampleParameters: List<EventParameter> = listOf(
-        EventParameter.String(PARAM_NAME1, STRING_VALUE1),
-        EventParameter.String(PARAM_NAME2, STRING_VALUE2),
-        EventParameter.Boolean(PARAM_NAME3, BOOLEAN_VALUE)
-    )
-
     private val converter = EventParametersConverter()
 
     @Test
     fun testConvert() {
-        val result = converter.convert(exampleParameters)
+        val result = converter.convert(
+            listOf(
+                EventParameter.String("param_name1", "string_value1"),
+                EventParameter.String("param_name2", "string_value2"),
+                EventParameter.Boolean("param_name3", true)
+            )
+        )
 
-        expectThat(result.getString(PARAM_NAME1)).isEqualTo(STRING_VALUE1)
-        expectThat(result.getString(PARAM_NAME2)).isEqualTo(STRING_VALUE2)
-        expectThat(result.getBoolean(PARAM_NAME3)).isEqualTo(BOOLEAN_VALUE)
+        expectThat(result.getString("param_name1")).isEqualTo("string_value1")
+        expectThat(result.getString("param_name2")).isEqualTo("string_value2")
+        expectThat(result.getBoolean("param_name3")).isEqualTo(true)
     }
 }
