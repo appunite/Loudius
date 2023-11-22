@@ -9,7 +9,9 @@ plugins {
 def fileName = "../app/google-services.json"
 
 if (project.file(fileName).exists()) {
-    apply plugin: 'com.google.gms.google-services'
+    apply {
+        plugin(libs.plugins.google.services.get().getPluginId())
+    }
 }
 
 java {
@@ -198,8 +200,8 @@ dependencies {
     ktlintRuleset project(":custom-ktlint-rules")
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
 
 tasks.withType(Test) {

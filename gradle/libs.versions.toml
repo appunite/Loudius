@@ -8,6 +8,8 @@ composeBom = "2023.10.01"
 coreKtx = "1.5.0"
 desugarJdkLibs = "2.0.3"
 espressoCore = "3.5.1"
+firebaseBom = "32.4.0"
+googleServices = "4.4.0"
 junit = "4.13.2"
 junitBom = "5.10.0"
 junitVersion = "1.1.5"
@@ -87,6 +89,8 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { module = "junit:junit", version.ref = "junit" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junitBom" }
 junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
@@ -127,6 +131,7 @@ totp = { module = "dev.samstevens.totp:totp", version.ref = "totp" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidLibrary" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
