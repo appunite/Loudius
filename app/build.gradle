@@ -1,16 +1,17 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-kapt'
-    id 'org.jetbrains.kotlin.android'
-    id 'jacoco'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.6.1'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.0'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ktlint.gradle)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 def fileName = "../app/google-services.json"
 
 if (project.file(fileName).exists()) {
-    apply plugin: 'com.google.gms.google-services'
+    apply {
+        plugin(libs.plugins.google.services.get().getPluginId())
+    }
 }
 
 java {
@@ -145,77 +146,62 @@ tasks.register('codeCoverage', JacocoReport) {
 
 dependencies {
     api project(':components')
-    //Desugaring for use of java.time in api lower then 26
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
-    //Base android deps
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    implementation 'androidx.activity:activity-compose:1.8.0'
+    // Desugaring for use of java.time in api lower then 26
+    coreLibraryDesugaring(libs.desugar)
+
+    // Base android deps
+    implementation(libs.bundles.androidx)
 
     // Orchestrator
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestUtil(libs.androidx.test.orchestartor)
 
-    //Compose
-    def composeBom = platform('androidx.compose:compose-bom:2023.10.01')
-    implementation composeBom
-    androidTestImplementation composeBom
-    implementation 'androidx.compose.material3:material3'
-    implementation 'androidx.compose.material:material'
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation "androidx.navigation:navigation-compose:2.7.4"
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    // Compose
+    def composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation(libs.bundles.compose)
+    implementation(libs.compose.navigation)
+    debugImplementation(libs.bundles.composeDebug)
 
-    //Showkase
-    implementation "com.airbnb.android:showkase:1.0.2"
-    kapt "com.airbnb.android:showkase-processor:1.0.2"
+    // Showkase
+    implementation(libs.showkase)
+    kapt(libs.showkase.processor)
 
-    // koin
-    api "io.insert-koin:koin-core:$koin_version"
-    api "io.insert-koin:koin-test:$koin_version"
-    api "io.insert-koin:koin-test-junit4:$koin_version"
-    api "io.insert-koin:koin-android:$koin_version"
-    api "io.insert-koin:koin-android-test:$koin_version"
-    api "io.insert-koin:koin-androidx-compose:$koin_version"
+    // Koin
+    api(libs.bundles.koin)
 
-    //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
+    // Coroutines
+    implementation(libs.coroutines.android)
+    testImplementation(libs.coroutines.test)
 
-    // ktor
-    implementation "io.ktor:ktor-client-core:$ktor_version"
-    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
-    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
-    implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
-    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
+    // Ktor
+    implementation(libs.bundles.ktor)
+    testImplementation(libs.ktor.client.mock)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+    // Util
+    implementation(libs.bundles.kotlinx)
+    testImplementation(libs.kotlinx.datetime)
 
-    //retrofit & okhttp
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+    // OkHttp
+    implementation(libs.bundles.okhttp)
 
-
-
+    // Testing
     testImplementation project(":app-shared-tests")
     androidTestImplementation(project(":app-shared-tests")) {
         exclude group: 'org.robolectric', module: 'robolectric'
     }
 
-    androidTestImplementation "io.mockk:mockk-android:1.13.3"
-    androidTestImplementation('androidx.test.uiautomator:uiautomator:2.3.0-alpha03')
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.uiautomator)
 
-    // ktlint
+    // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
 
 tasks.withType(Test) {
