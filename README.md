@@ -23,9 +23,9 @@ experiments with different development libraries and tools.
 - Jetpack Compose
 - Koin
 - Kotlin Coroutines
-- Retrofit
+- Ktor
 - OkHttp3
-- Gson
+- Kotlin Serialization
 
 ## 🔬 Experiments, the purpose of the project
 
@@ -61,7 +61,8 @@ Here's an example of an experiment that meets our rules:
 
 **Branch Name:** experiment/navigation-by-voyager-library\
 **Purpose:** Check compose navigation with voyager library. Compare that with standard way.\
-**Goal:** To resolve which navigation is better for compose. What are the pros and cons of each way.\
+**Goal:** To resolve which navigation is better for compose. What are the pros and cons of each
+way.\
 **Method:** Implement navigation with voyager library.
 
 ## 🚀 Project setup
@@ -71,8 +72,8 @@ In order to properly start the application and use it, the `LOUDIUS_CLIENT_SECRE
 
 * `LOUDIUS_CLIENT_SECRET` is a GitHub client secret key
 * `LOUDIUS_CLIENT_ID` is a GitHub client id
-*
-both are provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
+
+Both are provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
 If you're not AppUniter, here's a video to help you create such appliation:
 
@@ -82,7 +83,8 @@ If you'd like to run end-to-end tests you'd also need `LOUDIUS_GITHUB_USER_NAME`
 `LOUDIUS_GITHUB_USER_PASSWORD` which are credentials to GitHub test account.
 This is just a standard GitHub account that you can create by yourself.
 
-If you're AppUniter, you can find those secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
+If you're AppUniter, you can find those
+secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
 
 ### How to set environmental variable on mac?
 
@@ -102,6 +104,40 @@ To do that - add `[New snapshots]` to the pull request title. Otherwise the snap
 ### Design system documentation
 
 We also are having [design system documentation](components/README.md).
+
+## Firebase Analytics
+
+Google Analytics serves as an application measurement solution, offering valuable insights into app
+utilization and user engagement.
+
+Google Analytics helps you see how people use your Android app. It automatically tracks different
+actions and user details. You can even create your own custom events to measure things that are
+important to your app. Once it collects this info, you can check it out on a dashboard in the
+Firebase console.
+
+|                            Description                             |                                                                          Picture                                                                          |
+|:------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                     Users in last 30 minutes.                      | <img width="401" alt="Screenshot 2023-10-30 at 15 06 42" src="https://github.com/appunite/Loudius/assets/72873966/ac32815f-4493-44e3-bce2-5a8ef8a8608d">  |
+|              List of events from the selected period.              | <img width="398" alt="Screenshot 2023-10-30 at 15 06 52" src="https://github.com/appunite/Loudius/assets/72873966/06087e06-30b2-44c9-ae93-aefae7ad2d4f">  |
+| When you click on an event, you can see more detailed information. | <img width="1440" alt="Screenshot 2023-10-30 at 15 11 03" src="https://github.com/appunite/Loudius/assets/72873966/bae5e0ef-0ce3-4ed6-a65e-e838c15e55d5"> |
+
+### How to test?
+
+First, you should add commands to terminal which allow you logging events.
+
+```
+$ adb shell setprop log.tag.FA VERBOSE
+$ adb shell setprop log.tag.FA-SVC VERBOSE
+$ adb logcat -v time -s FA FA-SVC
+```
+
+Last command will print logs for the device.
+If you have problems with adb command, those links can
+help: [Not found adb Error](https://dev.to/ravics09/solution-of-command-not-found-adb-error-29e7)
+and [StackOverflow question](https://stackoverflow.com/questions/50456824/adb-command-not-found-on-mac-computer).
+Then, you can open the app and start testing! You should be able to see relevant events in Logcat.
+**❗️Be aware that you won't see analytics on dashboard immediately. Firebase needs about a few hours
+to note it.❗️**
 
 ## 🧑🏻‍🎓 Contributing
 
