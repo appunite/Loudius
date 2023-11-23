@@ -105,7 +105,7 @@ To do that - add `[New snapshots]` to the pull request title. Otherwise the snap
 
 We also are having [design system documentation](components/README.md).
 
-## Firebase Analytics
+## 🧐 Firebase Analytics
 
 Google Analytics serves as an application measurement solution, offering valuable insights into app
 utilization and user engagement.
@@ -136,8 +136,27 @@ If you have problems with adb command, those links can
 help: [Not found adb Error](https://dev.to/ravics09/solution-of-command-not-found-adb-error-29e7)
 and [StackOverflow question](https://stackoverflow.com/questions/50456824/adb-command-not-found-on-mac-computer).
 Then, you can open the app and start testing! You should be able to see relevant events in Logcat.
+
 **❗️Be aware that you won't see analytics on dashboard immediately. Firebase needs about a few hours
 to note it.❗️**
+
+### Documentation
+
+**Analytics Parameters**
+
+| Event parameter name |  Type   |    Examples    |                           Description                           |
+|:--------------------:|:-------:|:--------------:|:---------------------------------------------------------------:|
+|         name         | String  | "button_click" | An important event in the application that you want to measure. |
+|      item_name       | String  |    "notify"    |     Name of item that user interacted with during an event.     |
+|       success        | Boolean |     `true`     |         Information whether the action was successful.          |
+
+**Event Names**
+
+|   Event name    |                    Description                    |
+|:---------------:|:-------------------------------------------------:|
+|  button_click   |  Fired when a user clicked on a button or link.   |
+| action_finished |      Fired when “action_start” is finished.       |
+|  action_start   | Fired when we want to track start/finish actions. |
 
 ## 🧑🏻‍🎓 Contributing
 
