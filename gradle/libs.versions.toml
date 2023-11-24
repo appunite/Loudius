@@ -29,8 +29,6 @@ mockkAndroid = "1.13.5"
 okhttp3 = "4.12.0"
 robolectric = "4.10.3"
 slf4jApi = "2.0.7"
-# Cannot use 0.34.0 due to an existing bug.
-# https://github.com/robfletcher/strikt/issues/259
 striktCore = "0.34.1"
 striktMockk = "0.33.0"
 testlabInstrLib = "0.2"
