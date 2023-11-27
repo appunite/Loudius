@@ -126,9 +126,9 @@ Firebase console.
 First, you should add commands to terminal which allow you logging events.
 
 ```
-$ adb shell setprop log.tag.FA VERBOSE
-$ adb shell setprop log.tag.FA-SVC VERBOSE
-$ adb logcat -v time -s FA FA-SVC
+adb shell setprop log.tag.FA VERBOSE
+adb shell setprop log.tag.FA-SVC VERBOSE
+adb logcat -v time -s FA FA-SVC
 ```
 
 Last command will print logs for the device.
@@ -160,40 +160,40 @@ to note it.❗️**
 
 **Reviewers Screen**
 
-| When user clicks notify. | Specification |
-|:-:|--|
+|                                                    When user clicks notify.                                                    | Specification                                                                    |
+|:------------------------------------------------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 03 14](https://github.com/appunite/Loudius/assets/72873966/10e1414f-f6d4-44c8-965c-cb91e8230fb8) | <pre>{<br />   "name": "button_click"<br />   "item_name": "notify"<br />}<pre/> |
 
-| After user clicks notify, action finished with success. | Specification |
-|:-:|--|
+|                                    After user clicks notify, action finished with success.                                     | Specification                                                                                               |
+|:------------------------------------------------------------------------------------------------------------------------------:|-------------------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 22 36](https://github.com/appunite/Loudius/assets/72873966/ad716d96-ff6b-41a6-a13a-ce265baa55a8) | <pre>{<br />   "name": "action_finished"<br />   "item_name": "notify"<br />   "success": true<br />}<pre/> |
 
-| After user clicks notify, action finished with error. | Specification |
-|:-:|--|
+|                                     After user clicks notify, action finished with error.                                      | Specification                                                                                                |
+|:------------------------------------------------------------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 24 38](https://github.com/appunite/Loudius/assets/72873966/898be31d-8a23-425a-997d-363d9aa58b99) | <pre>{<br />   "name": "action_finished"<br />   "item_name": "notify"<br />   "success": false<br />}<pre/> |
 
-| When user pulls to refresh. | Specification |
-|:-:|--|
+|                                              When user pulls to refresh.                                               | Specification                                                                                    |
+|:----------------------------------------------------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------|
 | ![Frame-24-11-2023-01-33-33](https://github.com/appunite/Loudius/assets/72873966/c0b8b5f3-1a95-433e-856d-a5b3e396079e) | <pre>{<br />   "name": "action_start"<br />   "item_name": "refresh_reviewers_data"<br />}<pre/> |
 
-| When refresh data finished with success. | Specification |
-|:-:|--|
+|                                            When refresh data finished with success.                                            | Specification                                                                                                               |
+|:------------------------------------------------------------------------------------------------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 53 27](https://github.com/appunite/Loudius/assets/72873966/6abf8266-af26-41a6-b9cb-689dcd7c197f) | <pre>{<br />   "name": "action_finished"<br />   "item_name": "refresh_reviewers_data"<br />   "success": true<br />}<pre/> |
 
-| When refresh data finished with error. | Specification |
-|:-:|--|
+|                                             When refresh data finished with error.                                             | Specification                                                                                                                |
+|:------------------------------------------------------------------------------------------------------------------------------:|------------------------------------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 54 26](https://github.com/appunite/Loudius/assets/72873966/84d22828-eef2-4d3d-b613-208744edea19) | <pre>{<br />   "name": "action_finished"<br />   "item_name": "refresh_reviewers_data"<br />   "success": false<br />}<pre/> |
 
-| When user opens reviewers screen. | Specification |
-|:-:|--|
+|                                               When user opens reviewers screen.                                                | Specification                                                                                  |
+|:------------------------------------------------------------------------------------------------------------------------------:|------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 53 27](https://github.com/appunite/Loudius/assets/72873966/6abf8266-af26-41a6-b9cb-689dcd7c197f) | <pre>{<br />   "name": "action_start"<br />   "item_name": "fetch_reviewers_data"<br />}<pre/> |
 
-| When refresh data finished with success. | Specification |
-|:-:|--|
+|                                            When refresh data finished with success.                                            | Specification                                                                                                             |
+|:------------------------------------------------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 53 27](https://github.com/appunite/Loudius/assets/72873966/6abf8266-af26-41a6-b9cb-689dcd7c197f) | <pre>{<br />   "name": "action_finished"<br />   "item_name": "fetch_reviewers_data"<br />   "success": true<br />}<pre/> |
 
-| When refresh data finished with error. | Specification |
-|:-:|--|
+|                                             When refresh data finished with error.                                             | Specification                                                                                                              |
+|:------------------------------------------------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------------------------------|
 | ![Screenshot 2023-11-24 at 13 54 26](https://github.com/appunite/Loudius/assets/72873966/84d22828-eef2-4d3d-b613-208744edea19) | <pre>{<br />   "name": "action_finished"<br />   "item_name": "fetch_reviewers_data"<br />   "success": false<br />}<pre/> |
 
 ## 🧑🏻‍🎓 Contributing
