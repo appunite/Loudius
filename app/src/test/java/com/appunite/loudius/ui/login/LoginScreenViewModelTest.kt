@@ -16,8 +16,16 @@
 
 package com.appunite.loudius.ui.login
 
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.ClickLogInEvent
+import com.appunite.loudius.analytics.events.OpenGithubAuthEvent
+import com.appunite.loudius.analytics.events.ShowXiaomiPermissionDialogEvent
+import com.appunite.loudius.analytics.events.XiaomiPermissionDialogDismissedEvent
+import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionAlreadyGrantedEvent
+import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionGrantedEvent
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -30,7 +38,8 @@ class LoginScreenViewModelTest {
     private val githubHelper = mockk<GithubHelper> {
         every { shouldAskForXiaomiIntent() } returns false
     }
-    private fun create() = LoginScreenViewModel(githubHelper)
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
+    private fun create() = LoginScreenViewModel(githubHelper, eventTracker)
 
     @Test
     fun `WHEN log-in click THEN open github authorization`() {
@@ -41,6 +50,11 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenGithubAuth)
             get(LoginState::showXiaomiPermissionDialog).isFalse()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(OpenGithubAuthEvent)
         }
     }
 
@@ -54,6 +68,11 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::navigateTo).isNull()
             get(LoginState::showXiaomiPermissionDialog).isTrue()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
         }
     }
 
@@ -70,6 +89,12 @@ class LoginScreenViewModelTest {
             get(LoginState::navigateTo).isNull()
             get(LoginState::showXiaomiPermissionDialog).isFalse()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
+            eventTracker.trackEvent(XiaomiPermissionDialogDismissedEvent)
+        }
     }
 
     @Test
@@ -85,6 +110,12 @@ class LoginScreenViewModelTest {
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenXiaomiPermissionManager)
             get(LoginState::showXiaomiPermissionDialog).isTrue()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
+            eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
+        }
     }
 
     @Test
@@ -99,6 +130,13 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenGithubAuth)
             get(LoginState::showXiaomiPermissionDialog).isFalse()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
+            eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
+            eventTracker.trackEvent(OpenGithubAuthEvent)
         }
     }
 
@@ -133,6 +171,14 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::showXiaomiPermissionDialog).isFalse()
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenGithubAuth)
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
+            eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
+            eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
+            eventTracker.trackEvent(OpenGithubAuthEvent)
         }
     }
 }
