@@ -24,14 +24,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.analytics.EventTracker
 import com.appunite.loudius.analytics.events.ClickNotifyEvent
-import com.appunite.loudius.analytics.events.FetchDataEvent
-import com.appunite.loudius.analytics.events.FetchDataFailureEvent
-import com.appunite.loudius.analytics.events.FetchDataSuccessEvent
+import com.appunite.loudius.analytics.events.FetchReviewersEvent
+import com.appunite.loudius.analytics.events.FetchReviewersFailureEvent
+import com.appunite.loudius.analytics.events.FetchReviewersSuccessEvent
 import com.appunite.loudius.analytics.events.NotifyFailureEvent
 import com.appunite.loudius.analytics.events.NotifySuccessEvent
-import com.appunite.loudius.analytics.events.RefreshDataEvent
-import com.appunite.loudius.analytics.events.RefreshDataFailureEvent
-import com.appunite.loudius.analytics.events.RefreshDataSuccessEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersFailureEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersSuccessEvent
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -90,35 +90,35 @@ class ReviewersViewModel(
     }
 
     fun refreshData() {
-        eventTracker.trackEvent(RefreshDataEvent)
+        eventTracker.trackEvent(RefreshReviewersEvent)
         viewModelScope.launch {
             _isRefreshing.value = true
             getMergedData()
                 .onSuccess {
                     state = state.copy(data = Data.Success(reviewers = it))
-                    eventTracker.trackEvent(RefreshDataSuccessEvent)
+                    eventTracker.trackEvent(RefreshReviewersSuccessEvent)
                 }
                 .onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(RefreshDataFailureEvent)
+                    eventTracker.trackEvent(RefreshReviewersFailureEvent)
                 }
             _isRefreshing.value = false
         }
     }
 
     private fun fetchData() {
-        eventTracker.trackEvent(FetchDataEvent)
+        eventTracker.trackEvent(FetchReviewersEvent)
         viewModelScope.launch {
             state = state.copy(data = Data.Loading)
 
             getMergedData()
                 .onSuccess {
                     state = state.copy(data = Data.Success(reviewers = it))
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 }
                 .onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent)
                 }
         }
     }

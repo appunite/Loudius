@@ -23,6 +23,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.AuthenticationFinishedFailureEvent
+import com.appunite.loudius.analytics.events.AuthenticationFinishedSuccessEvent
+import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
+import com.appunite.loudius.analytics.events.ShowGenericErrorEvent
+import com.appunite.loudius.analytics.events.ShowLoginErrorEvent
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
@@ -53,7 +62,8 @@ sealed class AuthenticatingScreenNavigation {
 
 class AuthenticatingViewModel(
     private val authRepository: AuthRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)
@@ -61,6 +71,7 @@ class AuthenticatingViewModel(
         private set
 
     init {
+        eventTracker.trackEvent(AuthenticationStartedEvent)
         getAccessToken()
     }
 
@@ -73,6 +84,7 @@ class AuthenticatingViewModel(
         if (state.errorScreenType == LoadingErrorType.LOGIN_ERROR) {
             state = state.copy(navigateTo = AuthenticatingScreenNavigation.NavigateToLogin)
         } else {
+            eventTracker.trackEvent(GetAccessTokenStartedEvent)
             state = state.copy(errorScreenType = null)
             getAccessToken()
         }
@@ -93,17 +105,27 @@ class AuthenticatingViewModel(
                     state = state.copy(
                         navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests
                     )
+                    eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
+                    eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
                 }
             }
+            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }, onFailure = {
-                state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
-            })
+            state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+        })
     }
 
     private fun resolveErrorType(it: Throwable) = when (it) {
-        is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
-        else -> LoadingErrorType.GENERIC_ERROR
+        is BadVerificationCodeException -> {
+            eventTracker.trackEvent(ShowLoginErrorEvent)
+            LoadingErrorType.LOGIN_ERROR
+        }
+        else -> {
+            eventTracker.trackEvent(ShowGenericErrorEvent)
+            LoadingErrorType.GENERIC_ERROR
+        }
     }
 }

@@ -19,73 +19,64 @@ package com.appunite.loudius.analytics.events
 import com.appunite.loudius.analytics.Event
 import com.appunite.loudius.analytics.EventParameter
 
-interface ReviewersEvent : Event
+interface AuthenticatingEvent : Event
 
-object ClickNotifyEvent : ReviewersEvent {
-    override val name: String = "button_click"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "notify")
-    )
-}
-
-object NotifySuccessEvent : ReviewersEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "notify"),
-        EventParameter.Boolean("success", true)
-    )
-}
-
-object NotifyFailureEvent : ReviewersEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "notify"),
-        EventParameter.Boolean("success", false)
-    )
-}
-
-object RefreshReviewersEvent : ReviewersEvent {
+object AuthenticationStartedEvent : AuthenticatingEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_reviewers_data")
+        EventParameter.String("item_name", "authentication")
     )
 }
 
-object RefreshReviewersSuccessEvent : ReviewersEvent {
+object AuthenticationFinishedSuccessEvent : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_reviewers_data"),
+        EventParameter.String("item_name", "authentication"),
         EventParameter.Boolean("success", true)
     )
 }
 
-object RefreshReviewersFailureEvent : ReviewersEvent {
+object AuthenticationFinishedFailureEvent : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_reviewers_data"),
+        EventParameter.String("item_name", "authentication"),
         EventParameter.Boolean("success", false)
     )
 }
 
-object FetchReviewersEvent : ReviewersEvent {
+object GetAccessTokenStartedEvent : AuthenticatingEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_reviewers_data")
+        EventParameter.String("item_name", "authentication")
     )
 }
 
-object FetchReviewersSuccessEvent : ReviewersEvent {
+object GetAccessTokenFinishedSuccessEvent : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_reviewers_data"),
+        EventParameter.String("item_name", "authentication"),
         EventParameter.Boolean("success", true)
     )
 }
 
-object FetchReviewersFailureEvent : ReviewersEvent {
+object GetAccessTokenFinishedFailureEvent : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_reviewers_data"),
+        EventParameter.String("item_name", "authentication"),
         EventParameter.Boolean("success", false)
+    )
+}
+
+object ShowLoginErrorEvent : AuthenticatingEvent {
+    override val name: String = "screen_opened"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "login_error")
+    )
+}
+
+object ShowGenericErrorEvent : AuthenticatingEvent {
+    override val name: String = "screen_opened"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "generic_error")
     )
 }
