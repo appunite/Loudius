@@ -16,9 +16,9 @@ Firebase console.
 First, you should add commands to terminal which allow you logging events.
 
 ```
-$ adb shell setprop log.tag.FA VERBOSE
-$ adb shell setprop log.tag.FA-SVC VERBOSE
-$ adb logcat -v time -s FA FA-SVC
+adb shell setprop log.tag.FA VERBOSE
+adb shell setprop log.tag.FA-SVC VERBOSE
+adb logcat -v time -s FA FA-SVC
 ```
 
 Last command will print logs for the device.
