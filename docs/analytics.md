@@ -5,8 +5,8 @@ actions and user details. You can even create your own custom events to measure 
 important to your app. Once it collects this info, you can check it out on a dashboard in the
 Firebase console.
 
-|                            Description                             |                          Picture                          |
-|:------------------------------------------------------------------:|:---------------------------------------------------------:|
+|                            Description                             |                               Picture                               |
+|:------------------------------------------------------------------:|:-------------------------------------------------------------------:|
 |                     Users in last 30 minutes.                      |    ![Last 30 minutes](analytics_imgs/reviewers/last_30_mins.png)    |
 |              List of events from the selected period.              |   ![List of events](analytics_imgs/reviewers/list_of_events.png)    |
 | When you click on an event, you can see more detailed information. | ![Detailed information](analytics_imgs/reviewers/detailed_info.png) |

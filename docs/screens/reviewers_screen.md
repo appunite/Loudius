@@ -4,8 +4,8 @@
 
 ## Documentation
 
-|                    When user clicks notify.                    | Specification                                                                    |
-|:--------------------------------------------------------------:|----------------------------------------------------------------------------------|
+|                         When user clicks notify.                         | Specification                                                                    |
+|:------------------------------------------------------------------------:|----------------------------------------------------------------------------------|
 | ![Click notify](../analytics_imgs/reviewers/when_user_clicks_notify.png) | <pre>{<br />   "name": "button_click"<br />   "item_name": "notify"<br />}<pre/> |
 
 |            After user clicks notify, action finished with success.            | Specification                                                                                               |
