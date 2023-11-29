@@ -113,9 +113,9 @@ class AuthenticatingViewModel(
             }
             eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }, onFailure = {
-            state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
-        })
+                state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
+                eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            })
     }
 
     private fun resolveErrorType(it: Throwable) = when (it) {
