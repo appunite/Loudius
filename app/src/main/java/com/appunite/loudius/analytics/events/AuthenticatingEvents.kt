@@ -47,14 +47,14 @@ object AuthenticationFinishedFailureEvent : AuthenticatingEvent {
 object GetAccessTokenStartedEvent : AuthenticatingEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "authentication")
+        EventParameter.String("item_name", "get_access_token")
     )
 }
 
 object GetAccessTokenFinishedSuccessEvent : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "authentication"),
+        EventParameter.String("item_name", "get_access_token"),
         EventParameter.Boolean("success", true)
     )
 }
@@ -62,7 +62,7 @@ object GetAccessTokenFinishedSuccessEvent : AuthenticatingEvent {
 object GetAccessTokenFinishedFailureEvent : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "authentication"),
+        EventParameter.String("item_name", "get_access_token"),
         EventParameter.Boolean("success", false)
     )
 }
