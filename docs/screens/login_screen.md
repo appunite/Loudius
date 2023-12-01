@@ -8,7 +8,7 @@
 |:-------------------------------------------------------------------------:|----------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/login/login_screen.png" width=50% height=50%> | <pre>{<br />   "name": "button_click"<br />   "item_name": "log_in"<br />}<pre/> |
 
-|              !!!!!When user clicks log in on xiaomi device.              | Specification                                                                               |
+|                         When github auth opens.                          | Specification                                                                               |
 |:------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/login/github_auth.png" width=50% height=50%> | <pre>{<br />   "name": "simple_action"<br />   "item_name": "open_github_auth"<br />}<pre/> |
 

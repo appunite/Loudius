@@ -1,4 +1,4 @@
-# Login Screen
+# Reviewers Screen
 
 <img src="../analytics_imgs/reviewers/reviewers_screen.png" width=20% height=20%>
 
