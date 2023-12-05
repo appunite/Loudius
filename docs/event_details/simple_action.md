@@ -6,7 +6,7 @@ If you’d like to track action start and action finish. You should use "action_
 
 ## Parameters
 
-- event_name (required) - Always “simple_action”. 
+- event_name (required) - Always “simple_action”.
 - item_name (required) - Unique name of the action that is happening.
 
 ## Examples

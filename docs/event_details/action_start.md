@@ -6,7 +6,7 @@ This event should be tracked only if is followed by action_finished event. If yo
 
 ## Parameters
 
-- event_name (required) - Always “action_start”. 
+- event_name (required) - Always “action_start”.
 - item_name (required) - Unique action name. The same item_name should be used in action_finished event.
 
 ## Examples
