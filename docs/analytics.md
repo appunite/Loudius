@@ -1,4 +1,4 @@
-## 🧐 Firebase Analytics
+# 🧐 Firebase Analytics
 
 Google Analytics helps you see how people use your Android app. It automatically tracks different
 actions and user details. You can even create your own custom events to measure things that are
@@ -11,11 +11,11 @@ Firebase console.
 |              List of events from the selected period.              |   ![List of events](analytics_imgs/reviewers/list_of_events.png)    |
 | When you click on an event, you can see more detailed information. | ![Detailed information](analytics_imgs/reviewers/detailed_info.png) |
 
-### How to test?
+## How to test?
 
 First, you should add commands to terminal which allow you logging events.
 
-```
+```sh
 adb shell setprop log.tag.FA VERBOSE
 adb shell setprop log.tag.FA-SVC VERBOSE
 adb logcat -v time -s FA FA-SVC
@@ -30,7 +30,7 @@ Then, you can open the app and start testing! You should be able to see relevant
 **❗️Be aware that you won't see analytics on dashboard immediately. Firebase needs about a few hours
 to note it.❗️**
 
-### Documentation
+## Documentation
 
 **Analytics Parameters**
 
