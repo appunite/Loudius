@@ -35,4 +35,4 @@ google-services.json
 *.hprof
 
 # MegaLinter files
-**/megalinter-reports/*
+megalinter-reports/*
