@@ -24,8 +24,7 @@ import org.koin.dsl.module
 
 class AnalyticsRule : TestWatcher() {
 
-    private val converter = EventParametersConverter()
-    val analytics = AnalyticsLogger(converter)
+    val analytics = AnalyticsLogger()
 
     override fun starting(description: Description) {
         super.starting(description)

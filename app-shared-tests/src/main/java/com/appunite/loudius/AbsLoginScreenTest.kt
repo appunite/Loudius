@@ -19,7 +19,6 @@ package com.appunite.loudius
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import android.os.Bundle
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.intent.Intents.intended
@@ -47,8 +46,7 @@ import org.junit.Test
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import strikt.api.expectThat
-import strikt.assertions.isEqualTo
-import strikt.assertions.one
+import strikt.assertions.containsExactly
 
 abstract class AbsLoginScreenTest {
 
@@ -78,7 +76,7 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() = with(integrationTestRule) {
+    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
@@ -98,18 +96,14 @@ abstract class AbsLoginScreenTest {
             )
         )
 
-        val bundle = Bundle()
-        bundle.putString("item_name", "log_in")
-
-        expectThat(analyticsRule.analytics.log) {
-            one {
-                this.isEqualTo(AnalyticsLog("button_click", bundle))
-            }
-        }
+        expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth"))
+        )
     }
 
     @Test
-    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth() = with(integrationTestRule) {
+    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth(): Unit = with(integrationTestRule) {
         every { githubHelper.shouldAskForXiaomiIntent() } returns true
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
@@ -130,10 +124,17 @@ abstract class AbsLoginScreenTest {
                 hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
             )
         )
+
+        expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "show_xiaomi_permission_dialog")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_already_granted")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth"))
+        )
     }
 
     @Test
-    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() =
+    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor(): Unit =
         with(integrationTestRule) {
             every { githubHelper.shouldAskForXiaomiIntent() } returns true
             intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
@@ -160,6 +161,12 @@ abstract class AbsLoginScreenTest {
                         )
                     )
                 )
+            )
+
+            expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
+                AnalyticsLog("simple_action", mapOf("item_name" to "show_xiaomi_permission_dialog")),
+                AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_granted"))
             )
         }
 }

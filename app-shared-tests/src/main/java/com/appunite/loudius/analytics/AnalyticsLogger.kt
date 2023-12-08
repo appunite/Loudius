@@ -16,21 +16,24 @@
 
 package com.appunite.loudius.analytics
 
-import android.os.Bundle
-
 data class AnalyticsLog(
     val eventName: String,
-    val parameters: Bundle
+    val parameters: Map<String, Any?>
 )
 
-
-class AnalyticsLogger(
-    private val converter: EventParametersConverter
-) : EventTracker {
+class AnalyticsLogger : EventTracker {
 
     val log: MutableList<AnalyticsLog> = mutableListOf()
 
     override fun trackEvent(event: Event) {
-        log.add(AnalyticsLog(event.name, converter.convert(event.parameters)))
+        log.add(AnalyticsLog(event.name, convert(event.parameters)))
     }
+
+    private fun convert(parameters: List<EventParameter>): Map<String, Any?> =
+        parameters.associate {
+            it.name to when (it) {
+                is EventParameter.String -> it.value
+                is EventParameter.Boolean -> it.value
+            }
+        }
 }

@@ -19,6 +19,8 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.appunite.loudius.analytics.AnalyticsLog
+import com.appunite.loudius.analytics.AnalyticsRule
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
@@ -28,6 +30,8 @@ import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.containsExactly
 
 abstract class AbsReviewersScreenTest {
 
@@ -36,6 +40,9 @@ abstract class AbsReviewersScreenTest {
 
     @get:Rule(order = 1)
     var mockWebServer: MockWebServerRule = MockWebServerRule()
+
+    @get:Rule
+    val analyticsRule = AnalyticsRule()
 
     @Before
     fun setUp() {
@@ -54,6 +61,11 @@ abstract class AbsReviewersScreenTest {
             composeTestRule.waitUntilLoadingDoesNotExist()
 
             composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
+
+            expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true))
+            )
         }
     }
 
@@ -78,6 +90,13 @@ abstract class AbsReviewersScreenTest {
                 .onNodeWithText(
                     "Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89"
                 ).assertIsDisplayed()
+
+            expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true)),
+                AnalyticsLog("button_click", mapOf("item_name" to "notify")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true))
+            )
         }
     }
 
@@ -99,6 +118,13 @@ abstract class AbsReviewersScreenTest {
             composeTestRule
                 .onNodeWithText("Uh-oh, it seems that Loudius has taken a vacation. Don't worry, we're sending a postcard to bring it back ASAP!")
                 .assertIsDisplayed()
+
+            expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true)),
+                AnalyticsLog("button_click", mapOf("item_name" to "notify")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to false))
+            )
         }
     }
 

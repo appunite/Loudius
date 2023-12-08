@@ -19,6 +19,7 @@ package com.appunite.loudius
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.appunite.loudius.analytics.AnalyticsRule
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Rule
@@ -28,6 +29,9 @@ abstract class UniversalWalkThroughAppTest {
 
     @get:Rule(order = 0)
     val integrationTestRule by lazy { IntegrationTestRule(MainActivity::class.java) }
+
+    @get:Rule
+    val analyticsRule = AnalyticsRule()
 
     @Test
     fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
