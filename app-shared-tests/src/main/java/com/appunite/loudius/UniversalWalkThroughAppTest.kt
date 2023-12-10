@@ -69,7 +69,7 @@ abstract class UniversalWalkThroughAppTest {
             AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
             AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true)),
             AnalyticsLog("button_click", mapOf("item_name" to "notify")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true)),
+            AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true))
         )
     }
 

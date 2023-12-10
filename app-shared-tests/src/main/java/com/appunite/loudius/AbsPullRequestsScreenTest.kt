@@ -43,7 +43,7 @@ abstract class AbsPullRequestsScreenTest {
     val analyticsRule = AnalyticsRule()
 
     @Test
-    fun whenResponseIsCorrectThenPullRequestItemIsVisible(): Unit {
+    fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
         with(integrationTestRule) {
             Register.user(mockWebServer)
             Register.issues(mockWebServer)
