@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint.gradle)
     alias(libs.plugins.kotlin.serialization)
+    id 'jacoco'
 }
 
 def fileName = "../app/google-services.json"

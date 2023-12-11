@@ -33,6 +33,3 @@ google-services.json
 
 # Android Profiling
 *.hprof
-
-# MegaLinter files
-**/megalinter-reports/*
