@@ -72,6 +72,10 @@ fun ReviewersScreen(
     val state = viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
     val refreshing by viewModel.isRefreshing.collectAsState()
+    
+    LaunchedEffect(key1 = Unit) {
+        viewModel.trackScreenOpened()
+    }
 
     ReviewersScreenStateless(
         pullRequestNumber = state.pullRequestNumber,

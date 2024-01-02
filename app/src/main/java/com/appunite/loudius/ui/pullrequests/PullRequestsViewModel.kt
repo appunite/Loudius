@@ -69,7 +69,6 @@ class PullRequestsViewModel(
         private set
 
     init {
-        eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
         fetchData()
     }
 
@@ -127,5 +126,9 @@ class PullRequestsViewModel(
 
     private fun resetNavigationState() {
         state = state.copy(navigateToReviewers = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
     }
 }

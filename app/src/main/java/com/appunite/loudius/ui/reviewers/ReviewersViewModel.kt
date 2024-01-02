@@ -86,7 +86,6 @@ class ReviewersViewModel(
     val isRefreshing = _isRefreshing.asStateFlow()
 
     init {
-        eventTracker.trackEvent(ReviewersScreenOpenedEvent)
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
         fetchData()
     }
@@ -267,5 +266,9 @@ class ReviewersViewModel(
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(ReviewersScreenOpenedEvent)
     }
 }

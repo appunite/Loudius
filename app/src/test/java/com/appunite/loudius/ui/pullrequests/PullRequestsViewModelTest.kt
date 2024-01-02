@@ -21,7 +21,6 @@ import com.appunite.loudius.analytics.events.FetchPullRequestsEvent
 import com.appunite.loudius.analytics.events.FetchPullRequestsFailureEvent
 import com.appunite.loudius.analytics.events.FetchPullRequestsSuccessEvent
 import com.appunite.loudius.analytics.events.NavigateToReviewersEvent
-import com.appunite.loudius.analytics.events.PullRequestsScreenOpenedEvent
 import com.appunite.loudius.analytics.events.RefreshPullRequestsEvent
 import com.appunite.loudius.analytics.events.RefreshPullRequestsSuccessEvent
 import com.appunite.loudius.fakes.FakePullRequestRepository
@@ -64,7 +63,6 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.isRefreshing).isTrue()
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
             eventTracker.trackEvent(RefreshPullRequestsEvent)
@@ -80,7 +78,6 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.isRefreshing).isFalse()
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
             eventTracker.trackEvent(RefreshPullRequestsEvent)
@@ -99,7 +96,6 @@ class PullRequestsViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
             eventTracker.trackEvent(RefreshPullRequestsEvent)
@@ -116,7 +112,6 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Loading>()
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
         }
     }
@@ -130,7 +125,6 @@ class PullRequestsViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
         }
@@ -148,7 +142,6 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Error>()
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsFailureEvent)
         }
@@ -171,7 +164,6 @@ class PullRequestsViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsFailureEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
@@ -201,7 +193,6 @@ class PullRequestsViewModelTest {
             )
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
             eventTracker.trackEvent(NavigateToReviewersEvent)
@@ -221,7 +212,6 @@ class PullRequestsViewModelTest {
             .isNull()
 
         verifyOrder {
-            eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
             eventTracker.trackEvent(NavigateToReviewersEvent)
