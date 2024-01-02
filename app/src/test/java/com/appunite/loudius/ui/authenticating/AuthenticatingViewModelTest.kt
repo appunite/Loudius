@@ -70,8 +70,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
             eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
         }
     }
 
@@ -87,8 +87,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }
     }
 
@@ -107,8 +107,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }
     }
 
@@ -146,11 +146,11 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
             eventTracker.trackEvent(GetAccessTokenStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
             eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
         }
     }
 
@@ -179,8 +179,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }
     }
 
@@ -196,7 +196,7 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 
@@ -226,7 +226,7 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 
