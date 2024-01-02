@@ -4,6 +4,10 @@
 
 ## Documentation
 
+|                           When pull requests screen opened.                            | Specification                                                                                   |
+|:--------------------------------------------------------------------------------------:|-------------------------------------------------------------------------------------------------|
+| <img src="../analytics_imgs/pull_requests/prs_screen_opened.png" width=50% height=50%> | <pre>{<br />   "name": "screen_opened"<br />   "item_name": "pull_requests_screen"<br />}<pre/> |
+
 |                           When user pulls to refresh.                            | Specification                                                                                        |
 |:--------------------------------------------------------------------------------:|------------------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/pull_requests/refresh_prs.png" width=50% height=50%> | <pre>{<br />   "name": "action_start"<br />   "item_name": "refresh_pull_requests_data"<br />}<pre/> |
@@ -31,7 +35,3 @@
 |                           When user clicks on pull request item.                           | Specification                                                                        |
 |:------------------------------------------------------------------------------------------:|--------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/pull_requests/navigate_to_reviewers.png" width=50% height=50%> | <pre>{<br />   "name": "item_click"<br />   "item_name": "pull_request"<br />}<pre/> |
-
-|                           When pull requests screen opened.                            | Specification                                                                                   |
-|:--------------------------------------------------------------------------------------:|-------------------------------------------------------------------------------------------------|
-| <img src="../analytics_imgs/pull_requests/prs_screen_opened.png" width=50% height=50%> | <pre>{<br />   "name": "screen_opened"<br />   "item_name": "pull_requests_screen"<br />}<pre/> |

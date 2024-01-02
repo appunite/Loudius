@@ -66,17 +66,3 @@ object GetAccessTokenFinishedFailureEvent : AuthenticatingEvent {
         EventParameter.Boolean("success", false)
     )
 }
-
-object ShowLoginErrorEvent : AuthenticatingEvent {
-    override val name: String = "screen_opened"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "login_error")
-    )
-}
-
-object ShowGenericErrorEvent : AuthenticatingEvent {
-    override val name: String = "screen_opened"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "generic_error")
-    )
-}

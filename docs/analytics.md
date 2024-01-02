@@ -49,6 +49,7 @@ to note it.❗️**
 | [action_finished](event_details/action_finished.md) | item_name<br/>success | Called when the action_start is finished.         |
 |   [simple_action](event_details/simple_action.md)   | item_name             | Fired when single actions is happening.           |
 |   [screen_opened](event_details/screen_opened.md)   | item_name             | Called when screen is opened.                     |
+|     [screen_view](event_details/screen_view.md)     | item_name             | Called when user see component.                   |
 
 **Screens**
 * [Reviewers Screen](screens/reviewers_screen.md)

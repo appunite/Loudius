@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.appunite.loudius.analytics.EventTracker
 import com.appunite.loudius.analytics.events.ClickLogInEvent
+import com.appunite.loudius.analytics.events.LogInScreenOpenedEvent
 import com.appunite.loudius.analytics.events.OpenGithubAuthEvent
 import com.appunite.loudius.analytics.events.ShowXiaomiPermissionDialogEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogDismissedEvent
@@ -55,6 +56,10 @@ class LoginScreenViewModel(
 
     var state by mutableStateOf(LoginState())
         private set
+
+    init {
+        eventTracker.trackEvent(LogInScreenOpenedEvent)
+    }
 
     fun onAction(action: LoginAction) {
         when (action) {

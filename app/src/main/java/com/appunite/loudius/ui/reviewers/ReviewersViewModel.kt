@@ -32,6 +32,7 @@ import com.appunite.loudius.analytics.events.NotifySuccessEvent
 import com.appunite.loudius.analytics.events.RefreshReviewersEvent
 import com.appunite.loudius.analytics.events.RefreshReviewersFailureEvent
 import com.appunite.loudius.analytics.events.RefreshReviewersSuccessEvent
+import com.appunite.loudius.analytics.events.ReviewersScreenOpenedEvent
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -85,6 +86,7 @@ class ReviewersViewModel(
     val isRefreshing = _isRefreshing.asStateFlow()
 
     init {
+        eventTracker.trackEvent(ReviewersScreenOpenedEvent)
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
         fetchData()
     }

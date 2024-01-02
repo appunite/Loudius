@@ -12,9 +12,9 @@
 |:------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/login/github_auth.png" width=50% height=50%> | <pre>{<br />   "name": "simple_action"<br />   "item_name": "open_github_auth"<br />}<pre/> |
 
-|                       When user clicks log in on xiaomi device.                       | Specification                                                                                            |
-|:-------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------------|
-| <img src="../analytics_imgs/login/xiaomi_permission_dialog.png" width=50% height=50%> | <pre>{<br />   "name": "simple_action"<br />   "item_name": "show_xiaomi_permission_dialog"<br />}<pre/> |
+|                       When user clicks log in on xiaomi device.                       | Specification                                                                                     |
+|:-------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------|
+| <img src="../analytics_imgs/login/xiaomi_permission_dialog.png" width=50% height=50%> | <pre>{<br />   "name": "screen_view"<br />   "item_name": "xiaomi_permission_dialog"<br />}<pre/> |
 
 |                         When user dismiss permission dialog.                         | Specification                                                                                                 |
 |:------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------------------|

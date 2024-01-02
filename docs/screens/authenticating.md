@@ -1,15 +1,17 @@
 # Authenticating
 
+<img src="../analytics_imgs/authenticating/authenticating_screen.png" width=20% height=20%>
+
 ## Documentation
 
-| When authentication started. | <pre>{<br />   "name": "action_start"<br />   "item_name": "authentication"<br />}<pre/> |
-|:----------------------------:|------------------------------------------------------------------------------------------|
+| After user clicks log in, authentication started. | <pre>{<br />   "name": "action_start"<br />   "item_name": "authentication"<br />}<pre/> |
+|:-------------------------------------------------:|------------------------------------------------------------------------------------------|
 
-| When authentication finished with success. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": true<br />}<pre/> |
-|:------------------------------------------:|---------------------------------------------------------------------------------------------------------------------|
+| When application gets access token and authentication finished with success. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": true<br />}<pre/> |
+|:----------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------------------------|
 
-| When authentication finished with failure. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": false<br />}<pre/> |
-|:------------------------------------------:|----------------------------------------------------------------------------------------------------------------------|
+| When application doesn't get access token and  When authentication finished with failure. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": false<br />}<pre/> |
+|:-----------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------------------------|
 
 | When get access token started. | <pre>{<br />   "name": "action_start"<br />   "item_name": "get_access_token"<br />}<pre/> |
 |:------------------------------:|--------------------------------------------------------------------------------------------|
