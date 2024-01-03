@@ -35,6 +35,13 @@ object ClickNotifyEvent : ReviewersEvent {
     )
 }
 
+object NotifyEvent : ReviewersEvent {
+    override val name: String = "action_start"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "notify")
+    )
+}
+
 object NotifySuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(

@@ -22,6 +22,7 @@ import com.appunite.loudius.analytics.events.ClickNotifyEvent
 import com.appunite.loudius.analytics.events.FetchReviewersEvent
 import com.appunite.loudius.analytics.events.FetchReviewersFailureEvent
 import com.appunite.loudius.analytics.events.FetchReviewersSuccessEvent
+import com.appunite.loudius.analytics.events.NotifyEvent
 import com.appunite.loudius.analytics.events.NotifyFailureEvent
 import com.appunite.loudius.analytics.events.NotifySuccessEvent
 import com.appunite.loudius.analytics.events.RefreshReviewersEvent
@@ -377,6 +378,7 @@ class ReviewersViewModelTest {
                 eventTracker.trackEvent(FetchReviewersEvent)
                 eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(NotifyEvent)
                 eventTracker.trackEvent(NotifySuccessEvent)
             }
         }
@@ -412,6 +414,7 @@ class ReviewersViewModelTest {
                 eventTracker.trackEvent(FetchReviewersEvent)
                 eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(NotifyEvent)
             }
         }
 
@@ -434,6 +437,7 @@ class ReviewersViewModelTest {
                 eventTracker.trackEvent(FetchReviewersEvent)
                 eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(NotifyEvent)
                 eventTracker.trackEvent(NotifyFailureEvent)
             }
         }
@@ -454,6 +458,7 @@ class ReviewersViewModelTest {
                     eventTracker.trackEvent(FetchReviewersEvent)
                     eventTracker.trackEvent(FetchReviewersSuccessEvent)
                     eventTracker.trackEvent(ClickNotifyEvent)
+                    eventTracker.trackEvent(NotifyEvent)
                     eventTracker.trackEvent(NotifySuccessEvent)
                 }
             }

@@ -27,6 +27,7 @@ import com.appunite.loudius.analytics.events.ClickNotifyEvent
 import com.appunite.loudius.analytics.events.FetchReviewersEvent
 import com.appunite.loudius.analytics.events.FetchReviewersFailureEvent
 import com.appunite.loudius.analytics.events.FetchReviewersSuccessEvent
+import com.appunite.loudius.analytics.events.NotifyEvent
 import com.appunite.loudius.analytics.events.NotifyFailureEvent
 import com.appunite.loudius.analytics.events.NotifySuccessEvent
 import com.appunite.loudius.analytics.events.RefreshReviewersEvent
@@ -204,6 +205,7 @@ class ReviewersViewModel(
 
     private fun notifyReviewer(userLogin: String) {
         eventTracker.trackEvent(ClickNotifyEvent)
+        eventTracker.trackEvent(NotifyEvent)
         val (owner, repo, pullRequestNumber) = initialValues
         val successData = state.data as? Data.Success ?: return
 
