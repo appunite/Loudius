@@ -21,6 +21,13 @@ import com.appunite.loudius.analytics.EventParameter
 
 interface LoginEvent : Event
 
+object LogInScreenOpenedEvent : LoginEvent {
+    override val name: String = "screen_opened"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "log_in_screen")
+    )
+}
+
 object ClickLogInEvent : LoginEvent {
     override val name: String = "button_click"
     override val parameters: List<EventParameter> = listOf(
@@ -36,9 +43,9 @@ object OpenGithubAuthEvent : LoginEvent {
 }
 
 object ShowXiaomiPermissionDialogEvent : LoginEvent {
-    override val name: String = "simple_action"
+    override val name: String = "screen_view"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "show_xiaomi_permission_dialog")
+        EventParameter.String("item_name", "xiaomi_permission_dialog")
     )
 }
 

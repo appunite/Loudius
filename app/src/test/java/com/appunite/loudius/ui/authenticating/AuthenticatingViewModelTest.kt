@@ -27,8 +27,6 @@ import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
 import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
 import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
 import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
-import com.appunite.loudius.analytics.events.ShowGenericErrorEvent
-import com.appunite.loudius.analytics.events.ShowLoginErrorEvent
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
@@ -72,8 +70,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
             eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
         }
     }
 
@@ -89,9 +87,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(ShowLoginErrorEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }
     }
 
@@ -110,9 +107,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(ShowGenericErrorEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }
     }
 
@@ -150,12 +146,11 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(ShowGenericErrorEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
             eventTracker.trackEvent(GetAccessTokenStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
             eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
         }
     }
 
@@ -184,9 +179,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(ShowLoginErrorEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
             eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }
     }
 
@@ -202,7 +196,7 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 
@@ -232,7 +226,7 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 

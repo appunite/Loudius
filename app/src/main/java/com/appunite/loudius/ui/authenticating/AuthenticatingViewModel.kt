@@ -30,8 +30,6 @@ import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
 import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
 import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
 import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
-import com.appunite.loudius.analytics.events.ShowGenericErrorEvent
-import com.appunite.loudius.analytics.events.ShowLoginErrorEvent
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
@@ -71,7 +69,6 @@ class AuthenticatingViewModel(
         private set
 
     init {
-        eventTracker.trackEvent(AuthenticationStartedEvent)
         getAccessToken()
     }
 
@@ -95,6 +92,7 @@ class AuthenticatingViewModel(
     }
 
     private fun getAccessToken() {
+        eventTracker.trackEvent(AuthenticationStartedEvent)
         code.fold(onSuccess = { code ->
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
@@ -105,27 +103,22 @@ class AuthenticatingViewModel(
                     state = state.copy(
                         navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests
                     )
+                    eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
                     eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
+                    eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
                     eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
                 }
             }
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
         }, onFailure = {
                 state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
-                eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+                eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
             })
     }
 
     private fun resolveErrorType(it: Throwable) = when (it) {
-        is BadVerificationCodeException -> {
-            eventTracker.trackEvent(ShowLoginErrorEvent)
-            LoadingErrorType.LOGIN_ERROR
-        }
-        else -> {
-            eventTracker.trackEvent(ShowGenericErrorEvent)
-            LoadingErrorType.GENERIC_ERROR
-        }
+        is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
+        else -> LoadingErrorType.GENERIC_ERROR
     }
 }
