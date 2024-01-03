@@ -97,6 +97,7 @@ abstract class AbsLoginScreenTest {
         )
 
         expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
             AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
             AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth"))
         )
@@ -126,8 +127,9 @@ abstract class AbsLoginScreenTest {
         )
 
         expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
             AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
-            AnalyticsLog("simple_action", mapOf("item_name" to "show_xiaomi_permission_dialog")),
+            AnalyticsLog("screen_view", mapOf("item_name" to "xiaomi_permission_dialog")),
             AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_already_granted")),
             AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth"))
         )
@@ -164,8 +166,9 @@ abstract class AbsLoginScreenTest {
             )
 
             expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
                 AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
-                AnalyticsLog("simple_action", mapOf("item_name" to "show_xiaomi_permission_dialog")),
+                AnalyticsLog("screen_view", mapOf("item_name" to "xiaomi_permission_dialog")),
                 AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_granted"))
             )
         }

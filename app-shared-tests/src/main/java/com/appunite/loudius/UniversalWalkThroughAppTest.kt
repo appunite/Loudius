@@ -57,16 +57,18 @@ abstract class UniversalWalkThroughAppTest {
             .assertIsDisplayed()
 
         expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
             AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
             AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth")),
             AnalyticsLog("action_start", mapOf("item_name" to "authentication")),
             AnalyticsLog("action_finished", mapOf("item_name" to "get_access_token", "success" to true)),
             AnalyticsLog("action_finished", mapOf("item_name" to "authentication", "success" to true)),
-            AnalyticsLog("screen_opened", mapOf("item_name" to "pull_requests_screen")),
             AnalyticsLog("action_start", mapOf("item_name" to "fetch_pull_requests_data")),
+            AnalyticsLog("screen_opened", mapOf("item_name" to "pull_requests_screen")),
             AnalyticsLog("action_finished", mapOf("item_name" to "fetch_pull_requests_data", "success" to true)),
             AnalyticsLog("item_click", mapOf("item_name" to "pull_request")),
             AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
+            AnalyticsLog("screen_opened", mapOf("item_name" to "reviewers_screen")),
             AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true)),
             AnalyticsLog("button_click", mapOf("item_name" to "notify")),
             AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true))
