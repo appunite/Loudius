@@ -4,6 +4,10 @@
 
 ## Documentation
 
+|                         When login screen opened.                         | Specification                                                                            |
+|:-------------------------------------------------------------------------:|------------------------------------------------------------------------------------------|
+| <img src="../analytics_imgs/login/login_screen.png" width=50% height=50%> | <pre>{<br />   "name": "screen_opened"<br />   "item_name": "log_in_screen"<br />}<pre/> |
+
 |                         When user clicks log in.                          | Specification                                                                    |
 |:-------------------------------------------------------------------------:|----------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/login/login_screen.png" width=50% height=50%> | <pre>{<br />   "name": "button_click"<br />   "item_name": "log_in"<br />}<pre/> |
@@ -11,10 +15,6 @@
 |                         When github auth opens.                          | Specification                                                                               |
 |:------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/login/github_auth.png" width=50% height=50%> | <pre>{<br />   "name": "simple_action"<br />   "item_name": "open_github_auth"<br />}<pre/> |
-
-|                       When user clicks log in on xiaomi device.                       | Specification                                                                                     |
-|:-------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------|
-| <img src="../analytics_imgs/login/xiaomi_permission_dialog.png" width=50% height=50%> | <pre>{<br />   "name": "screen_view"<br />   "item_name": "xiaomi_permission_dialog"<br />}<pre/> |
 
 |                         When user dismiss permission dialog.                         | Specification                                                                                                 |
 |:------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------------------|

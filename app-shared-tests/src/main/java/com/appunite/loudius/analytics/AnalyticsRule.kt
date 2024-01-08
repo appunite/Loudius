@@ -29,9 +29,9 @@ class AnalyticsRule : TestWatcher() {
     override fun starting(description: Description) {
         super.starting(description)
         GlobalContext.get().unloadModules(listOf(analyticsModule))
-        val analyticsModule = module {
+        val fakeAnalyticsModule = module {
             single<EventTracker> { analytics }
         }
-        GlobalContext.get().loadModules(listOf(analyticsModule))
+        GlobalContext.get().loadModules(listOf(fakeAnalyticsModule))
     }
 }

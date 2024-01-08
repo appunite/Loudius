@@ -61,6 +61,8 @@ abstract class UniversalWalkThroughAppTest {
             AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
             AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth")),
             AnalyticsLog("action_start", mapOf("item_name" to "authentication")),
+            AnalyticsLog("action_start", mapOf("item_name" to "get_access_token")),
+            AnalyticsLog("screen_opened", mapOf("item_name" to "authenticating_screen")),
             AnalyticsLog("action_finished", mapOf("item_name" to "get_access_token", "success" to true)),
             AnalyticsLog("action_finished", mapOf("item_name" to "authentication", "success" to true)),
             AnalyticsLog("action_start", mapOf("item_name" to "fetch_pull_requests_data")),

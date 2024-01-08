@@ -18,9 +18,7 @@ package com.appunite.loudius.ui.login
 
 import com.appunite.loudius.analytics.EventTracker
 import com.appunite.loudius.analytics.events.ClickLogInEvent
-import com.appunite.loudius.analytics.events.LogInScreenOpenedEvent
 import com.appunite.loudius.analytics.events.OpenGithubAuthEvent
-import com.appunite.loudius.analytics.events.ShowXiaomiPermissionDialogEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogDismissedEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionAlreadyGrantedEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionGrantedEvent
@@ -54,7 +52,6 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(LogInScreenOpenedEvent)
             eventTracker.trackEvent(ClickLogInEvent)
             eventTracker.trackEvent(OpenGithubAuthEvent)
         }
@@ -73,9 +70,7 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(LogInScreenOpenedEvent)
             eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
         }
     }
 
@@ -94,9 +89,7 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(LogInScreenOpenedEvent)
             eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
             eventTracker.trackEvent(XiaomiPermissionDialogDismissedEvent)
         }
     }
@@ -116,9 +109,7 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(LogInScreenOpenedEvent)
             eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
             eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
         }
     }
@@ -138,9 +129,7 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(LogInScreenOpenedEvent)
             eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
             eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
             eventTracker.trackEvent(OpenGithubAuthEvent)
         }
@@ -180,9 +169,7 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(LogInScreenOpenedEvent)
             eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
             eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
             eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
             eventTracker.trackEvent(OpenGithubAuthEvent)

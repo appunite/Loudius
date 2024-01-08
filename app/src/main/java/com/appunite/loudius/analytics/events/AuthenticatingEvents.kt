@@ -21,6 +21,13 @@ import com.appunite.loudius.analytics.EventParameter
 
 interface AuthenticatingEvent : Event
 
+object AuthenticatingScreenOpenedEvent : AuthenticatingEvent {
+    override val name: String = "screen_opened"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("item_name", "authenticating_screen")
+    )
+}
+
 object AuthenticationStartedEvent : AuthenticatingEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(

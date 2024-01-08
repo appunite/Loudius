@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.AuthenticatingScreenOpenedEvent
 import com.appunite.loudius.analytics.events.AuthenticationFinishedFailureEvent
 import com.appunite.loudius.analytics.events.AuthenticationFinishedSuccessEvent
 import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
@@ -81,7 +82,6 @@ class AuthenticatingViewModel(
         if (state.errorScreenType == LoadingErrorType.LOGIN_ERROR) {
             state = state.copy(navigateTo = AuthenticatingScreenNavigation.NavigateToLogin)
         } else {
-            eventTracker.trackEvent(GetAccessTokenStartedEvent)
             state = state.copy(errorScreenType = null)
             getAccessToken()
         }
@@ -93,6 +93,7 @@ class AuthenticatingViewModel(
 
     private fun getAccessToken() {
         eventTracker.trackEvent(AuthenticationStartedEvent)
+        eventTracker.trackEvent(GetAccessTokenStartedEvent)
         code.fold(onSuccess = { code ->
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
@@ -120,5 +121,9 @@ class AuthenticatingViewModel(
     private fun resolveErrorType(it: Throwable) = when (it) {
         is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
         else -> LoadingErrorType.GENERIC_ERROR
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(AuthenticatingScreenOpenedEvent)
     }
 }

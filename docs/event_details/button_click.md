@@ -2,7 +2,7 @@
 
 ## When the event is called
 
-Fired when a user clicked on a button or link.
+Fired when the user clicked on a button or link.
 
 ## Parameters
 
@@ -14,7 +14,7 @@ Fired when a user clicked on a button or link.
 ```json
 {
   "event_name": "button_click",
-  "item_name": "Check-in button",
+  "item_name": "Check-in button"
 }
 ```
 

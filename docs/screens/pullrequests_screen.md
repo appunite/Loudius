@@ -20,7 +20,7 @@
 |:----------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/pull_requests/refresh_prs_failure.png" width=50% height=50%> | <pre>{<br />   "name": "action_finished"<br />   "item_name": "refresh_pull_requests_data"<br />   "success": false<br />}<pre/> |
 
-|                     When user opens pull requests screen.                      | Specification                                                                                      |
+|                         When fetching data is started.                         | Specification                                                                                      |
 |:------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/pull_requests/fetch_prs.png" width=50% height=50%> | <pre>{<br />   "name": "action_start"<br />   "item_name": "fetch_pull_requests_data"<br />}<pre/> |
 

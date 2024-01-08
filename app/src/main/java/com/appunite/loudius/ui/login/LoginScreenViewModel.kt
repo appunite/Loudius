@@ -24,7 +24,6 @@ import com.appunite.loudius.analytics.EventTracker
 import com.appunite.loudius.analytics.events.ClickLogInEvent
 import com.appunite.loudius.analytics.events.LogInScreenOpenedEvent
 import com.appunite.loudius.analytics.events.OpenGithubAuthEvent
-import com.appunite.loudius.analytics.events.ShowXiaomiPermissionDialogEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogDismissedEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionAlreadyGrantedEvent
 import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionGrantedEvent
@@ -57,10 +56,6 @@ class LoginScreenViewModel(
     var state by mutableStateOf(LoginState())
         private set
 
-    init {
-        eventTracker.trackEvent(LogInScreenOpenedEvent)
-    }
-
     fun onAction(action: LoginAction) {
         when (action) {
             LoginAction.ClearNavigation -> {
@@ -70,7 +65,6 @@ class LoginScreenViewModel(
             LoginAction.ClickLogIn -> {
                 eventTracker.trackEvent(ClickLogInEvent)
                 if (githubHelper.shouldAskForXiaomiIntent()) {
-                    eventTracker.trackEvent(ShowXiaomiPermissionDialogEvent)
                     state = state.copy(
                         showXiaomiPermissionDialog = true
                     )
@@ -103,5 +97,9 @@ class LoginScreenViewModel(
                 state = state.copy(navigateTo = LoginNavigateTo.OpenComponentsBrowser)
             }
         }
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(LogInScreenOpenedEvent)
     }
 }

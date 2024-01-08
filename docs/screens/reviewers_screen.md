@@ -4,9 +4,17 @@
 
 ## Documentation
 
+|                           When reviewers screen opened.                           | Specification                                                                               |
+|:---------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------|
+| <img src="../analytics_imgs/reviewers/reviewers_screen.png" width=50% height=50%> | <pre>{<br />   "name": "screen_opened"<br />   "item_name": "reviewers_screen"<br />}<pre/> |
+
 |                         When user clicks notify.                         | Specification                                                                    |
 |:------------------------------------------------------------------------:|----------------------------------------------------------------------------------|
 | ![Click notify](../analytics_imgs/reviewers/when_user_clicks_notify.png) | <pre>{<br />   "name": "button_click"<br />   "item_name": "notify"<br />}<pre/> |
+
+|                         Once the user notification is started.                          | Specification                                                                    |
+|:---------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------|
+|    ![Success after notify](../analytics_imgs/reviewers/when_user_clicks_notify.png)     | <pre>{<br />   "name": "action_start"<br />   "item_name": "notify"<br />}<pre/> |
 
 |            After user clicks notify, action finished with success.            | Specification                                                                                               |
 |:-----------------------------------------------------------------------------:|-------------------------------------------------------------------------------------------------------------|
@@ -28,7 +36,7 @@
 |:-----------------------------------------------------------------------------------:|------------------------------------------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/reviewers/refresh_with_error.png" width=50% height=50%> | <pre>{<br />   "name": "action_finished"<br />   "item_name": "refresh_reviewers_data"<br />   "success": false<br />}<pre/> |
 
-|                         When user opens reviewers screen.                         | Specification                                                                                  |
+|                          When fetching data is started.                           | Specification                                                                                  |
 |:---------------------------------------------------------------------------------:|------------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/reviewers/reviewers_screen.png" width=50% height=50%> | <pre>{<br />   "name": "action_start"<br />   "item_name": "fetch_reviewers_data"<br />}<pre/> |
 

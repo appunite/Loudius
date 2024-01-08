@@ -42,13 +42,6 @@ object OpenGithubAuthEvent : LoginEvent {
     )
 }
 
-object ShowXiaomiPermissionDialogEvent : LoginEvent {
-    override val name: String = "screen_view"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "xiaomi_permission_dialog")
-    )
-}
-
 object XiaomiPermissionDialogDismissedEvent : LoginEvent {
     override val name: String = "simple_action"
     override val parameters: List<EventParameter> = listOf(

@@ -34,6 +34,11 @@ fun AuthenticatingScreen(
     onNavigateToLogin: () -> Unit
 ) {
     val state = viewModel.state
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.trackScreenOpened()
+    }
+
     LaunchedEffect(key1 = state.navigateTo) {
         when (state.navigateTo) {
             AuthenticatingScreenNavigation.NavigateToLogin -> {
