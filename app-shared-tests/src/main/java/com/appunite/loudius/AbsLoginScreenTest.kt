@@ -97,9 +97,9 @@ abstract class AbsLoginScreenTest {
         )
 
         expectThat(analyticsRule.analytics.log).containsExactly(
-            AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
-            AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
-            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth"))
+            AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
+            AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth", "screen_name" to "log_in_screen"))
         )
     }
 
@@ -127,10 +127,10 @@ abstract class AbsLoginScreenTest {
         )
 
         expectThat(analyticsRule.analytics.log).containsExactly(
-            AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
-            AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
-            AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_already_granted")),
-            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth"))
+            AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
+            AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_already_granted", "screen_name" to "log_in_screen")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth", "screen_name" to "log_in_screen"))
         )
     }
 
@@ -165,9 +165,9 @@ abstract class AbsLoginScreenTest {
             )
 
             expectThat(analyticsRule.analytics.log).containsExactly(
-                AnalyticsLog("screen_opened", mapOf("item_name" to "log_in_screen")),
-                AnalyticsLog("button_click", mapOf("item_name" to "log_in")),
-                AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_granted"))
+                AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
+                AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
+                AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_granted", "screen_name" to "log_in_screen"))
             )
         }
 }

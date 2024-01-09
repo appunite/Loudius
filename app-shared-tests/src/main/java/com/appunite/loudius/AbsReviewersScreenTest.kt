@@ -63,9 +63,9 @@ abstract class AbsReviewersScreenTest {
             composeTestRule.onNodeWithText("userLogin").assertIsDisplayed()
 
             expectThat(analyticsRule.analytics.log).containsExactly(
-                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
-                AnalyticsLog("screen_opened", mapOf("item_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true))
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen"))
             )
         }
     }
@@ -93,12 +93,12 @@ abstract class AbsReviewersScreenTest {
                 ).assertIsDisplayed()
 
             expectThat(analyticsRule.analytics.log).containsExactly(
-                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
-                AnalyticsLog("screen_opened", mapOf("item_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true)),
-                AnalyticsLog("button_click", mapOf("item_name" to "notify")),
-                AnalyticsLog("action_start", mapOf("item_name" to "notify")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true))
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen")),
+                AnalyticsLog("button_click", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_start", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true, "screen_name" to "reviewers_screen"))
             )
         }
     }
@@ -123,12 +123,12 @@ abstract class AbsReviewersScreenTest {
                 .assertIsDisplayed()
 
             expectThat(analyticsRule.analytics.log).containsExactly(
-                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data")),
-                AnalyticsLog("screen_opened", mapOf("item_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true)),
-                AnalyticsLog("button_click", mapOf("item_name" to "notify")),
-                AnalyticsLog("action_start", mapOf("item_name" to "notify")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to false))
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen")),
+                AnalyticsLog("button_click", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_start", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to false, "screen_name" to "reviewers_screen"))
             )
         }
     }

@@ -8,13 +8,15 @@ Fired when the user clicked on a button or link.
 
 - event_name (required) - Always “button_click”.
 - item_name (required) - Name of the button or link that user clicked. Keep in mind, it should uniquely identify every button on every screen. So if there are two buttons with the same name, you need to add some suffix to the event. If the text on the button changes, it’s usually better to keep the “item_name” the same, so we can keep analytics dashboard simpler.
+- screen_name (required) - Unique name of the screen that is opened.
 
 ## Examples
 
 ```json
 {
   "event_name": "button_click",
-  "item_name": "Check-in button"
+  "item_name": "Check-in button",
+  "screen_name": "reviewers_screen"
 }
 ```
 

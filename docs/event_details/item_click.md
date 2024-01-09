@@ -8,13 +8,15 @@ Fired when the user clicked on an item.
 
 - event_name (required) - Always “item_click”.
 - item_name (required) - Name of the item that user clicked. Keep in mind, it should uniquely identify every item on every screen.
+- screen_name (required) - Unique name of the screen that is opened.
 
 ## Examples
 
 ```json
 {
   "event_name": "item_click",
-  "item_name": "pull_request"
+  "item_name": "pull_request",
+  "screen_name": "reviewers_screen"
 }
 ```
 

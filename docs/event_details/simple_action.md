@@ -8,13 +8,15 @@ If you’d like to track action start and action finish. You should use "action_
 
 - event_name (required) - Always “simple_action”.
 - item_name (required) - Unique name of the action that is happening.
+- screen_name (required) - Unique name of the screen that is opened.
 
 ## Examples
 
 ```json
 {
   "event_name": "simple_action",
-  "item_name": "User is checked-in"
+  "item_name": "User is checked-in",
+  "screen_name": "reviewers_screen"
 }
 ```
 

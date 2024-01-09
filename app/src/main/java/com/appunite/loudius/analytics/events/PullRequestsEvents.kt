@@ -21,10 +21,18 @@ import com.appunite.loudius.analytics.EventParameter
 
 interface PullRequestsEvent : Event
 
+object PullRequestsScreenOpenedEvent : PullRequestsEvent {
+    override val name: String = "screen_opened"
+    override val parameters: List<EventParameter> = listOf(
+        EventParameter.String("screen_name", "pull_requests_screen")
+    )
+}
+
 object RefreshPullRequestsEvent : PullRequestsEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_pull_requests_data")
+        EventParameter.String("item_name", "refresh_pull_requests_data"),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }
 
@@ -32,7 +40,8 @@ object RefreshPullRequestsSuccessEvent : PullRequestsEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "refresh_pull_requests_data"),
-        EventParameter.Boolean("success", true)
+        EventParameter.Boolean("success", true),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }
 
@@ -40,14 +49,16 @@ object RefreshPullRequestsFailureEvent : PullRequestsEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "refresh_pull_requests_data"),
-        EventParameter.Boolean("success", false)
+        EventParameter.Boolean("success", false),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }
 
 object FetchPullRequestsEvent : PullRequestsEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_pull_requests_data")
+        EventParameter.String("item_name", "fetch_pull_requests_data"),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }
 
@@ -55,7 +66,8 @@ object FetchPullRequestsSuccessEvent : PullRequestsEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "fetch_pull_requests_data"),
-        EventParameter.Boolean("success", true)
+        EventParameter.Boolean("success", true),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }
 
@@ -63,20 +75,15 @@ object FetchPullRequestsFailureEvent : PullRequestsEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "fetch_pull_requests_data"),
-        EventParameter.Boolean("success", false)
+        EventParameter.Boolean("success", false),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }
 
 object NavigateToReviewersEvent : PullRequestsEvent {
     override val name: String = "item_click"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "pull_request")
-    )
-}
-
-object PullRequestsScreenOpenedEvent : PullRequestsEvent {
-    override val name: String = "screen_opened"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "pull_requests_screen")
+        EventParameter.String("item_name", "pull_request"),
+        EventParameter.String("screen_name", "pull_requests_screen")
     )
 }

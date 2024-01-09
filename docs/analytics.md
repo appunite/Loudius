@@ -34,11 +34,12 @@ to note it.❗️**
 
 **Analytics Parameters**
 
-| Event parameter name |  Type   |    Examples    |                           Description                           |
-|:--------------------:|:-------:|:--------------:|:---------------------------------------------------------------:|
-|         name         | String  | "button_click" | An important event in the application that you want to measure. |
-|      item_name       | String  |    "notify"    |     Name of item that user interacted with during an event.     |
-|       success        | Boolean |     `true`     |         Information whether the action was successful.          |
+| Event parameter name |  Type   |      Examples      |                           Description                           |
+|:--------------------:|:-------:|:------------------:|:---------------------------------------------------------------:|
+|         name         | String  |   "button_click"   | An important event in the application that you want to measure. |
+|      item_name       | String  |      "notify"      |     Name of item that user interacted with during an event.     |
+|     screen_name      | String  | "reviewers_screen" |        Name of the screen that is related to the event.         |
+|       success        | Boolean |       `true`       |         Information whether the action was successful.          |
 
 **Event Names**
 

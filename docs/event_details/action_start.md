@@ -8,13 +8,15 @@ This event should be tracked only if is followed by action_finished event. If yo
 
 - event_name (required) - Always “action_start”.
 - item_name (required) - Unique action name. The same item_name should be used in action_finished event.
+- screen_name (required) - Unique name of the screen that is opened.
 
 ## Examples
 
 ```json
 {
   "event_name": "action_start",
-  "item_name": "Downloading User Profile"
+  "item_name": "Downloading User Profile",
+  "screen_name": "reviewers_screen"
 }
 ```
 

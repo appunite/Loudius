@@ -24,21 +24,23 @@ interface ReviewersEvent : Event
 object ReviewersScreenOpenedEvent : ReviewersEvent {
     override val name: String = "screen_opened"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "reviewers_screen")
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
 object ClickNotifyEvent : ReviewersEvent {
     override val name: String = "button_click"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "notify")
+        EventParameter.String("item_name", "notify"),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
 object NotifyEvent : ReviewersEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "notify")
+        EventParameter.String("item_name", "notify"),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
@@ -46,7 +48,8 @@ object NotifySuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "notify"),
-        EventParameter.Boolean("success", true)
+        EventParameter.Boolean("success", true),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
@@ -54,14 +57,16 @@ object NotifyFailureEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "notify"),
-        EventParameter.Boolean("success", false)
+        EventParameter.Boolean("success", false),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
 object RefreshReviewersEvent : ReviewersEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_reviewers_data")
+        EventParameter.String("item_name", "refresh_reviewers_data"),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
@@ -69,7 +74,8 @@ object RefreshReviewersSuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "refresh_reviewers_data"),
-        EventParameter.Boolean("success", true)
+        EventParameter.Boolean("success", true),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
@@ -77,14 +83,16 @@ object RefreshReviewersFailureEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "refresh_reviewers_data"),
-        EventParameter.Boolean("success", false)
+        EventParameter.Boolean("success", false),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
 object FetchReviewersEvent : ReviewersEvent {
     override val name: String = "action_start"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_reviewers_data")
+        EventParameter.String("item_name", "fetch_reviewers_data"),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
@@ -92,7 +100,8 @@ object FetchReviewersSuccessEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "fetch_reviewers_data"),
-        EventParameter.Boolean("success", true)
+        EventParameter.Boolean("success", true),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }
 
@@ -100,6 +109,7 @@ object FetchReviewersFailureEvent : ReviewersEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "fetch_reviewers_data"),
-        EventParameter.Boolean("success", false)
+        EventParameter.Boolean("success", false),
+        EventParameter.String("screen_name", "reviewers_screen")
     )
 }

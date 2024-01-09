@@ -24,41 +24,46 @@ interface LoginEvent : Event
 object LogInScreenOpenedEvent : LoginEvent {
     override val name: String = "screen_opened"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "log_in_screen")
+        EventParameter.String("screen_name", "log_in_screen")
     )
 }
 
 object ClickLogInEvent : LoginEvent {
     override val name: String = "button_click"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "log_in")
+        EventParameter.String("item_name", "log_in"),
+        EventParameter.String("screen_name", "log_in_screen")
     )
 }
 
 object OpenGithubAuthEvent : LoginEvent {
     override val name: String = "simple_action"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "open_github_auth")
+        EventParameter.String("item_name", "open_github_auth"),
+        EventParameter.String("screen_name", "log_in_screen")
     )
 }
 
 object XiaomiPermissionDialogDismissedEvent : LoginEvent {
     override val name: String = "simple_action"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "xiaomi_permission_dialog_dismissed")
+        EventParameter.String("item_name", "xiaomi_permission_dialog_dismissed"),
+        EventParameter.String("screen_name", "log_in_screen")
     )
 }
 
 object XiaomiPermissionDialogPermissionGrantedEvent : LoginEvent {
     override val name: String = "simple_action"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "xiaomi_permission_dialog_permission_granted")
+        EventParameter.String("item_name", "xiaomi_permission_dialog_permission_granted"),
+        EventParameter.String("screen_name", "log_in_screen")
     )
 }
 
 object XiaomiPermissionDialogPermissionAlreadyGrantedEvent : LoginEvent {
     override val name: String = "simple_action"
     override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "xiaomi_permission_dialog_permission_already_granted")
+        EventParameter.String("item_name", "xiaomi_permission_dialog_permission_already_granted"),
+        EventParameter.String("screen_name", "log_in_screen")
     )
 }
