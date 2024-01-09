@@ -66,6 +66,7 @@ jobs:
             */build/reports/jacoco/codeCoverage/html/**
 
       - name: Add coverage to PR
+        if: always()
         id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
         with:
