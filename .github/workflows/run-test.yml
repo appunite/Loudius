@@ -208,6 +208,7 @@ jobs:
 
       - name: Download tests results for both jobs
         uses: actions/download-artifact@v4
+        needs: test-results
         with:
           name: test-results
 
