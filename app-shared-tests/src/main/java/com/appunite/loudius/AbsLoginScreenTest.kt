@@ -30,6 +30,8 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.rule.IntentsRule
+import com.appunite.loudius.analytics.AnalyticsLog
+import com.appunite.loudius.analytics.AnalyticsRule
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.di.githubHelperModule
 import com.appunite.loudius.ui.login.GithubHelper
@@ -43,6 +45,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
+import strikt.api.expectThat
+import strikt.assertions.containsExactly
 
 abstract class AbsLoginScreenTest {
 
@@ -51,6 +55,9 @@ abstract class AbsLoginScreenTest {
 
     @get:Rule(order = 1)
     val intents = IntentsRule()
+
+    @get:Rule
+    val analyticsRule = AnalyticsRule()
 
     private val githubHelper: GithubHelper = mockk<GithubHelper>().apply {
         every { shouldAskForXiaomiIntent() } returns false
@@ -69,7 +76,7 @@ abstract class AbsLoginScreenTest {
     }
 
     @Test
-    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth() = with(integrationTestRule) {
+    fun whenLoginScreenIsVisible_LoginButtonOpensGithubAuth(): Unit = with(integrationTestRule) {
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
@@ -88,10 +95,16 @@ abstract class AbsLoginScreenTest {
                 hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
             )
         )
+
+        expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
+            AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth", "screen_name" to "log_in_screen"))
+        )
     }
 
     @Test
-    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth() = with(integrationTestRule) {
+    fun whenClickingPermissionGrantedInXiaomiDialog_OpenGithubAuth(): Unit = with(integrationTestRule) {
         every { githubHelper.shouldAskForXiaomiIntent() } returns true
         intending(hasAction(Intent.ACTION_VIEW))
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
@@ -112,10 +125,17 @@ abstract class AbsLoginScreenTest {
                 hasData("https://github.com/login/oauth/authorize?client_id=91131449e417c7e29912&scope=repo")
             )
         )
+
+        expectThat(analyticsRule.analytics.log).containsExactly(
+            AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
+            AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_already_granted", "screen_name" to "log_in_screen")),
+            AnalyticsLog("simple_action", mapOf("item_name" to "open_github_auth", "screen_name" to "log_in_screen"))
+        )
     }
 
     @Test
-    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor() =
+    fun whenClickingGrantPermissionInXiaomiDialog_OpenPermissionEditor(): Unit =
         with(integrationTestRule) {
             every { githubHelper.shouldAskForXiaomiIntent() } returns true
             intending(hasAction("miui.intent.action.APP_PERM_EDITOR"))
@@ -142,6 +162,12 @@ abstract class AbsLoginScreenTest {
                         )
                     )
                 )
+            )
+
+            expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
+                AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
+                AnalyticsLog("simple_action", mapOf("item_name" to "xiaomi_permission_dialog_permission_granted", "screen_name" to "log_in_screen"))
             )
         }
 }

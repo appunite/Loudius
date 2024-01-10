@@ -20,6 +20,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.AuthenticationFinishedFailureEvent
+import com.appunite.loudius.analytics.events.AuthenticationFinishedSuccessEvent
+import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
@@ -28,6 +35,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import strikt.api.expectThat
@@ -39,8 +47,9 @@ class AuthenticatingViewModelTest {
 
     private val repository: FakeAuthRepository = spyk(FakeAuthRepository())
     private val savedStateHandle = SavedStateHandle()
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
 
-    private fun create() = AuthenticatingViewModel(repository, savedStateHandle)
+    private fun create() = AuthenticatingViewModel(repository, savedStateHandle, eventTracker)
 
     @Test
     fun `GIVEN valid code WHEN authenticated THEN navigate to pull requests screen`() {
@@ -58,6 +67,12 @@ class AuthenticatingViewModelTest {
             get(AuthenticatingState::errorScreenType).isNull()
             get(AuthenticatingState::navigateTo).isNull()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
+        }
     }
 
     @Test
@@ -68,6 +83,12 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 
@@ -82,6 +103,12 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.GENERIC_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 
@@ -116,6 +143,15 @@ class AuthenticatingViewModelTest {
             get(AuthenticatingState::errorScreenType).isNull()
             get(AuthenticatingState::navigateTo).isNull()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(GetAccessTokenStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
+        }
     }
 
     @Test
@@ -140,6 +176,12 @@ class AuthenticatingViewModelTest {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+        }
     }
 
     @Test
@@ -150,6 +192,11 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 
@@ -175,6 +222,11 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticationStartedEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
         }
     }
 

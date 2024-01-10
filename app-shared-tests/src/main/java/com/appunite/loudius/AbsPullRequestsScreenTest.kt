@@ -18,6 +18,8 @@ package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import com.appunite.loudius.analytics.AnalyticsLog
+import com.appunite.loudius.analytics.AnalyticsRule
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
@@ -26,6 +28,8 @@ import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Rule
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.containsExactly
 
 abstract class AbsPullRequestsScreenTest {
 
@@ -34,6 +38,9 @@ abstract class AbsPullRequestsScreenTest {
 
     @get:Rule(order = 1)
     var mockWebServer: MockWebServerRule = MockWebServerRule()
+
+    @get:Rule
+    val analyticsRule = AnalyticsRule()
 
     @Test
     fun whenResponseIsCorrectThenPullRequestItemIsVisible() {
@@ -51,6 +58,12 @@ abstract class AbsPullRequestsScreenTest {
 
             composeTestRule.onNodeWithText("First Pull-Request title")
                 .assertIsDisplayed()
+
+            expectThat(analyticsRule.analytics.log).containsExactly(
+                AnalyticsLog("action_start", mapOf("item_name" to "fetch_pull_requests_data", "screen_name" to "pull_requests_screen")),
+                AnalyticsLog("screen_opened", mapOf("screen_name" to "pull_requests_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_pull_requests_data", "success" to true, "screen_name" to "pull_requests_screen"))
+            )
         }
     }
 }

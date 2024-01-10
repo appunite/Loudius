@@ -23,6 +23,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.AuthenticatingScreenOpenedEvent
+import com.appunite.loudius.analytics.events.AuthenticationFinishedFailureEvent
+import com.appunite.loudius.analytics.events.AuthenticationFinishedSuccessEvent
+import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
+import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
@@ -53,7 +61,8 @@ sealed class AuthenticatingScreenNavigation {
 
 class AuthenticatingViewModel(
     private val authRepository: AuthRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)
@@ -83,6 +92,8 @@ class AuthenticatingViewModel(
     }
 
     private fun getAccessToken() {
+        eventTracker.trackEvent(AuthenticationStartedEvent)
+        eventTracker.trackEvent(GetAccessTokenStartedEvent)
         code.fold(onSuccess = { code ->
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
@@ -93,17 +104,26 @@ class AuthenticatingViewModel(
                     state = state.copy(
                         navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests
                     )
+                    eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
+                    eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
+                    eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
+                    eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
                 }
             }
         }, onFailure = {
                 state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
+                eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
             })
     }
 
     private fun resolveErrorType(it: Throwable) = when (it) {
         is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
         else -> LoadingErrorType.GENERIC_ERROR
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(AuthenticatingScreenOpenedEvent)
     }
 }

@@ -21,6 +21,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.FetchPullRequestsEvent
+import com.appunite.loudius.analytics.events.FetchPullRequestsFailureEvent
+import com.appunite.loudius.analytics.events.FetchPullRequestsSuccessEvent
+import com.appunite.loudius.analytics.events.NavigateToReviewersEvent
+import com.appunite.loudius.analytics.events.PullRequestsScreenOpenedEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsFailureEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsSuccessEvent
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import kotlinx.coroutines.launch
@@ -50,7 +59,8 @@ data class NavigationPayload(
 )
 
 class PullRequestsViewModel(
-    private val pullRequestsRepository: PullRequestRepository
+    private val pullRequestsRepository: PullRequestRepository,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
@@ -63,26 +73,32 @@ class PullRequestsViewModel(
     }
 
     fun refreshData() {
+        eventTracker.trackEvent(RefreshPullRequestsEvent)
         viewModelScope.launch {
             isRefreshing = true
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
+                    eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(RefreshPullRequestsFailureEvent)
                 }
             isRefreshing = false
         }
     }
 
     private fun fetchData() {
+        eventTracker.trackEvent(FetchPullRequestsEvent)
         viewModelScope.launch {
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
+                    eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(FetchPullRequestsFailureEvent)
                 }
         }
     }
@@ -97,6 +113,7 @@ class PullRequestsViewModel(
         val successData = state.data as? Data.Success ?: return
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
+        eventTracker.trackEvent(NavigateToReviewersEvent)
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
@@ -109,5 +126,9 @@ class PullRequestsViewModel(
 
     private fun resetNavigationState() {
         state = state.copy(navigateToReviewers = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
     }
 }
