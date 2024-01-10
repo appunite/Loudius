@@ -9,7 +9,7 @@ Called when the "action_start" is finished.
 - event_name (required) - Always “action_finished”.
 - item_name (required) - Unique action name. The same value as in "action_start".
 - success (required) - True if action succeeded and false if not.
-- screen_name (required) - Unique name of the screen that is opened.
+- screen_name (optional) - Unique name of the screen that is opened.
 
 ## Examples
 

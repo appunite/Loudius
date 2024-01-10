@@ -8,7 +8,6 @@
 |:-------------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------|
 | <img src="../analytics_imgs/authenticating/authenticating_screen.png" width=50% height=50%> | <pre>{<br />   "name": "screen_opened"<br />   "screen_name": "authenticating_screen"<br />}<pre/> |
 
-
 | After user clicks log in, authentication started. | <pre>{<br />   "name": "action_start"<br />   "item_name": "authentication"<br />   "screen_name": "authenticating_screen"<br />}<pre/> |
 |:-------------------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------------|
 

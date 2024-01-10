@@ -43,14 +43,14 @@ to note it.❗️**
 
 **Event Names**
 
-|                     Event name                      | Parameters            | Description                                       |
-|:---------------------------------------------------:|-----------------------|---------------------------------------------------|
-|    [button_click](event_details/button_click.md)    | item_name             | Fired when the user clicked on a button or link.  |
-|    [action_start](event_details/action_start.md)    | item_name             | Fired when we want to track start/finish actions. |
-| [action_finished](event_details/action_finished.md) | item_name<br/>success | Called when the action_start is finished.         |
-|   [simple_action](event_details/simple_action.md)   | item_name             | Fired when single actions is happening.           |
-|   [screen_opened](event_details/screen_opened.md)   | item_name             | Called when screen is opened.                     |
-|      [item_click](event_details/item_click.md)      | item_name             | Fired when the user clicked on an item.           |
+|                     Event name                      | Description                                       |
+|:---------------------------------------------------:|---------------------------------------------------|
+|    [button_click](event_details/button_click.md)    | Fired when the user clicked on a button or link.  |
+|    [action_start](event_details/action_start.md)    | Fired when we want to track start/finish actions. |
+| [action_finished](event_details/action_finished.md) | Called when the action_start is finished.         |
+|   [simple_action](event_details/simple_action.md)   | Fired when single actions is happening.           |
+|   [screen_opened](event_details/screen_opened.md)   | Called when screen is opened.                     |
+|      [item_click](event_details/item_click.md)      | Fired when the user clicked on an item.           |
 
 **Screens**
 * [Reviewers Screen](screens/reviewers_screen.md)
