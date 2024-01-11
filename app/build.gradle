@@ -54,6 +54,7 @@ android {
         }
         debug{
             enableUnitTestCoverage true
+            testCoverageEnabled true
         }
     }
     compileOptions {
@@ -102,11 +103,12 @@ android {
 }
 
 tasks.register('codeCoverage', JacocoReport) {
-    dependsOn 'testDebugUnitTest'
+    dependsOn 'testDebugUnitTest', 'createDebugCoverageReport'
 
     reports {
         html.required.set(true)
         xml.required.set(true)
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
     }
 
     classDirectories.setFrom(

@@ -144,6 +144,7 @@ jobs:
             --results-dir="${{ steps.generate-dir.outputs.results_dir }}" \
             --results-bucket="${{ steps.generate-dir.outputs.bucket }}" \
             --environment-variables "clearPackageData=true,coverage=true,coverageFilePath=/sdcard/Download/"
+        script: ./gradlew connectedDebugAndroidTest
 
       - name: Download test results from Firebase Test Lab
         if: always()
