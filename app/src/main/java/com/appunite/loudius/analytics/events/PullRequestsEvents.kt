@@ -45,12 +45,13 @@ object RefreshPullRequestsSuccessEvent : PullRequestsEvent {
     )
 }
 
-object RefreshPullRequestsFailureEvent : PullRequestsEvent {
+data class RefreshPullRequestsFailureEvent(val errorMessage: String) : PullRequestsEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "refresh_pull_requests_data"),
         EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "pull_requests_screen")
+        EventParameter.String("screen_name", "pull_requests_screen"),
+        EventParameter.String("error_message", errorMessage)
     )
 }
 
@@ -71,12 +72,13 @@ object FetchPullRequestsSuccessEvent : PullRequestsEvent {
     )
 }
 
-object FetchPullRequestsFailureEvent : PullRequestsEvent {
+data class FetchPullRequestsFailureEvent(val errorMessage: String) : PullRequestsEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "fetch_pull_requests_data"),
         EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "pull_requests_screen")
+        EventParameter.String("screen_name", "pull_requests_screen"),
+        EventParameter.String("error_message", errorMessage)
     )
 }
 

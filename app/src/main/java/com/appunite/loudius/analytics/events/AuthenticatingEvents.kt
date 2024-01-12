@@ -45,12 +45,13 @@ object AuthenticationFinishedSuccessEvent : AuthenticatingEvent {
     )
 }
 
-object AuthenticationFinishedFailureEvent : AuthenticatingEvent {
+data class AuthenticationFinishedFailureEvent(val errorMessage: String) : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "authentication"),
         EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "authenticating_screen")
+        EventParameter.String("screen_name", "authenticating_screen"),
+        EventParameter.String("error_message", errorMessage)
     )
 }
 
@@ -71,11 +72,12 @@ object GetAccessTokenFinishedSuccessEvent : AuthenticatingEvent {
     )
 }
 
-object GetAccessTokenFinishedFailureEvent : AuthenticatingEvent {
+data class GetAccessTokenFinishedFailureEvent(val errorMessage: String) : AuthenticatingEvent {
     override val name: String = "action_finished"
     override val parameters: List<EventParameter> = listOf(
         EventParameter.String("item_name", "get_access_token"),
         EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "authenticating_screen")
+        EventParameter.String("screen_name", "authenticating_screen"),
+        EventParameter.String("error_message", errorMessage)
     )
 }

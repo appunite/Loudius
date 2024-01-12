@@ -40,6 +40,7 @@ to note it.❗️**
 |      item_name       | String  |      "notify"      |     Name of item that user interacted with during an event.     |
 |     screen_name      | String  | "reviewers_screen" |        Name of the screen that is related to the event.         |
 |       success        | Boolean |       `true`       |         Information whether the action was successful.          |
+|    error_message     | String  |  "error message"   |     Information that will help trace the root of the issue.     |
 
 **Event Names**
 

@@ -320,7 +320,7 @@ class ReviewersViewModelTest {
 
                 verifyOrder {
                     eventTracker.trackEvent(FetchReviewersEvent)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
                 }
             }
 
@@ -340,7 +340,7 @@ class ReviewersViewModelTest {
 
                 verifyOrder {
                     eventTracker.trackEvent(FetchReviewersEvent)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
                 }
             }
 
@@ -356,7 +356,7 @@ class ReviewersViewModelTest {
 
                 verifyOrder {
                     eventTracker.trackEvent(FetchReviewersEvent)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
                 }
             }
     }
@@ -438,7 +438,7 @@ class ReviewersViewModelTest {
                 eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 eventTracker.trackEvent(ClickNotifyEvent)
                 eventTracker.trackEvent(NotifyEvent)
-                eventTracker.trackEvent(NotifyFailureEvent)
+                eventTracker.trackEvent(NotifyFailureEvent("Unrecognised error."))
             }
         }
 
@@ -487,7 +487,7 @@ class ReviewersViewModelTest {
 
                 verifyOrder {
                     eventTracker.trackEvent(FetchReviewersEvent)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
                     eventTracker.trackEvent(FetchReviewersEvent)
                     eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 }
@@ -510,9 +510,9 @@ class ReviewersViewModelTest {
 
                 verifyOrder {
                     eventTracker.trackEvent(FetchReviewersEvent)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
                     eventTracker.trackEvent(FetchReviewersEvent)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
                 }
             }
     }

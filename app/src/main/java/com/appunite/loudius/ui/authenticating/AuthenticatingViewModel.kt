@@ -108,13 +108,13 @@ class AuthenticatingViewModel(
                     eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
-                    eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
-                    eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+                    eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent(it.message ?: "Unrecognised error."))
+                    eventTracker.trackEvent(AuthenticationFinishedFailureEvent(it.message ?: "Unrecognised error."))
                 }
             }
         }, onFailure = {
                 state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
-                eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+                eventTracker.trackEvent(AuthenticationFinishedFailureEvent(it.message ?: "Unrecognised error."))
             })
     }
 
