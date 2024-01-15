@@ -14,8 +14,8 @@
 | When application gets access token and authentication finished with success. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": true<br />   "screen_name": "authenticating_screen"<br />}<pre/> |
 |:----------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-| When application doesn't get access token and  When authentication finished with failure. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": false<br />   "screen_name": "authenticating_screen"<br />   "error_message": errorMessage<br />}<pre/> |
-|:-----------------------------------------------------------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| When application doesn't get access token and  When authentication finished with failure. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "authentication"<br />   "success": false<br />   "screen_name": "authenticating_screen"<br />   "error_message": "Some error message."<br />}<pre/> |
+|:-----------------------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 | When get access token started. | <pre>{<br />   "name": "action_start"<br />   "item_name": "get_access_token"<br />   "screen_name": "authenticating_screen"<br />}<pre/> |
 |:------------------------------:|-------------------------------------------------------------------------------------------------------------------------------------------|
@@ -23,5 +23,5 @@
 | When get access token finished with success. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "get_access_token"<br />   "success": true<br />   "screen_name": "authenticating_screen"<br />}<pre/> |
 |:--------------------------------------------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-| When get access token finished with failure. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "get_access_token"<br />   "success": false<br />   "screen_name": "authenticating_screen"<br />   "error_message": errorMessage<br />}}<pre/> |
-|:--------------------------------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| When get access token finished with failure. | <pre>{<br />   "name": "action_finished"<br />   "item_name": "get_access_token"<br />   "success": false<br />   "screen_name": "authenticating_screen"<br />   "error_message": "Some error message."<br />}}<pre/> |
+|:--------------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

@@ -31,7 +31,7 @@ or
   "item_name": "Downloading User Profile",
   "success": false,
   "screen_name": "reviewers_screen",
-  "error_message": "error message"
+  "error_message": "Some error message."
 }
 ```
 
