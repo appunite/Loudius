@@ -10,6 +10,7 @@ Called when the "action_start" is finished.
 - item_name (required) - Unique action name. The same value as in "action_start".
 - success (required) - True if action succeeded and false if not.
 - screen_name (optional) - Unique name of the screen that is opened.
+- error_message (required if success is false) - Error message that will help trace the root of the issue.
 
 ## Examples
 
@@ -29,7 +30,8 @@ or
   "event_name": "action_finished",
   "item_name": "Downloading User Profile",
   "success": false,
-  "screen_name": "reviewers_screen"
+  "screen_name": "reviewers_screen",
+  "error_message": "Some error message."
 }
 ```
 

@@ -143,7 +143,7 @@ class PullRequestsViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsFailureEvent)
+            eventTracker.trackEvent(FetchPullRequestsFailureEvent("Unrecognised error."))
         }
     }
 
@@ -165,7 +165,7 @@ class PullRequestsViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsFailureEvent)
+            eventTracker.trackEvent(FetchPullRequestsFailureEvent("Unrecognised error."))
             eventTracker.trackEvent(FetchPullRequestsEvent)
             eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
         }

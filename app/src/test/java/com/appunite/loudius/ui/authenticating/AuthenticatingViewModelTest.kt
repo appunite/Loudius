@@ -87,8 +87,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
         }
     }
 
@@ -107,8 +107,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
         }
     }
 
@@ -146,8 +146,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
             eventTracker.trackEvent(GetAccessTokenStartedEvent)
             eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
             eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
@@ -179,8 +179,8 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
         }
     }
 
@@ -196,7 +196,7 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("No error code"))
         }
     }
 
@@ -226,7 +226,7 @@ class AuthenticatingViewModelTest {
 
         verifyOrder {
             eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent)
+            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("No error code"))
         }
     }
 

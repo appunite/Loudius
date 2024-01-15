@@ -82,7 +82,7 @@ class PullRequestsViewModel(
                     eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(RefreshPullRequestsFailureEvent)
+                    eventTracker.trackEvent(RefreshPullRequestsFailureEvent(it.message ?: "Unrecognised error."))
                 }
             isRefreshing = false
         }
@@ -98,7 +98,7 @@ class PullRequestsViewModel(
                     eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(FetchPullRequestsFailureEvent)
+                    eventTracker.trackEvent(FetchPullRequestsFailureEvent(it.message ?: "Unrecognised error."))
                 }
         }
     }

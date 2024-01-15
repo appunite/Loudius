@@ -102,7 +102,7 @@ class ReviewersViewModel(
                 }
                 .onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(RefreshReviewersFailureEvent)
+                    eventTracker.trackEvent(RefreshReviewersFailureEvent(it.message ?: "Unrecognised error."))
                 }
             _isRefreshing.value = false
         }
@@ -120,7 +120,7 @@ class ReviewersViewModel(
                 }
                 .onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(FetchReviewersFailureEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent(it.message ?: "Unrecognised error."))
                 }
         }
     }
@@ -214,7 +214,7 @@ class ReviewersViewModel(
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess { onNotifyUserSuccess(successData, userLogin) }
-                .onFailure { onNotifyUserFailure(successData, userLogin) }
+                .onFailure { onNotifyUserFailure(successData, userLogin, it.message) }
         }
     }
 
@@ -231,7 +231,8 @@ class ReviewersViewModel(
 
     private fun onNotifyUserFailure(
         successData: Data.Success,
-        userLogin: String
+        userLogin: String,
+        errorMessage: String?
     ) {
         state = state.copy(
             snackbarTypeShown = FAILURE,
@@ -239,7 +240,7 @@ class ReviewersViewModel(
                 reviewers = successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
-        eventTracker.trackEvent(NotifyFailureEvent)
+        eventTracker.trackEvent(NotifyFailureEvent(errorMessage ?: "Unrecognised error."))
     }
 
     private fun onNotifyUserSuccess(
