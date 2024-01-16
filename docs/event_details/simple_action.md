@@ -2,7 +2,7 @@
 
 ## When the event is called
 
-If you’d like to track action start and action finish. You should use "action_start" events.
+If you’d like to track action start and action finish. You should use [action_start](action_start.md) events.
 
 ## Parameters
 
