@@ -17,12 +17,7 @@
 package com.appunite.loudius.ui.pullrequests
 
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.FetchPullRequestsEvent
-import com.appunite.loudius.analytics.events.FetchPullRequestsFailureEvent
-import com.appunite.loudius.analytics.events.FetchPullRequestsSuccessEvent
-import com.appunite.loudius.analytics.events.NavigateToReviewersEvent
-import com.appunite.loudius.analytics.events.RefreshPullRequestsEvent
-import com.appunite.loudius.analytics.events.RefreshPullRequestsSuccessEvent
+import com.appunite.loudius.analytics.events.PullRequestsEvents
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
@@ -63,9 +58,9 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.isRefreshing).isTrue()
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
-            eventTracker.trackEvent(RefreshPullRequestsEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
         }
     }
 
@@ -78,10 +73,10 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.isRefreshing).isFalse()
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
-            eventTracker.trackEvent(RefreshPullRequestsEvent)
-            eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
+            eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
         }
     }
 
@@ -96,10 +91,10 @@ class PullRequestsViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
-            eventTracker.trackEvent(RefreshPullRequestsEvent)
-            eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
+            eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
         }
     }
 
@@ -112,7 +107,7 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Loading>()
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
         }
     }
 
@@ -125,8 +120,8 @@ class PullRequestsViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
         }
     }
 
@@ -142,8 +137,8 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Error>()
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchFailure("Unrecognised error."))
         }
     }
 
@@ -164,10 +159,10 @@ class PullRequestsViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsFailureEvent("Unrecognised error."))
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchFailure("Unrecognised error."))
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
         }
     }
 
@@ -193,9 +188,9 @@ class PullRequestsViewModelTest {
             )
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
-            eventTracker.trackEvent(NavigateToReviewersEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
         }
     }
 
@@ -212,9 +207,9 @@ class PullRequestsViewModelTest {
             .isNull()
 
         verifyOrder {
-            eventTracker.trackEvent(FetchPullRequestsEvent)
-            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
-            eventTracker.trackEvent(NavigateToReviewersEvent)
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
         }
     }
 }

@@ -21,12 +21,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.AuthenticationFinishedFailureEvent
-import com.appunite.loudius.analytics.events.AuthenticationFinishedSuccessEvent
-import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
-import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
-import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
-import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
+import com.appunite.loudius.analytics.events.AuthenticatingEvents
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
@@ -69,9 +64,9 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
-            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
         }
     }
 
@@ -86,9 +81,9 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
         }
     }
 
@@ -106,9 +101,9 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
         }
     }
 
@@ -145,12 +140,12 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
-            eventTracker.trackEvent(GetAccessTokenStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
-            eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
         }
     }
 
@@ -178,9 +173,9 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent("Unrecognised error."))
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
         }
     }
 
@@ -195,8 +190,8 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("No error code"))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("No error code"))
         }
     }
 
@@ -225,8 +220,8 @@ class AuthenticatingViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(AuthenticationStartedEvent)
-            eventTracker.trackEvent(AuthenticationFinishedFailureEvent("No error code"))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("No error code"))
         }
     }
 

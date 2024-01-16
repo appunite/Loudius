@@ -22,14 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.FetchPullRequestsEvent
-import com.appunite.loudius.analytics.events.FetchPullRequestsFailureEvent
-import com.appunite.loudius.analytics.events.FetchPullRequestsSuccessEvent
-import com.appunite.loudius.analytics.events.NavigateToReviewersEvent
-import com.appunite.loudius.analytics.events.PullRequestsScreenOpenedEvent
-import com.appunite.loudius.analytics.events.RefreshPullRequestsEvent
-import com.appunite.loudius.analytics.events.RefreshPullRequestsFailureEvent
-import com.appunite.loudius.analytics.events.RefreshPullRequestsSuccessEvent
+import com.appunite.loudius.analytics.events.PullRequestsEvents
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import kotlinx.coroutines.launch
@@ -73,32 +66,32 @@ class PullRequestsViewModel(
     }
 
     fun refreshData() {
-        eventTracker.trackEvent(RefreshPullRequestsEvent)
+        eventTracker.trackEvent(PullRequestsEvents.Refresh)
         viewModelScope.launch {
             isRefreshing = true
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
-                    eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
+                    eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(RefreshPullRequestsFailureEvent(it.message ?: "Unrecognised error."))
+                    eventTracker.trackEvent(PullRequestsEvents.RefreshFailure(it.message ?: "Unrecognised error."))
                 }
             isRefreshing = false
         }
     }
 
     private fun fetchData() {
-        eventTracker.trackEvent(FetchPullRequestsEvent)
+        eventTracker.trackEvent(PullRequestsEvents.Fetch)
         viewModelScope.launch {
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
-                    eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+                    eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(FetchPullRequestsFailureEvent(it.message ?: "Unrecognised error."))
+                    eventTracker.trackEvent(PullRequestsEvents.FetchFailure(it.message ?: "Unrecognised error."))
                 }
         }
     }
@@ -113,7 +106,7 @@ class PullRequestsViewModel(
         val successData = state.data as? Data.Success ?: return
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
-        eventTracker.trackEvent(NavigateToReviewersEvent)
+        eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
@@ -129,6 +122,6 @@ class PullRequestsViewModel(
     }
 
     fun trackScreenOpened() {
-        eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
+        eventTracker.trackEvent(PullRequestsEvents.ScreenOpened)
     }
 }

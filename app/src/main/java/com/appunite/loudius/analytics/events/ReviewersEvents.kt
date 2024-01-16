@@ -22,6 +22,7 @@ import com.appunite.loudius.analytics.EventParameter
 interface ReviewersEvent : Event
 
 object ReviewersEvents {
+
     object ScreenOpened : ReviewersEvent {
         override val name: String = "screen_opened"
         override val parameters: List<EventParameter> = listOf(

@@ -24,13 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.AuthenticatingScreenOpenedEvent
-import com.appunite.loudius.analytics.events.AuthenticationFinishedFailureEvent
-import com.appunite.loudius.analytics.events.AuthenticationFinishedSuccessEvent
-import com.appunite.loudius.analytics.events.AuthenticationStartedEvent
-import com.appunite.loudius.analytics.events.GetAccessTokenFinishedFailureEvent
-import com.appunite.loudius.analytics.events.GetAccessTokenFinishedSuccessEvent
-import com.appunite.loudius.analytics.events.GetAccessTokenStartedEvent
+import com.appunite.loudius.analytics.events.AuthenticatingEvents
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
@@ -92,8 +86,8 @@ class AuthenticatingViewModel(
     }
 
     private fun getAccessToken() {
-        eventTracker.trackEvent(AuthenticationStartedEvent)
-        eventTracker.trackEvent(GetAccessTokenStartedEvent)
+        eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+        eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenStarted)
         code.fold(onSuccess = { code ->
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
@@ -104,17 +98,17 @@ class AuthenticatingViewModel(
                     state = state.copy(
                         navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests
                     )
-                    eventTracker.trackEvent(GetAccessTokenFinishedSuccessEvent)
-                    eventTracker.trackEvent(AuthenticationFinishedSuccessEvent)
+                    eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+                    eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
-                    eventTracker.trackEvent(GetAccessTokenFinishedFailureEvent(it.message ?: "Unrecognised error."))
-                    eventTracker.trackEvent(AuthenticationFinishedFailureEvent(it.message ?: "Unrecognised error."))
+                    eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure(it.message ?: "Unrecognised error."))
+                    eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure(it.message ?: "Unrecognised error."))
                 }
             }
         }, onFailure = {
                 state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
-                eventTracker.trackEvent(AuthenticationFinishedFailureEvent(it.message ?: "Unrecognised error."))
+                eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure(it.message ?: "Unrecognised error."))
             })
     }
 
@@ -124,6 +118,6 @@ class AuthenticatingViewModel(
     }
 
     fun trackScreenOpened() {
-        eventTracker.trackEvent(AuthenticatingScreenOpenedEvent)
+        eventTracker.trackEvent(AuthenticatingEvents.ScreenOpened)
     }
 }

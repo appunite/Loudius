@@ -17,11 +17,7 @@
 package com.appunite.loudius.ui.login
 
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.ClickLogInEvent
-import com.appunite.loudius.analytics.events.OpenGithubAuthEvent
-import com.appunite.loudius.analytics.events.XiaomiPermissionDialogDismissedEvent
-import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionAlreadyGrantedEvent
-import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionGrantedEvent
+import com.appunite.loudius.analytics.events.LoginEvents
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyOrder
@@ -52,8 +48,8 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(OpenGithubAuthEvent)
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
         }
     }
 
@@ -70,7 +66,7 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(ClickLogInEvent)
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
         }
     }
 
@@ -89,8 +85,8 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(XiaomiPermissionDialogDismissedEvent)
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogDismissed)
         }
     }
 
@@ -109,8 +105,8 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionGranted)
         }
     }
 
@@ -129,9 +125,9 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
-            eventTracker.trackEvent(OpenGithubAuthEvent)
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionAlreadyGranted)
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
         }
     }
 
@@ -169,10 +165,10 @@ class LoginScreenViewModelTest {
         }
 
         verifyOrder {
-            eventTracker.trackEvent(ClickLogInEvent)
-            eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
-            eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
-            eventTracker.trackEvent(OpenGithubAuthEvent)
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionGranted)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionAlreadyGranted)
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
         }
     }
 }
