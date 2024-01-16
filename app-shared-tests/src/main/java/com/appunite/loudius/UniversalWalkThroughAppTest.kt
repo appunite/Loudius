@@ -17,6 +17,7 @@
 package com.appunite.loudius
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.appunite.loudius.analytics.AnalyticsLog
@@ -56,6 +57,10 @@ abstract class UniversalWalkThroughAppTest {
             .onNodeWithText("Awesome! Your collaborator have been pinged for some serious code review action! \uD83C\uDF89")
             .assertIsDisplayed()
 
+        composeTestRule.onNodeWithContentDescription("Back button").performClick()
+
+        composeTestRule.waitUntilLoadingDoesNotExist()
+
         expectThat(analyticsRule.analytics.log).containsExactly(
             AnalyticsLog("screen_opened", mapOf("screen_name" to "log_in_screen")),
             AnalyticsLog("button_click", mapOf("item_name" to "log_in", "screen_name" to "log_in_screen")),
@@ -74,7 +79,8 @@ abstract class UniversalWalkThroughAppTest {
             AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen")),
             AnalyticsLog("button_click", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
             AnalyticsLog("action_start", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true, "screen_name" to "reviewers_screen"))
+            AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true, "screen_name" to "reviewers_screen")),
+            AnalyticsLog("screen_opened", mapOf("screen_name" to "pull_requests_screen"))
         )
     }
 
