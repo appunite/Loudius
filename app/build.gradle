@@ -33,7 +33,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.appunite.loudius.util.InstrumentationTestRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
+        testInstrumentationRunnerArguments clearPackageData: 'true', coverage: 'true', coverageFilePath: '/sdcard/Download/'
         vectorDrawables {
             useSupportLibrary true
         }
