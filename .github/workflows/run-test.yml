@@ -50,7 +50,7 @@ jobs:
         uses: ./.github/actions/prepare-android-env
 
       - name: Run test
-        run: ./gradlew test
+        run: ./gradlew codeCoverage
         env:
           LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
@@ -162,39 +162,6 @@ jobs:
           path: |
             */build/test-results/**
           retention-days: 5
-
-  code-coverage:
-    name: Measure coverage
-    runs-on: ubuntu-20.04
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      - name: Run Coverage
-        run: |
-          chmod +x gradlew
-          ./gradlew codeCoverage
-
-      - name: Store HTML coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: |
-            */build/reports/jacoco/codeCoverage/html/**
-
-      - name: Add coverage to PR
-        if: ${{ github.event_name != 'schedule' }}
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          paths: |
-            */build/reports/jacoco/codeCoverage/*.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   test-license-headers:
     name: Ensure license headers are added
