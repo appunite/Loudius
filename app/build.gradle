@@ -103,7 +103,7 @@ android {
 }
 
 tasks.register('codeCoverage', JacocoReport) {
-    dependsOn 'testDebugUnitTest', 'createDebugCoverageReport'
+    dependsOn 'testDebugUnitTest'
 
     reports {
         html.required.set(true)
@@ -141,9 +141,7 @@ tasks.register('codeCoverage', JacocoReport) {
             dir: project.buildDir,
             includes: [
                     "**/*.exec",
-                    "**/*.ec",
-                    "**/**/*.exec",
-                    "**/**/*.ec"
+                    "**/*.ec"
             ]))
 
 }
