@@ -16,6 +16,13 @@
 
 package com.appunite.loudius.ui.pullrequests
 
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.FetchPullRequestsEvent
+import com.appunite.loudius.analytics.events.FetchPullRequestsFailureEvent
+import com.appunite.loudius.analytics.events.FetchPullRequestsSuccessEvent
+import com.appunite.loudius.analytics.events.NavigateToReviewersEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsSuccessEvent
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
@@ -23,8 +30,9 @@ import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
+import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.verifyOrder
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -36,11 +44,11 @@ import strikt.assertions.isNull
 import strikt.assertions.isTrue
 import strikt.assertions.single
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
     private val pullRequestRepository = spyk(FakePullRequestRepository())
-    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
+    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository, eventTracker)
 
     @Test
     fun `WHEN refresh data THEN start refreshing data and set isRefreshing to true`() = runTest {
@@ -52,7 +60,13 @@ class PullRequestsViewModelTest {
 
         viewModel.refreshData()
 
-        expectThat(viewModel.isRefreshing.value).isTrue()
+        expectThat(viewModel.isRefreshing).isTrue()
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(RefreshPullRequestsEvent)
+        }
     }
 
     @Test
@@ -61,7 +75,14 @@ class PullRequestsViewModelTest {
 
         viewModel.refreshData()
 
-        expectThat(viewModel.isRefreshing.value).isFalse()
+        expectThat(viewModel.isRefreshing).isFalse()
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(RefreshPullRequestsEvent)
+            eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
+        }
     }
 
     @Test
@@ -73,6 +94,13 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Success>().and {
             get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(RefreshPullRequestsEvent)
+            eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
+        }
     }
 
     @Test
@@ -82,6 +110,10 @@ class PullRequestsViewModelTest {
         val viewModel = createViewModel()
 
         expectThat(viewModel.state.data).isA<Data.Loading>()
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+        }
     }
 
     @Test
@@ -91,25 +123,35 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Success>().and {
             get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+        }
     }
 
     @Test
     fun `WHEN fetching data failed on init THEN display error`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
             Result.failure(
-                WebException.NetworkError(),
+                WebException.NetworkError()
             )
         }
         val viewModel = createViewModel()
 
         expectThat(viewModel.state.data).isA<Data.Error>()
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsFailureEvent("Unrecognised error."))
+        }
     }
 
     @Test
     fun `GIVEN error state WHEN retry THEN fetch pull requests list again`() = runTest {
         coEvery { pullRequestRepository.getCurrentUserPullRequests() } coAnswers {
             Result.failure(
-                WebException.NetworkError(),
+                WebException.NetworkError()
             )
         }
         val viewModel = createViewModel()
@@ -119,6 +161,13 @@ class PullRequestsViewModelTest {
 
         expectThat(viewModel.state.data).isA<Data.Success>().and {
             get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsFailureEvent("Unrecognised error."))
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
         }
     }
 
@@ -139,9 +188,15 @@ class PullRequestsViewModelTest {
                     pullRequest.owner,
                     pullRequest.shortRepositoryName,
                     pullRequest.number.toString(),
-                    pullRequest.createdAt.toString(),
-                ),
+                    pullRequest.createdAt.toString()
+                )
             )
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(NavigateToReviewersEvent)
+        }
     }
 
     @Test
@@ -155,5 +210,11 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state)
             .get(PullRequestState::navigateToReviewers)
             .isNull()
+
+        verifyOrder {
+            eventTracker.trackEvent(FetchPullRequestsEvent)
+            eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
+            eventTracker.trackEvent(NavigateToReviewersEvent)
+        }
     }
 }

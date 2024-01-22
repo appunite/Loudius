@@ -29,7 +29,6 @@ import com.appunite.loudius.util.Defaults
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -39,7 +38,6 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFailure
 import strikt.assertions.isSuccess
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PullRequestRepositoryImpTest {
 
     private val pullRequestDataSource = spyk(FakePullRequestDataSource())
@@ -63,7 +61,7 @@ class PullRequestRepositoryImpTest {
                     .containsExactly(
                         Review("4", User(1, "user1"), ReviewState.COMMENTED, Defaults.date1),
                         Review("5", User(1, "user1"), ReviewState.COMMENTED, Defaults.date2),
-                        Review("6", User(1, "user1"), ReviewState.APPROVED, Defaults.date3),
+                        Review("6", User(1, "user1"), ReviewState.APPROVED, Defaults.date3)
                     )
             }
 
@@ -90,16 +88,16 @@ class PullRequestRepositoryImpTest {
                 val result = repository.getRequestedReviewers(
                     "example",
                     "example",
-                    pullRequestNumber,
+                    pullRequestNumber
                 )
 
                 expectThat(result).isSuccess().isEqualTo(
                     RequestedReviewersResponse(
                         listOf(
                             RequestedReviewer(3, "user3"),
-                            RequestedReviewer(4, "user4"),
-                        ),
-                    ),
+                            RequestedReviewer(4, "user4")
+                        )
+                    )
                 )
             }
 
@@ -111,7 +109,7 @@ class PullRequestRepositoryImpTest {
                 val response = repository.getRequestedReviewers(
                     "example",
                     "example",
-                    pullRequestNumber,
+                    pullRequestNumber
                 )
 
                 expectThat(response)
@@ -131,7 +129,7 @@ class PullRequestRepositoryImpTest {
                 "exampleOwner",
                 "exampleRepo",
                 pullRequestNumber,
-                "@ExampleUser",
+                "@ExampleUser"
             )
 
             expectThat(result)
@@ -149,7 +147,7 @@ class PullRequestRepositoryImpTest {
                 "exampleOwner",
                 "exampleRepo",
                 pullRequestNumber,
-                "@ExampleUser",
+                "@ExampleUser"
             )
 
             expectThat(response)
@@ -166,8 +164,8 @@ class PullRequestRepositoryImpTest {
                 coEvery { userDataSource.getUser() } returns Result.success(
                     User(
                         0,
-                        "correctAuthor",
-                    ),
+                        "correctAuthor"
+                    )
                 )
 
                 val response = repository.getCurrentUserPullRequests()

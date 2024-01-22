@@ -20,86 +20,67 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.intercept.AuthFailureInterceptor
 import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import com.appunite.loudius.network.utils.LocalDateTimeDeserializer
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDateTime
-import javax.inject.Singleton
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@InstallIn(SingletonComponent::class)
-@Module
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
+val networkModule = module {
+    single<HttpLoggingInterceptor> {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
     }
 
-    @Provides
-    @AuthAPI
-    fun provideBaseAuthUrl() = Constants.AUTH_API_URL
-
-    @Provides
-    @BaseAPI
-    fun provideBaseAPIUrl() = Constants.BASE_API_URL
-
-    @Provides
-    @Singleton
-    @AuthAPI
-    fun provideAuthRetrofit(
-        gson: Gson,
-        @AuthAPI baseUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+    single<HttpClient>(named("auth")) {
+        HttpClient(OkHttp) {
+            expectSuccess = true
+            engine {
+                addInterceptor(TestInterceptor)
+                addInterceptor(get<HttpLoggingInterceptor>())
+            }
+            defaultRequest {
+                url(Constants.AUTH_API_URL)
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+        }
     }
 
-    @Provides
-    @Singleton
-    @BaseAPI
-    fun provideBaseRetrofit(
-        gson: Gson,
-        @BaseAPI baseAPIUrl: String,
-        loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
-        authFailureHandler: AuthFailureHandler,
-    ): Retrofit {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(TestInterceptor)
-            .addInterceptor(AuthFailureInterceptor(authFailureHandler))
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        return Retrofit.Builder()
-            .baseUrl(baseAPIUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+    single<HttpClient>(named("base")) {
+        HttpClient(OkHttp) {
+            expectSuccess = true
+            engine {
+                addInterceptor(TestInterceptor)
+                addInterceptor(get<HttpLoggingInterceptor>())
+                addInterceptor(get<AuthFailureInterceptor>())
+                addInterceptor(get<AuthInterceptor>())
+            }
+            defaultRequest {
+                url(Constants.BASE_API_URL)
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                    }
+                )
+            }
+        }
     }
 
-    @Provides
-    @Singleton
-    fun provideGson(): Gson =
-        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
-            .create()
+    singleOf(::AuthFailureInterceptor)
+    singleOf(::AuthInterceptor)
+    singleOf(::AuthFailureHandler)
 }

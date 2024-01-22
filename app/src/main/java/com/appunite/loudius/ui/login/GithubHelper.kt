@@ -46,7 +46,7 @@ class GithubHelper(private val context: Context) {
             Intent("miui.intent.action.APP_PERM_EDITOR")
                 .setClassName(
                     "com.miui.securitycenter",
-                    "com.miui.permcenter.permissions.PermissionsEditorActivity",
+                    "com.miui.permcenter.permissions.PermissionsEditorActivity"
                 )
                 .putExtra("extra_pkgname", GITHUB_APP_PACKAGE_NAME)
     }
@@ -62,13 +62,13 @@ class GithubHelper(private val context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 context.packageManager.getPackageInfo(
                     GITHUB_APP_PACKAGE_NAME,
-                    PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong()),
+                    PackageManager.PackageInfoFlags.of(PackageManager.GET_META_DATA.toLong())
                 )
             } else {
                 @Suppress("DEPRECATION")
                 context.packageManager.getPackageInfo(
                     GITHUB_APP_PACKAGE_NAME,
-                    PackageManager.GET_META_DATA,
+                    PackageManager.GET_META_DATA
                 )
             }
             true

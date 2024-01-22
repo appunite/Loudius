@@ -32,16 +32,16 @@ fun LoudiusPlaceholderText(text: String) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         LoudiusText(
             text = text,
-            style = LoudiusTextStyle.ScreenContent,
+            style = LoudiusTextStyle.ScreenContent
         )
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
 fun PreviewLoudiusPlaceholderText() {
     LoudiusTheme {

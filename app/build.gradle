@@ -1,30 +1,50 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-kapt'
-    id 'org.jetbrains.kotlin.android'
-    id 'com.google.dagger.hilt.android'
-    id 'org.jlleitschuh.gradle.ktlint' version '11.2.0'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ktlint.gradle)
+    alias(libs.plugins.kotlin.serialization)
+    id 'jacoco'
+}
+
+def fileName = "../app/google-services.json"
+
+if (project.file(fileName).exists()) {
+    apply {
+        plugin(libs.plugins.google.services.get().getPluginId())
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 android {
     namespace 'com.appunite.loudius'
-    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.appunite.loudius"
         minSdk 24
-        targetSdk 33
+        compileSdk 34
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "com.appunite.loudius.util.HiltTestRunner"
+        testInstrumentationRunner "com.appunite.loudius.util.InstrumentationTestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables {
             useSupportLibrary true
         }
-        if (System.env.CLIENT_SECRET == null || System.env.CLIENT_SECRET.isEmpty()) {
-            logger.warn("You need to set CLIENT_SECRET in your environment variables")
+        if (System.env.LOUDIUS_CLIENT_SECRET == null || System.env.LOUDIUS_CLIENT_SECRET.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_CLIENT_SECRET in your environment variables")
         }
-        buildConfigField "String", "CLIENT_SECRET", "\"${System.env.CLIENT_SECRET}\""
+        buildConfigField "String", "LOUDIUS_CLIENT_SECRET", "\"${System.env.LOUDIUS_CLIENT_SECRET}\""
+        if (System.env.LOUDIUS_CLIENT_ID == null || System.env.LOUDIUS_CLIENT_ID.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_CLIENT_ID in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_CLIENT_ID", "\"${System.env.LOUDIUS_CLIENT_ID}\""
     }
 
     buildTypes {
@@ -32,111 +52,157 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug{
+            enableUnitTestCoverage true
+        }
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.2'
+        kotlinCompilerExtensionVersion '1.5.0'
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
             excludes += '/META-INF/LICENSE.md'
             excludes += '/META-INF/LICENSE-notice.md'
+            excludes += '/META-INF/versions/9/previous-compilation-data.bin'
         }
     }
     testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+
         packagingOptions {
             jniLibs {
                 useLegacyPackaging true
             }
         }
+        unitTests {
+            includeAndroidResources = true
+            animationsDisabled = true
+            all {
+                // Disable tests on release because on release we don't have TestActivity.
+                // We could also filter tasks by filter {}, but right now we don't need to test
+                // release version.
+                if (it.name == 'testReleaseUnitTest') {
+                    it.enabled = false
+                }
+            }
+        }
+    }
+    kapt {
+        arguments {
+            arg("skipPrivatePreviews", "true")
+        }
     }
 }
 
+tasks.register('codeCoverage', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include("**/tmp/kotlin-classes/debug/**")
+                exclude(
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        "**/*Application.*",
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        '**/android/**/*.*',
+                        '**/androidx/**/*.*',
+                        '**/airbnb/**/*.*',
+                        "**/di/**/*.*",
+                        '**/*Dagger*.*',
+                        "**/*Screen*"
+                )
+            }
+    )
+
+    sourceDirectories.setFrom(fileTree(
+            dir: project.projectDir,
+            includes: [
+                    "src/main/java/**",
+                    "src/main/kotlin/**"
+            ]))
+
+    executionData.setFrom(fileTree(
+            dir: project.buildDir,
+            includes: [
+                    "**/*.exec",
+                    "**/*.ec"
+            ]))
+
+}
+
 dependencies {
-    implementation project(':components')
-    //Desugaring for use of java.time in api lower then 26
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    api project(':components')
 
-    //Base android deps
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.6.1'
+    // Desugaring for use of java.time in api lower then 26
+    coreLibraryDesugaring(libs.desugar)
 
-    //Compose
-    def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
-    implementation composeBom
-    androidTestImplementation composeBom
-    implementation 'androidx.compose.material3:material3'
-    implementation 'androidx.compose.material:material:1.4.0'
-    implementation 'androidx.compose.ui:ui'
-    implementation 'androidx.compose.ui:ui-tooling-preview'
-    implementation "androidx.navigation:navigation-compose:2.5.3"
-    debugImplementation 'androidx.compose.ui:ui-tooling'
-    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    // Base android deps
+    implementation(libs.bundles.androidx)
 
-    //DI - Hilt
-    implementation "com.google.dagger:hilt-android:2.45"
-    kapt "com.google.dagger:hilt-compiler:2.45"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    // Orchestrator
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestUtil(libs.androidx.test.orchestartor)
 
-    //DI - for local unit tests
-    testImplementation 'com.google.dagger:hilt-android-testing:2.45'
-    kaptTest 'com.google.dagger:hilt-compiler:2.45'
+    // Compose
+    def composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation(libs.bundles.compose)
+    implementation(libs.compose.navigation)
+    debugImplementation(libs.bundles.composeDebug)
 
-    // DI - For instrumented tests.
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.45'
-    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.45'
+    // Showkase
+    implementation(libs.showkase)
+    kapt(libs.showkase.processor)
 
-    //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    // Koin
+    api(libs.bundles.koin)
 
-    //retrofit & okhttp
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    // Coroutines
+    implementation(libs.coroutines.android)
+    testImplementation(libs.coroutines.test)
 
-    //gson
-    implementation 'com.google.code.gson:gson:2.10.1'
+    // Ktor
+    implementation(libs.bundles.ktor)
+    testImplementation(libs.ktor.client.mock)
 
-    // assertion library
-    // cannot use 0.34.0 due to an existing bug
-    // https://github.com/robfletcher/strikt/issues/259
-    testImplementation 'io.strikt:strikt-core:0.33.0'
-    testImplementation 'io.strikt:strikt-mockk:0.33.0'
-    androidTestImplementation 'io.strikt:strikt-core:0.33.0'
-    androidTestImplementation 'io.strikt:strikt-mockk:0.33.0'
+    // Util
+    implementation(libs.bundles.kotlinx)
+    testImplementation(libs.kotlinx.datetime)
 
-    //testing
-    testImplementation "io.mockk:mockk:1.13.3"
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
-    androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
-    androidTestImplementation("io.mockk:mockk-android:1.13.3")
+    // OkHttp
+    implementation(libs.bundles.okhttp)
 
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+    // Testing
+    testImplementation project(":app-shared-tests")
+    androidTestImplementation(project(":app-shared-tests")) {
+        exclude group: 'org.robolectric', module: 'robolectric'
+    }
 
-    // Firebase instrumentation lib
-    androidTestImplementation 'com.google.firebase:testlab-instr-lib:0.2'
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.uiautomator)
 
-    // ktlint
+    // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
 
 tasks.withType(Test) {

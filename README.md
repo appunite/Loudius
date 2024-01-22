@@ -21,11 +21,11 @@ experiments with different development libraries and tools.
 ## ⚙️ Tech/framework used
 
 - Jetpack Compose
-- Hilt
+- Koin
 - Kotlin Coroutines
-- Retrofit
+- Ktor
 - OkHttp3
-- Gson
+- Kotlin Serialization
 
 ## 🔬 Experiments, the purpose of the project
 
@@ -61,32 +61,54 @@ Here's an example of an experiment that meets our rules:
 
 **Branch Name:** experiment/navigation-by-voyager-library\
 **Purpose:** Check compose navigation with voyager library. Compare that with standard way.\
-**Goal:** To resolve which navigation is better for compose. What are the pros and cons of each way.\
+**Goal:** To resolve which navigation is better for compose. What are the pros and cons of each
+way.\
 **Method:** Implement navigation with voyager library.
 
 ## 🚀 Project setup
 
-In order to properly start the application and use it, the CLIENT_SECRET environment variable must
-be set on your computer. CLIENT_SECRET is a GitHub client secret key provided
-from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
+In order to properly start the application and use it, the `LOUDIUS_CLIENT_SECRET` and
+`LOUDIUS_CLIENT_ID` environment variables must be set on your computer.
 
-If you're AppUniter, you can find this secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
+* `LOUDIUS_CLIENT_SECRET` is a GitHub client secret key
+* `LOUDIUS_CLIENT_ID` is a GitHub client id
 
-If you're not, don't worry, here's a video to help you create a new one:
+Both are provided from ``Settings -> Developer Settings -> OAuth Apps -> my application``.
 
-<https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd>
+If you're not AppUniter, here's a video to help you create such appliation:
+
+<https://github.com/appunite/Loudius/assets/72873966/4820b6df-81ca-48ed-9f3c-425011b758dd>.
+
+If you'd like to run end-to-end tests you'd also need `LOUDIUS_GITHUB_USER_NAME` and
+`LOUDIUS_GITHUB_USER_PASSWORD` which are credentials to GitHub test account.
+This is just a standard GitHub account that you can create by yourself.
+
+If you're AppUniter, you can find those
+secrets [here](https://www.notion.so/appunite/Github-Secrets-0c2c6c1b56e2472c8a4752241f1e20d3?pvs=4).
 
 ### How to set environmental variable on mac?
 
 1. Launch zsh (command `zsh`)
-2. `$ echo 'export CLIENT_SECRET=you know what' >> ~/.zshenv`
-3. Restart Android studio and Terminal.
-4. `$ echo $CLIENT_SECRET`
+2. `$ echo 'export LOUDIUS_CLIENT_SECRET="you know what"' >> ~/.zshenv`
+3. `$ echo 'export LOUDIUS_CLIENT_ID="you know what"' >> ~/.zshenv`
+4. optionally: `$ echo 'export LOUDIUS_GITHUB_USER_NAME="you know what"' >> ~/.zshenv`
+5. optionally: `$ echo 'export LOUDIUS_GITHUB_USER_PASSWORD="you know what"' >> ~/.zshenv`
+6. Restart Android studio and Terminal.
+7. `$ echo $LOUDIUS_CLIENT_ID/$LOUDIUS_CLIENT_SECRET $LOUDIUS_GITHUB_USER_NAME/$LOUDIUS_GITHUB_USER_PASSWORD`
 
 ### Screenshots tests
 
 We are using screenshot tests to check if the UI is not broken. We are recording screenshots on CI.
 To do that - add `[New snapshots]` to the pull request title. Otherwise the snapshots are tested.
+
+### Design system documentation
+
+We also are having [design system documentation](components/README.md).
+
+## 🧐 Firebase Analytics
+
+Google Analytics serves as an application measurement solution, offering valuable insights into app
+utilization and user engagement. Check out our [Analytics Documentation](docs/analytics.md)!
 
 ## 🧑🏻‍🎓 Contributing
 

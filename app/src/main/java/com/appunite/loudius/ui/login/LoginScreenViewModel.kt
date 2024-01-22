@@ -20,12 +20,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.ClickLogInEvent
+import com.appunite.loudius.analytics.events.LogInScreenOpenedEvent
+import com.appunite.loudius.analytics.events.OpenGithubAuthEvent
+import com.appunite.loudius.analytics.events.XiaomiPermissionDialogDismissedEvent
+import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionAlreadyGrantedEvent
+import com.appunite.loudius.analytics.events.XiaomiPermissionDialogPermissionGrantedEvent
 
 sealed class LoginAction {
     object ClearNavigation : LoginAction()
     object ClickLogIn : LoginAction()
+    object ClickBrowseComponents : LoginAction()
     object XiaomiPermissionDialogDismiss : LoginAction()
     object XiaomiPermissionDialogGrantPermission : LoginAction()
     object XiaomiPermissionDialogAlreadyGrantedPermission : LoginAction()
@@ -34,16 +40,17 @@ sealed class LoginAction {
 sealed class LoginNavigateTo {
     object OpenXiaomiPermissionManager : LoginNavigateTo()
     object OpenGithubAuth : LoginNavigateTo()
+    object OpenComponentsBrowser : LoginNavigateTo()
 }
 
 data class LoginState(
     val showXiaomiPermissionDialog: Boolean = false,
-    val navigateTo: LoginNavigateTo? = null,
+    val navigateTo: LoginNavigateTo? = null
 )
 
-@HiltViewModel
-class LoginScreenViewModel @Inject constructor(
+class LoginScreenViewModel(
     private val githubHelper: GithubHelper,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -56,29 +63,43 @@ class LoginScreenViewModel @Inject constructor(
             }
 
             LoginAction.ClickLogIn -> {
+                eventTracker.trackEvent(ClickLogInEvent)
                 if (githubHelper.shouldAskForXiaomiIntent()) {
                     state = state.copy(
-                        showXiaomiPermissionDialog = true,
+                        showXiaomiPermissionDialog = true
                     )
                 } else {
+                    eventTracker.trackEvent(OpenGithubAuthEvent)
                     state = state.copy(navigateTo = LoginNavigateTo.OpenGithubAuth)
                 }
             }
 
             LoginAction.XiaomiPermissionDialogDismiss -> {
+                eventTracker.trackEvent(XiaomiPermissionDialogDismissedEvent)
                 state = state.copy(showXiaomiPermissionDialog = false)
             }
 
             LoginAction.XiaomiPermissionDialogGrantPermission -> {
+                eventTracker.trackEvent(XiaomiPermissionDialogPermissionGrantedEvent)
                 state = state.copy(navigateTo = LoginNavigateTo.OpenXiaomiPermissionManager)
             }
 
             LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission -> {
+                eventTracker.trackEvent(XiaomiPermissionDialogPermissionAlreadyGrantedEvent)
+                eventTracker.trackEvent(OpenGithubAuthEvent)
                 state = state.copy(
                     showXiaomiPermissionDialog = false,
-                    navigateTo = LoginNavigateTo.OpenGithubAuth,
+                    navigateTo = LoginNavigateTo.OpenGithubAuth
                 )
             }
+
+            LoginAction.ClickBrowseComponents -> {
+                state = state.copy(navigateTo = LoginNavigateTo.OpenComponentsBrowser)
+            }
         }
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(LogInScreenOpenedEvent)
     }
 }

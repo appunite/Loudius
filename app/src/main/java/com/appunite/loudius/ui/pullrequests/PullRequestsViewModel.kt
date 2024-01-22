@@ -21,13 +21,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.FetchPullRequestsEvent
+import com.appunite.loudius.analytics.events.FetchPullRequestsFailureEvent
+import com.appunite.loudius.analytics.events.FetchPullRequestsSuccessEvent
+import com.appunite.loudius.analytics.events.NavigateToReviewersEvent
+import com.appunite.loudius.analytics.events.PullRequestsScreenOpenedEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsFailureEvent
+import com.appunite.loudius.analytics.events.RefreshPullRequestsSuccessEvent
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
@@ -43,51 +48,57 @@ sealed class Data {
 
 data class PullRequestState(
     val data: Data = Data.Loading,
-    val navigateToReviewers: NavigationPayload? = null,
+    val navigateToReviewers: NavigationPayload? = null
 )
 
 data class NavigationPayload(
     val owner: String,
     val repo: String,
     val pullRequestNumber: String,
-    val submissionTime: String,
+    val submissionTime: String
 )
 
-@HiltViewModel
-class PullRequestsViewModel @Inject constructor(
+class PullRequestsViewModel(
     private val pullRequestsRepository: PullRequestRepository,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+    var isRefreshing: Boolean by mutableStateOf(false)
+        private set
 
     init {
         fetchData()
     }
 
     fun refreshData() {
+        eventTracker.trackEvent(RefreshPullRequestsEvent)
         viewModelScope.launch {
-            _isRefreshing.value = true
+            isRefreshing = true
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
+                    eventTracker.trackEvent(RefreshPullRequestsSuccessEvent)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(RefreshPullRequestsFailureEvent(it.message ?: "Unrecognised error."))
                 }
-            _isRefreshing.value = false
+            isRefreshing = false
         }
     }
 
     private fun fetchData() {
+        eventTracker.trackEvent(FetchPullRequestsEvent)
         viewModelScope.launch {
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
+                    eventTracker.trackEvent(FetchPullRequestsSuccessEvent)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(FetchPullRequestsFailureEvent(it.message ?: "Unrecognised error."))
                 }
         }
     }
@@ -102,17 +113,22 @@ class PullRequestsViewModel @Inject constructor(
         val successData = state.data as? Data.Success ?: return
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
+        eventTracker.trackEvent(NavigateToReviewersEvent)
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
                 itemClickedData.shortRepositoryName,
                 itemClickedData.number.toString(),
-                itemClickedData.createdAt.toString(),
-            ),
+                itemClickedData.createdAt.toString()
+            )
         )
     }
 
     private fun resetNavigationState() {
         state = state.copy(navigateToReviewers = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(PullRequestsScreenOpenedEvent)
     }
 }

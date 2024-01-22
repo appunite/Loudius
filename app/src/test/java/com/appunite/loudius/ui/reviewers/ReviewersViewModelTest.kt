@@ -17,6 +17,16 @@
 package com.appunite.loudius.ui.reviewers
 
 import androidx.lifecycle.SavedStateHandle
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.ClickNotifyEvent
+import com.appunite.loudius.analytics.events.FetchReviewersEvent
+import com.appunite.loudius.analytics.events.FetchReviewersFailureEvent
+import com.appunite.loudius.analytics.events.FetchReviewersSuccessEvent
+import com.appunite.loudius.analytics.events.NotifyEvent
+import com.appunite.loudius.analytics.events.NotifyFailureEvent
+import com.appunite.loudius.analytics.events.NotifySuccessEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersSuccessEvent
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
@@ -26,11 +36,13 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import io.mockk.verifyOrder
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -47,33 +59,27 @@ import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
 import strikt.assertions.isNull
 import strikt.assertions.isTrue
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(MainDispatcherExtension::class)
 class ReviewersViewModelTest {
 
-    private val systemNow = LocalDateTime.parse("2022-01-29T15:00:00")
-    private val systemClockFixed =
-        Clock.fixed(systemNow.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"))
+    private val systemNow = Instant.parse("2022-01-29T15:00:00Z")
 
     private val repository = spyk(FakePullRequestRepository())
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true) {
         every { get<String>(any()) } returns "example"
-        every { get<String>("submission_date") } returns "2022-01-29T08:00:00"
+        every { get<String>("submission_date") } returns "2022-01-29T08:00:00Z"
         every { get<String>("pull_request_number") } returns "correctPullRequestNumber"
     }
     private lateinit var viewModel: ReviewersViewModel
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
 
-    private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle)
+    private fun createViewModel() = ReviewersViewModel(repository, savedStateHandle, eventTracker)
 
     @BeforeEach
     fun setup() {
-        mockkStatic(Clock::class)
-        every { Clock.systemDefaultZone() } returns systemClockFixed
+        mockkObject(Clock.System)
+        every { Clock.System.now() } returns systemNow
     }
 
     @Nested
@@ -88,8 +94,15 @@ class ReviewersViewModelTest {
                 get(Data.Success::reviewers).containsExactly(
                     Reviewer(1, "user1", true, 7, 5),
                     Reviewer(2, "user2", false, 7, null),
-                    Reviewer(3, "user3", false, 7, null),
+                    Reviewer(3, "user3", false, 7, null)
                 )
+            }
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                eventTracker.trackEvent(RefreshReviewersEvent)
+                eventTracker.trackEvent(RefreshReviewersSuccessEvent)
             }
         }
 
@@ -101,7 +114,7 @@ class ReviewersViewModelTest {
                 repository.getRequestedReviewers(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
 
@@ -109,13 +122,19 @@ class ReviewersViewModelTest {
                 repository.getReviews(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
 
             viewModel.refreshData()
 
             expectThat(viewModel.isRefreshing.value).isTrue()
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                eventTracker.trackEvent(RefreshReviewersEvent)
+            }
         }
 
         @Test
@@ -125,6 +144,13 @@ class ReviewersViewModelTest {
             viewModel.refreshData()
 
             expectThat(viewModel.isRefreshing.value).isFalse()
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                eventTracker.trackEvent(RefreshReviewersEvent)
+                eventTracker.trackEvent(RefreshReviewersSuccessEvent)
+            }
         }
 
         @Test
@@ -142,6 +168,11 @@ class ReviewersViewModelTest {
             verify(exactly = 1) { savedStateHandle.get<String>("repo") }
             verify(exactly = 1) { savedStateHandle.get<String>("pull_request_number") }
             verify(exactly = 1) { savedStateHandle.get<String>("submission_date") }
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+            }
         }
 
         @Test
@@ -151,6 +182,11 @@ class ReviewersViewModelTest {
             expectThat(viewModel.state)
                 .get(ReviewersState::pullRequestNumber)
                 .isEqualTo("correctPullRequestNumber")
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+            }
         }
 
         @Test
@@ -159,12 +195,16 @@ class ReviewersViewModelTest {
                 repository.getReviews(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
             viewModel = createViewModel()
 
             expectThat(viewModel.state.data).isA<Data.Loading>()
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+            }
         }
 
         @Test
@@ -173,14 +213,14 @@ class ReviewersViewModelTest {
                 repository.getReviews(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } returns Result.success(emptyList())
             coEvery {
                 repository.getRequestedReviewers(
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } returns Result.success(RequestedReviewersResponse(emptyList()))
 
@@ -188,6 +228,11 @@ class ReviewersViewModelTest {
 
             expectThat(viewModel.state.data).isA<Data.Success>().and {
                 get(Data.Success::reviewers).isEmpty()
+            }
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
             }
         }
 
@@ -200,8 +245,13 @@ class ReviewersViewModelTest {
                     get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
-                        Reviewer(3, "user3", false, 7, null),
+                        Reviewer(3, "user3", false, 7, null)
                     )
+                }
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 }
             }
 
@@ -209,7 +259,7 @@ class ReviewersViewModelTest {
         fun `GIVEN reviewers with no review done WHEN init THEN list of reviewers is fetched`() =
             runTest {
                 coEvery { repository.getReviews(any(), any(), any()) } returns Result.success(
-                    emptyList(),
+                    emptyList()
                 )
                 viewModel = createViewModel()
 
@@ -217,8 +267,13 @@ class ReviewersViewModelTest {
                     get(Data.Success::reviewers)
                         .containsExactly(
                             Reviewer(2, "user2", false, 7, null),
-                            Reviewer(3, "user3", false, 7, null),
+                            Reviewer(3, "user3", false, 7, null)
                         )
+                }
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 }
             }
 
@@ -229,15 +284,20 @@ class ReviewersViewModelTest {
                     repository.getRequestedReviewers(
                         any(),
                         any(),
-                        any(),
+                        any()
                     )
                 } returns Result.success(RequestedReviewersResponse(emptyList()))
                 viewModel = createViewModel()
 
                 expectThat(viewModel.state.data).isA<Data.Success>().and {
                     get(Data.Success::reviewers).containsExactly(
-                        Reviewer(1, "user1", true, 7, 5),
+                        Reviewer(1, "user1", true, 7, 5)
                     )
+                }
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 }
             }
 
@@ -245,18 +305,23 @@ class ReviewersViewModelTest {
         fun `WHEN there is an error during fetching data from 2 requests on init THEN error is shown`() =
             runTest {
                 coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(
-                    WebException.NetworkError(),
+                    WebException.NetworkError()
                 )
                 coEvery {
                     repository.getRequestedReviewers(
                         any(),
                         any(),
-                        any(),
+                        any()
                     )
                 } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
                 expectThat(viewModel.state.data).isA<Data.Error>()
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
+                }
             }
 
         @Test
@@ -266,23 +331,33 @@ class ReviewersViewModelTest {
                     repository.getRequestedReviewers(
                         any(),
                         any(),
-                        any(),
+                        any()
                     )
                 } returns Result.failure(WebException.NetworkError())
                 viewModel = createViewModel()
 
                 expectThat(viewModel.state.data).isA<Data.Error>()
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
+                }
             }
 
         @Test
         fun `WHEN there is an error during fetching data on init only from reviews request THEN error is shown`() =
             runTest {
                 coEvery { repository.getReviews(any(), any(), any()) } returns Result.failure(
-                    WebException.NetworkError(),
+                    WebException.NetworkError()
                 )
                 viewModel = createViewModel()
 
                 expectThat(viewModel.state.data).isA<Data.Error>()
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
+                }
             }
     }
 
@@ -298,6 +373,14 @@ class ReviewersViewModelTest {
             expectThat(viewModel.state)
                 .get(ReviewersState::snackbarTypeShown)
                 .isEqualTo(ReviewersSnackbarType.SUCCESS)
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(NotifyEvent)
+                eventTracker.trackEvent(NotifySuccessEvent)
+            }
         }
 
         @Test
@@ -308,7 +391,7 @@ class ReviewersViewModelTest {
                     any(),
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             } coAnswers { neverCompletingSuspension() }
 
@@ -326,6 +409,13 @@ class ReviewersViewModelTest {
                     .filterNot { it.login == "user1" }
                     .all { get(Reviewer::isLoading).isFalse() }
             }
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(NotifyEvent)
+            }
         }
 
         @Test
@@ -342,6 +432,14 @@ class ReviewersViewModelTest {
             expectThat(viewModel.state)
                 .get(ReviewersState::snackbarTypeShown)
                 .isEqualTo(ReviewersSnackbarType.FAILURE)
+
+            verifyOrder {
+                eventTracker.trackEvent(FetchReviewersEvent)
+                eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(NotifyEvent)
+                eventTracker.trackEvent(NotifyFailureEvent("Unrecognised error."))
+            }
         }
 
         @Test
@@ -355,6 +453,14 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state)
                     .get(ReviewersState::snackbarTypeShown)
                     .isNull()
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                    eventTracker.trackEvent(ClickNotifyEvent)
+                    eventTracker.trackEvent(NotifyEvent)
+                    eventTracker.trackEvent(NotifySuccessEvent)
+                }
             }
 
         @Test
@@ -375,8 +481,15 @@ class ReviewersViewModelTest {
                     get(Data.Success::reviewers).containsExactly(
                         Reviewer(1, "user1", true, 7, 5),
                         Reviewer(2, "user2", false, 7, null),
-                        Reviewer(3, "user3", false, 7, null),
+                        Reviewer(3, "user3", false, 7, null)
                     )
+                }
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
                 }
             }
 
@@ -394,6 +507,13 @@ class ReviewersViewModelTest {
                 viewModel.onAction(ReviewersAction.OnTryAgain)
 
                 expectThat(viewModel.state.data).isA<Data.Error>()
+
+                verifyOrder {
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
+                    eventTracker.trackEvent(FetchReviewersEvent)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent("Unrecognised error."))
+                }
             }
     }
 }

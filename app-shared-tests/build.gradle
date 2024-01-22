@@ -1,0 +1,92 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ktlint.gradle)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+android {
+    namespace 'com.appunite.loudius'
+
+    defaultConfig {
+        minSdk 24
+        compileSdk 34
+        targetSdk 34
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        if (System.env.LOUDIUS_GITHUB_USER_PASSWORD == null || System.env.LOUDIUS_GITHUB_USER_PASSWORD.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_PASSWORD in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_PASSWORD", "\"${System.env.LOUDIUS_GITHUB_USER_PASSWORD}\""
+        if (System.env.LOUDIUS_GITHUB_USER_NAME == null || System.env.LOUDIUS_GITHUB_USER_NAME.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_NAME in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_NAME", "\"${System.env.LOUDIUS_GITHUB_USER_NAME}\""
+        if (System.env.LOUDIUS_GITHUB_USER_OTP_SECRET == null || System.env.LOUDIUS_GITHUB_USER_OTP_SECRET.isEmpty()) {
+            logger.warn("You need to set LOUDIUS_GITHUB_USER_OTP_SECRET in your environment variables")
+        }
+        buildConfigField "String", "LOUDIUS_GITHUB_USER_OTP_SECRET", "\"${System.env.LOUDIUS_GITHUB_USER_OTP_SECRET}\""
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    packagingOptions {
+        resources {
+            excludes += 'META-INF/{AL2.0,LGPL2.1}'
+            excludes += 'META-INF/LICENSE.md'
+            excludes += 'META-INF/LICENSE-notice.md'
+            excludes += 'META-INF/versions/9/previous-compilation-data.bin'
+        }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation(project(":app"))
+
+    // Koin
+    api(libs.bundles.koin)
+
+    // Assertion Library
+    api(libs.bundles.strikt)
+
+    // Setup Junit4 and Junit5
+    api(platform(libs.junit.bom))
+    api(libs.jupiter) {
+        because 'allows to write and run Jupiter tests'
+    }
+    api(libs.junit)
+    runtimeOnly(libs.junit.vintage) {
+        because 'allows JUnit 3 and JUnit 4 tests to run'
+    }
+    runtimeOnly(libs.junit.platform) {
+        because 'allows tests to run from IDEs that bundle older version of launcher'
+    }
+
+    // Testing
+    api(libs.bundles.androidxTesting)
+    api(libs.robolectric)
+    api(libs.bundles.mock)
+
+    // Firebase instrumentation lib
+    api(libs.bundles.firebase)
+
+    // Ktlint
+    ktlintRuleset project(":custom-ktlint-rules")
+}

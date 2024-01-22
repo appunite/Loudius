@@ -20,6 +20,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.components.theme.LoudiusTheme
 
 @Composable
@@ -32,7 +33,7 @@ fun LoudiusDialog(
     /**
      * For text [LoudiusTextStyle.ScreenContent] should be used
      */
-    text: @Composable (() -> Unit)? = null,
+    text: @Composable (() -> Unit)? = null
 
 ) {
     AlertDialog(
@@ -43,12 +44,13 @@ fun LoudiusDialog(
         },
         text = text,
         confirmButton = confirmButton,
-        dismissButton = dismissButton,
+        dismissButton = dismissButton
     )
 }
 
 @Composable
-@Preview
+@ShowkaseComposable(skip = true)
+@Preview(group = "Dialogs")
 fun LoudiusDialogSimplePreview() {
     LoudiusTheme {
         LoudiusDialog(
@@ -56,13 +58,14 @@ fun LoudiusDialogSimplePreview() {
             title = "Title",
             confirmButton = {
                 LoudiusOutlinedButton(text = "Confirm") {}
-            },
+            }
         )
     }
 }
 
 @Composable
-@Preview
+@ShowkaseComposable(skip = true)
+@Preview(group = "Dialogs")
 fun LoudiusDialogAdvancedPreview() {
     LoudiusTheme {
         LoudiusDialog(
@@ -71,7 +74,7 @@ fun LoudiusDialogAdvancedPreview() {
             text = {
                 LoudiusText(
                     style = LoudiusTextStyle.ScreenContent,
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus elit justo, at pharetra nulla mattis vel. Integer gravida tortor sed fringilla viverra. Duis scelerisque ante neque, a pretium eros.",
+                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus elit justo, at pharetra nulla mattis vel. Integer gravida tortor sed fringilla viverra. Duis scelerisque ante neque, a pretium eros."
                 )
             },
             confirmButton = {
@@ -79,7 +82,7 @@ fun LoudiusDialogAdvancedPreview() {
             },
             dismissButton = {
                 LoudiusOutlinedButton(text = "Dismiss") {}
-            },
+            }
         )
     }
 }

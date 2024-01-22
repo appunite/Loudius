@@ -29,6 +29,7 @@ import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import com.appunite.loudius.components.getMetadata
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -37,7 +38,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 class ComponentPreview(
-    private val showkaseBrowserComponent: ShowkaseBrowserComponent,
+    private val showkaseBrowserComponent: ShowkaseBrowserComponent
 ) {
     val content: @Composable () -> Unit = showkaseBrowserComponent.component
     override fun toString(): String =
@@ -54,22 +55,22 @@ class PaparazziShowkaseTests {
 
     @get:Rule
     val paparazzi = Paparazzi(
-        deviceConfig = DeviceConfig.PIXEL_5.copy(softButtons = false),
+        deviceConfig = DeviceConfig.PIXEL_5.copy(softButtons = false)
     )
 
     @Test
     fun preview_tests(
         @TestParameter(valuesProvider = PreviewProvider::class) componentPreview: ComponentPreview,
         @TestParameter(value = ["1.0", "2"]) fontScale: Float,
-        @TestParameter(value = ["light"]) theme: String,
+        @TestParameter(value = ["light"]) theme: String
     ) {
         paparazzi.snapshot {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
                 LocalDensity provides Density(
                     density = LocalDensity.current.density,
-                    fontScale = fontScale,
-                ),
+                    fontScale = fontScale
+                )
             ) {
                 LoudiusTheme(darkTheme = (theme == "dark")) {
                     Box(modifier = Modifier.background(Color.White)) {

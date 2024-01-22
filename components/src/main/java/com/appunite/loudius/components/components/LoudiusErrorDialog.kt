@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.components.R
 import com.appunite.loudius.components.theme.LoudiusTheme
 
@@ -31,7 +32,7 @@ fun LoudiusErrorDialog(
     onConfirmButtonClick: () -> Unit,
     dialogTitle: String = stringResource(id = R.string.components_error_dialog_title),
     dialogText: String = stringResource(id = R.string.components_error_dialog_description),
-    confirmText: String = stringResource(R.string.components_error_dialog_confirm_button),
+    confirmText: String = stringResource(R.string.components_error_dialog_confirm_button)
 ) {
     var openDialog by remember { mutableStateOf(true) }
     if (openDialog) {
@@ -41,13 +42,14 @@ fun LoudiusErrorDialog(
             text = { LoudiusText(style = LoudiusTextStyle.ScreenContent, text = dialogText) },
             confirmButton = {
                 LoudiusOutlinedButton(text = confirmText, onClick = onConfirmButtonClick)
-            },
+            }
         )
     }
 }
 
-@Preview
 @Composable
+@ShowkaseComposable(skip = true)
+@Preview(group = "Dialogs")
 fun LoudiusErrorDialogPreview() {
     LoudiusTheme {
         LoudiusErrorDialog(onConfirmButtonClick = {})

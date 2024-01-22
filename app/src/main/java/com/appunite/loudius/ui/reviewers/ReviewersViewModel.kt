@@ -22,6 +22,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.ClickNotifyEvent
+import com.appunite.loudius.analytics.events.FetchReviewersEvent
+import com.appunite.loudius.analytics.events.FetchReviewersFailureEvent
+import com.appunite.loudius.analytics.events.FetchReviewersSuccessEvent
+import com.appunite.loudius.analytics.events.NotifyEvent
+import com.appunite.loudius.analytics.events.NotifyFailureEvent
+import com.appunite.loudius.analytics.events.NotifySuccessEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersFailureEvent
+import com.appunite.loudius.analytics.events.RefreshReviewersSuccessEvent
+import com.appunite.loudius.analytics.events.ReviewersScreenOpenedEvent
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -29,15 +41,15 @@ import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.model.Review
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.FAILURE
 import com.appunite.loudius.ui.reviewers.ReviewersSnackbarType.SUCCESS
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-import javax.inject.Inject
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.minus
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -48,7 +60,7 @@ sealed class ReviewersAction {
 data class ReviewersState(
     val data: Data = Data.Loading,
     val pullRequestNumber: String = "",
-    val snackbarTypeShown: ReviewersSnackbarType? = null,
+    val snackbarTypeShown: ReviewersSnackbarType? = null
 )
 
 sealed class Data {
@@ -61,10 +73,10 @@ enum class ReviewersSnackbarType {
     SUCCESS, FAILURE
 }
 
-@HiltViewModel
-class ReviewersViewModel @Inject constructor(
+class ReviewersViewModel(
     private val repository: PullRequestRepository,
     savedStateHandle: SavedStateHandle,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
     private val initialValues = getInitialValues(savedStateHandle)
 
@@ -80,22 +92,36 @@ class ReviewersViewModel @Inject constructor(
     }
 
     fun refreshData() {
+        eventTracker.trackEvent(RefreshReviewersEvent)
         viewModelScope.launch {
             _isRefreshing.value = true
             getMergedData()
-                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
-                .onFailure { state = state.copy(data = Data.Error) }
+                .onSuccess {
+                    state = state.copy(data = Data.Success(reviewers = it))
+                    eventTracker.trackEvent(RefreshReviewersSuccessEvent)
+                }
+                .onFailure {
+                    state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(RefreshReviewersFailureEvent(it.message ?: "Unrecognised error."))
+                }
             _isRefreshing.value = false
         }
     }
 
     private fun fetchData() {
+        eventTracker.trackEvent(FetchReviewersEvent)
         viewModelScope.launch {
             state = state.copy(data = Data.Loading)
 
             getMergedData()
-                .onSuccess { state = state.copy(data = Data.Success(reviewers = it)) }
-                .onFailure { state = state.copy(data = Data.Error) }
+                .onSuccess {
+                    state = state.copy(data = Data.Success(reviewers = it))
+                    eventTracker.trackEvent(FetchReviewersSuccessEvent)
+                }
+                .onFailure {
+                    state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(FetchReviewersFailureEvent(it.message ?: "Unrecognised error."))
+                }
         }
     }
 
@@ -108,14 +134,14 @@ class ReviewersViewModel @Inject constructor(
                 repository.getRequestedReviewers(
                     initialValues.owner,
                     initialValues.repo,
-                    initialValues.pullRequestNumber,
+                    initialValues.pullRequestNumber
                 )
             }
             val reviewsDeferred = async {
                 repository.getReviews(
                     initialValues.owner,
                     initialValues.repo,
-                    initialValues.pullRequestNumber,
+                    initialValues.pullRequestNumber
                 )
             }
 
@@ -127,7 +153,7 @@ class ReviewersViewModel @Inject constructor(
 
     private fun mergeData(
         requestedReviewers: Result<List<Reviewer>>,
-        reviewersWithReviews: Result<List<Reviewer>>,
+        reviewersWithReviews: Result<List<Reviewer>>
     ) = requestedReviewers.flatMap { list ->
         reviewersWithReviews.map { it + list }
     }
@@ -143,7 +169,7 @@ class ReviewersViewModel @Inject constructor(
                     requestedReviewer.login,
                     false,
                     hoursFromPRStart,
-                    null,
+                    null
                 )
             }
         }
@@ -162,14 +188,14 @@ class ReviewersViewModel @Inject constructor(
                         latestReview.user.login,
                         true,
                         hoursFromPRStart,
-                        hoursFromReviewDone,
+                        hoursFromReviewDone
                     )
                 }
         }
     }
 
-    private fun countHoursTillNow(submissionTime: LocalDateTime): Long =
-        ChronoUnit.HOURS.between(submissionTime, LocalDateTime.now())
+    private fun countHoursTillNow(submissionTime: Instant): Long =
+        Clock.System.now().minus(submissionTime, DateTimeUnit.HOUR)
 
     fun onAction(action: ReviewersAction) = when (action) {
         is ReviewersAction.Notify -> notifyReviewer(action.userLogin)
@@ -178,6 +204,8 @@ class ReviewersViewModel @Inject constructor(
     }
 
     private fun notifyReviewer(userLogin: String) {
+        eventTracker.trackEvent(ClickNotifyEvent)
+        eventTracker.trackEvent(NotifyEvent)
         val (owner, repo, pullRequestNumber) = initialValues
         val successData = state.data as? Data.Success ?: return
 
@@ -186,48 +214,51 @@ class ReviewersViewModel @Inject constructor(
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess { onNotifyUserSuccess(successData, userLogin) }
-                .onFailure { onNotifyUserFailure(successData, userLogin) }
+                .onFailure { onNotifyUserFailure(successData, userLogin, it.message) }
         }
     }
 
     private fun setReviewerToLoading(
         successData: Data.Success,
-        userLogin: String,
+        userLogin: String
     ) {
         state = state.copy(
             data = Data.Success(
-                reviewers = successData.reviewers.updateLoadingState(userLogin, true),
-            ),
+                reviewers = successData.reviewers.updateLoadingState(userLogin, true)
+            )
         )
     }
 
     private fun onNotifyUserFailure(
         successData: Data.Success,
         userLogin: String,
+        errorMessage: String?
     ) {
         state = state.copy(
             snackbarTypeShown = FAILURE,
             data = Data.Success(
-                reviewers = successData.reviewers.updateLoadingState(userLogin, false),
-            ),
+                reviewers = successData.reviewers.updateLoadingState(userLogin, false)
+            )
         )
+        eventTracker.trackEvent(NotifyFailureEvent(errorMessage ?: "Unrecognised error."))
     }
 
     private fun onNotifyUserSuccess(
         successData: Data.Success,
-        userLogin: String,
+        userLogin: String
     ) {
         state = state.copy(
             snackbarTypeShown = SUCCESS,
             data = Data.Success(
-                successData.reviewers.updateLoadingState(userLogin, false),
-            ),
+                successData.reviewers.updateLoadingState(userLogin, false)
+            )
         )
+        eventTracker.trackEvent(NotifySuccessEvent)
     }
 
     private fun List<Reviewer>.updateLoadingState(
         userLogin: String,
-        isLoading: Boolean,
+        isLoading: Boolean
     ): List<Reviewer> = map {
         if (it.login == userLogin) {
             it.copy(isLoading = isLoading)
@@ -238,5 +269,9 @@ class ReviewersViewModel @Inject constructor(
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(ReviewersScreenOpenedEvent)
     }
 }

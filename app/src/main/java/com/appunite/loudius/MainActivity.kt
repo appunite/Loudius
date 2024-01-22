@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,12 +36,11 @@ import com.appunite.loudius.ui.authenticating.AuthenticatingScreen
 import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel by viewModel<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -50,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
 
@@ -60,14 +58,14 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.Login.route,
+                        startDestination = Screen.Login.route
                     ) {
                         composable(route = Screen.Login.route) {
                             LoginScreen()
                         }
                         composable(
                             route = Screen.Authenticating.route,
-                            deepLinks = Screen.Authenticating.deepLinks,
+                            deepLinks = Screen.Authenticating.deepLinks
                         ) {
                             AuthenticatingScreen(
                                 onNavigateToPullRequest = {
@@ -79,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(Screen.Login.route) {
                                         popUpTo(Screen.Login.route) { inclusive = true }
                                     }
-                                },
+                                }
                             )
                         }
                         composable(route = Screen.PullRequests.route) {
@@ -88,14 +86,14 @@ class MainActivity : ComponentActivity() {
                                     owner = owner,
                                     repo = repo,
                                     pullRequestNumber = pullRequestNumber,
-                                    submissionDate = submissionTime,
+                                    submissionDate = submissionTime
                                 )
                                 navController.navigate(route)
                             }
                         }
                         composable(
                             route = Screen.Reviewers.route,
-                            arguments = Screen.Reviewers.arguments,
+                            arguments = Screen.Reviewers.arguments
                         ) {
                             ReviewersScreen { navController.popBackStack() }
                         }
@@ -119,7 +117,7 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(
             this@MainActivity,
             getString(R.string.common_user_unauthorized_error_message),
-            Toast.LENGTH_LONG,
+            Toast.LENGTH_LONG
         ).show()
     }
 }

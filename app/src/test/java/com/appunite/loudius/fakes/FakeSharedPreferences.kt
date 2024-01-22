@@ -32,7 +32,7 @@ class FakeSharedPreferences : SharedPreferences {
 
         override fun putStringSet(
             key: String,
-            value: MutableSet<String>?,
+            value: MutableSet<String>?
         ): SharedPreferences.Editor =
             TODO("Not yet implemented")
 

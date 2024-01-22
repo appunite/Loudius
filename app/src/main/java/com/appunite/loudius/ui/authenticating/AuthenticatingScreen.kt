@@ -20,19 +20,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import com.appunite.loudius.R
 import com.appunite.loudius.components.components.LoudiusFullScreenError
 import com.appunite.loudius.components.components.LoudiusLoadingIndicator
 import com.appunite.loudius.components.theme.LoudiusTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AuthenticatingScreen(
-    viewModel: AuthenticatingViewModel = hiltViewModel(),
+    viewModel: AuthenticatingViewModel = koinViewModel(),
     onNavigateToPullRequest: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val state = viewModel.state
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.trackScreenOpened()
+    }
+
     LaunchedEffect(key1 = state.navigateTo) {
         when (state.navigateTo) {
             AuthenticatingScreenNavigation.NavigateToLogin -> {
@@ -54,7 +60,7 @@ fun AuthenticatingScreen(
 @Composable
 fun AuthenticatingScreenStateless(
     errorScreenType: LoadingErrorType?,
-    onTryAgainClick: () -> Unit,
+    onTryAgainClick: () -> Unit
 ) {
     when (errorScreenType) {
         LoadingErrorType.GENERIC_ERROR -> ShowLoudiusGenericErrorScreen(onTryAgainClick)
@@ -65,23 +71,23 @@ fun AuthenticatingScreenStateless(
 
 @Composable
 private fun ShowLoudiusLoginErrorScreen(
-    navigateToLogin: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     LoudiusFullScreenError(
         errorText = stringResource(id = R.string.authenticating_screen_error_screen_error_message),
         buttonText = stringResource(id = R.string.authenticating_screen_error_screen_login_button),
-        onButtonClick = navigateToLogin,
+        onButtonClick = navigateToLogin
     )
 }
 
 @Composable
 private fun ShowLoudiusGenericErrorScreen(
-    onTryAgainClick: () -> Unit,
+    onTryAgainClick: () -> Unit
 ) {
     LoudiusFullScreenError(onButtonClick = onTryAgainClick)
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
 fun ShowLoudiusGenericErrorScreenPreview() {
     LoudiusTheme {
@@ -89,15 +95,16 @@ fun ShowLoudiusGenericErrorScreenPreview() {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
+@ShowkaseComposable(skip = true)
 fun ShowLoudiusLoginErrorScreenPreview() {
     LoudiusTheme {
         AuthenticatingScreenStateless(errorScreenType = LoadingErrorType.LOGIN_ERROR) {}
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, group = "Full screen")
 @Composable
 fun ShowLoadingIndicatorScreenPreview() {
     LoudiusTheme {
