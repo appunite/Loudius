@@ -87,6 +87,8 @@ jobs:
   android-tests:
     name: Run UI tests on Firebase Test Lab
     runs-on: ubuntu-20.04
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout
