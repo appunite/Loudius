@@ -163,6 +163,25 @@ jobs:
             */build/test-results/**
           retention-days: 5
 
+      - name: Run instrumentation code coverage
+        run: ./gradlew instrumentationCodeCoverage
+
+      - name: Store HTML coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            */build/reports/jacoco/instrumentationCodeCoverage/html/**
+
+      - name: Add coverage to PR
+        if: ${{ github.event_name != 'schedule' }}
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            */build/reports/jacoco/instrumentationCodeCoverage/instrumentationCodeCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   test-license-headers:
     name: Ensure license headers are added
     runs-on: ubuntu-20.04
