@@ -151,8 +151,8 @@ tasks.register('codeCoverage', JacocoReport) {
 tasks.register('instrumentationCodeCoverage', JacocoReport) {
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        html.required.set(true)
+        xml.required.set(true)
     }
 
     classDirectories.setFrom(

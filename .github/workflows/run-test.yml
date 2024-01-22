@@ -165,6 +165,12 @@ jobs:
 
       - name: Run instrumentation code coverage
         run: ./gradlew instrumentationCodeCoverage
+        env:
+          LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
+          LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
+          LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
+          LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
+          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
       - name: Store HTML coverage report
         uses: actions/upload-artifact@v3
