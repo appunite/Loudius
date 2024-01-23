@@ -141,9 +141,7 @@ tasks.register('codeCoverage', JacocoReport) {
             dir: project.buildDir,
             includes: [
                     "**/*.exec",
-                    "**/*.ec",
-                    "**/**/*.exec",
-                    "**/**/*.ec",
+                    "**/*.ec"
             ]))
 
 }
