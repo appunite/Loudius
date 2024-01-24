@@ -30,6 +30,7 @@ import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.compose.KoinContext
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 
@@ -53,8 +54,10 @@ abstract class AbsReviewersScreenTest {
     fun whenResponseIsCorrectThenReviewersAreVisible() {
         with(integrationTestRule) {
             composeTestRule.setContent {
-                LoudiusTheme {
-                    ReviewersScreen { }
+                KoinContext {
+                    LoudiusTheme {
+                        ReviewersScreen { }
+                    }
                 }
             }
 
@@ -76,8 +79,10 @@ abstract class AbsReviewersScreenTest {
             Register.comment(mockWebServer)
 
             composeTestRule.setContent {
-                LoudiusTheme {
-                    ReviewersScreen { }
+                KoinContext {
+                    LoudiusTheme {
+                        ReviewersScreen { }
+                    }
                 }
             }
 
@@ -107,8 +112,10 @@ abstract class AbsReviewersScreenTest {
     fun whenClickOnNotifyAndDoNotCommentThenShowError() {
         with(integrationTestRule) {
             composeTestRule.setContent {
-                LoudiusTheme {
-                    ReviewersScreen { }
+                KoinContext {
+                    LoudiusTheme {
+                        ReviewersScreen { }
+                    }
                 }
             }
 

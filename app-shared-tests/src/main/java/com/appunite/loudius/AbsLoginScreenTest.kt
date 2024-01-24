@@ -43,6 +43,7 @@ import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.compose.KoinContext
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import strikt.api.expectThat
@@ -81,8 +82,10 @@ abstract class AbsLoginScreenTest {
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
         composeTestRule.setContent {
-            LoudiusTheme {
-                LoginScreen()
+            KoinContext {
+                LoudiusTheme {
+                    LoginScreen()
+                }
             }
         }
 
@@ -110,8 +113,10 @@ abstract class AbsLoginScreenTest {
             .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 
         composeTestRule.setContent {
-            LoudiusTheme {
-                LoginScreen()
+            KoinContext {
+                LoudiusTheme {
+                    LoginScreen()
+                }
             }
         }
 
