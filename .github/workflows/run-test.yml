@@ -73,6 +73,7 @@ jobs:
           paths: |
             */build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+          title: Unit tests code coverage
 
       - name: Upload tests results
         if: always()
@@ -189,6 +190,40 @@ jobs:
           paths: |
             */build/reports/jacoco/instrumentationCodeCoverage/instrumentationCodeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+          title: E2E code coverage
+
+  code-coverage:
+    name: Merged code coverage
+    runs-on: ubuntu-20.04
+    permissions:
+      pull-requests: write
+    needs:
+      - android-tests
+      - unit-tests
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Store HTML coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            */build/reports/jacoco/codeCoverage/html/**
+            */build/reports/jacoco/instrumentationCodeCoverage/html/**
+
+      - name: Add coverage to PR
+        if: ${{ github.event_name != 'schedule' }}
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            */build/reports/jacoco/codeCoverage/codeCoverage.xml
+            */build/reports/jacoco/instrumentationCodeCoverage/instrumentationCodeCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Merged code coverage
 
   test-license-headers:
     name: Ensure license headers are added
