@@ -103,7 +103,6 @@ android {
 }
 
 tasks.register('codeCoverage', JacocoReport) {
-    dependsOn 'testDebugUnitTest'
 
     reports {
         html.required.set(true)
