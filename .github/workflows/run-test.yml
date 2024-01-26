@@ -168,6 +168,9 @@ jobs:
         with:
           name: test-results
 
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
       - name: Run code coverage
         run: ./gradlew codeCoverage
         env:
