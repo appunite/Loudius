@@ -33,7 +33,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "com.appunite.loudius.util.InstrumentationTestRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
+        testInstrumentationRunnerArguments clearPackageData: 'true', coverage: 'true', coverageFilePath: '/sdcard/Download/'
         vectorDrawables {
             useSupportLibrary true
         }
@@ -54,6 +54,7 @@ android {
         }
         debug{
             enableUnitTestCoverage true
+            testCoverageEnabled true
         }
     }
     compileOptions {
@@ -143,6 +144,44 @@ tasks.register('codeCoverage', JacocoReport) {
                     "**/*.ec"
             ]))
 
+}
+
+tasks.register('instrumentationCodeCoverage', JacocoReport) {
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+
+    classDirectories.setFrom(
+            fileTree(project.buildDir) {
+                include("**/tmp/kotlin-classes/debug/**")
+                exclude(
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        "**/*Application.*",
+                        '**/Manifest*.*',
+                        '**/*Test*.*',
+                        '**/android/**/*.*',
+                        '**/androidx/**/*.*',
+                        '**/airbnb/**/*.*',
+                        "**/di/**/*.*",
+                        '**/*Dagger*.*',
+                        "**/*Screen*"
+                )
+            }
+    )
+
+    sourceDirectories.setFrom(fileTree(
+            dir: project.projectDir,
+            includes: [
+                    "src/main/java/**",
+                    "src/main/kotlin/**"
+            ]))
+
+    executionData.setFrom(
+            fileTree(dir: "${buildDir}/test-results/instrumentation_results", includes: ['*.ec']))
 }
 
 dependencies {

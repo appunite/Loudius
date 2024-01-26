@@ -87,6 +87,8 @@ jobs:
   android-tests:
     name: Run UI tests on Firebase Test Lab
     runs-on: ubuntu-20.04
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -143,13 +145,16 @@ jobs:
             --timeout="20m" \
             --results-dir="${{ steps.generate-dir.outputs.results_dir }}" \
             --results-bucket="${{ steps.generate-dir.outputs.bucket }}" \
-            --environment-variables "clearPackageData=true,coverage=true,coverageFilePath=/sdcard/Download/"
+            --environment-variables "clearPackageData=true,coverage=true,coverageFilePath=/sdcard/Download/" \
+            --directories-to-pull /sdcard/Download
 
       - name: Download test results from Firebase Test Lab
         if: always()
         run: |-
           mkdir "app/build/test-results"
+          mkdir "app/build/test-results/instrumentation_results"
           gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2.arm-33-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
+          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2.arm-33-en-portrait/artifacts/sdcard/Download/*.ec" "app/build/test-results/instrumentation_results"
 
       - name: Upload tests results
         if: always()
@@ -159,6 +164,31 @@ jobs:
           path: |
             */build/test-results/**
           retention-days: 5
+
+      - name: Run instrumentation code coverage
+        run: ./gradlew instrumentationCodeCoverage
+        env:
+          LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
+          LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
+          LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
+          LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
+          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
+
+      - name: Store HTML coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: |
+            */build/reports/jacoco/instrumentationCodeCoverage/html/**
+
+      - name: Add coverage to PR
+        if: ${{ github.event_name != 'schedule' }}
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+            */build/reports/jacoco/instrumentationCodeCoverage/instrumentationCodeCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   test-license-headers:
     name: Ensure license headers are added
