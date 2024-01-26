@@ -28,6 +28,7 @@ import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
 import org.junit.Rule
 import org.junit.Test
+import org.koin.compose.KoinContext
 import strikt.api.expectThat
 import strikt.assertions.containsExactly
 
@@ -49,8 +50,10 @@ abstract class AbsPullRequestsScreenTest {
             Register.issues(mockWebServer)
 
             composeTestRule.setContent {
-                LoudiusTheme {
-                    PullRequestsScreen { _, _, _, _ -> }
+                KoinContext {
+                    LoudiusTheme {
+                        PullRequestsScreen { _, _, _, _ -> }
+                    }
                 }
             }
 
