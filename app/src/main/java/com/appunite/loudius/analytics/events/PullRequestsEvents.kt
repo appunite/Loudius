@@ -21,71 +21,74 @@ import com.appunite.loudius.analytics.EventParameter
 
 interface PullRequestsEvent : Event
 
-object PullRequestsScreenOpenedEvent : PullRequestsEvent {
-    override val name: String = "screen_opened"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("screen_name", "pull_requests_screen")
-    )
-}
+object PullRequestsEvents {
 
-object RefreshPullRequestsEvent : PullRequestsEvent {
-    override val name: String = "action_start"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_pull_requests_data"),
-        EventParameter.String("screen_name", "pull_requests_screen")
-    )
-}
+    object ScreenOpened : PullRequestsEvent {
+        override val name: String = "screen_opened"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("screen_name", "pull_requests_screen")
+        )
+    }
 
-object RefreshPullRequestsSuccessEvent : PullRequestsEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_pull_requests_data"),
-        EventParameter.Boolean("success", true),
-        EventParameter.String("screen_name", "pull_requests_screen")
-    )
-}
+    object Refresh : PullRequestsEvent {
+        override val name: String = "action_start"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "refresh_pull_requests_data"),
+            EventParameter.String("screen_name", "pull_requests_screen")
+        )
+    }
 
-data class RefreshPullRequestsFailureEvent(val errorMessage: String) : PullRequestsEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "refresh_pull_requests_data"),
-        EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "pull_requests_screen"),
-        EventParameter.String("error_message", errorMessage)
-    )
-}
+    object RefreshSuccess : PullRequestsEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "refresh_pull_requests_data"),
+            EventParameter.Boolean("success", true),
+            EventParameter.String("screen_name", "pull_requests_screen")
+        )
+    }
 
-object FetchPullRequestsEvent : PullRequestsEvent {
-    override val name: String = "action_start"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_pull_requests_data"),
-        EventParameter.String("screen_name", "pull_requests_screen")
-    )
-}
+    data class RefreshFailure(val errorMessage: String) : PullRequestsEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "refresh_pull_requests_data"),
+            EventParameter.Boolean("success", false),
+            EventParameter.String("screen_name", "pull_requests_screen"),
+            EventParameter.String("error_message", errorMessage)
+        )
+    }
 
-object FetchPullRequestsSuccessEvent : PullRequestsEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_pull_requests_data"),
-        EventParameter.Boolean("success", true),
-        EventParameter.String("screen_name", "pull_requests_screen")
-    )
-}
+    object Fetch : PullRequestsEvent {
+        override val name: String = "action_start"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "fetch_pull_requests_data"),
+            EventParameter.String("screen_name", "pull_requests_screen")
+        )
+    }
 
-data class FetchPullRequestsFailureEvent(val errorMessage: String) : PullRequestsEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "fetch_pull_requests_data"),
-        EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "pull_requests_screen"),
-        EventParameter.String("error_message", errorMessage)
-    )
-}
+    object FetchSuccess : PullRequestsEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "fetch_pull_requests_data"),
+            EventParameter.Boolean("success", true),
+            EventParameter.String("screen_name", "pull_requests_screen")
+        )
+    }
 
-object NavigateToReviewersEvent : PullRequestsEvent {
-    override val name: String = "item_click"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "pull_request"),
-        EventParameter.String("screen_name", "pull_requests_screen")
-    )
+    data class FetchFailure(val errorMessage: String) : PullRequestsEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "fetch_pull_requests_data"),
+            EventParameter.Boolean("success", false),
+            EventParameter.String("screen_name", "pull_requests_screen"),
+            EventParameter.String("error_message", errorMessage)
+        )
+    }
+
+    object NavigateToReviewers : PullRequestsEvent {
+        override val name: String = "item_click"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "pull_request"),
+            EventParameter.String("screen_name", "pull_requests_screen")
+        )
+    }
 }

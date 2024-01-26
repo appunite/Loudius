@@ -21,63 +21,65 @@ import com.appunite.loudius.analytics.EventParameter
 
 interface AuthenticatingEvent : Event
 
-object AuthenticatingScreenOpenedEvent : AuthenticatingEvent {
-    override val name: String = "screen_opened"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("screen_name", "authenticating_screen")
-    )
-}
+object AuthenticatingEvents {
+    object ScreenOpened : AuthenticatingEvent {
+        override val name: String = "screen_opened"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("screen_name", "authenticating_screen")
+        )
+    }
 
-object AuthenticationStartedEvent : AuthenticatingEvent {
-    override val name: String = "action_start"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "authentication"),
-        EventParameter.String("screen_name", "authenticating_screen")
-    )
-}
+    object AuthenticationStarted : AuthenticatingEvent {
+        override val name: String = "action_start"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "authentication"),
+            EventParameter.String("screen_name", "authenticating_screen")
+        )
+    }
 
-object AuthenticationFinishedSuccessEvent : AuthenticatingEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "authentication"),
-        EventParameter.Boolean("success", true),
-        EventParameter.String("screen_name", "authenticating_screen")
-    )
-}
+    object AuthenticationFinishedSuccess : AuthenticatingEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "authentication"),
+            EventParameter.Boolean("success", true),
+            EventParameter.String("screen_name", "authenticating_screen")
+        )
+    }
 
-data class AuthenticationFinishedFailureEvent(val errorMessage: String) : AuthenticatingEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "authentication"),
-        EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "authenticating_screen"),
-        EventParameter.String("error_message", errorMessage)
-    )
-}
+    data class AuthenticationFinishedFailure(val errorMessage: String) : AuthenticatingEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "authentication"),
+            EventParameter.Boolean("success", false),
+            EventParameter.String("screen_name", "authenticating_screen"),
+            EventParameter.String("error_message", errorMessage)
+        )
+    }
 
-object GetAccessTokenStartedEvent : AuthenticatingEvent {
-    override val name: String = "action_start"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "get_access_token"),
-        EventParameter.String("screen_name", "authenticating_screen")
-    )
-}
+    object GetAccessTokenStarted : AuthenticatingEvent {
+        override val name: String = "action_start"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "get_access_token"),
+            EventParameter.String("screen_name", "authenticating_screen")
+        )
+    }
 
-object GetAccessTokenFinishedSuccessEvent : AuthenticatingEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "get_access_token"),
-        EventParameter.Boolean("success", true),
-        EventParameter.String("screen_name", "authenticating_screen")
-    )
-}
+    object GetAccessTokenFinishedSuccess : AuthenticatingEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "get_access_token"),
+            EventParameter.Boolean("success", true),
+            EventParameter.String("screen_name", "authenticating_screen")
+        )
+    }
 
-data class GetAccessTokenFinishedFailureEvent(val errorMessage: String) : AuthenticatingEvent {
-    override val name: String = "action_finished"
-    override val parameters: List<EventParameter> = listOf(
-        EventParameter.String("item_name", "get_access_token"),
-        EventParameter.Boolean("success", false),
-        EventParameter.String("screen_name", "authenticating_screen"),
-        EventParameter.String("error_message", errorMessage)
-    )
+    data class GetAccessTokenFinishedFailure(val errorMessage: String) : AuthenticatingEvent {
+        override val name: String = "action_finished"
+        override val parameters: List<EventParameter> = listOf(
+            EventParameter.String("item_name", "get_access_token"),
+            EventParameter.Boolean("success", false),
+            EventParameter.String("screen_name", "authenticating_screen"),
+            EventParameter.String("error_message", errorMessage)
+        )
+    }
 }
