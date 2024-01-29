@@ -167,6 +167,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: test-results
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
