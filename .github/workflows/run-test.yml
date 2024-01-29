@@ -167,6 +167,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: test-results
+
+      - name: Download tests results for both jobs
+        uses: actions/download-artifact@v3
+        with:
+          name: outputs/unit_test_code_coverage
+
       - name: Display structure of downloaded files
         run: ls -R
 
