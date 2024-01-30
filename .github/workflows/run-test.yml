@@ -67,7 +67,7 @@ jobs:
             */build/test-results/**
             */build/paparazzi/failures/**
             */build/outputs/**
-            */build/reports/**
+            */build/tmp/kotlin-classes/**
           retention-days: 5
 
   android-tests:
@@ -164,8 +164,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          lfs: true
 
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
@@ -174,9 +172,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: test-results
-
-      - name: Display structure of downloaded files
-        run: ls -R  app/build/outputs app/build/test-results app/build/reports
 
       - name: Run code coverage
         run: ./gradlew codeCoverage
