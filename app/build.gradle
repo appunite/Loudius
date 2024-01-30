@@ -52,7 +52,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug{
+        debug {
             enableUnitTestCoverage true
             testCoverageEnabled true
         }
@@ -103,7 +103,6 @@ android {
 }
 
 tasks.register('codeCoverage', JacocoReport) {
-    dependsOn 'testDebugUnitTest'
 
     reports {
         html.required.set(true)
@@ -130,58 +129,14 @@ tasks.register('codeCoverage', JacocoReport) {
             }
     )
 
-    sourceDirectories.setFrom(fileTree(
-            dir: project.projectDir,
-            includes: [
-                    "src/main/java/**",
-                    "src/main/kotlin/**"
-            ]))
-
-    executionData.setFrom(fileTree(
-            dir: project.buildDir,
-            includes: [
-                    "**/*.exec",
-                    "**/*.ec"
-            ]))
-
-}
-
-tasks.register('instrumentationCodeCoverage', JacocoReport) {
-
-    reports {
-        html.required.set(true)
-        xml.required.set(true)
-    }
-
-    classDirectories.setFrom(
-            fileTree(project.buildDir) {
-                include("**/tmp/kotlin-classes/debug/**")
-                exclude(
-                        '**/R.class',
-                        '**/R$*.class',
-                        '**/BuildConfig.*',
-                        "**/*Application.*",
-                        '**/Manifest*.*',
-                        '**/*Test*.*',
-                        '**/android/**/*.*',
-                        '**/androidx/**/*.*',
-                        '**/airbnb/**/*.*',
-                        "**/di/**/*.*",
-                        '**/*Dagger*.*',
-                        "**/*Screen*"
-                )
-            }
+    sourceDirectories.setFrom(
+            fileTree(dir: project.projectDir, includes: ["src/main/java/**", "src/main/kotlin/**"])
     )
-
-    sourceDirectories.setFrom(fileTree(
-            dir: project.projectDir,
-            includes: [
-                    "src/main/java/**",
-                    "src/main/kotlin/**"
-            ]))
 
     executionData.setFrom(
-            fileTree(dir: "${buildDir}/test-results/instrumentation_results", includes: ['*.ec']))
+            fileTree(dir: "${buildDir}/test-results/instrumentation_results", includes: ['*.ec']),
+            fileTree(dir: "${buildDir}/outputs/unit_test_code_coverage", includes: ["**/*.exec", "**/*.ec"])
+    )
 }
 
 dependencies {
