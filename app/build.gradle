@@ -135,7 +135,7 @@ tasks.register('codeCoverage', JacocoReport) {
 
     executionData.setFrom(
             fileTree(dir: "${buildDir}/test-results/instrumentation_results", includes: ['*.ec']),
-            fileTree(dir: buildDir, includes: ["**/*.exec", "**/*.ec"])
+            fileTree(dir: "${buildDir}/outputs/unit_test_code_coverage", includes: ["**/*.exec", "**/*.ec"])
     )
 }
 

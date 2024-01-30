@@ -167,6 +167,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
       - name: Download tests results for both jobs
         uses: actions/download-artifact@v3
         with:
@@ -175,8 +178,6 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R  app/build/outputs app/build/test-results
 
-      - name: Prepare Android Environment
-        uses: ./.github/actions/prepare-android-env
 
       - name: Run code coverage
         run: ./gradlew codeCoverage
