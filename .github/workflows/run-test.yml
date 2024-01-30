@@ -50,7 +50,7 @@ jobs:
         uses: ./.github/actions/prepare-android-env
 
       - name: Run test
-        run: ./gradlew test
+        run: ./gradlew testDebugUnitTest
         env:
           LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
           LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
