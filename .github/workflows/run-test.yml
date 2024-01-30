@@ -58,6 +58,9 @@ jobs:
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
+      - name: Check coverage output
+        run: ls -R app/build/outputs
+
       - name: Upload tests results
         if: always()
         uses: actions/upload-artifact@v3
@@ -66,6 +69,7 @@ jobs:
           path: |
             */build/test-results/**
             */build/paparazzi/failures/**
+            */build/outputs/**
           retention-days: 5
 
   android-tests:
@@ -168,14 +172,8 @@ jobs:
         with:
           name: test-results
 
-      - name: Download tests results for both jobs
-        uses: actions/download-artifact@v3
-        with:
-          path: |
-            */build/outputs/unit_test_code_coverage
-
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -R  app/build/outputs app/build/test-results
 
       - name: Prepare Android Environment
         uses: ./.github/actions/prepare-android-env
