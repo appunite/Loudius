@@ -67,6 +67,7 @@ jobs:
             */build/test-results/**
             */build/paparazzi/failures/**
             */build/outputs/**
+            */build/reports/**
           retention-days: 5
 
   android-tests:
