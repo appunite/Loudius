@@ -58,9 +58,6 @@ jobs:
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
-      - name: Check coverage output
-        run: ls -R app/build/outputs
-
       - name: Upload tests results
         if: always()
         uses: actions/upload-artifact@v3
@@ -178,7 +175,6 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R  app/build/outputs app/build/test-results
 
-
       - name: Run code coverage
         run: ./gradlew codeCoverage
         env:
@@ -188,12 +184,15 @@ jobs:
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
+      - name: Display structure of downloaded files
+        run: ls -R  app/build/reports/jacoco/codeCoverage
+
       - name: Store HTML coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
           path: |
-            */build/reports/jacoco/codeCoverage/html/**
+            app/build/reports/jacoco/codeCoverage
 
       - name: Add coverage to PR
         if: ${{ github.event_name != 'schedule' }}
@@ -201,7 +200,7 @@ jobs:
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
-            */build/reports/jacoco/codeCoverage/codeCoverage.xml
+            app/build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
   test-license-headers:
