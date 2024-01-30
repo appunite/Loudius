@@ -182,9 +182,6 @@ jobs:
           LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
-      - name: Display structure of downloaded files
-        run: ls -R  app/build/reports/jacoco/codeCoverage
-
       - name: Store HTML coverage report
         uses: actions/upload-artifact@v3
         with:
