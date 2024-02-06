@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
 }
 
+apply from: '../module-jacoco.gradle'
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -35,6 +37,13 @@ android {
     kapt {
         arguments {
             arg("skipPrivatePreviews", "true")
+        }
+    }
+
+    buildTypes {
+        debug {
+            enableUnitTestCoverage true
+            testCoverageEnabled true
         }
     }
 }

@@ -4,8 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint.gradle)
     alias(libs.plugins.kotlin.serialization)
-    id 'jacoco'
 }
+
+apply from: '../module-jacoco.gradle'
 
 def fileName = "../app/google-services.json"
 
@@ -100,43 +101,6 @@ android {
             arg("skipPrivatePreviews", "true")
         }
     }
-}
-
-tasks.register('codeCoverage', JacocoReport) {
-
-    reports {
-        html.required.set(true)
-        xml.required.set(true)
-    }
-
-    classDirectories.setFrom(
-            fileTree(project.buildDir) {
-                include("**/tmp/kotlin-classes/debug/**")
-                exclude(
-                        '**/R.class',
-                        '**/R$*.class',
-                        '**/BuildConfig.*',
-                        "**/*Application.*",
-                        '**/Manifest*.*',
-                        '**/*Test*.*',
-                        '**/android/**/*.*',
-                        '**/androidx/**/*.*',
-                        '**/airbnb/**/*.*',
-                        "**/di/**/*.*",
-                        '**/*Dagger*.*',
-                        "**/*Screen*"
-                )
-            }
-    )
-
-    sourceDirectories.setFrom(
-            fileTree(dir: project.projectDir, includes: ["src/main/java/**", "src/main/kotlin/**"])
-    )
-
-    executionData.setFrom(
-            fileTree(dir: "${buildDir}/test-results/instrumentation_results", includes: ['*.ec']),
-            fileTree(dir: "${buildDir}/outputs/unit_test_code_coverage", includes: ["**/*.exec", "**/*.ec"])
-    )
 }
 
 dependencies {
