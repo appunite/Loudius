@@ -64,6 +64,10 @@ fun PullRequestsScreen(
     val state = viewModel.state
     val refreshing = viewModel.isRefreshing
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.trackScreenOpened()
+    }
+
     PullRequestsScreenStateless(
         state = state,
         refreshing = refreshing,

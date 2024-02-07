@@ -37,6 +37,7 @@ import com.appunite.loudius.ui.login.LoginScreen
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.compose.KoinContext
 
 class MainActivity : ComponentActivity() {
 
@@ -44,58 +45,60 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoudiusTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val navController = rememberNavController()
-
-                    LaunchedEffect(viewModel.state.authFailureEvent) {
-                        navigateToLoginOnAuthFailure(navController)
-                    }
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.Login.route
+            KoinContext {
+                LoudiusTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
                     ) {
-                        composable(route = Screen.Login.route) {
-                            LoginScreen()
+                        val navController = rememberNavController()
+
+                        LaunchedEffect(viewModel.state.authFailureEvent) {
+                            navigateToLoginOnAuthFailure(navController)
                         }
-                        composable(
-                            route = Screen.Authenticating.route,
-                            deepLinks = Screen.Authenticating.deepLinks
+
+                        NavHost(
+                            navController = navController,
+                            startDestination = Screen.Login.route
                         ) {
-                            AuthenticatingScreen(
-                                onNavigateToPullRequest = {
-                                    navController.navigate(Screen.PullRequests.route) {
-                                        popUpTo(Screen.Login.route) { inclusive = true }
-                                    }
-                                },
-                                onNavigateToLogin = {
-                                    navController.navigate(Screen.Login.route) {
-                                        popUpTo(Screen.Login.route) { inclusive = true }
-                                    }
-                                }
-                            )
-                        }
-                        composable(route = Screen.PullRequests.route) {
-                            PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime ->
-                                val route = Screen.Reviewers.constructRoute(
-                                    owner = owner,
-                                    repo = repo,
-                                    pullRequestNumber = pullRequestNumber,
-                                    submissionDate = submissionTime
-                                )
-                                navController.navigate(route)
+                            composable(route = Screen.Login.route) {
+                                LoginScreen()
                             }
-                        }
-                        composable(
-                            route = Screen.Reviewers.route,
-                            arguments = Screen.Reviewers.arguments
-                        ) {
-                            ReviewersScreen { navController.popBackStack() }
+                            composable(
+                                route = Screen.Authenticating.route,
+                                deepLinks = Screen.Authenticating.deepLinks
+                            ) {
+                                AuthenticatingScreen(
+                                    onNavigateToPullRequest = {
+                                        navController.navigate(Screen.PullRequests.route) {
+                                            popUpTo(Screen.Login.route) { inclusive = true }
+                                        }
+                                    },
+                                    onNavigateToLogin = {
+                                        navController.navigate(Screen.Login.route) {
+                                            popUpTo(Screen.Login.route) { inclusive = true }
+                                        }
+                                    }
+                                )
+                            }
+                            composable(route = Screen.PullRequests.route) {
+                                PullRequestsScreen { owner, repo, pullRequestNumber, submissionTime ->
+                                    val route = Screen.Reviewers.constructRoute(
+                                        owner = owner,
+                                        repo = repo,
+                                        pullRequestNumber = pullRequestNumber,
+                                        submissionDate = submissionTime
+                                    )
+                                    navController.navigate(route)
+                                }
+                            }
+                            composable(
+                                route = Screen.Reviewers.route,
+                                arguments = Screen.Reviewers.arguments
+                            ) {
+                                ReviewersScreen { navController.popBackStack() }
+                            }
                         }
                     }
                 }

@@ -18,14 +18,7 @@ package com.appunite.loudius.ui.reviewers
 
 import androidx.lifecycle.SavedStateHandle
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.ClickNotifyEvent
-import com.appunite.loudius.analytics.events.FetchDataEvent
-import com.appunite.loudius.analytics.events.FetchDataFailureEvent
-import com.appunite.loudius.analytics.events.FetchDataSuccessEvent
-import com.appunite.loudius.analytics.events.NotifyFailureEvent
-import com.appunite.loudius.analytics.events.NotifySuccessEvent
-import com.appunite.loudius.analytics.events.RefreshDataEvent
-import com.appunite.loudius.analytics.events.RefreshDataSuccessEvent
+import com.appunite.loudius.analytics.events.ReviewersEvents
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.model.RequestedReviewersResponse
 import com.appunite.loudius.network.utils.WebException
@@ -98,10 +91,10 @@ class ReviewersViewModelTest {
             }
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
-                eventTracker.trackEvent(RefreshDataEvent)
-                eventTracker.trackEvent(RefreshDataSuccessEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                eventTracker.trackEvent(ReviewersEvents.Refresh)
+                eventTracker.trackEvent(ReviewersEvents.RefreshSuccess)
             }
         }
 
@@ -130,9 +123,9 @@ class ReviewersViewModelTest {
             expectThat(viewModel.isRefreshing.value).isTrue()
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
-                eventTracker.trackEvent(RefreshDataEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                eventTracker.trackEvent(ReviewersEvents.Refresh)
             }
         }
 
@@ -145,10 +138,10 @@ class ReviewersViewModelTest {
             expectThat(viewModel.isRefreshing.value).isFalse()
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
-                eventTracker.trackEvent(RefreshDataEvent)
-                eventTracker.trackEvent(RefreshDataSuccessEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                eventTracker.trackEvent(ReviewersEvents.Refresh)
+                eventTracker.trackEvent(ReviewersEvents.RefreshSuccess)
             }
         }
 
@@ -169,8 +162,8 @@ class ReviewersViewModelTest {
             verify(exactly = 1) { savedStateHandle.get<String>("submission_date") }
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
             }
         }
 
@@ -183,8 +176,8 @@ class ReviewersViewModelTest {
                 .isEqualTo("correctPullRequestNumber")
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
             }
         }
 
@@ -202,7 +195,7 @@ class ReviewersViewModelTest {
             expectThat(viewModel.state.data).isA<Data.Loading>()
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
             }
         }
 
@@ -230,8 +223,8 @@ class ReviewersViewModelTest {
             }
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
             }
         }
 
@@ -249,8 +242,8 @@ class ReviewersViewModelTest {
                 }
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
                 }
             }
 
@@ -271,8 +264,8 @@ class ReviewersViewModelTest {
                 }
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
                 }
             }
 
@@ -295,8 +288,8 @@ class ReviewersViewModelTest {
                 }
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
                 }
             }
 
@@ -318,8 +311,8 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state.data).isA<Data.Error>()
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure("Unrecognised error."))
                 }
             }
 
@@ -338,8 +331,8 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state.data).isA<Data.Error>()
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure("Unrecognised error."))
                 }
             }
 
@@ -354,8 +347,8 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state.data).isA<Data.Error>()
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure("Unrecognised error."))
                 }
             }
     }
@@ -374,10 +367,11 @@ class ReviewersViewModelTest {
                 .isEqualTo(ReviewersSnackbarType.SUCCESS)
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
-                eventTracker.trackEvent(ClickNotifyEvent)
-                eventTracker.trackEvent(NotifySuccessEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                eventTracker.trackEvent(ReviewersEvents.ClickNotify)
+                eventTracker.trackEvent(ReviewersEvents.Notify)
+                eventTracker.trackEvent(ReviewersEvents.NotifySuccess)
             }
         }
 
@@ -409,9 +403,10 @@ class ReviewersViewModelTest {
             }
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
-                eventTracker.trackEvent(ClickNotifyEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                eventTracker.trackEvent(ReviewersEvents.ClickNotify)
+                eventTracker.trackEvent(ReviewersEvents.Notify)
             }
         }
 
@@ -431,10 +426,11 @@ class ReviewersViewModelTest {
                 .isEqualTo(ReviewersSnackbarType.FAILURE)
 
             verifyOrder {
-                eventTracker.trackEvent(FetchDataEvent)
-                eventTracker.trackEvent(FetchDataSuccessEvent)
-                eventTracker.trackEvent(ClickNotifyEvent)
-                eventTracker.trackEvent(NotifyFailureEvent)
+                eventTracker.trackEvent(ReviewersEvents.Fetch)
+                eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                eventTracker.trackEvent(ReviewersEvents.ClickNotify)
+                eventTracker.trackEvent(ReviewersEvents.Notify)
+                eventTracker.trackEvent(ReviewersEvents.NotifyFailure("Unrecognised error."))
             }
         }
 
@@ -451,10 +447,11 @@ class ReviewersViewModelTest {
                     .isNull()
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
-                    eventTracker.trackEvent(ClickNotifyEvent)
-                    eventTracker.trackEvent(NotifySuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+                    eventTracker.trackEvent(ReviewersEvents.ClickNotify)
+                    eventTracker.trackEvent(ReviewersEvents.Notify)
+                    eventTracker.trackEvent(ReviewersEvents.NotifySuccess)
                 }
             }
 
@@ -481,10 +478,10 @@ class ReviewersViewModelTest {
                 }
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure("Unrecognised error."))
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
                 }
             }
 
@@ -504,10 +501,10 @@ class ReviewersViewModelTest {
                 expectThat(viewModel.state.data).isA<Data.Error>()
 
                 verifyOrder {
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
-                    eventTracker.trackEvent(FetchDataEvent)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure("Unrecognised error."))
+                    eventTracker.trackEvent(ReviewersEvents.Fetch)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure("Unrecognised error."))
                 }
             }
     }

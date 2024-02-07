@@ -20,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.LoginEvents
 
 sealed class LoginAction {
     object ClearNavigation : LoginAction()
@@ -42,7 +44,8 @@ data class LoginState(
 )
 
 class LoginScreenViewModel(
-    private val githubHelper: GithubHelper
+    private val githubHelper: GithubHelper,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -55,24 +58,30 @@ class LoginScreenViewModel(
             }
 
             LoginAction.ClickLogIn -> {
+                eventTracker.trackEvent(LoginEvents.ClickLogIn)
                 if (githubHelper.shouldAskForXiaomiIntent()) {
                     state = state.copy(
                         showXiaomiPermissionDialog = true
                     )
                 } else {
+                    eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
                     state = state.copy(navigateTo = LoginNavigateTo.OpenGithubAuth)
                 }
             }
 
             LoginAction.XiaomiPermissionDialogDismiss -> {
+                eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogDismissed)
                 state = state.copy(showXiaomiPermissionDialog = false)
             }
 
             LoginAction.XiaomiPermissionDialogGrantPermission -> {
+                eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionGranted)
                 state = state.copy(navigateTo = LoginNavigateTo.OpenXiaomiPermissionManager)
             }
 
             LoginAction.XiaomiPermissionDialogAlreadyGrantedPermission -> {
+                eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionAlreadyGranted)
+                eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
                 state = state.copy(
                     showXiaomiPermissionDialog = false,
                     navigateTo = LoginNavigateTo.OpenGithubAuth
@@ -83,5 +92,9 @@ class LoginScreenViewModel(
                 state = state.copy(navigateTo = LoginNavigateTo.OpenComponentsBrowser)
             }
         }
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(LoginEvents.ScreenOpened)
     }
 }

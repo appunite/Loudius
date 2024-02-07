@@ -16,6 +16,8 @@
 
 package com.appunite.loudius.ui.pullrequests
 
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.PullRequestsEvents
 import com.appunite.loudius.fakes.FakePullRequestRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.Defaults
@@ -23,7 +25,9 @@ import com.appunite.loudius.util.MainDispatcherExtension
 import com.appunite.loudius.util.neverCompletingSuspension
 import io.mockk.clearMocks
 import io.mockk.coEvery
+import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verifyOrder
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,7 +42,8 @@ import strikt.assertions.single
 @ExtendWith(MainDispatcherExtension::class)
 class PullRequestsViewModelTest {
     private val pullRequestRepository = spyk(FakePullRequestRepository())
-    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository)
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
+    private fun createViewModel() = PullRequestsViewModel(pullRequestRepository, eventTracker)
 
     @Test
     fun `WHEN refresh data THEN start refreshing data and set isRefreshing to true`() = runTest {
@@ -51,6 +56,12 @@ class PullRequestsViewModelTest {
         viewModel.refreshData()
 
         expectThat(viewModel.isRefreshing).isTrue()
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
+        }
     }
 
     @Test
@@ -60,6 +71,13 @@ class PullRequestsViewModelTest {
         viewModel.refreshData()
 
         expectThat(viewModel.isRefreshing).isFalse()
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
+            eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
+        }
     }
 
     @Test
@@ -71,6 +89,13 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state.data).isA<Data.Success>().and {
             get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
+            eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
+        }
     }
 
     @Test
@@ -80,6 +105,10 @@ class PullRequestsViewModelTest {
         val viewModel = createViewModel()
 
         expectThat(viewModel.state.data).isA<Data.Loading>()
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+        }
     }
 
     @Test
@@ -88,6 +117,11 @@ class PullRequestsViewModelTest {
 
         expectThat(viewModel.state.data).isA<Data.Success>().and {
             get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
         }
     }
 
@@ -101,6 +135,11 @@ class PullRequestsViewModelTest {
         val viewModel = createViewModel()
 
         expectThat(viewModel.state.data).isA<Data.Error>()
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchFailure("Unrecognised error."))
+        }
     }
 
     @Test
@@ -117,6 +156,13 @@ class PullRequestsViewModelTest {
 
         expectThat(viewModel.state.data).isA<Data.Success>().and {
             get(Data.Success::pullRequests).single().isEqualTo(Defaults.pullRequest())
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchFailure("Unrecognised error."))
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
         }
     }
 
@@ -140,6 +186,12 @@ class PullRequestsViewModelTest {
                     pullRequest.createdAt.toString()
                 )
             )
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
+        }
     }
 
     @Test
@@ -153,5 +205,11 @@ class PullRequestsViewModelTest {
         expectThat(viewModel.state)
             .get(PullRequestState::navigateToReviewers)
             .isNull()
+
+        verifyOrder {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+            eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
+        }
     }
 }

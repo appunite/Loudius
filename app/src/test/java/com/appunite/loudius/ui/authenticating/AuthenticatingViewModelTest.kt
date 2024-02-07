@@ -20,6 +20,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.AuthenticatingEvents
 import com.appunite.loudius.fakes.FakeAuthRepository
 import com.appunite.loudius.network.utils.WebException
 import com.appunite.loudius.util.MainDispatcherExtension
@@ -28,6 +30,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import strikt.api.expectThat
@@ -39,8 +42,9 @@ class AuthenticatingViewModelTest {
 
     private val repository: FakeAuthRepository = spyk(FakeAuthRepository())
     private val savedStateHandle = SavedStateHandle()
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
 
-    private fun create() = AuthenticatingViewModel(repository, savedStateHandle)
+    private fun create() = AuthenticatingViewModel(repository, savedStateHandle, eventTracker)
 
     @Test
     fun `GIVEN valid code WHEN authenticated THEN navigate to pull requests screen`() {
@@ -58,6 +62,12 @@ class AuthenticatingViewModelTest {
             get(AuthenticatingState::errorScreenType).isNull()
             get(AuthenticatingState::navigateTo).isNull()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
+        }
     }
 
     @Test
@@ -68,6 +78,12 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
         }
     }
 
@@ -82,6 +98,12 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.GENERIC_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
         }
     }
 
@@ -116,6 +138,15 @@ class AuthenticatingViewModelTest {
             get(AuthenticatingState::errorScreenType).isNull()
             get(AuthenticatingState::navigateTo).isNull()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
+        }
     }
 
     @Test
@@ -140,6 +171,12 @@ class AuthenticatingViewModelTest {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("Unrecognised error."))
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("Unrecognised error."))
+        }
     }
 
     @Test
@@ -150,6 +187,11 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("No error code"))
         }
     }
 
@@ -175,6 +217,11 @@ class AuthenticatingViewModelTest {
         expectThat(viewModel.state) {
             get(AuthenticatingState::errorScreenType).isEqualTo(LoadingErrorType.LOGIN_ERROR)
             get(AuthenticatingState::navigateTo).isNull()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("No error code"))
         }
     }
 

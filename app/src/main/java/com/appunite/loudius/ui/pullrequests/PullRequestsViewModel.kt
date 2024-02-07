@@ -21,6 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.PullRequestsEvents
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import kotlinx.coroutines.launch
@@ -50,7 +52,8 @@ data class NavigationPayload(
 )
 
 class PullRequestsViewModel(
-    private val pullRequestsRepository: PullRequestRepository
+    private val pullRequestsRepository: PullRequestRepository,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
     var state: PullRequestState by mutableStateOf(PullRequestState())
         private set
@@ -63,26 +66,32 @@ class PullRequestsViewModel(
     }
 
     fun refreshData() {
+        eventTracker.trackEvent(PullRequestsEvents.Refresh)
         viewModelScope.launch {
             isRefreshing = true
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
+                    eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(PullRequestsEvents.RefreshFailure(it.message ?: "Unrecognised error."))
                 }
             isRefreshing = false
         }
     }
 
     private fun fetchData() {
+        eventTracker.trackEvent(PullRequestsEvents.Fetch)
         viewModelScope.launch {
             state = PullRequestState()
             pullRequestsRepository.getCurrentUserPullRequests()
                 .onSuccess {
                     state = state.copy(data = Data.Success(it.items))
+                    eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
                 }.onFailure {
                     state = state.copy(data = Data.Error)
+                    eventTracker.trackEvent(PullRequestsEvents.FetchFailure(it.message ?: "Unrecognised error."))
                 }
         }
     }
@@ -97,6 +106,7 @@ class PullRequestsViewModel(
         val successData = state.data as? Data.Success ?: return
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
+        eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
         state = state.copy(
             navigateToReviewers = NavigationPayload(
                 itemClickedData.owner,
@@ -109,5 +119,9 @@ class PullRequestsViewModel(
 
     private fun resetNavigationState() {
         state = state.copy(navigateToReviewers = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(PullRequestsEvents.ScreenOpened)
     }
 }

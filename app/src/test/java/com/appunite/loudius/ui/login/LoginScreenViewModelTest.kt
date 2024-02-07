@@ -16,8 +16,11 @@
 
 package com.appunite.loudius.ui.login
 
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.LoginEvents
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -30,7 +33,8 @@ class LoginScreenViewModelTest {
     private val githubHelper = mockk<GithubHelper> {
         every { shouldAskForXiaomiIntent() } returns false
     }
-    private fun create() = LoginScreenViewModel(githubHelper)
+    private val eventTracker = mockk<EventTracker>(relaxed = true)
+    private fun create() = LoginScreenViewModel(githubHelper, eventTracker)
 
     @Test
     fun `WHEN log-in click THEN open github authorization`() {
@@ -41,6 +45,11 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenGithubAuth)
             get(LoginState::showXiaomiPermissionDialog).isFalse()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
         }
     }
 
@@ -54,6 +63,10 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::navigateTo).isNull()
             get(LoginState::showXiaomiPermissionDialog).isTrue()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
         }
     }
 
@@ -70,6 +83,11 @@ class LoginScreenViewModelTest {
             get(LoginState::navigateTo).isNull()
             get(LoginState::showXiaomiPermissionDialog).isFalse()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogDismissed)
+        }
     }
 
     @Test
@@ -85,6 +103,11 @@ class LoginScreenViewModelTest {
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenXiaomiPermissionManager)
             get(LoginState::showXiaomiPermissionDialog).isTrue()
         }
+
+        verifyOrder {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionGranted)
+        }
     }
 
     @Test
@@ -99,6 +122,12 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenGithubAuth)
             get(LoginState::showXiaomiPermissionDialog).isFalse()
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionAlreadyGranted)
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
         }
     }
 
@@ -133,6 +162,13 @@ class LoginScreenViewModelTest {
         expectThat(viewModel.state) {
             get(LoginState::showXiaomiPermissionDialog).isFalse()
             get(LoginState::navigateTo).isEqualTo(LoginNavigateTo.OpenGithubAuth)
+        }
+
+        verifyOrder {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionGranted)
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionAlreadyGranted)
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
         }
     }
 }

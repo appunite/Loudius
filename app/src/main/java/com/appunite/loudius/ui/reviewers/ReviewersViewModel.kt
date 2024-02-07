@@ -23,15 +23,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.analytics.EventTracker
-import com.appunite.loudius.analytics.events.ClickNotifyEvent
-import com.appunite.loudius.analytics.events.FetchDataEvent
-import com.appunite.loudius.analytics.events.FetchDataFailureEvent
-import com.appunite.loudius.analytics.events.FetchDataSuccessEvent
-import com.appunite.loudius.analytics.events.NotifyFailureEvent
-import com.appunite.loudius.analytics.events.NotifySuccessEvent
-import com.appunite.loudius.analytics.events.RefreshDataEvent
-import com.appunite.loudius.analytics.events.RefreshDataFailureEvent
-import com.appunite.loudius.analytics.events.RefreshDataSuccessEvent
+import com.appunite.loudius.analytics.events.ReviewersEvents
 import com.appunite.loudius.common.Screen.Reviewers.getInitialValues
 import com.appunite.loudius.common.flatMap
 import com.appunite.loudius.domain.repository.PullRequestRepository
@@ -90,35 +82,35 @@ class ReviewersViewModel(
     }
 
     fun refreshData() {
-        eventTracker.trackEvent(RefreshDataEvent)
+        eventTracker.trackEvent(ReviewersEvents.Refresh)
         viewModelScope.launch {
             _isRefreshing.value = true
             getMergedData()
                 .onSuccess {
                     state = state.copy(data = Data.Success(reviewers = it))
-                    eventTracker.trackEvent(RefreshDataSuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.RefreshSuccess)
                 }
                 .onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(RefreshDataFailureEvent)
+                    eventTracker.trackEvent(ReviewersEvents.RefreshFailure(it.message ?: "Unrecognised error."))
                 }
             _isRefreshing.value = false
         }
     }
 
     private fun fetchData() {
-        eventTracker.trackEvent(FetchDataEvent)
+        eventTracker.trackEvent(ReviewersEvents.Fetch)
         viewModelScope.launch {
             state = state.copy(data = Data.Loading)
 
             getMergedData()
                 .onSuccess {
                     state = state.copy(data = Data.Success(reviewers = it))
-                    eventTracker.trackEvent(FetchDataSuccessEvent)
+                    eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
                 }
                 .onFailure {
                     state = state.copy(data = Data.Error)
-                    eventTracker.trackEvent(FetchDataFailureEvent)
+                    eventTracker.trackEvent(ReviewersEvents.FetchFailure(it.message ?: "Unrecognised error."))
                 }
         }
     }
@@ -202,7 +194,8 @@ class ReviewersViewModel(
     }
 
     private fun notifyReviewer(userLogin: String) {
-        eventTracker.trackEvent(ClickNotifyEvent)
+        eventTracker.trackEvent(ReviewersEvents.ClickNotify)
+        eventTracker.trackEvent(ReviewersEvents.Notify)
         val (owner, repo, pullRequestNumber) = initialValues
         val successData = state.data as? Data.Success ?: return
 
@@ -211,7 +204,7 @@ class ReviewersViewModel(
 
             repository.notify(owner, repo, pullRequestNumber, "@$userLogin")
                 .onSuccess { onNotifyUserSuccess(successData, userLogin) }
-                .onFailure { onNotifyUserFailure(successData, userLogin) }
+                .onFailure { onNotifyUserFailure(successData, userLogin, it.message) }
         }
     }
 
@@ -228,7 +221,8 @@ class ReviewersViewModel(
 
     private fun onNotifyUserFailure(
         successData: Data.Success,
-        userLogin: String
+        userLogin: String,
+        errorMessage: String?
     ) {
         state = state.copy(
             snackbarTypeShown = FAILURE,
@@ -236,7 +230,7 @@ class ReviewersViewModel(
                 reviewers = successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
-        eventTracker.trackEvent(NotifyFailureEvent)
+        eventTracker.trackEvent(ReviewersEvents.NotifyFailure(errorMessage ?: "Unrecognised error."))
     }
 
     private fun onNotifyUserSuccess(
@@ -249,7 +243,7 @@ class ReviewersViewModel(
                 successData.reviewers.updateLoadingState(userLogin, false)
             )
         )
-        eventTracker.trackEvent(NotifySuccessEvent)
+        eventTracker.trackEvent(ReviewersEvents.NotifySuccess)
     }
 
     private fun List<Reviewer>.updateLoadingState(
@@ -265,5 +259,9 @@ class ReviewersViewModel(
 
     private fun dismissSnackbar() {
         state = state.copy(snackbarTypeShown = null)
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(ReviewersEvents.ScreenOpened)
     }
 }

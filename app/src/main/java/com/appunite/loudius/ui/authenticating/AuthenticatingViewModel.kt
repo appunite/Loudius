@@ -23,6 +23,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.appunite.loudius.BuildConfig
+import com.appunite.loudius.analytics.EventTracker
+import com.appunite.loudius.analytics.events.AuthenticatingEvents
 import com.appunite.loudius.common.Constants.CLIENT_ID
 import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
@@ -53,7 +55,8 @@ sealed class AuthenticatingScreenNavigation {
 
 class AuthenticatingViewModel(
     private val authRepository: AuthRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val eventTracker: EventTracker
 ) : ViewModel() {
 
     private val code = Screen.Authenticating.getCode(savedStateHandle)
@@ -83,6 +86,8 @@ class AuthenticatingViewModel(
     }
 
     private fun getAccessToken() {
+        eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+        eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenStarted)
         code.fold(onSuccess = { code ->
             viewModelScope.launch {
                 authRepository.fetchAccessToken(
@@ -93,17 +98,26 @@ class AuthenticatingViewModel(
                     state = state.copy(
                         navigateTo = AuthenticatingScreenNavigation.NavigateToPullRequests
                     )
+                    eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+                    eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
                 }.onFailure {
                     state = state.copy(errorScreenType = resolveErrorType(it))
+                    eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure(it.message ?: "Unrecognised error."))
+                    eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure(it.message ?: "Unrecognised error."))
                 }
             }
         }, onFailure = {
                 state = state.copy(errorScreenType = LoadingErrorType.LOGIN_ERROR)
+                eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure(it.message ?: "Unrecognised error."))
             })
     }
 
     private fun resolveErrorType(it: Throwable) = when (it) {
         is BadVerificationCodeException -> LoadingErrorType.LOGIN_ERROR
         else -> LoadingErrorType.GENERIC_ERROR
+    }
+
+    fun trackScreenOpened() {
+        eventTracker.trackEvent(AuthenticatingEvents.ScreenOpened)
     }
 }
