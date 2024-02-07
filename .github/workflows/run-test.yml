@@ -62,7 +62,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-unit
           path: |
             */build/test-results/**
             */build/paparazzi/failures/**
@@ -146,7 +146,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-instrumentation
           path: |
             */build/test-results/**
           retention-days: 5
@@ -171,7 +171,10 @@ jobs:
       - name: Download tests results for both jobs
         uses: actions/download-artifact@v4
         with:
-          name: test-results
+          path: test-results
+          pattern: test-results-*
+          merge-multiple: true
+
 
       - name: Run code coverage
         run: ./gradlew codeCoverage
@@ -242,7 +245,9 @@ jobs:
       - name: Download tests results for both jobs
         uses: actions/download-artifact@v4
         with:
-          name: test-results
+          path: test-results
+          pattern: test-results-*
+          merge-multiple: true
 
       - id: auth
         name: Authenticate to Google Cloud
