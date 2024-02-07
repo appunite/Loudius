@@ -59,7 +59,7 @@ jobs:
           LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
 
       - name: Store HTML coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: |
@@ -75,12 +75,13 @@ jobs:
 
       - name: Upload tests results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: |
             */build/test-results/**
             */build/paparazzi/failures/**
+          merge-multiple: true
           retention-days: 5
 
   android-tests:
@@ -152,7 +153,7 @@ jobs:
 
       - name: Upload tests results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: |
