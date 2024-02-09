@@ -193,7 +193,7 @@ jobs:
         with:
           name: coverage-report
           path: |
-            app/build/reports/jacoco/codeCoverage
+            */build/reports/jacoco/codeCoverage
 
       - name: Add coverage to PR
         if: ${{ github.event_name != 'schedule' }}
@@ -201,7 +201,7 @@ jobs:
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: |
-            app/build/reports/jacoco/codeCoverage/codeCoverage.xml
+            */build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
   test-license-headers:
