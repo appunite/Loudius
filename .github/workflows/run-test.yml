@@ -154,6 +154,7 @@ jobs:
 
   merge:
     runs-on: ubuntu-latest
+    if: always()
     needs:
       - android-tests
       - unit-tests
