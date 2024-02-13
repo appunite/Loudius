@@ -292,7 +292,7 @@ jobs:
           fail-on-error: "false"
 
       - name: Include Slack Notification
-        if: always() && contains(needs.*.result, 'failure') # && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
+        if: always() && contains(needs.*.result, 'failure') && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
         uses: ./.github/actions/slack-notification
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
