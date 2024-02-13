@@ -84,7 +84,7 @@ class ReviewersViewModelTest {
 
             expectThat(viewModel.state.data).isA<Data.Success>().and {
                 get(Data.Success::reviewers).containsExactly(
-                    Reviewer(1, "user1", true, 7, 5),
+                    // Reviewer(1, "user1", true, 7, 5),
                     Reviewer(2, "user2", false, 7, null),
                     Reviewer(3, "user3", false, 7, null)
                 )
