@@ -240,6 +240,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: always()
     needs:
+      - android-tests
       - merge
       - verify-formatting
       - test-license-headers
