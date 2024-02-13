@@ -133,7 +133,7 @@ jobs:
             --results-bucket="${{ steps.generate-dir.outputs.bucket }}" \
             --environment-variables "clearPackageData=true,coverage=true,coverageFilePath=/sdcard/Download/" \
             --directories-to-pull /sdcard/Download
-          exit 10
+          exit 1
 
       - name: Download test results from Firebase Test Lab
         if: always()
