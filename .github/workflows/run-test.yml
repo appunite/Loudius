@@ -153,6 +153,7 @@ jobs:
 
   merge:
     runs-on: ubuntu-latest
+    if: always()
     needs:
       - android-tests
       - unit-tests
@@ -238,7 +239,10 @@ jobs:
     runs-on: ubuntu-20.04
     if: always()
     needs:
+      - android-tests
+      - unit-tests
       - merge
+      - code-coverage
       - verify-formatting
       - test-license-headers
 
@@ -288,7 +292,7 @@ jobs:
           fail-on-error: "false"
 
       - name: Include Slack Notification
-        if: failure() && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
+        if: always() && contains(needs.*.result, 'failure') && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
         uses: ./.github/actions/slack-notification
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
