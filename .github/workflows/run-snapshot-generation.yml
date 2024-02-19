@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload snapshot record report
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: snapshot-recording-failure-report
           path: components/build/reports/tests/testDebugUnitTest/
