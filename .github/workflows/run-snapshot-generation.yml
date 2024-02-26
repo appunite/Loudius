@@ -29,6 +29,9 @@ jobs:
         with:
           lfs: true
 
+      - name: Prepare Android Environment
+        uses: ./.github/actions/prepare-android-env
+
       - name: Gradle - Record snapshots with Paparazzi
         id: testStep
         run: ./gradlew components:recordPaparazziDebug
