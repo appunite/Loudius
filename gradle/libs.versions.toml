@@ -1,6 +1,6 @@
 [versions]
 #libraries
-activityCompose = "1.8.0"
+activityCompose = "1.8.2"
 airbnbShowkase = "1.0.2"
 appcompat = "1.6.1"
 assertjCore = "3.24.2"
