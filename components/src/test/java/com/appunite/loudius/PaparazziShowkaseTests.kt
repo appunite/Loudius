@@ -61,7 +61,7 @@ class PaparazziShowkaseTests {
     @Test
     fun preview_tests(
         @TestParameter(valuesProvider = PreviewProvider::class) componentPreview: ComponentPreview,
-        @TestParameter(value = ["1", "2"]) fontScale: Float,
+        @TestParameter(value = ["1.0", "2"]) fontScale: Float,
         @TestParameter(value = ["light"]) theme: String
     ) {
         paparazzi.snapshot {
