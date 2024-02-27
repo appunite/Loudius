@@ -161,6 +161,9 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    // Security
+    implementation(libs.androidx.security)
 }
 
 tasks.withType(Test) {

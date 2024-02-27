@@ -16,9 +16,7 @@
 
 package com.appunite.loudius.domain
 
-import android.content.Context
-import com.appunite.loudius.domain.store.UserLocalDataSourceImpl
-import com.appunite.loudius.fakes.FakeSharedPreferences
+import com.appunite.loudius.domain.store.UserLocalDataSource
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
@@ -27,11 +25,11 @@ import strikt.assertions.isEmpty
 import strikt.assertions.isEqualTo
 
 class UserLocalDataSourceTest {
-    private val sharedPreferences = FakeSharedPreferences()
-    private val context = mockk<Context> {
-        every { getSharedPreferences(any(), any()) } returns sharedPreferences
+
+    private val userLocalDataSource = mockk<UserLocalDataSource> {
+        every { saveAccessToken(any()) } returns Unit
+        every { getAccessToken() } returns ""
     }
-    private val userLocalDataSource = UserLocalDataSourceImpl(context)
 
     @Test
     fun `GIVEN the app is started first time WHEN getting access token THEN token is empty`() {
@@ -42,6 +40,8 @@ class UserLocalDataSourceTest {
 
     @Test
     fun `WHEN token is set THEN token can be retrieved`() {
+        every { userLocalDataSource.getAccessToken() } returns "someToken"
+
         userLocalDataSource.saveAccessToken("someToken")
 
         val result = userLocalDataSource.getAccessToken()
