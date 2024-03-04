@@ -66,7 +66,7 @@ jobs:
           body-regex: "Snapshot recording result:"
 
       - name: Create or update comment on PR (Success)
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: always() && steps.testStep.outcome == 'success'
         with:
           comment-id: ${{ steps.findCommentId.outputs.comment-id }}
@@ -85,7 +85,7 @@ jobs:
           reactions-edit-mode: replace
 
       - name: Create or update comment on PR (Failure)
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         if: always() && steps.testStep.outcome == 'failure'
         with:
           comment-id: ${{ steps.findCommentId.outputs.comment-id }}
