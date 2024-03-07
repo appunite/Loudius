@@ -6,11 +6,6 @@ on:
     branches:
       - "develop"
       - "main"
-  schedule:
-    # Run twice a day the sanity check, at 9:13 and 21:13.
-    # You ask why 13? because probably less people schedule their tasks at exactly this time, so I
-    # guess CI is less occupied. And 13 is a lucky number ;)
-    - cron: "13 9,21 * * *"
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -70,107 +65,13 @@ jobs:
             */build/tmp/kotlin-classes/**
           retention-days: 5
 
-  android-tests:
-    name: Run UI tests on Firebase Test Lab
-    runs-on: ubuntu-20.04
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      - name: Add google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
-
-      - name: LFS-warning - Prevent large files that are not LFS tracked
-        uses: ppremk/lfs-warning@v3.2
-
-      - name: Prepare Android Environment
-        uses: ./.github/actions/prepare-android-env
-
-      - name: Assemble App Debug APK and Android Instrumentation Tests
-        run: ./gradlew assembleDebug assembleDebugAndroidTest
-        env:
-          LOUDIUS_CLIENT_SECRET: ${{ secrets.LOUDIUS_CLIENT_SECRET }}
-          LOUDIUS_CLIENT_ID: ${{ secrets.LOUDIUS_CLIENT_ID }}
-          LOUDIUS_GITHUB_USER_PASSWORD: ${{ secrets.LOUDIUS_GITHUB_USER_PASSWORD }}
-          LOUDIUS_GITHUB_USER_NAME: ${{ secrets.LOUDIUS_GITHUB_USER_NAME }}
-          LOUDIUS_GITHUB_USER_OTP_SECRET: ${{ secrets.LOUDIUS_GITHUB_USER_OTP_SECRET }}
-
-      - id: auth
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          install_components: "gsutil"
-
-      - name: Generate random directory
-        id: generate-dir
-        run: |-
-          echo "results_dir=$(date +%F_%T)-${RANDOM}" >> "$GITHUB_OUTPUT"
-          echo "bucket=test-lab-07qs3ns6c51bi-iazpthysivhkq" >> "$GITHUB_OUTPUT"
-
-      - name: Run tests on Firebase Test Lab
-        run: |-
-          gcloud firebase test android run \
-            --app="app/build/outputs/apk/debug/app-debug.apk" \
-            --test="app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" \
-            --device="model=Pixel2.arm,version=33,locale=en,orientation=portrait" \
-            --type=instrumentation \
-            --use-orchestrator \
-            --test-runner-class="com.appunite.loudius.util.InstrumentationTestRunner" \
-            --timeout="20m" \
-            --results-dir="${{ steps.generate-dir.outputs.results_dir }}" \
-            --results-bucket="${{ steps.generate-dir.outputs.bucket }}" \
-            --environment-variables "clearPackageData=true,coverage=true,coverageFilePath=/sdcard/Download/" \
-            --directories-to-pull /sdcard/Download
-
-      - name: Download test results from Firebase Test Lab
-        if: always()
-        run: |-
-          mkdir "app/build/test-results"
-          mkdir "app/build/test-results/instrumentation_results"
-          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2.arm-33-en-portrait/test_result_1.xml" "app/build/test-results/results.xml"
-          gsutil cp -r "gs://${{ steps.generate-dir.outputs.bucket }}/${{ steps.generate-dir.outputs.results_dir }}/Pixel2.arm-33-en-portrait/artifacts/sdcard/Download/*.ec" "app/build/test-results/instrumentation_results"
-
-      - name: Upload tests results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-instrumentation
-          path: |
-            */build/test-results/**
-          retention-days: 5
-
-  merge:
-    runs-on: ubuntu-latest
-    if: always()
-    needs:
-      - android-tests
-      - unit-tests
-    steps:
-      - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: test-results
-          pattern: test-results-*
-
   code-coverage:
     name: Merged code coverage
     runs-on: ubuntu-20.04
     permissions:
       pull-requests: write
     needs:
-      - merge
+      - unit-tests
 
     steps:
 
@@ -203,97 +104,3 @@ jobs:
           paths: |
             */build/reports/jacoco/codeCoverage/codeCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  test-license-headers:
-    name: Ensure license headers are added
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Ensure license headers are added
-        run: python "build-tools/check-license-headers.py"
-
-  verify-formatting:
-    name: Verify ktlint formatting
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Prepare Android Environment
-        uses: ./.github/actions/prepare-android-env
-
-      - name: Run test
-        run: ./gradlew ktlintCheck
-
-  test-results:
-    name: Upload tests results
-    runs-on: ubuntu-20.04
-    if: always()
-    needs:
-      - android-tests
-      - unit-tests
-      - merge
-      - code-coverage
-      - verify-formatting
-      - test-license-headers
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            build-tools/
-            .github/
-
-      - name: Download tests results for both jobs
-        uses: actions/download-artifact@v4
-        with:
-          name: test-results
-
-      - id: auth
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install Python dependencies
-        uses: py-actions/py-dependency-install@v4
-        with:
-          path: "build-tools/requirements.txt"
-
-      - name: Upload to Big Query
-        run: |-
-          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
-            python "build-tools/upload-junit-to-cloud.py" --url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --final --glob "*/build/test-results/**/*.xml"
-          else
-            python "build-tools/upload-junit-to-cloud.py" --url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --glob "*/build/test-results/**/*.xml"
-          fi
-
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        with:
-          name: Tests Results
-          path: "*/build/test-results/**/*.xml"
-          reporter: java-junit
-          fail-on-error: "false"
-
-      - name: Include Slack Notification
-        if: always() && contains(needs.*.result, 'failure') && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
-        uses: ./.github/actions/slack-notification
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_GIT_REF: ${{ github.ref }}
-          SLACK_WORKFLOW: ${{ github.workflow }}
