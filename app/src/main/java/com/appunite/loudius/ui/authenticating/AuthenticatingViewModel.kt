@@ -30,6 +30,7 @@ import com.appunite.loudius.common.Screen
 import com.appunite.loudius.domain.repository.AuthRepository
 import com.appunite.loudius.network.datasource.BadVerificationCodeException
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 sealed class AuthenticatingAction {
 
@@ -65,6 +66,27 @@ class AuthenticatingViewModel(
 
     init {
         getAccessToken()
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.ScreenOpened)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationStarted)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedSuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.AuthenticationFinishedFailure("example auth error"))
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenStarted)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedSuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(AuthenticatingEvents.GetAccessTokenFinishedFailure("example get access token error"))
+        }
     }
 
     fun onAction(action: AuthenticatingAction) = when (action) {

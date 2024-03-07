@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.appunite.loudius.analytics.EventTracker
 import com.appunite.loudius.analytics.events.LoginEvents
+import kotlin.random.Random
 
 sealed class LoginAction {
     object ClearNavigation : LoginAction()
@@ -50,6 +51,27 @@ class LoginScreenViewModel(
 
     var state by mutableStateOf(LoginState())
         private set
+
+    init {
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(LoginEvents.ScreenOpened)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(LoginEvents.ClickLogIn)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(LoginEvents.OpenGithubAuth)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogDismissed)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionGranted)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(LoginEvents.XiaomiPermissionDialogPermissionAlreadyGranted)
+        }
+    }
 
     fun onAction(action: LoginAction) {
         when (action) {

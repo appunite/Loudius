@@ -26,6 +26,7 @@ import com.appunite.loudius.analytics.events.PullRequestsEvents
 import com.appunite.loudius.domain.repository.PullRequestRepository
 import com.appunite.loudius.network.model.PullRequest
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 sealed class PulLRequestsAction {
     data class ItemClick(val id: Int) : PulLRequestsAction()
@@ -63,6 +64,30 @@ class PullRequestsViewModel(
 
     init {
         fetchData()
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.ScreenOpened)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.Refresh)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.RefreshSuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.RefreshFailure("example refresh prs error"))
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.Fetch)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.FetchSuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.FetchFailure("example fetch prs error"))
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(PullRequestsEvents.NavigateToReviewers)
+        }
     }
 
     fun refreshData() {

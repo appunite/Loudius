@@ -40,6 +40,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.minus
+import kotlin.random.Random
 
 sealed class ReviewersAction {
     data class Notify(val userLogin: String) : ReviewersAction()
@@ -79,6 +80,39 @@ class ReviewersViewModel(
     init {
         state = state.copy(pullRequestNumber = initialValues.pullRequestNumber)
         fetchData()
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.ScreenOpened)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.ClickNotify)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.Notify)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.NotifySuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.NotifyFailure("example notify error"))
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.Refresh)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.RefreshSuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.RefreshFailure("example refresh reviewers error"))
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.Fetch)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.FetchSuccess)
+        }
+        for (i in 1..Random.nextInt(3, 12)) {
+            eventTracker.trackEvent(ReviewersEvents.FetchFailure("example fetch reviewers error"))
+        }
     }
 
     fun refreshData() {
