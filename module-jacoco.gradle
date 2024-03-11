@@ -4,7 +4,6 @@ tasks.register('codeCoverage', JacocoReport) {
 
     reports {
         html.required.set(true)
-        xml.required.set(true)
     }
 
     classDirectories.setFrom(
@@ -25,6 +24,7 @@ tasks.register('codeCoverage', JacocoReport) {
     )
 
     sourceDirectories.setFrom(
+            //fileTree(dir: "${buildDir}/test-results/instrumentation_results", includes: ['*.ec']),
             fileTree(dir: project.projectDir, includes: ["src/main/java/**", "src/main/kotlin/**"])
     )
 
