@@ -28,7 +28,7 @@ import com.appunite.loudius.network.model.PullRequest
 import kotlinx.coroutines.launch
 
 sealed class PulLRequestsAction {
-    data class ItemClick(val id: Int) : PulLRequestsAction()
+    data class ItemClick(val id: Long) : PulLRequestsAction()
     object OnNavigateToReviewers : PulLRequestsAction()
     object RetryClick : PulLRequestsAction()
 }
@@ -102,7 +102,7 @@ class PullRequestsViewModel(
         is PulLRequestsAction.RetryClick -> fetchData()
     }
 
-    private fun navigateToReviewers(itemClickedId: Int) {
+    private fun navigateToReviewers(itemClickedId: Long) {
         val successData = state.data as? Data.Success ?: return
         val index = successData.pullRequests.indexOfFirst { it.id == itemClickedId }
         val itemClickedData = successData.pullRequests[index]
