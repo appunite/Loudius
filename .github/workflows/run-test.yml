@@ -46,7 +46,6 @@ jobs:
         with:
           name: test-results-unit
           path: |
-            */build/test-results/**
             */build/outputs/**
             */build/tmp/kotlin-classes/**
 
