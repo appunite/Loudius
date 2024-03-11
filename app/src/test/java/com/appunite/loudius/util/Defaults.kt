@@ -30,10 +30,10 @@ object Defaults {
     val date2: Instant = Instant.parse("2022-01-29T11:00:00Z")
     val date3: Instant = Instant.parse("2022-01-29T12:00:00Z")
 
-    fun pullRequest(id: Int = 1) = PullRequest(
+    fun pullRequest(id: Long = 1) = PullRequest(
         id = id,
         draft = false,
-        number = id,
+        number = id.toInt(),
         repositoryUrl = "https://api.github.com/repos/exampleOwner/exampleRepo",
         title = "example title",
         Instant.parse("2023-03-07T08:21:45Z").plus(id.toLong().hours)

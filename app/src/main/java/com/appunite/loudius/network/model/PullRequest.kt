@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PullRequest(
-    val id: Int,
+    val id: Long,
     val draft: Boolean,
     val number: Int,
     @SerialName("repository_url")
