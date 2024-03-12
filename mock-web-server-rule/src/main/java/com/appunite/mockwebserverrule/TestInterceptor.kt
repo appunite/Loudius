@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 AppUnite S.A.
+ * Copyright 2024 AppUnite S.A.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.di
+package com.appunite.mockwebserverrule
 
 import okhttp3.Interceptor
 import okhttp3.Response

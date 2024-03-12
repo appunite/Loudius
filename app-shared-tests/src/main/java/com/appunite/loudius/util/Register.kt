@@ -16,6 +16,11 @@
 
 package com.appunite.loudius.util
 
+import com.appunite.mockwebserverrule.MockWebServerRule
+import com.appunite.mockwebserverrule.jsonResponse
+import com.appunite.mockwebserverrule.path
+import com.appunite.mockwebserverrule.queryParameter
+import com.appunite.mockwebserverrule.url
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 

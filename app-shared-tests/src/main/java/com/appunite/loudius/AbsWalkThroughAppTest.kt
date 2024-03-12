@@ -24,8 +24,8 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.rule.IntentsRule
-import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
+import com.appunite.mockwebserverrule.MockWebServerRule
 import org.junit.Before
 import org.junit.Rule
 

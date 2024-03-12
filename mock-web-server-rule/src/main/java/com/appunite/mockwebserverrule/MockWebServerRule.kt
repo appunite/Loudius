@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 AppUnite S.A.
+ * Copyright 2024 AppUnite S.A.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.util
+package com.appunite.mockwebserverrule
 
 import android.util.Log
-import com.appunite.loudius.di.TestInterceptor
 import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -125,9 +124,9 @@ private class MockDispatcher : Dispatcher() {
             val mockRequest = try {
                 Request(
                     url = (
-                        request.getHeader("X-Test-Original-Url")
-                            ?: throw Exception("No X-Test-Original-Url header, problem with mocker")
-                        ).toHttpUrl(),
+                            request.getHeader("X-Test-Original-Url")
+                                ?: throw Exception("No X-Test-Original-Url header, problem with mocker")
+                            ).toHttpUrl(),
                     headers = request.headers.newBuilder().removeAll("X-Test-Original-Url").build(),
                     method = request.method ?: throw Exception("Nullable method in the request"),
                     body = request.body
@@ -189,3 +188,4 @@ class MultipleFailuresError(val heading: String, val failures: List<Throwable>) 
     private fun nullSafeMessage(failure: Throwable): String =
         failure.javaClass.name + ": " + failure.message.orEmpty().ifBlank { "<no message>" }
 }
+

@@ -105,6 +105,7 @@ android {
 
 dependencies {
     api project(':components')
+    implementation(project(':mock-web-server-rule'))
 
     // Desugaring for use of java.time in api lower then 26
     coreLibraryDesugaring(libs.desugar)

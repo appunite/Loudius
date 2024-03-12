@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 AppUnite S.A.
+ * Copyright 2024 AppUnite S.A.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.appunite.loudius.util
+package com.appunite.mockwebserverrule
+
 
 import android.util.Log
-import com.appunite.loudius.di.TestInterceptor
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
@@ -318,3 +318,4 @@ class LoggerMockRule : TestWatcher() {
         every { Log.w(any(), any(), any()) } returns 0
     }
 }
+
