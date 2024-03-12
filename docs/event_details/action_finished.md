@@ -18,7 +18,7 @@ Called when the [action_start](action_start.md) is finished.
 {
   "event_name": "action_finished",
   "item_name": "Downloading User Profile",
-  "success": true,
+  "action_success": true,
   "screen_name": "reviewers_screen"
 }
 ```
@@ -29,7 +29,7 @@ or
 {
   "event_name": "action_finished",
   "item_name": "Downloading User Profile",
-  "success": false,
+  "action_success": false,
   "screen_name": "reviewers_screen",
   "error_message": "Some error message."
 }

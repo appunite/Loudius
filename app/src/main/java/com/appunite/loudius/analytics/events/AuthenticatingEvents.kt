@@ -41,7 +41,7 @@ object AuthenticatingEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "authentication"),
-            EventParameter.Boolean("success", true),
+            EventParameter.Boolean("action_success", true),
             EventParameter.String("screen_name", "authenticating_screen")
         )
     }
@@ -50,7 +50,7 @@ object AuthenticatingEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "authentication"),
-            EventParameter.Boolean("success", false),
+            EventParameter.Boolean("action_success", false),
             EventParameter.String("screen_name", "authenticating_screen"),
             EventParameter.String("error_message", errorMessage)
         )
@@ -68,7 +68,7 @@ object AuthenticatingEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "get_access_token"),
-            EventParameter.Boolean("success", true),
+            EventParameter.Boolean("action_success", true),
             EventParameter.String("screen_name", "authenticating_screen")
         )
     }
@@ -77,7 +77,7 @@ object AuthenticatingEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "get_access_token"),
-            EventParameter.Boolean("success", false),
+            EventParameter.Boolean("action_success", false),
             EventParameter.String("screen_name", "authenticating_screen"),
             EventParameter.String("error_message", errorMessage)
         )
