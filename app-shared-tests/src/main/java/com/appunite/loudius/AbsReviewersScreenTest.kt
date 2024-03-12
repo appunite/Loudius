@@ -68,7 +68,7 @@ abstract class AbsReviewersScreenTest {
             expectThat(analyticsRule.analytics.log).containsExactly(
                 AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
                 AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen"))
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "action_success" to true, "screen_name" to "reviewers_screen"))
             )
         }
     }
@@ -100,10 +100,10 @@ abstract class AbsReviewersScreenTest {
             expectThat(analyticsRule.analytics.log).containsExactly(
                 AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
                 AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "action_success" to true, "screen_name" to "reviewers_screen")),
                 AnalyticsLog("button_click", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
                 AnalyticsLog("action_start", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true, "screen_name" to "reviewers_screen"))
+                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "action_success" to true, "screen_name" to "reviewers_screen"))
             )
         }
     }
@@ -132,10 +132,10 @@ abstract class AbsReviewersScreenTest {
             expectThat(analyticsRule.analytics.log).containsExactly(
                 AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
                 AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen")),
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "action_success" to true, "screen_name" to "reviewers_screen")),
                 AnalyticsLog("button_click", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
                 AnalyticsLog("action_start", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to false, "screen_name" to "reviewers_screen", "error_message" to "Client request(POST https://api.github.com/repos/exampleOwner/exampleRepo/issues/1/comments) invalid: 404 Client Error. Text: \"\""))
+                AnalyticsLog("action_finished", mapOf("item_name" to "notify", "action_success" to false, "screen_name" to "reviewers_screen", "error_message" to "Client request(POST https://api.github.com/repos/exampleOwner/exampleRepo/issues/1/comments) invalid: 404 Client Error. Text: \"\""))
             )
         }
     }

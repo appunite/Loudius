@@ -68,18 +68,18 @@ abstract class UniversalWalkThroughAppTest {
             AnalyticsLog("action_start", mapOf("item_name" to "authentication", "screen_name" to "authenticating_screen")),
             AnalyticsLog("action_start", mapOf("item_name" to "get_access_token", "screen_name" to "authenticating_screen")),
             AnalyticsLog("screen_opened", mapOf("screen_name" to "authenticating_screen")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "get_access_token", "success" to true, "screen_name" to "authenticating_screen")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "authentication", "success" to true, "screen_name" to "authenticating_screen")),
+            AnalyticsLog("action_finished", mapOf("item_name" to "get_access_token", "action_success" to true, "screen_name" to "authenticating_screen")),
+            AnalyticsLog("action_finished", mapOf("item_name" to "authentication", "action_success" to true, "screen_name" to "authenticating_screen")),
             AnalyticsLog("action_start", mapOf("item_name" to "fetch_pull_requests_data", "screen_name" to "pull_requests_screen")),
             AnalyticsLog("screen_opened", mapOf("screen_name" to "pull_requests_screen")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "fetch_pull_requests_data", "success" to true, "screen_name" to "pull_requests_screen")),
+            AnalyticsLog("action_finished", mapOf("item_name" to "fetch_pull_requests_data", "action_success" to true, "screen_name" to "pull_requests_screen")),
             AnalyticsLog("item_click", mapOf("item_name" to "pull_request", "screen_name" to "pull_requests_screen")),
             AnalyticsLog("action_start", mapOf("item_name" to "fetch_reviewers_data", "screen_name" to "reviewers_screen")),
             AnalyticsLog("screen_opened", mapOf("screen_name" to "reviewers_screen")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "success" to true, "screen_name" to "reviewers_screen")),
+            AnalyticsLog("action_finished", mapOf("item_name" to "fetch_reviewers_data", "action_success" to true, "screen_name" to "reviewers_screen")),
             AnalyticsLog("button_click", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
             AnalyticsLog("action_start", mapOf("item_name" to "notify", "screen_name" to "reviewers_screen")),
-            AnalyticsLog("action_finished", mapOf("item_name" to "notify", "success" to true, "screen_name" to "reviewers_screen")),
+            AnalyticsLog("action_finished", mapOf("item_name" to "notify", "action_success" to true, "screen_name" to "reviewers_screen")),
             AnalyticsLog("screen_opened", mapOf("screen_name" to "pull_requests_screen"))
         )
     }

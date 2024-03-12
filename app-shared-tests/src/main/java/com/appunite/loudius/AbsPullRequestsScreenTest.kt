@@ -65,7 +65,7 @@ abstract class AbsPullRequestsScreenTest {
             expectThat(analyticsRule.analytics.log).containsExactly(
                 AnalyticsLog("action_start", mapOf("item_name" to "fetch_pull_requests_data", "screen_name" to "pull_requests_screen")),
                 AnalyticsLog("screen_opened", mapOf("screen_name" to "pull_requests_screen")),
-                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_pull_requests_data", "success" to true, "screen_name" to "pull_requests_screen"))
+                AnalyticsLog("action_finished", mapOf("item_name" to "fetch_pull_requests_data", "action_success" to true, "screen_name" to "pull_requests_screen"))
             )
         }
     }

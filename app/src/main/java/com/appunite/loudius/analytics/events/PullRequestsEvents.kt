@@ -42,7 +42,7 @@ object PullRequestsEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "refresh_pull_requests_data"),
-            EventParameter.Boolean("success", true),
+            EventParameter.Boolean("action_success", true),
             EventParameter.String("screen_name", "pull_requests_screen")
         )
     }
@@ -51,7 +51,7 @@ object PullRequestsEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "refresh_pull_requests_data"),
-            EventParameter.Boolean("success", false),
+            EventParameter.Boolean("action_success", false),
             EventParameter.String("screen_name", "pull_requests_screen"),
             EventParameter.String("error_message", errorMessage)
         )
@@ -69,7 +69,7 @@ object PullRequestsEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "fetch_pull_requests_data"),
-            EventParameter.Boolean("success", true),
+            EventParameter.Boolean("action_success", true),
             EventParameter.String("screen_name", "pull_requests_screen")
         )
     }
@@ -78,7 +78,7 @@ object PullRequestsEvents {
         override val name: String = "action_finished"
         override val parameters: List<EventParameter> = listOf(
             EventParameter.String("item_name", "fetch_pull_requests_data"),
-            EventParameter.Boolean("success", false),
+            EventParameter.Boolean("action_success", false),
             EventParameter.String("screen_name", "pull_requests_screen"),
             EventParameter.String("error_message", errorMessage)
         )
