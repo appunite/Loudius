@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.appunite.mockwebserverrule
+package com.appunite.mock_web_server
 
-import android.util.Log
+import io.github.oshai.kotlinlogging.KotlinLogging
 import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -33,6 +33,7 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
 private const val TAG = "MockWebServerRule"
+private val logger = KotlinLogging.logger {}
 
 class Request(
     val headers: Headers,
@@ -60,7 +61,9 @@ class MockWebServerRule : TestRule {
                 MockWebServer().use { server ->
                     server.dispatcher = dispatcher
                     TestInterceptor.testInterceptor = UrlOverrideInterceptor(server.url("/"))
-                    Log.v(TAG, "TestInterceptor installed")
+                    logger.info {
+                        TAG + "TestInterceptor installed"
+                    }
                     try {
                         base.evaluate()
                     } catch (e: Throwable) {
@@ -76,7 +79,9 @@ class MockWebServerRule : TestRule {
                             )
                         }
                     } finally {
-                        Log.v(TAG, "TestInterceptor uninstalled")
+                        logger.info {
+                            TAG + "TestInterceptor uninstalled"
+                        }
                         TestInterceptor.testInterceptor = null
                     }
                 }
@@ -137,7 +142,9 @@ private class MockDispatcher : Dispatcher() {
             return runMocks(mockRequest)
         } catch (e: Throwable) {
             errors.add(e)
-            Log.w(TAG, e.message!!)
+            logger.warn {
+                TAG + e.message!!
+            }
             return MockResponse().setResponseCode(404)
         }
     }

@@ -16,27 +16,25 @@
 
 package com.appunite.loudius.util
 
-import com.appunite.mockwebserverrule.MockWebServerRule
-import com.appunite.mockwebserverrule.jsonResponse
-import com.appunite.mockwebserverrule.path
-import com.appunite.mockwebserverrule.queryParameter
-import com.appunite.mockwebserverrule.url
+import com.appunite.mock_web_server.path
+import com.appunite.mock_web_server.queryParameter
+import com.appunite.mock_web_server.url
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
 object Register {
 
-    fun user(mockWebServer: MockWebServerRule) {
+    fun user(mockWebServer: com.appunite.mock_web_server.MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.path.isEqualTo("/user")
-            jsonResponse("""{"id": 1, "login": "user"}""")
+            com.appunite.mock_web_server.jsonResponse("""{"id": 1, "login": "user"}""")
         }
     }
 
-    fun accessToken(mockWebServer: MockWebServerRule) {
+    fun accessToken(mockWebServer: com.appunite.mock_web_server.MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.path.isEqualTo("/login/oauth/access_token")
-            jsonResponse(
+            com.appunite.mock_web_server.jsonResponse(
                 """
                 {
                   "access_token": "example_access_token",
@@ -48,23 +46,23 @@ object Register {
         }
     }
 
-    fun reviews(mockWebServer: MockWebServerRule) {
+    fun reviews(mockWebServer: com.appunite.mock_web_server.MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
                 path.isEqualTo("/repos/exampleOwner/exampleRepo/pulls/1/reviews")
             }
-            jsonResponse("[]")
+            com.appunite.mock_web_server.jsonResponse("[]")
         }
     }
 
-    fun comment(mockWebServer: MockWebServerRule) {
+    fun comment(mockWebServer: com.appunite.mock_web_server.MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
                 path.isEqualTo("/repos/exampleOwner/exampleRepo/issues/1/comments")
             }
-            jsonResponse(
+            com.appunite.mock_web_server.jsonResponse(
                 """
                     {
                       "id": 1,
@@ -102,13 +100,13 @@ object Register {
         }
     }
 
-    fun requestedReviewers(mockWebServer: MockWebServerRule) {
+    fun requestedReviewers(mockWebServer: com.appunite.mock_web_server.MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
                 path.isEqualTo("/repos/exampleOwner/exampleRepo/pulls/1/requested_reviewers")
             }
-            jsonResponse(
+            com.appunite.mock_web_server.jsonResponse(
                 """
                         {
                             "users": [
@@ -140,7 +138,7 @@ object Register {
         }
     }
 
-    fun issues(mockWebServer: MockWebServerRule) {
+    fun issues(mockWebServer: com.appunite.mock_web_server.MockWebServerRule) {
         mockWebServer.register {
             expectThat(it).url.and {
                 get("host") { host }.isEqualTo("api.github.com")
@@ -150,7 +148,7 @@ object Register {
                 queryParameter("per_page").isEqualTo("100")
             }
 
-            jsonResponse(
+            com.appunite.mock_web_server.jsonResponse(
                 """
                         {
                             "total_count":1,

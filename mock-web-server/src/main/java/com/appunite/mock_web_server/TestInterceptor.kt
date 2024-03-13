@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appunite.mockwebserverrule
+package com.appunite.mock_web_server
 
 import okhttp3.Interceptor
 import okhttp3.Response
