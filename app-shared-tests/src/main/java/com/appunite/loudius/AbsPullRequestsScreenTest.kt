@@ -25,6 +25,7 @@ import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
+import com.appunite.mock_web_server.MockWebServerRule
 import org.junit.Rule
 import org.junit.Test
 import org.koin.compose.KoinContext
@@ -37,8 +38,7 @@ abstract class AbsPullRequestsScreenTest {
     val integrationTestRule = IntegrationTestRule()
 
     @get:Rule(order = 1)
-    var mockWebServer: com.appunite.mock_web_server.MockWebServerRule =
-        com.appunite.mock_web_server.MockWebServerRule()
+    var mockWebServer: MockWebServerRule = MockWebServerRule()
 
     @get:Rule
     val analyticsRule = AnalyticsRule()
