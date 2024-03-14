@@ -17,7 +17,7 @@ dependencies {
     implementation(libs.bundles.okhttp)
     implementation(libs.bundles.mock)
     implementation(libs.bundles.strikt)
-    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+    implementation(libs.kotlin.logging.jvm)
 
     testImplementation(libs.junit)
 }

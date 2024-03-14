@@ -60,9 +60,7 @@ class MockDispatcher : Dispatcher() {
             return runMocks(mockRequest)
         } catch (e: Throwable) {
             errors.add(e)
-            logger.warn {
-                TAG + e.message!!
-            }
+            logger.warn { TAG + e.message!! }
             return MockResponse().setResponseCode(404)
         }
     }
