@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.appunite.mock_web_server
+package com.appunite.mock_web_server.util
 
+import com.appunite.mock_web_server.Request
 import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.Response

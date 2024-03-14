@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package com.appunite.mock_web_server
+package com.appunite.mock_web_server.intercept
 
+import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 
-object TestInterceptor : Interceptor {
-    var testInterceptor: Interceptor? = null
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val interceptor = testInterceptor ?: DoNothingInterceptor
-        return interceptor.intercept(chain)
-    }
-}
+class UrlOverrideInterceptor(private val baseUrl: HttpUrl) : Interceptor {
 
-private object DoNothingInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response = chain.proceed(chain.request())
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+        val newUrl = request.url.newBuilder()
+            .host(baseUrl.host)
+            .scheme(baseUrl.scheme)
+            .port(baseUrl.port)
+            .build()
+        return chain.proceed(
+            request.newBuilder().url(newUrl)
+                .addHeader("X-Test-Original-Url", request.url.toString()).build()
+        )
+    }
 }

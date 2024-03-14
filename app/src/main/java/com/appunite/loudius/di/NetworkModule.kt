@@ -20,7 +20,7 @@ import com.appunite.loudius.common.Constants
 import com.appunite.loudius.network.intercept.AuthFailureInterceptor
 import com.appunite.loudius.network.intercept.AuthInterceptor
 import com.appunite.loudius.network.utils.AuthFailureHandler
-import com.appunite.mock_web_server.TestInterceptor
+import com.appunite.mock_web_server.intercept.TestInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
