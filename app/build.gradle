@@ -105,7 +105,6 @@ android {
 
 dependencies {
     api project(':components')
-    implementation(project(':mock-web-server'))
 
     // Desugaring for use of java.time in api lower then 26
     coreLibraryDesugaring(libs.desugar)
@@ -162,6 +161,8 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    implementation("com.github.appunite:MockWebServer-Extensions:add-jitpack-SNAPSHOT")
 }
 
 tasks.withType(Test) {

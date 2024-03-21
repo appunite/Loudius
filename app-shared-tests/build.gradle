@@ -59,7 +59,6 @@ android {
 
 dependencies {
     implementation(project(":app"))
-    implementation(project(':mock-web-server'))
 
     // Koin
     api(libs.bundles.koin)
@@ -90,4 +89,6 @@ dependencies {
 
     // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+
+    implementation("com.github.appunite:MockWebServer-Extensions:add-jitpack-SNAPSHOT")
 }

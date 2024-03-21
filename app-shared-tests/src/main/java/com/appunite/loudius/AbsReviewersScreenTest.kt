@@ -26,7 +26,7 @@ import com.appunite.loudius.ui.reviewers.ReviewersScreen
 import com.appunite.loudius.util.IntegrationTestRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
-import com.appunite.mock_web_server.MockWebServerRule
+import com.appunite.mockwebserverextensions.MockWebServerRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -13,6 +13,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -22,4 +23,3 @@ include ':app'
 include ':custom-ktlint-rules'
 include ':components'
 include ':app-shared-tests'
-include ':mock-web-server'
