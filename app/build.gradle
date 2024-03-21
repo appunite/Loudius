@@ -161,6 +161,8 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    implementation("com.github.appunite:MockWebServer-Extensions:0.1.0")
 }
 
 tasks.withType(Test) {

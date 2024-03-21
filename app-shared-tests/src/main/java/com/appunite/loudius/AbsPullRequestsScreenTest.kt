@@ -23,9 +23,9 @@ import com.appunite.loudius.analytics.AnalyticsRule
 import com.appunite.loudius.components.theme.LoudiusTheme
 import com.appunite.loudius.ui.pullrequests.PullRequestsScreen
 import com.appunite.loudius.util.IntegrationTestRule
-import com.appunite.loudius.util.MockWebServerRule
 import com.appunite.loudius.util.Register
 import com.appunite.loudius.util.waitUntilLoadingDoesNotExist
+import com.appunite.mockwebserverextensions.MockWebServerRule
 import org.junit.Rule
 import org.junit.Test
 import org.koin.compose.KoinContext

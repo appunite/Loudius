@@ -89,4 +89,6 @@ dependencies {
 
     // Ktlint
     ktlintRuleset project(":custom-ktlint-rules")
+
+    implementation("com.github.appunite:MockWebServer-Extensions:0.1.0")
 }
